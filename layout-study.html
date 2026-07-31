@@ -1,0 +1,304 @@
+<title>Infra Bench — metric layout study</title>
+<style>
+  :root {
+    --ground:#F4F6F7; --surface:#FFFFFF; --sunk:#EDF1F2;
+    --ink:#0F171D; --muted:#5D6B75; --faint:#8595A0;
+    --line:#D8E0E4; --line-soft:#E6ECEF;
+    --outcome:#0B6E76; --outcome-track:#DCE9EA;
+    --cost:#9A5B12; --cost-track:#EDE4D8;
+    --good:#2C7A55; --bad:#A63F38; --stale:#7A6A3F;
+    --shadow:0 1px 2px rgba(15,23,29,.05), 0 0 0 1px rgba(15,23,29,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground:#0B1114; --surface:#131C21; --sunk:#0F171B;
+      --ink:#E4EDF1; --muted:#93A4AE; --faint:#6B7C87;
+      --line:#243036; --line-soft:#1B252A;
+      --outcome:#3FAFB6; --outcome-track:#173133;
+      --cost:#C9913F; --cost-track:#2E2618;
+      --good:#4FA97C; --bad:#D0665C; --stale:#B39A5C;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.05);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0B1114; --surface:#131C21; --sunk:#0F171B;
+    --ink:#E4EDF1; --muted:#93A4AE; --faint:#6B7C87;
+    --line:#243036; --line-soft:#1B252A;
+    --outcome:#3FAFB6; --outcome-track:#173133;
+    --cost:#C9913F; --cost-track:#2E2618;
+    --good:#4FA97C; --bad:#D0665C; --stale:#B39A5C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.05);
+  }
+  :root[data-theme="light"] {
+    --ground:#F4F6F7; --surface:#FFFFFF; --sunk:#EDF1F2;
+    --ink:#0F171D; --muted:#5D6B75; --faint:#8595A0;
+    --line:#D8E0E4; --line-soft:#E6ECEF;
+    --outcome:#0B6E76; --outcome-track:#DCE9EA;
+    --cost:#9A5B12; --cost-track:#EDE4D8;
+    --good:#2C7A55; --bad:#A63F38; --stale:#7A6A3F;
+    --shadow:0 1px 2px rgba(15,23,29,.05), 0 0 0 1px rgba(15,23,29,.04);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-size:15px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:980px; margin:0 auto; padding:56px 24px 96px; }
+
+  .eyebrow {
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 10px;
+  }
+  h1 { font-size:34px; line-height:1.15; letter-spacing:-.021em; font-weight:700; margin:0 0 12px; text-wrap:balance; }
+  .lede { color:var(--muted); max-width:64ch; margin:0 0 8px; }
+
+  .scope {
+    display:flex; flex-wrap:wrap; gap:8px 20px; margin:24px 0 0;
+    padding:14px 16px; background:var(--sunk); border:1px solid var(--line-soft); border-radius:6px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; color:var(--muted);
+  }
+  .scope b { color:var(--ink); font-weight:600; }
+
+  .cards { display:flex; flex-direction:column; gap:18px; margin-top:32px; }
+
+  .card {
+    background:var(--surface); border-radius:8px; box-shadow:var(--shadow);
+    padding:20px 22px 22px; border:1px solid transparent;
+  }
+  .card.is-stale { background:var(--sunk); }
+
+  .card-head { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:4px; }
+  .arm { font-size:20px; font-weight:700; letter-spacing:-.015em; margin:0; }
+  .run {
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12px; color:var(--faint);
+  }
+  .headline {
+    margin-left:auto; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-variant-numeric:tabular-nums; font-size:26px; font-weight:600; letter-spacing:-.02em;
+  }
+  .headline .sub { font-size:12px; color:var(--faint); font-weight:400; margin-left:6px; }
+
+  .chip {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+    padding:3px 8px; border-radius:4px; border:1px solid currentColor;
+  }
+  .chip.ok { color:var(--good); }
+  .chip.invalid { color:var(--bad); }
+  .chip.stale { color:var(--stale); }
+
+  .gate-note {
+    font-size:13px; color:var(--muted); margin:10px 0 0;
+    padding:9px 12px; border-left:2px solid var(--bad); background:var(--sunk); border-radius:0 4px 4px 0;
+  }
+  .card.is-stale .gate-note { border-left-color:var(--stale); background:transparent; padding-left:10px; }
+
+  .block { margin-top:20px; }
+  .block-head {
+    display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+    padding-bottom:7px; margin-bottom:11px; border-bottom:1px solid var(--line-soft);
+  }
+  .block-title {
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); font-weight:600;
+  }
+  .block-dir { font-size:11px; color:var(--faint); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+
+  /* One metric = one row. Rows stack; nothing grows sideways as arms are added. */
+  .metric { display:grid; grid-template-columns:132px 1fr 84px; align-items:center; gap:14px; padding:3px 0; }
+  .metric-name {
+    font-size:12px; color:var(--muted);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .track { height:9px; border-radius:2px; background:var(--outcome-track); overflow:hidden; }
+  .track.cost { background:var(--cost-track); }
+  .fill { height:100%; background:var(--outcome); border-radius:2px; }
+  .fill.cost { background:var(--cost); }
+  .metric-val {
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-variant-numeric:tabular-nums; font-size:13px; text-align:right;
+  }
+  .metric-val .unit { color:var(--faint); font-size:11px; margin-left:2px; }
+
+  /* Bench-specific block: same visual language, different granularity. */
+  .tasks { display:flex; flex-direction:column; gap:3px; }
+  .task { display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; padding:2px 0; }
+  .task-name { font-size:12px; color:var(--muted); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  .pips { display:flex; gap:4px; }
+  .pip { width:16px; height:9px; border-radius:2px; background:var(--outcome); }
+  .pip.miss { background:var(--outcome-track); }
+  .card.is-stale .pip { background:var(--stale); opacity:.55; }
+  .card.is-stale .pip.miss { background:var(--line); opacity:1; }
+
+  .legend { margin-top:38px; padding-top:20px; border-top:1px solid var(--line); }
+  .legend h2 { font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-weight:600; margin:0 0 14px; }
+  .legend dl { display:grid; grid-template-columns:150px 1fr; gap:8px 18px; margin:0; font-size:13px; }
+  .legend dt { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; color:var(--ink); }
+  .legend dd { margin:0; color:var(--muted); }
+  .legend .tag {
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:10px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--faint);
+    border:1px solid var(--line); border-radius:3px; padding:1px 5px; margin-left:6px;
+  }
+
+  @media (max-width:620px) {
+    .metric { grid-template-columns:104px 1fr 70px; gap:10px; }
+    .headline { margin-left:0; }
+  }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Infra Bench · layout study</p>
+  <h1>One card per toolchain, metrics as stacked bars</h1>
+  <p class="lede">
+    Toolchains run down the page; metrics run across inside each card. Adding a toolchain makes
+    the page longer, never wider — so every arm and every metric stays reachable without scrolling
+    sideways. Each bar is scaled against the largest value for that metric across all arms, so
+    reading straight down a column compares like with like.
+  </p>
+
+  <div class="scope">
+    <span><b>aws-bench</b> / ec2-multiregion</span>
+    <span>agent <b>claude-code</b></span>
+    <span>model <b>claude-haiku-4-5</b></span>
+    <span><b>k=3</b> · 8 tasks · 24 trials</span>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="legend">
+    <h2>Metrics</h2>
+    <dl>
+      <dt>outcome rate<span class="tag">shared</span></dt>
+      <dd>Trials whose answer the judge accepted, over trials that ran.</dd>
+      <dt>account reads<span class="tag">shared</span></dt>
+      <dd>Calls that read the cloud while answering, rather than state the tool already held. The axis the comparison is about.</dd>
+      <dt>tool calls · turns · seconds<span class="tag">shared</span></dt>
+      <dd>What the answer cost, averaged per trial.</dd>
+      <dt>per task<span class="tag">bench-specific</span></dt>
+      <dd>aws-bench defines these eight questions. Another bench names its own; the rendering does not change.</dd>
+    </dl>
+  </div>
+</div>
+
+<script>
+  const ARMS = [
+    {"arm":"chant","run":"chant-s17-eni","rate":0.9167,"passed":22,"trials":24,"reads":1,
+     "calls":3.96,"turns":5.92,"secs":37.84,"valid":true,"stale":false,"note":null,
+     "by_task":{"describe-ec-instances-cross-regi":[1,1,1],"ec-instances-without-default-vpc":[1,1,1],
+       "find-ec-instances-in-public-subn":[1,1,1],"list-ec-instances-all-regions":[1,0,1],
+       "list-ec-instances-all-regions-1":[1,1,1],"list-ec-instances-by-vpc-across":[1,1,1],
+       "list-ec-private-ips-all-regions":[1,1,1],"list-unused-security-groups-all":[1,1,0]}},
+    {"arm":"pulumi","run":"pulumi-s1-rerun","rate":0.8333,"passed":20,"trials":24,"reads":0,
+     "calls":7.67,"turns":9.92,"secs":47.94,"valid":true,"stale":true,
+     "note":"Ran on an earlier harness, before the current gates and the briefing symmetry pass. Not comparable to chant's run above until it is re-run.",
+     "by_task":{"describe-ec-instances-cross-regi":[1,1,1],"ec-instances-without-default-vpc":[1,1,1],
+       "find-ec-instances-in-public-subn":[1,1,0],"list-ec-instances-all-regions":[1,1,1],
+       "list-ec-instances-all-regions-1":[1,1,1],"list-ec-instances-by-vpc-across":[1,1,1],
+       "list-ec-private-ips-all-regions":[1,1,1],"list-unused-security-groups-all":[0,0,0]}},
+    {"arm":"terraform","run":"terraform-s1-rerun","rate":0.7917,"passed":19,"trials":24,"reads":0,
+     "calls":10.67,"turns":13.67,"secs":56.35,"valid":false,"stale":true,
+     "note":"Failed the current audit gate, and predates it. Shown to demonstrate how an invalid run renders — it is not a result.",
+     "by_task":{"describe-ec-instances-cross-regi":[1,1,1],"ec-instances-without-default-vpc":[1,1,1],
+       "find-ec-instances-in-public-subn":[1,0,0],"list-ec-instances-all-regions":[1,1,1],
+       "list-ec-instances-all-regions-1":[1,1,1],"list-ec-instances-by-vpc-across":[1,1,1],
+       "list-ec-private-ips-all-regions":[1,1,1],"list-unused-security-groups-all":[0,0,0]}},
+    {"arm":"cdk","run":"cdk-s1-rerun","rate":0.7083,"passed":17,"trials":24,"reads":77,
+     "calls":11.04,"turns":14.88,"secs":71.34,"valid":false,"stale":true,
+     "note":"Failed the current audit gate, and predates it. CDK keeps no state of its own, so its account reads are its sanctioned path, not a fallback.",
+     "by_task":{"describe-ec-instances-cross-regi":[1,1,1],"ec-instances-without-default-vpc":[1,1,0],
+       "find-ec-instances-in-public-subn":[0,0,0],"list-ec-instances-all-regions":[1,1,1],
+       "list-ec-instances-all-regions-1":[1,1,1],"list-ec-instances-by-vpc-across":[1,1,1],
+       "list-ec-private-ips-all-regions":[1,1,1],"list-unused-security-groups-all":[0,0,0]}},
+    {"arm":"alchemy","run":"alchemy-s1-rerun","rate":0.6667,"passed":16,"trials":24,"reads":0,
+     "calls":8.67,"turns":18.75,"secs":54.83,"valid":false,"stale":true,
+     "note":"Failed the current audit gate: trials could not find the arm's own CLI, so they were not measuring alchemy.",
+     "by_task":{"describe-ec-instances-cross-regi":[1,1,1],"ec-instances-without-default-vpc":[1,1,1],
+       "find-ec-instances-in-public-subn":[0,0,0],"list-ec-instances-all-regions":[1,1,1],
+       "list-ec-instances-all-regions-1":[1,0,0],"list-ec-instances-by-vpc-across":[1,1,1],
+       "list-ec-private-ips-all-regions":[1,1,1],"list-unused-security-groups-all":[0,0,0]}}
+  ];
+
+  // Outcome metrics read better when longer; cost metrics read worse. Hue carries
+  // the direction so bar length can stay honest to the raw value.
+  const OUTCOME = [
+    {key:"rate",  name:"outcome rate", fmt:v => (v*100).toFixed(1), unit:"%"},
+  ];
+  const COST = [
+    {key:"reads", name:"account reads", fmt:v => String(v),        unit:""},
+    {key:"calls", name:"tool calls",    fmt:v => v.toFixed(1),     unit:"/trial"},
+    {key:"turns", name:"turns",         fmt:v => v.toFixed(1),     unit:"/trial"},
+    {key:"secs",  name:"seconds",       fmt:v => v.toFixed(0),     unit:"/trial"},
+  ];
+
+  // Scale every metric against its own maximum across arms, so a bar's length
+  // means the same thing wherever it appears in the column.
+  const maxOf = key => Math.max(...ARMS.map(a => a[key]), 0) || 1;
+  const SCALE = Object.fromEntries([...OUTCOME, ...COST].map(m => [m.key, maxOf(m.key)]));
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  function metricRow(arm, m, kind) {
+    const pct = Math.max(1.5, (arm[m.key] / SCALE[m.key]) * 100);
+    const cost = kind === "cost" ? " cost" : "";
+    return `<div class="metric">
+      <span class="metric-name">${esc(m.name)}</span>
+      <div class="track${cost}"><div class="fill${cost}" style="width:${pct.toFixed(1)}%"></div></div>
+      <span class="metric-val">${esc(m.fmt(arm[m.key]))}<span class="unit">${esc(m.unit)}</span></span>
+    </div>`;
+  }
+
+  function block(arm, title, dir, metrics, kind) {
+    return `<div class="block">
+      <div class="block-head">
+        <span class="block-title">${esc(title)}</span>
+        <span class="block-dir">${esc(dir)}</span>
+      </div>
+      ${metrics.map(m => metricRow(arm, m, kind)).join("")}
+    </div>`;
+  }
+
+  function tasksBlock(arm) {
+    const rows = Object.entries(arm.by_task).map(([name, runs]) => `
+      <div class="task">
+        <span class="task-name">${esc(name)}</span>
+        <span class="pips">${runs.map(r => `<span class="pip${r ? "" : " miss"}"></span>`).join("")}</span>
+      </div>`).join("");
+    return `<div class="block">
+      <div class="block-head">
+        <span class="block-title">Per task</span>
+        <span class="block-dir">bench-specific · 3 trials each</span>
+      </div>
+      <div class="tasks">${rows}</div>
+    </div>`;
+  }
+
+  function card(arm) {
+    const chip = !arm.valid
+      ? '<span class="chip invalid">gate failed</span>'
+      : arm.stale
+        ? '<span class="chip stale">stale harness</span>'
+        : '<span class="chip ok">gates passed</span>';
+    return `<article class="card${arm.stale || !arm.valid ? " is-stale" : ""}">
+      <div class="card-head">
+        <h2 class="arm">${esc(arm.arm)}</h2>
+        <span class="run">${esc(arm.run)}</span>
+        ${chip}
+        <span class="headline">${(arm.rate*100).toFixed(1)}<span class="sub">${arm.passed}/${arm.trials}</span></span>
+      </div>
+      ${arm.note ? `<p class="gate-note">${esc(arm.note)}</p>` : ""}
+      ${block(arm, "Outcome", "higher is better", OUTCOME, "outcome")}
+      ${block(arm, "Cost", "lower is better", COST, "cost")}
+      ${tasksBlock(arm)}
+    </article>`;
+  }
+
+  document.getElementById("cards").innerHTML = ARMS.map(card).join("");
+</script>
