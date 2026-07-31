@@ -58,35 +58,55 @@ inherits aws-bench's credibility instead of competing with it.
 Never "we deploy / we ask / we grade". The questions and the grading are
 aws-bench's.
 
-### ELI5 for the bench page
+### Two ELI5s, at different levels
 
-> You build cloud infrastructure with a tool — Terraform, Pulumi, CDK, chant.
-> Months later you ask a question about it: *"which of my servers can be reached
-> from the internet?"*
->
-> That sounds easy. It isn't. A server is reachable if its security group allows
-> port 22 — but the group might be attached through a launch template rather
-> than to the server directly. And only if its subnet routes to an internet
-> gateway, which depends on a route table you look up separately. The answer
-> isn't written down anywhere. It has to be assembled.
->
-> **aws-bench asks exactly those questions.** It is an open benchmark for AI
-> agents on AWS: it defines the estate, the tasks, the reference answers, and
-> the judge. None of that is ours.
->
-> **chant-bench runs it across toolchains.** Each arm deploys aws-bench's estate
-> with a different toolchain, and the same agent and model answer the same eight
-> questions using only that tool.
->
-> **What gets reported.** Whether the answer was right. How much work it took.
-> And whether the tool had to go back and ask the cloud — because a tool that
-> already knows the answer is worth more than one that re-reads the account
-> every time.
->
-> Results run on the Floci emulator rather than a real AWS account, so anyone
-> can reproduce them for nothing.
+The bench page explains **the benchmark**; the scenario page explains **the
+questions**. Keeping them apart means a second scenario needs no rewrite of the
+bench page, and a reader who already knows aws-bench can skip straight to the
+scenario.
 
-The estate diagram goes directly under this.
+**`/aws-bench` — what aws-bench is**
+
+> aws-bench is an open benchmark for AI agents working on AWS. It defines
+> estates, the questions to ask about them, the reference answers, and an LLM
+> judge that grades what the agent said. None of that is ours.
+>
+> It measures the *agent*. chant-bench asks a different question of the same
+> scenarios: not how good the agent is, but how much the *tool it is holding*
+> helps. Same agent, same model, same questions — one arm per toolchain.
+>
+> Running it here differs from upstream in three ways: Floci replaces a real AWS
+> account so a run costs nothing; one deployment of each scenario per toolchain;
+> and two gates — preflight proves each tool can answer before scoring, a
+> postflight audit proves it actually did.
+>
+> Six hook points in aws-bench, all behind `AWS_BENCH_EMULATOR=floci`. With it
+> unset, the fork is upstream.
+
+**`/aws-bench/ec2-multiregion` — what this scenario asks**
+
+> Four CloudFormation stacks across three regions: six EC2 instances, four VPCs,
+> six security groups. Eight questions get asked about it.
+>
+> They look easy and are not. "Which servers can be reached from the internet?"
+> — a server is reachable if its security group allows port 22, but one
+> instance's group is attached through a *launch template* rather than to the
+> instance. And only if its subnet routes to an internet gateway, via a route
+> table you look up separately. "Which security groups are unused?" — a group
+> nothing references cannot be found by listing what you deployed, because it is
+> not attached to any of it.
+>
+> Neither answer is written down. Both have to be assembled from things stored
+> apart.
+
+Then the estate diagram and the ground-truth table: 6 instances (4/1/1), 4 VPCs
+including the account default, 6 security groups of which 4 are attached to
+nothing, 2 instances reachable from the internet and one of those only via its
+launch template.
+
+The ground truth belongs in the ELI5 rather than further down — it is what makes
+the questions concrete, and it is how a reader checks the numbers instead of
+trusting them.
 
 ## What to publish for a scenario
 
