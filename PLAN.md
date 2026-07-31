@@ -25,6 +25,26 @@ The cost is that another tool's maintainer is unlikely to contribute an arm
 under this name. That is worth revisiting if the project ever attracts outside
 contributors; the taxonomy and schema below do not depend on it.
 
+## Home page
+
+> **Benchmarks for agentic infrastructure.**
+>
+> Agents are starting to operate real infrastructure — not just write it, but
+> answer questions about it, find what is broken, and change it. Which means the
+> tool an agent is holding matters as much as the model.
+>
+> This site collects benchmarks that measure that, and publishes every run: what
+> was asked, what each toolchain answered, how much work it took, and whether
+> the run was valid at all.
+>
+> Today that is one benchmark — **aws-bench**, run across five toolchains on an
+> emulator. More will land here as they are published; the shape of the results
+> will not change.
+
+That last sentence is a commitment to the result contract below. It is what lets
+a second benchmark slot in without a redesign, so it should not be written
+unless the schema is actually held stable.
+
 ## Taxonomy
 
 ```
@@ -98,6 +118,17 @@ scenario.
 >
 > Neither answer is written down. Both have to be assembled from things stored
 > apart.
+
+The scenario page must stand alone — nobody is going to read aws-bench's docs
+first — so it also says what an agent actually gets:
+
+> Each question is asked in a fresh container holding one toolchain and the
+> estate's own state. The agent gets the question in plain English — "Provide me
+> a list of unused Security Groups by all regions" — and a short briefing on how
+> to read that tool's state. Nothing tells it the answer. It runs commands, then
+> writes an answer in prose, which an LLM judge compares against aws-bench's
+> reference. Three attempts per question, so a lucky guess shows up as
+> one-of-three.
 
 Then the estate diagram and the ground-truth table: 6 instances (4/1/1), 4 VPCs
 including the account default, 6 security groups of which 4 are attached to
@@ -176,6 +207,13 @@ dropped for being verbose:
   single "24/24" into two different experiments.
 - **`briefing.sha256`** — the instruction is part of the experiment. Same code,
   different briefing, different experiment.
+
+**Substrate is part of the run, not a separate tree.** Results here come from
+the Floci emulator; live-cloud runs are possible later. Same scenario, same
+questions, so `run.substrate: "floci" | "aws"` is a field and a badge rather
+than a parallel hierarchy — but the two must **never be pooled**. Emulator
+fidelity gaps are real, and averaging across substrates would hide exactly the
+differences worth knowing about.
 
 **Invalid runs are published, not hidden.** They render dimmed with the reason.
 A number whose conditions failed must never look like a merely low number.
