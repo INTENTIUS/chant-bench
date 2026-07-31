@@ -168,6 +168,42 @@ directories.
 gate evidence — the thing that decides whether a number is allowed to stand —
 had no record beside the result.
 
+## The agent's context is published, and tunable
+
+The briefing each arm receives is printed **in full on its result page**. It is
+simultaneously the fairness proof — a reader can check the instructions are
+symmetric instead of taking it on trust — and the starting point for anyone
+wanting to tune.
+
+**Scenario page, generic:**
+
+> Every trial gets the task question plus one briefing — a short page teaching
+> that toolchain's read commands. Nothing else. The briefings are published in
+> full; if the comparison is fair, you can check that yourself.
+>
+> They are held to the same shape so no arm is told more than another: three
+> rungs in the same order (own state, own source, raw `aws` for runtime values
+> state cannot carry); no arm taught a route the others lack; no briefing
+> containing an answer, a count, or a resource name from the estate.
+>
+> Tuning a briefing is legitimate — it is how each arm was brought to its best.
+> But the briefing is part of the experiment, so every result records its SHA. A
+> tuned briefing produces a different result set; you cannot accidentally
+> compare across two.
+
+**Tool page:** that arm's briefing verbatim, then the edit/run/emit loop, then
+what actually moved the numbers — which is the expensive knowledge and worth
+giving away:
+
+> Removing `--live` from the taught path dropped account reads from 44 to 0.
+> Teaching the negation form `!<-kind:X` fixed the unused-groups question;
+> teaching the bare `!<-` broke it again, because it counts stack outputs as
+> references. Widening the briefing made things worse — the largest, wordiest
+> version scored lowest of any run.
+
+The briefing SHA already sits in the result contract, so this costs nothing to
+enforce: two runs with different briefings are visibly different experiments.
+
 ## What to publish for a scenario
 
 Ranked by worth, and by how little anyone else publishes it:
