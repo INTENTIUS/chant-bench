@@ -1,4 +1,4 @@
-# Infra Bench — plan
+# chant-bench — plan
 
 A hub that hosts result sets for chant against other toolchains, across
 benchmarks from many providers, and teaches people to run them.
@@ -10,15 +10,20 @@ Two jobs, equally weighted:
 - **Education.** Someone should be able to reproduce a result, add an arm, or
   bring their own benchmark without asking anyone.
 
-Name undecided. `chant-bench` is honest about authorship and promises little,
-but frames chant as the subject and everyone else as foils, so no other tool's
-maintainer would contribute an arm. A neutral category name is a bigger promise
-and attracts more scrutiny, not less — "why does the benchmark's author win
-their own benchmark" is harder to answer under a neutral banner. The third
-option, and the current lean, is to name the *question*: this measures whether a
-tool can answer questions about the estate it deployed from what it already
-knows. Something on the estate/state/recall axis. The taxonomy and the schema
-below don't depend on which is chosen.
+Called **chant-bench**. `infra-bench` was the first instinct and is already
+taken — it is Kubeply's Kubernetes AI agent benchmark.
+
+The name is honest about authorship, which is the right trade here. A neutral
+category name would be a larger promise and would attract more scrutiny, not
+less: "why does the benchmark's author win their own benchmark" is harder to
+answer under a neutral banner than under a partisan one. What earns trust is the
+method page, not the name — every arm gets an identical environment, briefings
+have identical shape, and a run whose gates fail is published as invalid rather
+than as a low score.
+
+The cost is that another tool's maintainer is unlikely to contribute an arm
+under this name. That is worth revisiting if the project ever attracts outside
+contributors; the taxonomy and schema below do not depend on it.
 
 ## Taxonomy
 
