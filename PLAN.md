@@ -28,18 +28,93 @@ contributors; the taxonomy and schema below do not depend on it.
 ## Taxonomy
 
 ```
-/                                    what this is, latest results across benches
-/aws-bench/                          the benchmark: whose it is, our fork, how we hook in
-/aws-bench/ec2-multiregion/          scenario: the estate, the questions, the agent env
-                          /results/  every run, gates visible
-                          /method/   preflight, audit, briefing symmetry, gates
-                          /reproduce/chant   one page per arm
-/azure-bench/…                       same shape, no new code
+/                                  what this is · ELI5 · latest comparison
+/method                            the fairness rules  (reserved name)
+/aws-bench                         what aws-bench is · its scenarios · what the fork adds
+/aws-bench/ec2-multiregion         the estate · the 8 questions · agent env · leaderboard
+/aws-bench/ec2-multiregion/chant   how it answers · run history · reproduce
+  …/chant/runs/chant-b1            one run: per-task, gates, provenance
+  …/chant/runs/chant-b1/ssh        the k=3 trials: commands, answers, verdict
 ```
 
-`bench → scenario → {results, method, reproduce/arm}` is the whole thing. Arms
-are scoped to a scenario, not global: an Azure bench has Bicep and ARM arms that
-mean nothing here, and chant is one arm among them rather than the centre.
+Bench names sit at the root, so `method`, `about` and `runs` are reserved. Runs
+hang off the arm rather than the scenario — a run *is* one arm's attempt.
+
+A cross-bench `/tools/chant` summary is worth adding later, once a second bench
+exists. The substance stays at the scenario level, because an arm's briefing,
+reproduce steps and results are all scenario-specific.
+
+## Voice: whose benchmark this is
+
+**aws-bench is not ours.** It defines the estate, the tasks, the reference
+answers and the judge. The fork adds three things and should say so plainly: the
+Floci emulator so runs cost nothing, the toolchain arms, and the fairness gates.
+
+The framing that follows from that is also the stronger one: aws-bench measures
+how well an *agent* answers; chant-bench asks a different question of the same
+scenario — how well the *tool the agent is holding* lets it answer. That
+inherits aws-bench's credibility instead of competing with it.
+
+Never "we deploy / we ask / we grade". The questions and the grading are
+aws-bench's.
+
+### ELI5 for the bench page
+
+> You build cloud infrastructure with a tool — Terraform, Pulumi, CDK, chant.
+> Months later you ask a question about it: *"which of my servers can be reached
+> from the internet?"*
+>
+> That sounds easy. It isn't. A server is reachable if its security group allows
+> port 22 — but the group might be attached through a launch template rather
+> than to the server directly. And only if its subnet routes to an internet
+> gateway, which depends on a route table you look up separately. The answer
+> isn't written down anywhere. It has to be assembled.
+>
+> **aws-bench asks exactly those questions.** It is an open benchmark for AI
+> agents on AWS: it defines the estate, the tasks, the reference answers, and
+> the judge. None of that is ours.
+>
+> **chant-bench runs it across toolchains.** Each arm deploys aws-bench's estate
+> with a different toolchain, and the same agent and model answer the same eight
+> questions using only that tool.
+>
+> **What gets reported.** Whether the answer was right. How much work it took.
+> And whether the tool had to go back and ask the cloud — because a tool that
+> already knows the answer is worth more than one that re-reads the account
+> every time.
+>
+> Results run on the Floci emulator rather than a real AWS account, so anyone
+> can reproduce them for nothing.
+
+The estate diagram goes directly under this.
+
+## What to publish for a scenario
+
+Ranked by worth, and by how little anyone else publishes it:
+
+1. **Leaderboard** — arms by latest valid run, gate state visible
+2. **Per-task matrix** — tasks x arms, passes out of k
+3. **Cost against outcome** — a scatter; the one chart the result needs
+4. **Run history per arm** — chant has 12 runs spanning 0.83-1.00. One number
+   hides that; the series is both more honest and more interesting
+5. **Trial drill-down** — the commands each agent actually ran. Full
+   trajectories exist (~5.5MB per 24-trial run) and nobody publishes this
+6. **Every briefing, verbatim** — the fairness proof. If the instructions are
+   symmetric, showing all five side by side settles the argument before it starts
+7. **The estate ground truth** — 6 instances, 4 VPCs, 4 unattached groups, 2
+   SSH-reachable, and why it is shaped that way
+
+6 and 7 rank higher than they look: they turn "trust our numbers" into "check
+our numbers".
+
+**Leaderboard honesty.** chant has 12 runs and the others 1-2. A naive
+leaderboard flatters whoever ran most, by giving it the maximum of many draws.
+State `n`, and use a stated rule — latest valid run, or mean of the last three —
+never a best-of.
+
+**The judge grades against aws-bench's reference answers**, so a low score is
+sometimes a phrasing mismatch rather than a tool failure: a correct six-instance
+answer was marked wrong for not naming regions. The method page has to say so.
 
 ## The result-set contract
 
