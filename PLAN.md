@@ -180,25 +180,44 @@ rules plainly enough that another provider's benchmark could adopt them:
 
 ## State, as of 2026-07-31
 
-chant on aws-bench/ec2-multiregion, claude-haiku-4-5, k=3, answering from
-recorded state (≤1 account read): **mean 0.892 across 5 valid runs**, range
-0.833–0.917. Best run `chant-s17-eni` — 0.9167 at 3.96 tool calls, 5.92 turns,
-38s per trial.
+chant on aws-bench/ec2-multiregion, claude-haiku-4-5, k=3, three runs at one
+frozen config (`58d5cb5`):
 
-One earlier run scored 1.000 but read the account 44 times, under a briefing
-that still taught `--live`. It is a different experiment and should never be
-quoted next to the others without that attached.
+| run | score | rate | account reads | calls | turns | secs |
+|---|---|---|---|---|---|---|
+| chant-b1 | 24/24 | 1.0000 | **0** | 2.67 | 4.67 | 31 |
+| chant-b2 | 21/24 | 0.8750 | 23 | 3.92 | 5.92 | 37 |
+| chant-b3 | 23/24 | 0.9583 | 0 | 2.88 | 4.88 | 32 |
 
-**Not ready to publish.** The other four arms have not run on the current
-harness; three of them fail the current gates and all four predate the briefing
-symmetry work. Their numbers are in the prototype only to show how stale and
-invalid runs render. A cross-tool comparison needs them re-run first.
+mean 0.9444, sd 0.0636. **`chant-b1` is 24/24 having never read the account** —
+audited, not asserted. An earlier run also scored 24/24 but read the account 44
+times under a briefing that still taught `--live`; same number, different claim,
+and the two should never be quoted together.
+
+Pooled per task over 9 trials each:
+
+```
+9/9  describe-ec-instances-cross-regi   9/9  list-ec-instances-all-regions
+9/9  ec-instances-without-default-vpc   9/9  list-ec-instances-by-vpc-across
+9/9  find-ec-instances-in-public-subn   9/9  list-ec-private-ips-all-regions
+8/9  list-ec-instances-all-regions-1    6/9  list-unused-security-groups-all
+```
+
+Six of eight solid across 9 trials. All 23 of b2's account reads came from one
+trajectory on the SSH task, so the reads column is not a property of the config.
+
+Say this as "six tasks solid, two occasionally miss, one run in three is
+perfect" — not "chant scores 94%". n=3 and the range spans 0.875–1.000.
+
+**Not ready to publish a comparison.** The other four arms have never run on
+this harness; three fail the current gates and all four predate the briefing
+symmetry work. Their numbers exist in the prototype only to show how stale and
+invalid runs render.
 
 Open, in rough order:
 
 - [ ] Re-run terraform, pulumi, cdk, alchemy on the current harness
-- [ ] Several chant runs at a settled config — one good run is not a baseline
 - [ ] Pick the name
 - [ ] Scaffold Starlight; generate results pages from the schema directory
 - [ ] Extract the shared scenario lead into one partial
-- [ ] `cdk_app` has a REPRODUCE.md now, but the CDK arm still needs a valid run
+- [ ] chant#1280 — derive the observation surface from the lexicon
