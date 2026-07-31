@@ -50,16 +50,23 @@ markdown_extensions:
 extra_css:
   - styles/results.css
 
+# Run pages are generated — one per result set, and there will be dozens. They
+# are linked from each arm's page rather than listed here, and declared so
+# `--strict` does not treat "not in nav" as an error.
+not_in_nav: |
+  /aws-bench/ec2-multiregion/*/runs/*.md
+
 nav:
   - Overview: index.md
   - Method: method.md
+  - Run it yourself: running.md
   - aws-bench:
       - What it is: aws-bench/index.md
       - ec2-multiregion:
           - The scenario: aws-bench/ec2-multiregion/index.md
           - Results: aws-bench/ec2-multiregion/results.md
-          - chant: aws-bench/ec2-multiregion/chant.md
-          - Terraform: aws-bench/ec2-multiregion/terraform.md
-          - Pulumi: aws-bench/ec2-multiregion/pulumi.md
-          - AWS CDK: aws-bench/ec2-multiregion/cdk.md
-          - Alchemy: aws-bench/ec2-multiregion/alchemy.md
+          - chant: aws-bench/ec2-multiregion/chant/index.md
+          - Terraform: aws-bench/ec2-multiregion/terraform/index.md
+          - Pulumi: aws-bench/ec2-multiregion/pulumi/index.md
+          - AWS CDK: aws-bench/ec2-multiregion/cdk/index.md
+          - Alchemy: aws-bench/ec2-multiregion/alchemy/index.md

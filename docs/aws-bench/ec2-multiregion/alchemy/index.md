@@ -20,10 +20,10 @@ low score.
 
 ## Runs
 
-| run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|
-| `alchemy-cur` | 14/24 | 0.583 | 25 | 11.67 | 14.71 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
-| `alchemy-s1-rerun` | 16/24 | 0.667 | 0 | 8.67 | 18.75 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
+| # | run | passed | rate | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|
+| 2 | [`alchemy-cur`](runs/alchemy-cur.md) | 14/24 | 0.583 | 25 | 11.67 | 14.71 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`alchemy-s1-rerun`](runs/alchemy-s1-rerun.md) | 16/24 | 0.667 | 0 | 8.67 | 18.75 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
 
 ## The agent's context
 

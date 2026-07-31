@@ -20,20 +20,20 @@ low score.
 
 ## Runs
 
-| run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|
-| `chant-b3` | 23/24 | 0.958 | 0 | 2.88 | 4.88 | `58d5cb5` | <span class="cb-badge ok">gates passed</span> |
-| `chant-b2` | 21/24 | 0.875 | 23 | 3.92 | 5.92 | `58d5cb5` | <span class="cb-badge ok">gates passed</span> |
-| `chant-b1` | 24/24 | 1.000 | 0 | 2.67 | 4.67 | `58d5cb5` | <span class="cb-badge ok">gates passed</span> |
-| `chant-s18-region` | 20/24 | 0.833 | 0 | 4.17 | 6.21 | `c17a6f1` | <span class="cb-badge ok">gates passed</span> |
-| `chant-s17-eni` | 22/24 | 0.917 | 1 | 3.96 | 5.92 | `a9fe29f` | <span class="cb-badge ok">gates passed</span> |
-| `chant-s16-gated` | 20/24 | 0.833 | 1 | 5.83 | 7.75 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
-| `chant-s15-revert` | 19/23 | 0.826 | 2 | 5.43 | 7.35 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
-| `chant-s14-sgfix` | 21/24 | 0.875 | 0 | 5.5 | 7.29 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
-| `chant-s13-hintfix` | 22/24 | 0.917 | 0 | 6.58 | 8.54 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
-| `chant-s12-steered` | 22/24 | 0.917 | 1 | 5.75 | 7.71 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
-| `chant-s11-baseline` | 21/24 | 0.875 | 8 | 4.5 | 6.33 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
-| `chant-s8-region` | 24/24 | 1.000 | 44 | 6.17 | 8 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
+| # | run | passed | rate | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|
+| 12 | [`chant-b3`](runs/chant-b3.md) | 23/24 | 0.958 | 0 | 2.88 | 4.88 | `58d5cb5` | <span class="cb-badge ok">gates passed</span> |
+| 11 | [`chant-b2`](runs/chant-b2.md) | 21/24 | 0.875 | 23 | 3.92 | 5.92 | `58d5cb5` | <span class="cb-badge ok">gates passed</span> |
+| 10 | [`chant-b1`](runs/chant-b1.md) | 24/24 | 1.000 | 0 | 2.67 | 4.67 | `58d5cb5` | <span class="cb-badge ok">gates passed</span> |
+| 9 | [`chant-s18-region`](runs/chant-s18-region.md) | 20/24 | 0.833 | 0 | 4.17 | 6.21 | `c17a6f1` | <span class="cb-badge ok">gates passed</span> |
+| 8 | [`chant-s17-eni`](runs/chant-s17-eni.md) | 22/24 | 0.917 | 1 | 3.96 | 5.92 | `a9fe29f` | <span class="cb-badge ok">gates passed</span> |
+| 7 | [`chant-s16-gated`](runs/chant-s16-gated.md) | 20/24 | 0.833 | 1 | 5.83 | 7.75 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
+| 6 | [`chant-s15-revert`](runs/chant-s15-revert.md) | 19/23 | 0.826 | 2 | 5.43 | 7.35 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
+| 5 | [`chant-s14-sgfix`](runs/chant-s14-sgfix.md) | 21/24 | 0.875 | 0 | 5.5 | 7.29 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
+| 4 | [`chant-s13-hintfix`](runs/chant-s13-hintfix.md) | 22/24 | 0.917 | 0 | 6.58 | 8.54 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
+| 3 | [`chant-s12-steered`](runs/chant-s12-steered.md) | 22/24 | 0.917 | 1 | 5.75 | 7.71 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
+| 2 | [`chant-s11-baseline`](runs/chant-s11-baseline.md) | 21/24 | 0.875 | 8 | 4.5 | 6.33 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`chant-s8-region`](runs/chant-s8-region.md) | 24/24 | 1.000 | 44 | 6.17 | 8 | `0d7178c` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

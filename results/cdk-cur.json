@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "cdk",
+  "run": {
+    "id": "cdk-cur",
+    "finished_at": "2026-07-31T17:13:25.673021",
+    "harness_commit": "9894bca"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "passed": 18,
+    "pass_rate": 0.75,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        0
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        0,
+        1
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        0,
+        0,
+        1
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        1,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": 89,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 12.88,
+    "turns": 16.71,
+    "wall_seconds": 117.91
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/cdk-cur/job.log",
+    "trials": "jobs/cdk-cur/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-cdk.md",
+    "sha256": "0214c5b545ad"
+  },
+  "reproduce": "benchmarks/arms/cdk_app/REPRODUCE.md"
+}

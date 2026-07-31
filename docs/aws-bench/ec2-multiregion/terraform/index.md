@@ -20,10 +20,10 @@ low score.
 
 ## Runs
 
-| run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|
-| `terraform-cur` | 20/24 | 0.833 | 0 | 11.71 | 14.79 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
-| `terraform-s1-rerun` | 19/24 | 0.792 | 0 | 10.67 | 13.67 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
+| # | run | passed | rate | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|
+| 2 | [`terraform-cur`](runs/terraform-cur.md) | 20/24 | 0.833 | 0 | 11.71 | 14.79 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`terraform-s1-rerun`](runs/terraform-s1-rerun.md) | 19/24 | 0.792 | 0 | 10.67 | 13.67 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
 
 ## The agent's context
 

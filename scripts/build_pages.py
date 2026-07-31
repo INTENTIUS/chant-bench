@@ -56,6 +56,16 @@ def load() -> dict[str, list[dict]]:
     return by_arm
 
 
+def numbered(runs: list[dict]) -> list[tuple[int, dict]]:
+    """Runs newest-first, each with its ordinal counted from the oldest.
+
+    An arm's third run stays "run 3" when a fourth arrives, so a link written
+    today still points at the same thing tomorrow.
+    """
+    oldest_first = list(reversed(runs))
+    return [(len(runs) - i, r) for i, r in enumerate(runs)] if oldest_first else []
+
+
 def valid(r: dict) -> bool:
     g = r.get("gates", {})
     return bool(g.get("audit")) and bool(g.get("complete")) and not g.get("tool_missing")
@@ -99,7 +109,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         reads = r["independence"]["account_reads"]
         reads_note = f"{reads} *(by design)*" if arm in STATELESS else str(reads)
         out.append(
-            f"| {i} | [{name}]({arm}.md) | {s['passed']}/{s['trials']} | "
+            f"| {i} | [{name}]({arm}/index.md) | {s['passed']}/{s['trials']} | "
             f"**{s['pass_rate']:.3f}** | {reads_note} | {e['tool_calls']} | "
             f"{e['turns']} | {e['wall_seconds']:.0f} | {n} | {badge(r)} |"
         )
@@ -174,13 +184,14 @@ def arm_page(arm: str, runs: list[dict]) -> str:
         "",
         "## Runs",
         "",
-        "| run | passed | rate | reads | commands | turns | harness | |",
-        "|---|---|---|---|---|---|---|---|",
+        "| # | run | passed | rate | reads | commands | turns | harness | |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
-    for r in runs:
+    for n, r in numbered(runs):
         s, e = r["score"], r["effort"]
         out.append(
-            f"| `{r['run']['id']}` | {s['passed']}/{s['trials']} | {s['pass_rate']:.3f} | "
+            f"| {n} | [`{r['run']['id']}`](runs/{r['run']['id']}.md) | "
+            f"{s['passed']}/{s['trials']} | {s['pass_rate']:.3f} | "
             f"{r['independence']['account_reads']} | {e['tool_calls']} | {e['turns']} | "
             f"`{r['run'].get('harness_commit') or '—'}` | {badge(r)} |"
         )
@@ -215,6 +226,95 @@ def arm_page(arm: str, runs: list[dict]) -> str:
     return "\n".join(out)
 
 
+
+
+def run_page(arm: str, number: int, total: int, r: dict) -> str:
+    """One run, with everything needed to judge whether its number counts."""
+    name = ARMS[arm][0]
+    s, e, g = r["score"], r["effort"], r["gates"]
+    run, agent = r["run"], r["agent"]
+    ok = valid(r)
+
+    out = [
+        f"# {name} — run {number} of {total}",
+        "",
+        f"`{run['id']}` {badge(r)}",
+        "",
+    ]
+
+    if not ok:
+        reasons = []
+        if not g.get("audit"):
+            reasons.append("the postflight audit failed")
+        if not g.get("complete"):
+            reasons.append("not every trial completed")
+        if g.get("tool_missing"):
+            reasons.append("trials could not find the arm's own CLI")
+        out += [
+            '!!! danger "This run does not count"',
+            f"    {'; '.join(reasons)}. The numbers below describe something other",
+            "    than this tool, and are published so the failure is visible rather",
+            "    than quietly dropped.",
+            "",
+        ]
+
+    out += [
+        f"**{s['passed']} of {s['trials']}** ({s['pass_rate']:.3f}) · "
+        f"{r['independence']['account_reads']} account read(s) · "
+        f"{e['tool_calls']} commands, {e['turns']} turns, {e['wall_seconds']:.0f}s per trial",
+        "",
+        "## By question",
+        "",
+        "| task | attempts |",
+        "|---|---|",
+    ]
+    for task, runs_ in sorted(s["by_task"].items()):
+        marks = " ".join("✓" if v else "✗" for v in runs_)
+        out.append(f"| `{task}` | {sum(runs_)}/{len(runs_)} &nbsp; {marks} |")
+
+    out += [
+        "",
+        "## What produced this",
+        "",
+        "| | |",
+        "|---|---|",
+        f"| finished | {run.get('finished_at') or '—'} |",
+        f"| harness | `{run.get('harness_commit') or '—'}` |",
+        f"| agent | {agent.get('name')} / `{agent.get('model')}`, k={agent.get('k')} |",
+        f"| briefing | `{(r.get('briefing') or {}).get('sha256') or '—'}` |",
+        f"| substrate | {run.get('substrate', 'floci')} |",
+        f"| trials | {s['trials']} of {s.get('expected_trials') or s['trials']} expected |",
+        "",
+        "A run is only comparable with another that shares the harness commit and",
+        "the briefing hash. Different either, different experiment.",
+        "",
+        "## Logs",
+        "",
+    ]
+    logs = r.get("logs") or {}
+    if logs.get("run"):
+        out.append(f"- `{logs['run']}` — wipe, deploy, both gates, and the scored run")
+    else:
+        out.append("- *(whole-run log not captured; this run predates it)*")
+    if logs.get("job"):
+        out.append(f"- `{logs['job']}` — the scored run")
+    if logs.get("trials"):
+        out.append(f"- `{logs['trials']}` — per trial: every command, its output, the answer, the verdict")
+
+    out += [
+        "",
+        "## Reproducing",
+        "",
+        "```sh",
+        f"./benchmarks/agent-env/run-arm.sh {arm} {run['id']}",
+        "```",
+        "",
+        f"[← all {name} runs](../index.md)",
+        "",
+    ]
+    return "\n".join(out)
+
+
 def main() -> int:
     by_arm = load()
     if not by_arm:
@@ -228,7 +328,11 @@ def main() -> int:
         if not runs:
             print(f"skip  {arm}.md  (no runs)")
             continue
-        (DOCS / f"{arm}.md").write_text(arm_page(arm, runs))
+        arm_dir = DOCS / arm
+        (arm_dir / "runs").mkdir(parents=True, exist_ok=True)
+        (arm_dir / "index.md").write_text(arm_page(arm, runs))
+        for number, r in numbered(runs):
+            (arm_dir / "runs" / f"{r['run']['id']}.md").write_text(run_page(arm, number, len(runs), r))
         print(f"ok    {arm}.md  ({len(runs)} run(s))")
     return 0
 

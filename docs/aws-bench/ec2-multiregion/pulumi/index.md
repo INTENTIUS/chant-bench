@@ -20,10 +20,10 @@ low score.
 
 ## Runs
 
-| run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|
-| `pulumi-cur` | 18/24 | 0.750 | 0 | 8 | 10.33 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
-| `pulumi-s1-rerun` | 20/24 | 0.833 | 0 | 7.67 | 9.92 | `a9fe29f` | <span class="cb-badge ok">gates passed</span> |
+| # | run | passed | rate | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|
+| 2 | [`pulumi-cur`](runs/pulumi-cur.md) | 18/24 | 0.750 | 0 | 8 | 10.33 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`pulumi-s1-rerun`](runs/pulumi-s1-rerun.md) | 20/24 | 0.833 | 0 | 7.67 | 9.92 | `a9fe29f` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

@@ -1,9 +1,6 @@
 # AWS CDK
 
-!!! warning "No valid run yet"
-    Every run of this arm so far failed a gate. The runs are published
-    below with the reason — a tool that never ran is not a tool that did
-    badly.
+Latest valid run: **18/24** (0.750), 89 account read(s), 12.88 commands and 16.71 turns per trial.
 
 ## Reproducing this
 
@@ -23,9 +20,10 @@ low score.
 
 ## Runs
 
-| run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|
-| `cdk-s1-rerun` | 17/24 | 0.708 | 77 | 11.04 | 14.88 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
+| # | run | passed | rate | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|
+| 2 | [`cdk-cur`](runs/cdk-cur.md) | 18/24 | 0.750 | 89 | 12.88 | 16.71 | `9894bca` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`cdk-s1-rerun`](runs/cdk-s1-rerun.md) | 17/24 | 0.708 | 77 | 11.04 | 14.88 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
 
 ## The agent's context
 
@@ -65,11 +63,15 @@ its own run rather than replacing one.
     Run from the project root:
 
     - `cd /workspace/cdk_app && npx cdk ls` — every stack the app defines.
-    - `cd /workspace/cdk_app && npx cdk synth <stack>` — the synthesized
+    - `cd /workspace/cdk_app && npx cdk synth <stack> --json` — the synthesized
       CloudFormation template: all resources with their properties, logical ids, and
       the `Ref`/`Fn::GetAtt` edges between them. `jq` over this answers relationship
-      questions without hand-joining CLI output. Templates are also written to
-      `cdk.out/`.
+      questions without hand-joining CLI output.
+
+        `synth` prints **YAML** unless you pass `--json`, so piping it straight into
+        `jq` fails with `Invalid numeric literal`. Warnings go to stderr, so redirect
+        with `2>/dev/null`, not `2>&1`. The same templates are written as JSON to
+        `cdk.out/*.template.json` if you would rather read them from there.
     - `aws cloudformation describe-stack-resources --stack-name <stack> --region <region>`
       — the deployed logical id → physical id mapping for that stack.
     - `aws cloudformation describe-stacks --stack-name <stack> --region <region>` —
@@ -77,7 +79,7 @@ its own run rather than replacing one.
 
     Path to estate facts, in order:
 
-    1. `npx cdk synth` (or the templates in `cdk.out/`) for the declared shape and
+    1. `npx cdk synth --json` (or the templates in `cdk.out/`) for the declared shape and
        the relationships, joined to `describe-stack-resources` for the physical ids
        — the default, for every question. The app spans several stacks and regions;
        cover each.
