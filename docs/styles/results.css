@@ -1,0 +1,54 @@
+/* Outcome metrics and cost metrics read in opposite directions, so hue carries
+   the direction and bar length can stay honest to the raw value. Longer is not
+   always better — a long "account reads" bar is a worse result, not a win. */
+:root {
+  --cb-outcome: #0b6e76;
+  --cb-cost: #9a5b12;
+  --cb-track: rgba(0, 0, 0, 0.07);
+}
+[data-md-color-scheme="slate"] {
+  --cb-outcome: #3fafb6;
+  --cb-cost: #c9913f;
+  --cb-track: rgba(255, 255, 255, 0.1);
+}
+
+/* Gate state is structural, not decorative: an invalid run must not be
+   mistakable for a merely low-scoring one at a glance. */
+.cb-invalid { opacity: 0.62; }
+.cb-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.cb-badge.ok { color: #2c7a55; }
+.cb-badge.invalid { color: #a63f38; }
+[data-md-color-scheme="slate"] .cb-badge.ok { color: #4fa97c; }
+[data-md-color-scheme="slate"] .cb-badge.invalid { color: #d0665c; }
+
+/* Figures line up when they are compared down a column. */
+.md-typeset table td:not(:first-child),
+.md-typeset table th:not(:first-child) {
+  font-variant-numeric: tabular-nums;
+}
+
+.cb-bar {
+  display: inline-block;
+  height: 0.55rem;
+  border-radius: 2px;
+  background: var(--cb-outcome);
+  vertical-align: middle;
+}
+.cb-bar.cost { background: var(--cb-cost); }
+.cb-bar-track {
+  display: inline-block;
+  width: 100%;
+  min-width: 4rem;
+  height: 0.55rem;
+  border-radius: 2px;
+  background: var(--cb-track);
+}
