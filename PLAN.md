@@ -139,6 +139,35 @@ The ground truth belongs in the ELI5 rather than further down — it is what mak
 the questions concrete, and it is how a reader checks the numbers instead of
 trusting them.
 
+## Every result page leads with how to reproduce it
+
+A result page opens by telling a reader how to get the same number themselves,
+before showing the number. Roughly:
+
+> **Reproducing this run.** Everything below came from one command against a
+> local emulator — no AWS account, no spend:
+>
+> ```
+> ./benchmarks/agent-env/run-arm.sh chant
+> ```
+>
+> That wipes the emulator, deploys this arm's estate, proves the tool can answer
+> before scoring it, runs all eight questions three times, and then checks the
+> tool was actually used. It takes about ten minutes.
+>
+> If a gate fails the run stops and is published as invalid rather than as a low
+> score — a tool that never ran is not a tool that did badly.
+>
+> Full log · scored run log · per-trial commands and answers
+
+Then the numbers. The three links are `run-arm.log` (wipe through audit,
+including both gates), `job.log` (the scored run), and the per-trial agent
+directories.
+
+`run-arm.log` exists because `job.log` covers only the scored portion, so the
+gate evidence — the thing that decides whether a number is allowed to stand —
+had no record beside the result.
+
 ## What to publish for a scenario
 
 Ranked by worth, and by how little anyone else publishes it:
