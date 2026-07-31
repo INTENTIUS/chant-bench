@@ -114,6 +114,46 @@ bench-specific: aws-bench names its eight questions, another bench names its
 own, and nothing about the rendering changes. Per-task uses pips rather than
 bars because the value is k-of-3, a count of trials, not a magnitude.
 
+### Page shape
+
+Kubeply's infra-bench (the Kubernetes one) solves the same layout problem a
+different way, and two of its moves are better than the card stack:
+
+**Selection drives the page.** A ranked leaderboard at the top — rank, arm,
+headline rate — and selecting a row redraws everything below it. Detail is
+stacked *under* the leaderboard, never beside it, which is the same
+anti-horizontal-scroll instinct and scales past five arms far better than one
+tall card each. Their leaderboard rows are models on one toolchain; ours are
+toolchains on one model. Same shape.
+
+**Cost against outcome as a scatter.** Theirs is "score per token spend" — pass
+rate on y, spend on x. That single chart is the one chant's result needs: 0.94
+at 2.67 tool calls against arms that are both lower and dearer. The bar blocks
+show it only if the reader scans two of them and holds the comparison in their
+head.
+
+**Drill-down.** "Open a task to inspect logs and artifacts." Every trial writes a
+full trajectory and we surface none of them. A per-task table — task, result,
+duration, and a link into the trajectory — is most of the education half of this
+site for very little work.
+
+Their distributions (token, duration, by-difficulty, by-category) are worth
+having once there is enough data to fill them. There is not yet: 8 tasks, no
+difficulty labels, one model.
+
+Two things we need that they do not have, and they are the whole credibility of
+this project:
+
+- **Gate validity.** A run whose tooling broke renders as invalid, not as a low
+  score. Kubeply has no equivalent because every row there is the same harness;
+  ours differ per arm and break in arm-specific ways — three of four arms failed
+  their first honest run.
+- **Account reads.** Whether the arm answered from state it already held. Their
+  x-axis is spend; ours has to be independence, because that is the claim.
+
+Keep from the card study: hue carries direction (teal outcome, ochre cost) and
+bar length stays honest to the raw value.
+
 ### Tokens
 
 Instrument-panel neutrals with a blue bias — deliberately not warm cream, not
