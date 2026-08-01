@@ -27,9 +27,9 @@ measured figure for three assumed ones.
 
 <div class="cb-cards" markdown="0">
 <div class="cb-card">
-<div class="cb-card-head"><a class="cb-card-name" href="../chant/">chant</a><span class="cb-card-rate">0.958</span></div>
+<div class="cb-card-head"><a class="cb-card-name" href="../chant/">chant</a></div>
+<div class="cb-hero"><span class="cb-hero-value">0.958</span><span class="cb-hero-label">pass rate · 23/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:96%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">pass rate</span><span class="cb-value">0.958</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:96%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0330</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:32%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">129,446</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:27%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">2,350</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:42%"></span></span></div>
@@ -41,9 +41,9 @@ measured figure for three assumed ones.
 <div class="cb-card-foot">20 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card">
-<div class="cb-card-head"><a class="cb-card-name" href="../pulumi/">Pulumi</a><span class="cb-card-rate">0.792</span></div>
+<div class="cb-card-head"><a class="cb-card-name" href="../pulumi/">Pulumi</a></div>
+<div class="cb-hero"><span class="cb-hero-value">0.792</span><span class="cb-hero-label">pass rate · 19/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:79%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">pass rate</span><span class="cb-value">0.792</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:79%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0704</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:68%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">302,064</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:62%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">4,094</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:73%"></span></span></div>
@@ -55,9 +55,9 @@ measured figure for three assumed ones.
 <div class="cb-card-foot">3 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card">
-<div class="cb-card-head"><a class="cb-card-name" href="../cdk/">AWS CDK</a><span class="cb-card-rate">0.708</span></div>
+<div class="cb-card-head"><a class="cb-card-name" href="../cdk/">AWS CDK</a></div>
+<div class="cb-hero"><span class="cb-hero-value">0.708</span><span class="cb-hero-label">pass rate · 17/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:71%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">pass rate</span><span class="cb-value">0.708</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:71%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0849</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:83%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">317,640</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:65%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">5,636</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
@@ -69,9 +69,9 @@ measured figure for three assumed ones.
 <div class="cb-card-foot">2 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card">
-<div class="cb-card-head"><a class="cb-card-name" href="../terraform/">Terraform</a><span class="cb-card-rate">0.792</span></div>
+<div class="cb-card-head"><a class="cb-card-name" href="../terraform/">Terraform</a></div>
+<div class="cb-hero"><span class="cb-hero-value">0.792</span><span class="cb-hero-label">pass rate · 19/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:79%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">pass rate</span><span class="cb-value">0.792</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:79%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0853</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:83%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">359,447</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:74%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">4,612</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:82%"></span></span></div>
@@ -83,9 +83,9 @@ measured figure for three assumed ones.
 <div class="cb-card-foot">2 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card">
-<div class="cb-card-head"><a class="cb-card-name" href="../alchemy/">Alchemy</a><span class="cb-card-rate">0.625</span></div>
+<div class="cb-card-head"><a class="cb-card-name" href="../alchemy/">Alchemy</a></div>
+<div class="cb-hero"><span class="cb-hero-value">0.625</span><span class="cb-hero-label">pass rate · 15/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:62%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">pass rate</span><span class="cb-value">0.625</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:62%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.1028</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">486,457</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
 <div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">5,278</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:94%"></span></span></div>
@@ -97,11 +97,13 @@ measured figure for three assumed ones.
 <div class="cb-card-foot">2 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card pending">
-<div class="cb-card-head"><a class="cb-card-name" href="../alchemy-effect/">Alchemy v2 (Effect)</a><span class="cb-card-rate">—</span></div>
+<div class="cb-card-head"><a class="cb-card-name" href="../alchemy-effect/">Alchemy v2 (Effect)</a></div>
+<div class="cb-hero"><span class="cb-hero-value none">—</span><span class="cb-hero-label">pass rate</span><span class="cb-bar-track"></span></div>
 <p class="cb-pending-note">Not yet run — declared, no runs yet.</p>
 </div>
 <div class="cb-card pending">
-<div class="cb-card-head"><a class="cb-card-name" href="../bare/">No tool (AWS CLI)</a><span class="cb-card-rate">—</span></div>
+<div class="cb-card-head"><a class="cb-card-name" href="../bare/">No tool (AWS CLI)</a></div>
+<div class="cb-hero"><span class="cb-hero-value none">—</span><span class="cb-hero-label">pass rate</span><span class="cb-bar-track"></span></div>
 <p class="cb-pending-note">Not yet run — the floor every other card is read against.</p>
 </div>
 </div>

@@ -269,22 +269,27 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         name = ARMS.get(arm, (arm, ""))[0]
         is_base = arm == "bare"
         klass = "cb-card baseline" if is_base else "cb-card"
+        s = r["score"]
         out.append(f'<div class="{klass}">')
         out.append(
             '<div class="cb-card-head">'
             f'<a class="cb-card-name" href="../{arm}/">{name}</a>'
             + ('<span class="cb-tag">baseline</span>' if is_base else "")
-            + f'<span class="cb-card-rate">{rate(r)}</span>'
+            + "</div>"
+        )
+        # The answer first, and once. It was in the header and repeated as the
+        # first metric row, so it competed with itself and neither one led.
+        #
+        # Its bar is drawn against 1.0 rather than the best arm on the page: a
+        # field where nobody does well must not render as though someone did.
+        out.append(
+            '<div class="cb-hero">'
+            f'<span class="cb-hero-value">{rate(r)}</span>'
+            f'<span class="cb-hero-label">pass rate · {s["passed"]}/{s["trials"]}</span>'
+            f'{track(s.get("pass_rate"), 1.0, "outcome")}'
             "</div>"
         )
-        # The rate bar is drawn against 1.0 rather than the best arm, so a field
-        # where nobody does well cannot render as though someone did.
         out.append('<div class="cb-metrics">')
-        out.append(
-            '<div class="cb-metric"><span class="cb-label">pass rate</span>'
-            f'<span class="cb-value">{rate(r)}</span>'
-            f'{track(r["score"].get("pass_rate"), 1.0, "outcome")}</div>'
-        )
         for label, get, spec, unit in METRICS:
             v = get(r)
             shown = "—" if not isinstance(v, (int, float)) else (
@@ -313,8 +318,12 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         out.append(f'<div class="cb-card pending">')
         out.append(
             '<div class="cb-card-head">'
-            f'<a class="cb-card-name" href="../{arm}/">{name}</a>'
-            '<span class="cb-card-rate">—</span></div>'
+            f'<a class="cb-card-name" href="../{arm}/">{name}</a></div>'
+        )
+        out.append(
+            '<div class="cb-hero"><span class="cb-hero-value none">—</span>'
+            '<span class="cb-hero-label">pass rate</span>'
+            '<span class="cb-bar-track"></span></div>'
         )
         out.append(f'<p class="cb-pending-note">Not yet run — {why}.</p>')
         out.append("</div>")
