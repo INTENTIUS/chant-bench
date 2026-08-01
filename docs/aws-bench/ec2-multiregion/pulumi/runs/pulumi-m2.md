@@ -1,4 +1,4 @@
-# Pulumi — run 4 of 4
+# Pulumi — run 3 of 3
 
 `pulumi-m2` <span class="cb-badge ok">gates passed</span>
 

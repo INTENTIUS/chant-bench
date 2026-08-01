@@ -1,4 +1,4 @@
-# chant — run 9 of 24
+# chant — run 7 of 20
 
 `chant-s7-grammar` <span class="cb-badge ok">gates passed</span>
 

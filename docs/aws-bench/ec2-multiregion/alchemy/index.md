@@ -15,16 +15,15 @@ That wipes the emulator, deploys this arm's estate, proves the tool can
 answer before scoring it, runs all eight questions three times, then checks
 the tool was used. About ten minutes.
 
-If a gate fails the run stops and is published as invalid, not as a low
-score.
+If a gate fails the run stops and is not published at all. It has to
+happen again. A tool that never ran is not a tool that did badly.
 
 ## Runs
 
 | # | run | passed | rate | reads | commands | turns | harness | |
 |---|---|---|---|---|---|---|---|---|
-| 3 | [`alchemy-m1`](runs/alchemy-m1.md) | 15/24 | 0.625 | 25 | 12.46 | 16.67 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 2 | [`alchemy-cur`](runs/alchemy-cur.md) | 14/24 | 0.583 | 25 | 11.67 | 14.71 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`alchemy-s1-rerun`](runs/alchemy-s1-rerun.md) | 16/24 | — | 0 | 8.67 | 18.75 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
+| 2 | [`alchemy-m1`](runs/alchemy-m1.md) | 15/24 | 0.625 | 25 | 12.46 | 16.67 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`alchemy-cur`](runs/alchemy-cur.md) | 14/24 | 0.583 | 25 | 11.67 | 14.71 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

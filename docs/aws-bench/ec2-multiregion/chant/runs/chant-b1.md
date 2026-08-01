@@ -1,4 +1,4 @@
-# chant — run 20 of 24
+# chant — run 17 of 20
 
 `chant-b1` <span class="cb-badge ok">gates passed</span>
 

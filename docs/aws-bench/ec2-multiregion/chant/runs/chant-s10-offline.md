@@ -1,4 +1,4 @@
-# chant — run 11 of 24
+# chant — run 9 of 20
 
 `chant-s10-offline` <span class="cb-badge ok">gates passed</span>
 

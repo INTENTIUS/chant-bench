@@ -1,4 +1,4 @@
-# chant — run 10 of 24
+# chant — run 8 of 20
 
 `chant-s8-region` <span class="cb-badge ok">gates passed</span>
 

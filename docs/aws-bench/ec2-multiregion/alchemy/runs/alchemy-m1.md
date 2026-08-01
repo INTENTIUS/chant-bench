@@ -1,4 +1,4 @@
-# Alchemy — run 3 of 3
+# Alchemy — run 2 of 2
 
 `alchemy-m1` <span class="cb-badge ok">gates passed</span>
 

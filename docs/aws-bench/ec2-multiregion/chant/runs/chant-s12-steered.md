@@ -1,4 +1,4 @@
-# chant — run 13 of 24
+# chant — run 11 of 20
 
 `chant-s12-steered` <span class="cb-badge ok">gates passed</span>
 

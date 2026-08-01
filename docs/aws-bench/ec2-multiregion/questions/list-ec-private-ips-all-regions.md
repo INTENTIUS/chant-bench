@@ -34,10 +34,18 @@ cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | selec
 
 ## AWS CDK — answered
 
-3 commands, from `cdk-m2`.
+11 commands, from `cdk-cur`.
 
 ```sh
-aws ec2 describe-instances --region us-east-1 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`].Value|[0]]' --output json 2>/dev/null
-aws ec2 describe-instances --region us-west-1 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`].Value|[0]]' --output json 2>/dev/null
-aws ec2 describe-instances --region us-west-2 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`].Value|[0]]' --output json 2>/dev/null
+cd /workspace/cdk_app && npx cdk ls
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | keys[] as $k | select(.Resources[$k].Type == "AWS::EC2::Instance") | .Resources[$k]' 2>/dev/null || npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {id: .key, resource: .value}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null > /tmp/template-us-east-1.json && cat /tmp/template-us-east-1.json | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance")'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null > /tmp/template-us-west-1.json && cat /tmp/template-us-west-1.json | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance")'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null > /tmp/template-us-west-2.json && cat /tmp/template-us-west-2.json | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance")'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId}'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId}'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId}'
+aws ec2 describe-instances --instance-ids i-99224a9cff337e5b0 i-5fdf2028dd5a7a28d i-f5d8c3aa998285b73 i-754790856a4ef8150 --region us-east-1 2>/dev/null | jq '.Reservations[].Instances[] | {InstanceId: .InstanceId, PrivateIp: .PrivateIpAddress, State: .State.Name, InstanceType: .InstanceType}'
+aws ec2 describe-instances --instance-ids i-c52758030f5620e05 --region us-west-1 2>/dev/null | jq '.Reservations[].Instances[] | {InstanceId: .InstanceId, PrivateIp: .PrivateIpAddress, State: .State.Name, InstanceType: .InstanceType}'
+aws ec2 describe-instances --instance-ids i-e1c4d75f234795b0a --region us-west-2 2>/dev/null | jq '.Reservations[].Instances[] | {InstanceId: .InstanceId, PrivateIp: .PrivateIpAddress, State: .State.Name, InstanceType: .InstanceType}'
 ```

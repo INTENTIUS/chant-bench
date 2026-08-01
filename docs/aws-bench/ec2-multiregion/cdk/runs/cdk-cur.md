@@ -1,4 +1,4 @@
-# AWS CDK — run 2 of 4
+# AWS CDK — run 1 of 2
 
 `cdk-cur` <span class="cb-badge ok">gates passed</span>
 

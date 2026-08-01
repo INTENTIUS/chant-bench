@@ -1,4 +1,4 @@
-# chant — run 8 of 24
+# chant — run 6 of 20
 
 `chant-s6-properties` <span class="cb-badge ok">gates passed</span>
 

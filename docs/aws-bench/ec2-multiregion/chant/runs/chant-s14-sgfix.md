@@ -1,4 +1,4 @@
-# chant — run 15 of 24
+# chant — run 13 of 20
 
 `chant-s14-sgfix` <span class="cb-badge ok">gates passed</span>
 
