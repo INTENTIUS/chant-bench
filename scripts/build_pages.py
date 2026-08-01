@@ -168,30 +168,48 @@ def usd(v) -> str:
     return f"${v:.4f}" if isinstance(v, (int, float)) else "—"
 
 
-def track(value, peak, kind: str = "cost") -> str:
-    """Just the bar, scaled against the largest value any arm recorded for it.
+def track(value, others, better: str = "lower") -> str:
+    """A full-width bar whose hue says how this arm did on one metric.
 
-    Hue carries direction, length stays honest to the raw value. The columns
-    disagree about which way is good — a long `pass rate` bar is a win and a long
-    `cost` bar is the opposite — and one colour for both would read them the
-    same. So outcome is teal and anything you want less of is amber.
+    Length encoded the raw value before, which meant the columns argued with each
+    other: a long `pass rate` bar was a win and a long `cost` bar was the
+    opposite, and the eye reads length as magnitude in one direction whatever the
+    colour says. So length is constant and hue carries the whole comparison —
+    every bar is the same size, and the only thing that varies is where this arm
+    sits between the best and worst on that metric.
 
-    Scaling against the metric's own peak rather than a fixed ceiling is what
-    makes the shape legible: cost per answer runs from $0.03 to $0.10, and on a
-    0-to-1 axis every arm would be a stub.
+    Teal to amber rather than green to red: it is the palette the rest of the
+    page already uses, and it stays distinguishable to the ~8% of men who would
+    read a red/green ramp as one colour.
+
+    `others` is every arm's value for this metric, so the ends of the ramp are
+    the real best and worst rather than an assumed range.
     """
-    if not isinstance(value, (int, float)) or not peak or value <= 0:
-        # Zero draws nothing. A minimum-width sliver under chant's account reads
-        # would undercut the one number whose whole meaning is that it is zero.
+    if not isinstance(value, (int, float)):
         return '<span class="cb-bar-track"></span>'
-    width = max(2, min(100, round(100 * value / peak)))
-    return f'<span class="cb-bar-track"><span class="cb-bar {kind}" style="width:{width}%"></span></span>'
+    vals = [v for v in others if isinstance(v, (int, float))]
+    lo, hi = (min(vals), max(vals)) if vals else (value, value)
+    if hi == lo:
+        # Everyone tied. Nothing to rank, so nothing to shade — a full teal bar
+        # would tell six arms they each won.
+        good = 0.5
+    else:
+        pos = (value - lo) / (hi - lo)
+        good = pos if better == "higher" else 1 - pos
+    # 172 teal (best) to 28 amber (worst). Lightness lifts slightly toward the
+    # amber end so the ramp still separates when the hue does not.
+    hue = round(28 + 144 * good)
+    light = round(46 - 6 * good)
+    return (
+        '<span class="cb-bar-track">'
+        f'<span class="cb-bar" style="--h:{hue};--l:{light}%"></span>'
+        "</span>"
+    )
 
 
-def peak(rows: list, get) -> float:
-    """The largest value for a metric, so bars scale against each other."""
-    vals = [v for v in (get(r) for r in rows) if isinstance(v, (int, float))]
-    return max(vals) if vals else 0
+def column(rows: list, get) -> list:
+    """Every arm's value for one metric, so a bar can be shaded against the field."""
+    return [get(r) for r in rows]
 
 
 def headline(runs: list[dict]) -> dict | None:
@@ -249,6 +267,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "your own volumes for an annual number. We have not, because that swaps one",
         "measured figure for three assumed ones.",
         "",
+        "Bars are all one length. The colour is where that arm sits between the best",
+        "and worst result on that metric, teal best and amber worst, so a low number",
+        "and a high number can both be the good one without the bar arguing.",
+        "",
         '<div class="cb-cards" markdown="0">',
     ]
     # Each metric scales against the largest value any arm recorded for it, so
@@ -263,7 +285,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         ("clock time", lambda r: r["effort"].get("wall_seconds"), ".0f", "s"),
         ("account reads", lambda r: r["independence"]["account_reads"], "", ""),
     ]
-    peaks = {label: peak(just, get) for label, get, _, _ in METRICS}
+    # Every arm's value per metric, so each bar can be shaded against the
+    # real best and worst rather than an assumed range.
+    fields = {label: column(just, get) for label, get, _, _ in METRICS}
+    rates = column(just, lambda r: r["score"].get("pass_rate"))
 
     for arm, r, n in rows:
         name = ARMS.get(arm, (arm, ""))[0]
@@ -286,7 +311,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             '<div class="cb-hero">'
             f'<span class="cb-hero-value">{rate(r)}</span>'
             f'<span class="cb-hero-label">pass rate · {s["passed"]}/{s["trials"]}</span>'
-            f'{track(s.get("pass_rate"), 1.0, "outcome")}'
+            f'{track(s.get("pass_rate"), rates, "higher")}'
             "</div>"
         )
         out.append('<div class="cb-metrics">')
@@ -299,7 +324,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             out.append(
                 f'<div class="cb-metric"><span class="cb-label">{label}{note}</span>'
                 f'<span class="cb-value">{shown}</span>'
-                f'{track(v, peaks[label], "cost")}</div>'
+                f'{track(v, fields[label], "lower")}</div>'
             )
         out.append("</div>")
         out.append(f'<div class="cb-card-foot">{n} run(s) · {badge(r)}</div>')

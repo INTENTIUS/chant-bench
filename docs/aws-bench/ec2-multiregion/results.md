@@ -25,74 +25,78 @@ and the figure is never a best-of. Cost is measured per question. Multiply by
 your own volumes for an annual number. We have not, because that swaps one
 measured figure for three assumed ones.
 
+Bars are all one length. The colour is where that arm sits between the best
+and worst result on that metric, teal best and amber worst, so a low number
+and a high number can both be the good one without the bar arguing.
+
 <div class="cb-cards" markdown="0">
 <div class="cb-card">
 <div class="cb-card-head"><a class="cb-card-name" href="../chant/">chant</a></div>
-<div class="cb-hero"><span class="cb-hero-value">0.958</span><span class="cb-hero-label">pass rate · 23/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:96%"></span></span></div>
+<div class="cb-hero"><span class="cb-hero-value">0.958</span><span class="cb-hero-label">pass rate · 23/24</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0330</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:32%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">129,446</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:27%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">2,350</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:42%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">3.25</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:26%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">5.21</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:31%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">32s</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:29%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">account reads</span><span class="cb-value">0</span><span class="cb-bar-track"></span></div>
+<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0330</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">129,446</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">2,350</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">3.25</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">5.21</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">32s</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">account reads</span><span class="cb-value">0</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
 </div>
 <div class="cb-card-foot">20 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card">
 <div class="cb-card-head"><a class="cb-card-name" href="../pulumi/">Pulumi</a></div>
-<div class="cb-hero"><span class="cb-hero-value">0.792</span><span class="cb-hero-label">pass rate · 19/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:79%"></span></span></div>
+<div class="cb-hero"><span class="cb-hero-value">0.792</span><span class="cb-hero-label">pass rate · 19/24</span><span class="cb-bar-track"><span class="cb-bar" style="--h:100;--l:43%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0704</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:68%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">302,064</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:62%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">4,094</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:73%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">8.21</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:66%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">10.5</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:63%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">48s</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:44%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">account reads</span><span class="cb-value">6</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:8%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0704</span><span class="cb-bar-track"><span class="cb-bar" style="--h:95;--l:43%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">302,064</span><span class="cb-bar-track"><span class="cb-bar" style="--h:102;--l:43%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">4,094</span><span class="cb-bar-track"><span class="cb-bar" style="--h:96;--l:43%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">8.21</span><span class="cb-bar-track"><span class="cb-bar" style="--h:94;--l:43%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">10.5</span><span class="cb-bar-track"><span class="cb-bar" style="--h:106;--l:43%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">48s</span><span class="cb-bar-track"><span class="cb-bar" style="--h:142;--l:41%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">account reads</span><span class="cb-value">6</span><span class="cb-bar-track"><span class="cb-bar" style="--h:160;--l:40%"></span></span></div>
 </div>
 <div class="cb-card-foot">3 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card">
 <div class="cb-card-head"><a class="cb-card-name" href="../cdk/">AWS CDK</a></div>
-<div class="cb-hero"><span class="cb-hero-value">0.708</span><span class="cb-hero-label">pass rate · 17/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:71%"></span></span></div>
+<div class="cb-hero"><span class="cb-hero-value">0.708</span><span class="cb-hero-label">pass rate · 17/24</span><span class="cb-bar-track"><span class="cb-bar" style="--h:64;--l:45%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0849</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:83%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">317,640</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:65%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">5,636</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">10.71</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:86%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">13</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:78%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">109s</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">account reads <em>by design</em></span><span class="cb-value">74</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0849</span><span class="cb-bar-track"><span class="cb-bar" style="--h:65;--l:44%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">317,640</span><span class="cb-bar-track"><span class="cb-bar" style="--h:96;--l:43%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">5,636</span><span class="cb-bar-track"><span class="cb-bar" style="--h:28;--l:46%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">10.71</span><span class="cb-bar-track"><span class="cb-bar" style="--h:55;--l:45%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">13</span><span class="cb-bar-track"><span class="cb-bar" style="--h:74;--l:44%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">109s</span><span class="cb-bar-track"><span class="cb-bar" style="--h:28;--l:46%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">account reads <em>by design</em></span><span class="cb-value">74</span><span class="cb-bar-track"><span class="cb-bar" style="--h:28;--l:46%"></span></span></div>
 </div>
 <div class="cb-card-foot">2 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card">
 <div class="cb-card-head"><a class="cb-card-name" href="../terraform/">Terraform</a></div>
-<div class="cb-hero"><span class="cb-hero-value">0.792</span><span class="cb-hero-label">pass rate · 19/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:79%"></span></span></div>
+<div class="cb-hero"><span class="cb-hero-value">0.792</span><span class="cb-hero-label">pass rate · 19/24</span><span class="cb-bar-track"><span class="cb-bar" style="--h:100;--l:43%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0853</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:83%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">359,447</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:74%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">4,612</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:82%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">9.62</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:77%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">12.21</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:73%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">69s</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:63%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">account reads</span><span class="cb-value">0</span><span class="cb-bar-track"></span></div>
+<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.0853</span><span class="cb-bar-track"><span class="cb-bar" style="--h:64;--l:44%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">359,447</span><span class="cb-bar-track"><span class="cb-bar" style="--h:79;--l:44%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">4,612</span><span class="cb-bar-track"><span class="cb-bar" style="--h:73;--l:44%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">9.62</span><span class="cb-bar-track"><span class="cb-bar" style="--h:72;--l:44%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">12.21</span><span class="cb-bar-track"><span class="cb-bar" style="--h:84;--l:44%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">69s</span><span class="cb-bar-track"><span class="cb-bar" style="--h:104;--l:43%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">account reads</span><span class="cb-value">0</span><span class="cb-bar-track"><span class="cb-bar" style="--h:172;--l:40%"></span></span></div>
 </div>
 <div class="cb-card-foot">2 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
 <div class="cb-card">
 <div class="cb-card-head"><a class="cb-card-name" href="../alchemy/">Alchemy</a></div>
-<div class="cb-hero"><span class="cb-hero-value">0.625</span><span class="cb-hero-label">pass rate · 15/24</span><span class="cb-bar-track"><span class="cb-bar outcome" style="width:62%"></span></span></div>
+<div class="cb-hero"><span class="cb-hero-value">0.625</span><span class="cb-hero-label">pass rate · 15/24</span><span class="cb-bar-track"><span class="cb-bar" style="--h:28;--l:46%"></span></span></div>
 <div class="cb-metrics">
-<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.1028</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">486,457</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">5,278</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:94%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">12.46</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">16.67</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:100%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">85s</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:78%"></span></span></div>
-<div class="cb-metric"><span class="cb-label">account reads</span><span class="cb-value">25</span><span class="cb-bar-track"><span class="cb-bar cost" style="width:34%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">cost / answer</span><span class="cb-value">$0.1028</span><span class="cb-bar-track"><span class="cb-bar" style="--h:28;--l:46%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens in</span><span class="cb-value">486,457</span><span class="cb-bar-track"><span class="cb-bar" style="--h:28;--l:46%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">tokens out</span><span class="cb-value">5,278</span><span class="cb-bar-track"><span class="cb-bar" style="--h:44;--l:45%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">commands</span><span class="cb-value">12.46</span><span class="cb-bar-track"><span class="cb-bar" style="--h:28;--l:46%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">turns</span><span class="cb-value">16.67</span><span class="cb-bar-track"><span class="cb-bar" style="--h:28;--l:46%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">clock time</span><span class="cb-value">85s</span><span class="cb-bar-track"><span class="cb-bar" style="--h:73;--l:44%"></span></span></div>
+<div class="cb-metric"><span class="cb-label">account reads</span><span class="cb-value">25</span><span class="cb-bar-track"><span class="cb-bar" style="--h:123;--l:42%"></span></span></div>
 </div>
 <div class="cb-card-foot">2 run(s) · <span class="cb-badge ok">gates passed</span></div>
 </div>
