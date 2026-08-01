@@ -15,12 +15,10 @@ cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci
 
 ## No tool (AWS CLI) — answered
 
-3 commands, from `bare-m2`.
+1 commands, from `bare-m3`.
 
 ```sh
-aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].InstanceId' --output text
-aws ec2 describe-instances --region us-west-1 --query 'Reservations[*].Instances[*].InstanceId' --output text
-aws ec2 describe-instances --region us-west-2 --query 'Reservations[*].Instances[*].InstanceId' --output text
+# Query EC2 instances in all three regions for region in us-east-1 us-west-1 us-west-2; do echo "=== $region ===" >&2 aws ec2 describe-instances --region "$region" --output json | \ jq -r '.Reservations[].Instances[] | .InstanceId' 2>/dev/null done
 ```
 
 ## Terraform — answered

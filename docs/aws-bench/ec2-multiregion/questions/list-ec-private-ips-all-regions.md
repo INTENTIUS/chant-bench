@@ -15,12 +15,13 @@ cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci
 
 ## No tool (AWS CLI) — answered
 
-3 commands, from `bare-m2`.
+4 commands, from `bare-m3`.
 
 ```sh
-aws ec2 describe-instances --region us-east-1 --output json --query 'Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, State.Name]' 2>/dev/null | jq -r '.[] | .[] | @csv' | sort
-aws ec2 describe-instances --region us-west-1 --output json --query 'Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, State.Name]' 2>/dev/null | jq -r '.[] | .[] | @csv' | sort
-aws ec2 describe-instances --region us-west-2 --output json --query 'Reservations[*].Instances[*].[InstanceId, PrivateIpAddress, State.Name]' 2>/dev/null | jq -r '.[] | .[] | @csv' | sort
+aws ec2 describe-instances --region us-east-1 --output json --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' | jq -r '.[][] | @csv' > /tmp/ec2_us_east_1.csv 2>&1 && echo "us-east-1 done" || echo "us-east-1 error"
+aws ec2 describe-instances --region us-west-1 --output json --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' | jq -r '.[][] | @csv' > /tmp/ec2_us_west_1.csv 2>&1 && echo "us-west-1 done" || echo "us-west-1 error"
+aws ec2 describe-instances --region us-west-2 --output json --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' | jq -r '.[][] | @csv' > /tmp/ec2_us_west_2.csv 2>&1 && echo "us-west-2 done" || echo "us-west-2 error"
+{ echo "Region | Instance ID | Private IP | State" echo "-------|-------------|------------|-------" # Process us-east-1 while IFS=',' read -r instance_id private_ip state; do instance_id=$(echo "$instance_id" | tr -d '"') private_ip=$(echo "$private_ip" | tr -d '"') state=$(echo "$state" | tr -d '"') echo "us-east-1 | $instance_id | $private_ip | $state" done < /tmp/ec2_us_east_1.csv # Process us-west-1 while IFS=',' read -r instance_id private_ip state; do instance_id=$(echo "$instance_id" | tr -d '"') private_ip=$(echo "$private_ip" | tr -d '"') state=$(echo "$state" | tr -d '"') echo "us-west-1 | $instance_id | $private_ip | $state" done < /tmp/ec2_us_west_1.csv # Process us-west-2 while IFS=',' read -r instance_id private_ip state; do instance_id=$(echo "$instance_id" | tr -d '"') private_ip=$(echo "$private_ip" | tr -d '"') state=$(echo "$state" | tr -d '"') echo "us-west-2 | $instance_id | $private_ip | $state" done < /tmp/ec2_us_west_2.csv } > /logs/agent/agent-output.txt cat /logs/agent/agent-output.txt
 ```
 
 ## Terraform — answered

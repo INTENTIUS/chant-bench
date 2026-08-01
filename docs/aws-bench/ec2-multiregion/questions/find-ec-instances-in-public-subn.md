@@ -17,22 +17,19 @@ cd /workspace/chant && chant search "kind:EC2::Instance attr:internetFacing=true
 
 ## No tool (AWS CLI) — answered
 
-22 commands, from `bare-m2`.
+10 commands, from `bare-m3`.
 
 ```sh
-aws ec2 describe-instances --region us-east-1 --output json --query 'Reservations[*].Instances[*].[InstanceId,State.Name,SubnetId,VpcId,PrivateIpAddress,PublicIpAddress]' | jq -r '.[][] | @csv'
-aws ec2 describe-instances --region us-west-1 --output json --query 'Reservations[*].Instances[*].[InstanceId,State.Name,SubnetId,VpcId,PrivateIpAddress,PublicIpAddress]' | jq -r '.[][] | @csv'
-aws ec2 describe-instances --region us-west-2 --output json --query 'Reservations[*].Instances[*].[InstanceId,State.Name,SubnetId,VpcId,PrivateIpAddress,PublicIpAddress]' | jq -r '.[][] | @csv'
-aws ec2 describe-route-tables --region us-east-1 --output json --query 'RouteTables[*].[RouteTableId,Associations[*].SubnetId,Routes[*].[DestinationCidrBlock,GatewayId]]' | jq -c '.'
-aws ec2 describe-route-tables --region us-west-1 --output json --query 'RouteTables[*].[RouteTableId,Associations[*].SubnetId,Routes[*].[DestinationCidrBlock,GatewayId]]' | jq -c '.'
-aws ec2 describe-route-tables --region us-west-2 --output json --query 'RouteTables[*].[RouteTableId,Associations[*].SubnetId,Routes[*].[DestinationCidrBlock,GatewayId]]' | jq -c '.'
-aws ec2 describe-subnets --region us-east-1 --output json --query 'Subnets[*].[SubnetId,VpcId,CidrBlock]' | jq -c '.'
-aws ec2 describe-subnets --region us-west-1 --output json --query 'Subnets[*].[SubnetId,VpcId,CidrBlock]' | jq -c '.'
-aws ec2 describe-subnets --region us-west-2 --output json --query 'Subnets[*].[SubnetId,VpcId,CidrBlock]' | jq -c '.'
-# For us-east-1 echo "=== us-east-1 Route Table Associations ===" aws ec2 describe-route-tables --region us-east-1 --output json | jq -r '.RouteTables[] | "\(.RouteTableId): Subnets: \(.Associations[] | select(.SubnetId != null) | .SubnetId), Routes: \(.Routes[] | select(.GatewayId | startswith("igw")) | "\(.DestinationCidrBlock) -> \(.GatewayId)")"'
-# For us-west-1 echo "=== us-west-1 Route Table Associations ===" aws ec2 describe-route-tables --region us-west-1 --output json | jq -r '.RouteTables[] | "\(.RouteTableId): Subnets: \(.Associations[] | select(.SubnetId != null) | .SubnetId), Routes: \(.Routes[] | select(.GatewayId | startswith("igw")) | "\(.DestinationCidrBlock) -> \(.GatewayId)")"'
-# For us-west-2 echo "=== us-west-2 Route Table Associations ===" aws ec2 describe-route-tables --region us-west-2 --output json | jq -r '.RouteTables[] | "\(.RouteTableId): Subnets: \(.Associations[] | select(.SubnetId != null) | .SubnetId), Routes: \(.Routes[] | select(.GatewayId | startswith("igw")) | "\(.DestinationCidrBlock) -> \(.GatewayId)")"'
-# … 10 more
+aws ec2 describe-instances --region us-east-1 --output json
+aws ec2 describe-instances --region us-west-1 --output json
+aws ec2 describe-instances --region us-west-2 --output json
+aws ec2 describe-subnets --subnet-ids subnet-75f1c56f subnet-db00e426 subnet-default-c --region us-east-1 --output json
+aws ec2 describe-subnets --subnet-ids subnet-a2688b5e --region us-west-1 --output json
+aws ec2 describe-subnets --subnet-ids subnet-8e8eb4fe --region us-west-2 --output json
+aws ec2 describe-route-tables --filters Name=vpc-id,Values=vpc-a6155e20 --region us-east-1 --output json
+aws ec2 describe-route-tables --filters Name=vpc-id,Values=vpc-default --region us-east-1 --output json
+aws ec2 describe-route-tables --filters Name=vpc-id,Values=vpc-9ad31e31 --region us-west-1 --output json
+aws ec2 describe-route-tables --filters Name=vpc-id,Values=vpc-4ae644ae --region us-west-2 --output json
 ```
 
 ## Terraform — answered
