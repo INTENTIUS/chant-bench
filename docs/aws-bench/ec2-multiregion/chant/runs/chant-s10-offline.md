@@ -2,7 +2,22 @@
 
 `chant-s10-offline` <span class="cb-badge ok">gates passed</span>
 
-**20 of 24** (0.833) · 31 account read(s) · 6.29 commands, 8.71 turns, 69s per trial
+**20 of 24** (0.833) · 31 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.0513** |
+| tokens in | 247,269 |
+| tokens out | 2,951 |
+| commands | 6.29 |
+| turns | 8.71 |
+| clock time | 69s |
+| account reads | 31 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T09:03:28.903307 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `9ce3707f885e` |
 | substrate | floci |

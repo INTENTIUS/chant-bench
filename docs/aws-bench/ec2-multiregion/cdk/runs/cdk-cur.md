@@ -2,7 +2,22 @@
 
 `cdk-cur` <span class="cb-badge ok">gates passed</span>
 
-**17 of 24** (0.708) · 104 account read(s) · 12.79 commands, 15.17 turns, 143s per trial
+**17 of 24** (0.708) · 104 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.0906** |
+| tokens in | 379,557 |
+| tokens out | 5,650 |
+| commands | 12.79 |
+| turns | 15.17 |
+| clock time | 143s |
+| account reads | 104 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T17:36:10.317989 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `f4b4c7082924` |
 | substrate | floci |

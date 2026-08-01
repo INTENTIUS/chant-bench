@@ -36,19 +36,34 @@
   font-variant-numeric: tabular-nums;
 }
 
-.cb-bar {
-  display: inline-block;
-  height: 0.55rem;
-  border-radius: 2px;
-  background: var(--cb-outcome);
-  vertical-align: middle;
+/* Figure over bar, so the column reads as a shape from a distance and as exact
+   numbers up close. The number stays first in the source: it is the data, the
+   bar is the encoding of it. */
+.cb-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  min-width: 3.4rem;
 }
-.cb-bar.cost { background: var(--cb-cost); }
+
 .cb-bar-track {
-  display: inline-block;
+  display: block;
   width: 100%;
-  min-width: 4rem;
-  height: 0.55rem;
+  height: 0.3rem;
   border-radius: 2px;
   background: var(--cb-track);
+  overflow: hidden;
+}
+.cb-bar {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--cb-outcome);
+}
+.cb-bar.cost { background: var(--cb-cost); }
+
+/* Bars encode a comparison. Print, and anyone who has asked not to be shown
+   motion or decoration, get the numbers, which were always the point. */
+@media print {
+  .cb-bar-track { display: none; }
 }

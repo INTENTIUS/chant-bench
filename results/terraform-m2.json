@@ -6,7 +6,7 @@
   "run": {
     "id": "terraform-m2",
     "finished_at": "2026-07-31T18:52:49.660999",
-    "harness_commit": "6303a2f"
+    "harness_commit": "c7bfd82"
   },
   "agent": {
     "name": "claude-code",
@@ -79,7 +79,8 @@
     "turns": 12.21,
     "wall_seconds": 68.55,
     "tokens_in": 359447.42,
-    "tokens_out": 4611.5
+    "tokens_out": 4611.5,
+    "cost_usd": 0.0853
   },
   "logs": {
     "run": "jobs/terraform-m2/run-arm.log",

@@ -163,6 +163,48 @@ def badge(r: dict) -> str:
     )
 
 
+def bar(value, peak, kind: str = "cost", spec: str = "", prefix: str = "") -> str:
+    """A figure with a bar behind it, scaled against the largest in its column.
+
+    Hue carries direction, length stays honest to the raw value. That split
+    matters because the columns disagree about which way is good: a long `rate`
+    bar is a win and a long `cost` bar is the opposite, and drawing both in the
+    same colour would make an expensive arm look like a strong one at a glance.
+    So `outcome` is teal and everything you are trying to spend less of is amber,
+    and neither is ever scaled to make a point.
+
+    Scaling against the column's own peak, rather than a fixed ceiling, is what
+    makes the shape readable: with cost per question running from $0.03 to $0.10
+    a 0-to-1 axis would render every arm as a stub.
+    """
+    if not isinstance(value, (int, float)):
+        return "—"
+    text = f"{prefix}{format(value, spec) if spec else value}"
+    # Zero draws nothing. The 2% floor keeps a small non-zero value visible, but
+    # applying it to zero would put a sliver under chant's account reads, which
+    # is the one number on the page whose whole meaning is that it is zero.
+    if not peak or value <= 0:
+        width = 0
+    else:
+        width = max(2, min(100, round(100 * value / peak)))
+    return (
+        f'<span class="cb-cell">{text}'
+        f'<span class="cb-bar-track"><span class="cb-bar {kind}" style="width:{width}%"></span></span>'
+        "</span>"
+    )
+
+
+def usd(v) -> str:
+    """A dollar figure, or an em dash. Four decimals: the arms differ in the third."""
+    return f"${v:.4f}" if isinstance(v, (int, float)) else "—"
+
+
+def peak(rows: list, get) -> float:
+    """The largest value in a column, so its bars scale against each other."""
+    vals = [v for v in (get(r) for r in rows) if isinstance(v, (int, float))]
+    return max(vals) if vals else 0
+
+
 def headline(runs: list[dict]) -> dict | None:
     """The latest valid run — a stated rule, never a best-of."""
     return next((r for r in runs if valid(r)), None)
@@ -206,24 +248,43 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "measured. Multiply by your own volumes if you want an annual number. We have",
         "not, because that swaps a measured figure for three assumed ones.",
         "",
-        "| | arm | rate | tokens in | tokens out | commands | turns | secs | reads | n | |",
-        "|---|---|---|---|---|---|---|---|---|---|---|",
+        "| | arm | cost / answer | rate | tokens in | tokens out | commands | turns | secs | reads | n | |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
+    # Each column scales against its own largest value — see bar().
+    just = [r for _, r, _ in rows]
+    p_cost = peak(just, lambda r: r["effort"].get("cost_usd"))
+    p_tin = peak(just, lambda r: r["effort"].get("tokens_in"))
+    p_tout = peak(just, lambda r: r["effort"].get("tokens_out"))
+    p_cmd = peak(just, lambda r: r["effort"].get("tool_calls"))
+    p_turn = peak(just, lambda r: r["effort"].get("turns"))
+    p_wall = peak(just, lambda r: r["effort"].get("wall_seconds"))
+    p_read = peak(just, lambda r: r["independence"]["account_reads"])
+
     for i, (arm, r, n) in enumerate(rows, 1):
         s, e = r["score"], r["effort"]
         name = ARMS.get(arm, (arm, ""))[0]
         reads = r["independence"]["account_reads"]
-        reads_note = f"{reads} *(by design)*" if arm in STATELESS else str(reads)
-        tin = e.get("tokens_in")
-        tout = e.get("tokens_out")
+        reads_cell = bar(reads, p_read, "cost")
+        if arm in STATELESS:
+            reads_cell += " *(by design)*"
+        # The rate bar is drawn against 1.0 rather than the column's best, so a
+        # field where nobody does well cannot render as though someone did.
+        rate_cell = bar(s.get("pass_rate"), 1.0, "outcome", ".3f") if valid(r) else "—"
         # One row shape. The two-branch version this replaces had a dead
         # `if False else` arm, and its live fallback formatted score.pass_rate
         # directly — bypassing rate(), so an invalid run printed its survivors'
         # number, and a run with no rate at all crashed the build.
         out.append(
-            f"| {i} | [{name}]({arm}/index.md) | {rate(r)} | "
-            f"**{num(tin, ',.0f')}** | {num(tout, ',.0f')} | {num(e['tool_calls'])} | "
-            f"{num(e['turns'])} | {num(e['wall_seconds'], '.0f')} | {reads_note} | {n} | {badge(r)} |"
+            f"| {i} | [{name}]({arm}/index.md) "
+            f"| {bar(e.get('cost_usd'), p_cost, 'cost', '.4f', '$')} "
+            f"| {rate_cell} "
+            f"| {bar(e.get('tokens_in'), p_tin, 'cost', ',.0f')} "
+            f"| {bar(e.get('tokens_out'), p_tout, 'cost', ',.0f')} "
+            f"| {bar(e.get('tool_calls'), p_cmd, 'cost')} "
+            f"| {bar(e.get('turns'), p_turn, 'cost')} "
+            f"| {bar(e.get('wall_seconds'), p_wall, 'cost', '.0f')} "
+            f"| {reads_cell} | {n} | {badge(r)} |"
         )
 
     out += [
@@ -298,14 +359,15 @@ def arm_page(arm: str, runs: list[dict]) -> str:
         "",
         "## Runs",
         "",
-        "| # | run | passed | rate | reads | commands | turns | harness | |",
-        "|---|---|---|---|---|---|---|---|---|",
+        "| # | run | passed | rate | cost | secs | reads | commands | turns | harness | |",
+        "|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for n, r in numbered(runs):
         s, e = r["score"], r["effort"]
         out.append(
             f"| {n} | [`{r['run']['id']}`](runs/{r['run']['id']}.md) | "
             f"{s['passed']}/{s['trials']} | {rate(r)} | "
+            f"{usd(e.get('cost_usd'))} | {num(e.get('wall_seconds'), '.0f')} | "
             f"{num(r['independence']['account_reads'])} | {num(e['tool_calls'])} | {num(e['turns'])} | "
             f"`{r['run'].get('harness_commit') or '—'}` | {badge(r)} |"
         )
@@ -374,8 +436,22 @@ def run_page(arm: str, number: int, total: int, r: dict) -> str:
 
     out += [
         f"**{s['passed']} of {s['trials']}** ({rate(r)}) · "
-        f"{r['independence']['account_reads']} account read(s) · "
-        f"{num(e['tool_calls'])} commands, {num(e['turns'])} turns, {num(e['wall_seconds'], '.0f')}s per trial",
+        f"{r['independence']['account_reads']} account read(s)",
+        "",
+        "## What one answer cost",
+        "",
+        "Per question, averaged over this run's trials. Cost is the agent's own",
+        "billed total, not tokens times a rate card.",
+        "",
+        "| | |",
+        "|---|--:|",
+        f"| dollars | **{usd(e.get('cost_usd'))}** |",
+        f"| tokens in | {num(e.get('tokens_in'), ',.0f')} |",
+        f"| tokens out | {num(e.get('tokens_out'), ',.0f')} |",
+        f"| commands | {num(e.get('tool_calls'))} |",
+        f"| turns | {num(e.get('turns'))} |",
+        f"| clock time | {num(e.get('wall_seconds'), '.0f')}s |",
+        f"| account reads | {r['independence']['account_reads']} |",
         "",
         "## By question",
         "",

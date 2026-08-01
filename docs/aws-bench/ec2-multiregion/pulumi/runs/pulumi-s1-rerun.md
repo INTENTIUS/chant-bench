@@ -2,7 +2,22 @@
 
 `pulumi-s1-rerun` <span class="cb-badge ok">gates passed</span>
 
-**20 of 24** (0.833) · 0 account read(s) · 7.67 commands, 9.92 turns, 48s per trial
+**20 of 24** (0.833) · 0 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.0698** |
+| tokens in | 286,700 |
+| tokens out | 3,927 |
+| commands | 7.67 |
+| turns | 9.92 |
+| clock time | 48s |
+| account reads | 0 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-30T16:21:46.124137 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `a06c6b73c0eb` |
 | substrate | floci |

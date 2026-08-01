@@ -20,10 +20,10 @@ happen again. A tool that never ran is not a tool that did badly.
 
 ## Runs
 
-| # | run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|---|
-| 2 | [`terraform-m2`](runs/terraform-m2.md) | 19/24 | 0.792 | 0 | 9.62 | 12.21 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`terraform-cur`](runs/terraform-cur.md) | 20/24 | 0.833 | 0 | 11.71 | 14.79 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| # | run | passed | rate | cost | secs | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2 | [`terraform-m2`](runs/terraform-m2.md) | 19/24 | 0.792 | $0.0853 | 69 | 0 | 9.62 | 12.21 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`terraform-cur`](runs/terraform-cur.md) | 20/24 | 0.833 | $0.0901 | 71 | 0 | 11.71 | 14.79 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

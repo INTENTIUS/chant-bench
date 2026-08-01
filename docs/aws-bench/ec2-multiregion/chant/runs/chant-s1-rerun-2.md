@@ -2,7 +2,22 @@
 
 `chant-s1-rerun-2` <span class="cb-badge ok">gates passed</span>
 
-**19 of 24** (0.792) · 200 account read(s) · 9.33 commands, 11.79 turns, 97s per trial
+**19 of 24** (0.792) · 200 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.0681** |
+| tokens in | 318,501 |
+| tokens out | 3,811 |
+| commands | 9.33 |
+| turns | 11.79 |
+| clock time | 97s |
+| account reads | 200 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-30T15:11:38.259457 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `9ce3707f885e` |
 | substrate | floci |

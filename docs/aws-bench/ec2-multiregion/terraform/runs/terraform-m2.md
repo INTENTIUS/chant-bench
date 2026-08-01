@@ -2,7 +2,22 @@
 
 `terraform-m2` <span class="cb-badge ok">gates passed</span>
 
-**19 of 24** (0.792) · 0 account read(s) · 9.62 commands, 12.21 turns, 69s per trial
+**19 of 24** (0.792) · 0 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.0853** |
+| tokens in | 359,447 |
+| tokens out | 4,612 |
+| commands | 9.62 |
+| turns | 12.21 |
+| clock time | 69s |
+| account reads | 0 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T18:52:49.660999 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `7822d55ca7ca` |
 | substrate | floci |

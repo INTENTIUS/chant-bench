@@ -20,10 +20,10 @@ happen again. A tool that never ran is not a tool that did badly.
 
 ## Runs
 
-| # | run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|---|
-| 2 | [`alchemy-m1`](runs/alchemy-m1.md) | 15/24 | 0.625 | 25 | 12.46 | 16.67 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`alchemy-cur`](runs/alchemy-cur.md) | 14/24 | 0.583 | 25 | 11.67 | 14.71 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| # | run | passed | rate | cost | secs | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2 | [`alchemy-m1`](runs/alchemy-m1.md) | 15/24 | 0.625 | $0.1028 | 85 | 25 | 12.46 | 16.67 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`alchemy-cur`](runs/alchemy-cur.md) | 14/24 | 0.583 | $0.0854 | 74 | 25 | 11.67 | 14.71 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

@@ -20,11 +20,11 @@ happen again. A tool that never ran is not a tool that did badly.
 
 ## Runs
 
-| # | run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|---|
-| 3 | [`pulumi-m2`](runs/pulumi-m2.md) | 19/24 | 0.792 | 6 | 8.21 | 10.5 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 2 | [`pulumi-cur`](runs/pulumi-cur.md) | 18/24 | 0.750 | 0 | 8 | 10.33 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`pulumi-s1-rerun`](runs/pulumi-s1-rerun.md) | 20/24 | 0.833 | 0 | 7.67 | 9.92 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| # | run | passed | rate | cost | secs | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 3 | [`pulumi-m2`](runs/pulumi-m2.md) | 19/24 | 0.792 | $0.0704 | 48 | 6 | 8.21 | 10.5 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
+| 2 | [`pulumi-cur`](runs/pulumi-cur.md) | 18/24 | 0.750 | $0.0718 | 48 | 0 | 8 | 10.33 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`pulumi-s1-rerun`](runs/pulumi-s1-rerun.md) | 20/24 | 0.833 | $0.0698 | 48 | 0 | 7.67 | 9.92 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 
