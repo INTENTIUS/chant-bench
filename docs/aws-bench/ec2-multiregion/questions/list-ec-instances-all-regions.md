@@ -67,20 +67,15 @@ cd /workspace/alchemy && for resource in "alchemy-ec2-multiregion/bench/exp-Inst
 
 ## Alchemy v2 (Effect) — answered
 
-17 commands, from `alchemy-effect-m3`.
+8 commands, from `alchemy-effect-m3`.
 
 ```sh
-cd /workspace/alchemy && alchemy state tree us-east-1.run.ts --local 2>&1 | head -50
-cd /workspace/alchemy && alchemy state tree us-west-1.run.ts --local 2>&1 | head -50
-cd /workspace/alchemy && alchemy state tree us-west-2.run.ts --local 2>&1 | head -50
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-east-1.run.ts --local 2>&1 | grep -i instance
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local 2>&1 | grep -i instance
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-2.run.ts --local 2>&1 | grep -i instance
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-east-1.run.ts --local 2>&1
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local 2>&1
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-2.run.ts --local 2>&1
-find /workspace/alchemy/.alchemy/state -name "*.json" -type f | head -20
-find /workspace/alchemy/.alchemy/state -name "*.json" -type f | xargs grep -l '"resourceType".*Instance' | sort
-cat /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/DefaultVpcServer.json | jq '{resource: .resourceType, name: .props.instanceName, instanceId: .attr.instanceId}'
-# … 5 more
+cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local 2>&1
+cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local 2>&1
+cd /workspace/alchemy && for stack in "alchemy-effect-ec2-multiregion-us-east-1" "alchemy-effect-ec2-multiregion-us-west-1" "alchemy-effect-ec2-multiregion-us-west-2"; do echo "=== $stack ==="; alchemy state stages --stack "$stack" us-west-1.run.ts --local 2>&1; done
+cd /workspace/alchemy && for stack in "alchemy-effect-ec2-multiregion-us-east-1" "alchemy-effect-ec2-multiregion-us-west-1" "alchemy-effect-ec2-multiregion-us-west-2"; do echo "=== $stack ==="; alchemy state resources --stack "$stack" --stage bench us-west-1.run.ts --local 2>&1 | grep -i "instance"; done
+cd /workspace/alchemy && alchemy state resources --stack "alchemy-effect-ec2-multiregion-us-east-1" --stage bench us-west-1.run.ts --local 2>&1
+cd /workspace/alchemy && for inst in "DefaultVpcServer" "LaunchTemplateServer" "PrivateServer" "WebServer"; do echo "=== $inst ==="; alchemy state get --stack "alchemy-effect-ec2-multiregion-us-east-1" --stage bench --fqn "$inst" us-west-1.run.ts --local 2>&1 | jq '.attr.id // .attr.instanceId // .props.instanceId // empty' 2>&1; done
+cd /workspace/alchemy && for stack in "alchemy-effect-ec2-multiregion-us-west-1" "alchemy-effect-ec2-multiregion-us-west-2"; do echo "=== $stack ==="; alchemy state resources --stack "$stack" --stage bench us-west-1.run.ts --local 2>&1; done
+cd /workspace/alchemy && for stack in "alchemy-effect-ec2-multiregion-us-west-1" "alchemy-effect-ec2-multiregion-us-west-2"; do echo "=== $stack ==="; alchemy state get --stack "$stack" --stage bench --fqn "WebServer" us-west-1.run.ts --local 2>&1 | jq '.attr.id // .attr.instanceId // .props.instanceId // empty' 2>&1; done
 ```

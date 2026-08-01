@@ -106,20 +106,20 @@ cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/ && cat > /tmp/find
 
 ## Alchemy v2 (Effect) — missed
 
-19 commands, from `alchemy-effect-m3`.
+13 commands, from `alchemy-effect-m3`.
 
 ```sh
-cd /workspace/alchemy && alchemy state resources us-east-1.run.ts --local 2>&1 | head -50
-cd /workspace/alchemy && alchemy state resources us-west-1.run.ts --local 2>&1 | head -50
-cd /workspace/alchemy && alchemy state resources us-west-2.run.ts --local 2>&1 | head -50
-cd /workspace/alchemy && alchemy state stacks us-east-1.run.ts --local 2>&1
-cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local 2>&1
-cd /workspace/alchemy && alchemy state stacks us-west-2.run.ts --local 2>&1
-cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-east-1.run.ts --local 2>&1
-cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-west-1 us-west-1.run.ts --local 2>&1
-cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-west-2 us-west-2.run.ts --local 2>&1
-find /workspace/alchemy/.alchemy/state -type f -name "*.json" | head -20
-find /workspace/alchemy/.alchemy/state -type f -name "*.json" | xargs grep -l "SecurityGroup" | sort
-find /workspace/alchemy/.alchemy/state -type d -name "bench" | sort
-# … 7 more
+cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local --stack alchemy-effect-ec2-multiregion-us-east-1
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebSecurityGroup us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn UnusedSecurityGroup us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench --fqn WebServer us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebServer us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn PrivateServer us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebLaunchTemplate us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn LaunchTemplateServer us-west-1.run.ts --local
+# … 1 more
 ```

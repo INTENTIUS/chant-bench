@@ -105,20 +105,20 @@ cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && jq -r '.fqn + ":
 
 ## Alchemy v2 (Effect) — answered
 
-20 commands, from `alchemy-effect-m3`.
+16 commands, from `alchemy-effect-m3`.
 
 ```sh
-cd /workspace/alchemy && alchemy state tree us-east-1.run.ts --local 2>/dev/null | head -50
-cd /workspace/alchemy && alchemy state tree us-west-1.run.ts --local 2>/dev/null | head -50
-cd /workspace/alchemy && alchemy state tree us-west-2.run.ts --local 2>/dev/null | head -50
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/WebServer.json
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/LaunchTemplateServer.json
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/PrivateServer.json
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/DefaultVpcServer.json
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/PublicSubnet.json
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/PrivateSubnet.json
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/PublicRouteTable.json
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/InternetRoute.json
-cd /workspace/alchemy && jq . .alchemy/state/alchemy-effect-ec2-multiregion-us-west-1/bench/WebServer.json
-# … 8 more
+cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | grep -i -E "(instance|subnet|route)" | head -30
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | grep -i instance | grep -v "Profile\|Role\|Metadata\|Action\|Launch"
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebServer us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn PublicSubnet us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn LaunchTemplateServer us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn DefaultVpcServer us-west-1.run.ts --local && echo "---" && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn PrivateServer us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench --fqn WebServer us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench --fqn PublicSubnet us-west-1.run.ts --local
+# … 4 more
 ```
