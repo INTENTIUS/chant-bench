@@ -33,6 +33,14 @@ fi
 say "emitting ${#runs[@]} result set(s)"
 (cd "$BENCH" && python3 benchmarks/agent-env/emit-result.py "${runs[@]}" --out "$SITE/results")
 
+# How each tool answered, not just whether. The scores say which arms got there;
+# the transcripts say what they ran to get there, and that is where the tools
+# differ most — one arm answers with a single query, another walks ids between
+# state records by hand, a third joins a synthesized template to a
+# CloudFormation call because it keeps no state of its own.
+say "extracting transcripts"
+(cd "$BENCH" && python3 benchmarks/agent-env/emit-transcript.py "${runs[@]}" --out "$SITE/transcripts")
+
 # Whatever briefing each run actually used, so the page can print the prompt
 # that produced these numbers rather than whatever the file says today.
 say "copying the briefings those runs used"

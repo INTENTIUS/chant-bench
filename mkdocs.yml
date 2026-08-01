@@ -70,3 +70,4 @@ nav:
           - Pulumi: aws-bench/ec2-multiregion/pulumi/index.md
           - AWS CDK: aws-bench/ec2-multiregion/cdk/index.md
           - Alchemy: aws-bench/ec2-multiregion/alchemy/index.md
+          - Alchemy v2 (Effect): aws-bench/ec2-multiregion/alchemy-effect/index.md

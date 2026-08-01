@@ -29,6 +29,20 @@ ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "results"
 DOCS = ROOT / "docs" / "aws-bench" / "ec2-multiregion"
 BRIEFINGS = ROOT / "briefings"
+TRANSCRIPTS = ROOT / "transcripts"
+
+#: What each question is actually asking, and the answer aws-bench grades
+#: against. Published so a reader can check a transcript rather than trust it.
+QUESTIONS = {
+    "list-ec-instances-all-regions": ("List my account's EC2 instance ids in all regions.", "6 instances across 3 regions"),
+    "list-ec-instances-all-regions-1": ("Which EC2 instances are reachable via SSH from the internet?", "2 — one only through its launch template"),
+    "find-ec-instances-in-public-subn": ("Find my EC2 instances that are in a public subnet.", "5"),
+    "list-ec-instances-by-vpc-across": ("Which EC2 instances are in which VPCs across all regions?", "6 instances across 4 VPCs"),
+    "ec-instances-without-default-vpc": ("Which of my EC2 instances don't have a default VPC?", "5"),
+    "describe-ec-instances-cross-regi": ("Describe my EC2 instances across the three regions.", "4 / 1 / 1 by region"),
+    "list-ec-private-ips-all-regions": ("List all of my EC2 and their private ip in a table.", "6 instances with private IPs"),
+    "list-unused-security-groups-all": ("Provide me a list of unused Security Groups by all regions.", "4 attached to nothing"),
+}
 
 #: Display name and the briefing each arm is given.
 ARMS = {
@@ -37,6 +51,7 @@ ARMS = {
     "pulumi": ("Pulumi", "briefing-pulumi.md"),
     "cdk": ("AWS CDK", "briefing-cdk.md"),
     "alchemy": ("Alchemy", "briefing-alchemy.md"),
+    "alchemy-effect": ("Alchemy v2 (Effect)", "briefing-alchemy-effect.md"),
 }
 
 #: Arms with no state of their own, whose account reads are the sanctioned path
@@ -64,6 +79,47 @@ def numbered(runs: list[dict]) -> list[tuple[int, dict]]:
     """
     oldest_first = list(reversed(runs))
     return [(len(runs) - i, r) for i, r in enumerate(runs)] if oldest_first else []
+
+
+def transcripts() -> dict[str, dict]:
+    """Latest transcript per arm — how that tool answered, not just whether."""
+    latest: dict[str, dict] = {}
+    for path in sorted(TRANSCRIPTS.glob("*.json")):
+        t = json.loads(path.read_text())
+        latest[t["arm"]] = t          # sorted, so the last wins
+    return latest
+
+
+def question_page(task: str, tx: dict[str, dict]) -> str:
+    """One question, and what each tool ran to answer it."""
+    prompt, truth = QUESTIONS.get(task, (task, "—"))
+    out = [
+        f"# {prompt}",
+        "",
+        f"`{task}` · the answer aws-bench grades against: **{truth}**",
+        "",
+        "Below is what each tool's agent actually ran. The scores say which tools",
+        "answered; this says how — and the how is where the tools differ most.",
+        "",
+    ]
+    for arm in ARMS:
+        entry = (tx.get(arm) or {}).get("by_task", {}).get(task)
+        if not entry:
+            continue
+        name = ARMS[arm][0]
+        mark = "answered" if entry["passed"] else "missed"
+        out += [
+            f"## {name} — {mark}",
+            "",
+            f"{len(entry['commands'])} commands, from `{tx[arm]['run']}`.",
+            "",
+            "```sh",
+        ]
+        out += entry["commands"][:12]
+        if len(entry["commands"]) > 12:
+            out.append(f"# … {len(entry['commands']) - 12} more")
+        out += ["```", ""]
+    return "\n".join(out)
 
 
 def valid(r: dict) -> bool:
@@ -322,6 +378,14 @@ def main() -> int:
         return 0
 
     (DOCS / "results.md").write_text(results_page(by_arm))
+    tx = transcripts()
+    if tx:
+        qdir = DOCS / "questions"
+        qdir.mkdir(parents=True, exist_ok=True)
+        for task in QUESTIONS:
+            if any(task in (t.get("by_task") or {}) for t in tx.values()):
+                (qdir / f"{task}.md").write_text(question_page(task, tx))
+        print(f"ok    questions/  ({len(tx)} arm(s) with transcripts)")
     print(f"ok    results.md  ({len(by_arm)} arm(s))")
     for arm in ARMS:
         runs = by_arm.get(arm, [])

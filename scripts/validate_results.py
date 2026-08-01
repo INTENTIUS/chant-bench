@@ -102,6 +102,19 @@ def main() -> int:
             print(f"ok    {path.name}")
 
     print(f"\n{len(files) - failed}/{len(files)} result set(s) satisfy the contract")
+
+    # A transcript is optional — older runs predate them — but one that exists
+    # must belong to a published run, or the question pages would quote commands
+    # from a result nobody can see.
+    transcripts = root.parent / "transcripts"
+    if transcripts.is_dir():
+        published = {p.stem for p in files}
+        orphans = sorted(p.stem for p in transcripts.glob("*.json") if p.stem not in published)
+        if orphans:
+            print(f"orphaned transcript(s) with no result set: {', '.join(orphans)}")
+            return 1
+        print(f"{len(list(transcripts.glob('*.json')))} transcript(s), all matched to a result")
+
     return 1 if failed else 0
 
 

@@ -13,6 +13,10 @@ setup dir="../aws-bench":
 run arm dir="../aws-bench":
     cd {{dir}} && ./benchmarks/agent-env/run-arm.sh {{arm}}
 
+# Run every arm N times, publishing each result as it lands.
+matrix reps="3" dir="../aws-bench" *arms:
+    ./scripts/run_matrix.sh {{reps}} {{dir}} {{arms}}
+
 # Pull completed runs into the site: emit, copy briefings, regenerate, build.
 ingest dir="../aws-bench" *runs:
     ./scripts/ingest.sh {{dir}} {{runs}}

@@ -45,6 +45,19 @@ jobs:
       - name: Validate result sets
         run: python3 scripts/validate_results.py
 
+      # The results pages are generated, not written. Regenerating and diffing
+      # catches a page hand-edited into disagreeing with its result set, and a
+      # result committed without rebuilding — both of which put a number on the
+      # site that no record backs.
+      - name: Results pages are up to date
+        run: |
+          python3 scripts/build_pages.py
+          if ! git diff --quiet -- docs/; then
+            echo "::error::generated pages are stale — run 'just build' and commit"
+            git diff --stat -- docs/
+            exit 1
+          fi
+
       # --strict fails on a broken internal link. The site's whole claim is that
       # every number links to the evidence behind it, so a dead link is a
       # correctness bug rather than a cosmetic one.
