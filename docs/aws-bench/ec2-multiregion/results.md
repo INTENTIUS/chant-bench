@@ -41,101 +41,301 @@ Pick a tool to see what its answers cost.
 <li><label class="cb-board-row pending" for="cb-arm-alchemy-effect"><span class="cb-rank">6</span><span class="cb-who"><span class="cb-who-name">Alchemy v2 (Effect)</span><span class="cb-who-sub">not yet run</span></span><span class="cb-track"></span><span class="cb-board-value">—</span></label></li>
 <li><label class="cb-board-row pending" for="cb-arm-bare"><span class="cb-rank">7</span><span class="cb-who"><span class="cb-who-name">No tool (AWS CLI)</span><span class="cb-who-sub">baseline · not yet run</span></span><span class="cb-track"></span><span class="cb-board-value">—</span></label></li>
 </ul>
-<div class="cb-mpanels">
-<section class="cb-mpanel">
-<h3 class="cb-mpanel-title">Pass rate</h3>
-<p class="cb-mpanel-note">Of 24 trials: eight questions, three attempts each.</p>
+<div class="cb-panelsets">
+<div class="cb-panelset">
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Pass rate by question</h3>
+<p class="cb-mpanel-note">Of 24 trials: 8 questions, 3 attempts each.</p>
 <div class="cb-mrows">
-<div class="cb-mrow"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:95.8%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">0.958</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:79.2%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">0.792</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:70.8%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">0.708</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:79.2%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">0.792</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:62.5%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">0.625</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-</div>
-</section>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>describe-ec-instances-cross-regi</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>ec-instances-without-default-vpc</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>find-ec-instances-in-public-subn</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions-1</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-by-vpc-across</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-private-ips-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-unused-security-groups-all</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></div>
+</div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
 <p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<div class="cb-mrows">
 <div class="cb-mpanel-sub">dollars</div>
-<div class="cb-mrows">
-<div class="cb-mrow"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0330</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:68.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0704</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:82.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0849</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:83.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0853</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1028</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
-<div class="cb-mrows">
-<div class="cb-mrow"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">129,446</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:62.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">302,064</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:65.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">317,640</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:73.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">359,447</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">486,457</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
-<div class="cb-mrows">
-<div class="cb-mrow"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">2,350</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:72.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,094</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5,636</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:81.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,612</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:93.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5,278</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-</div>
-</section>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
+</div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Work per answer</h3>
 <p class="cb-mpanel-note">What the agent had to do to get there.</p>
+<div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
-<div class="cb-mrows">
-<div class="cb-mrow"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">3.25</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:65.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">8.21</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:86.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">10.71</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:77.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">9.62</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">12.46</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
 <div class="cb-mpanel-sub">turns</div>
-<div class="cb-mrows">
-<div class="cb-mrow"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5.21</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:63.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">10.5</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">13</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:73.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">12.21</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">16.67</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
 <div class="cb-mpanel-sub">clock time</div>
-<div class="cb-mrows">
-<div class="cb-mrow"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">32s</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:44.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">48s</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">109s</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">69s</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">85s</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-</div>
-</section>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
+</div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Independence</h3>
 <p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
 <div class="cb-mrows">
-<div class="cb-mrow"><span class="cb-mrow-name">chant</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:8.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">6</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">74</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Terraform</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:33.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">25</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
+<div class="cb-mpanel-sub">account reads</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
+</div></section>
 </div>
-</section>
+<div class="cb-panelset">
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Pass rate by question</h3>
+<p class="cb-mpanel-note">Of 24 trials: 8 questions, 3 attempts each.</p>
+<div class="cb-mrows">
+<div class="cb-mrow"><span class="cb-mrow-name"><code>describe-ec-instances-cross-regi</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>ec-instances-without-default-vpc</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>find-ec-instances-in-public-subn</code></span><span class="cb-track"><span class="cb-fill" style="width:33.3%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">1/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions-1</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-by-vpc-across</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-private-ips-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-unused-security-groups-all</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">What one answer cost</h3>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:68.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0704</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mpanel-sub">tokens in</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:62.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">302,064</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
+<div class="cb-mpanel-sub">tokens out</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:72.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,094</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Work per answer</h3>
+<p class="cb-mpanel-note">What the agent had to do to get there.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">commands</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:65.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">8.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
+<div class="cb-mpanel-sub">turns</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:63.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">10.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
+<div class="cb-mpanel-sub">clock time</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:44.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">48s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Independence</h3>
+<p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">account reads</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:8.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">6</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
+</div></section>
+</div>
+<div class="cb-panelset">
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Pass rate by question</h3>
+<p class="cb-mpanel-note">Of 24 trials: 8 questions, 3 attempts each.</p>
+<div class="cb-mrows">
+<div class="cb-mrow"><span class="cb-mrow-name"><code>describe-ec-instances-cross-regi</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>ec-instances-without-default-vpc</code></span><span class="cb-track"><span class="cb-fill" style="width:33.3%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">1/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>find-ec-instances-in-public-subn</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions-1</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-by-vpc-across</code></span><span class="cb-track"><span class="cb-fill" style="width:33.3%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">1/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-private-ips-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-unused-security-groups-all</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">What one answer cost</h3>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:82.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0849</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mpanel-sub">tokens in</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:65.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">317,640</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
+<div class="cb-mpanel-sub">tokens out</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5,636</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Work per answer</h3>
+<p class="cb-mpanel-note">What the agent had to do to get there.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">commands</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:86.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">10.71</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
+<div class="cb-mpanel-sub">turns</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">13</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
+<div class="cb-mpanel-sub">clock time</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">109s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Independence</h3>
+<p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">account reads <em>by design</em></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">74</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
+</div></section>
+</div>
+<div class="cb-panelset">
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Pass rate by question</h3>
+<p class="cb-mpanel-note">Of 24 trials: 8 questions, 3 attempts each.</p>
+<div class="cb-mrows">
+<div class="cb-mrow"><span class="cb-mrow-name"><code>describe-ec-instances-cross-regi</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>ec-instances-without-default-vpc</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>find-ec-instances-in-public-subn</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions-1</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-by-vpc-across</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-private-ips-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-unused-security-groups-all</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">What one answer cost</h3>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:83.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0853</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mpanel-sub">tokens in</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:73.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">359,447</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
+<div class="cb-mpanel-sub">tokens out</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:81.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,612</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Work per answer</h3>
+<p class="cb-mpanel-note">What the agent had to do to get there.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">commands</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:77.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">9.62</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
+<div class="cb-mpanel-sub">turns</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:73.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">12.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
+<div class="cb-mpanel-sub">clock time</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">69s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Independence</h3>
+<p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">account reads</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
+</div></section>
+</div>
+<div class="cb-panelset">
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Pass rate by question</h3>
+<p class="cb-mpanel-note">Of 24 trials: 8 questions, 3 attempts each.</p>
+<div class="cb-mrows">
+<div class="cb-mrow"><span class="cb-mrow-name"><code>describe-ec-instances-cross-regi</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>ec-instances-without-default-vpc</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>find-ec-instances-in-public-subn</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-all-regions-1</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-instances-by-vpc-across</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-ec-private-ips-all-regions</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></div>
+<div class="cb-mrow"><span class="cb-mrow-name"><code>list-unused-security-groups-all</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">What one answer cost</h3>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1028</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mpanel-sub">tokens in</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">486,457</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
+<div class="cb-mpanel-sub">tokens out</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:93.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5,278</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Work per answer</h3>
+<p class="cb-mpanel-note">What the agent had to do to get there.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">commands</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">12.46</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
+<div class="cb-mpanel-sub">turns</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">16.67</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
+<div class="cb-mpanel-sub">clock time</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">85s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Independence</h3>
+<p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">account reads</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">this tool</span><span class="cb-track"><span class="cb-fill" style="width:33.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
+</div></section>
+</div>
+<div class="cb-panelset">
+<section class="cb-mpanel"><p class="cb-pending-note">Not yet run — declared, no runs yet.</p></section></div>
+<div class="cb-panelset">
+<section class="cb-mpanel"><p class="cb-pending-note">Not yet run — the floor every other arm is read against.</p></section></div>
 </div>
 </div>
 

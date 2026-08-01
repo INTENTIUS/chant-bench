@@ -175,6 +175,57 @@ OUTCOME = ("#0b6e76", "#3fafb6")
 SPEND = ("#9a5b12", "#c9913f")
 
 
+def attempts_each(runs: list[dict], tasks: set) -> str:
+    """k, counted from the runs. Written out, it silently lies the day k changes."""
+    trials = {r["score"].get("expected_trials") or r["score"]["trials"] for r in runs}
+    if not tasks or len(trials) != 1:
+        return "the run's"
+    k = trials.pop() // len(tasks)
+    return {1: "one", 2: "two", 3: "three", 4: "four", 5: "five"}.get(k, str(k))
+
+
+def pass_rate_blurb(runs: list[dict], tasks: set) -> str:
+    """How a rate was arrived at, counted from the runs rather than typed here.
+
+    It read "Of 24 trials: eight questions, three attempts each", which was true
+    the day it was written. k or the question set changing would have left the
+    page confidently describing an experiment nobody ran.
+    """
+    trials = {r["score"].get("expected_trials") or r["score"]["trials"] for r in runs}
+    if not tasks or len(trials) != 1:
+        return "Passes over every trial the run was asked for."
+    n, q = trials.pop(), len(tasks)
+    k = n // q if q else 0
+    return f"Of {n} trials: {q} questions, {k} attempt{'s' if k != 1 else ''} each."
+
+
+def cheapness(rows: list) -> str:
+    """chant's token cost against the other arms', as a fraction, from the data.
+
+    The claim was "a third of the tokens". It is the page's central claim, so it
+    should not be a number someone remembered — it should move when the results
+    do, or be dropped when chant stops being cheapest.
+    """
+    mine = next((r["effort"].get("tokens_in") for a, r, _ in rows if a == "chant"), None)
+    others = [
+        r["effort"].get("tokens_in")
+        for a, r, _ in rows
+        if a not in ("chant", "bare") and isinstance(r["effort"].get("tokens_in"), (int, float))
+    ]
+    if not isinstance(mine, (int, float)) or not others:
+        return "fewer tokens"
+    ratio = mine / (sum(others) / len(others))
+    if ratio >= 0.9:
+        return "the same tokens"
+    denom = round(1 / ratio)
+    if denom < 2:
+        # Cheaper, but not by a clean fraction. "a 1th of the tokens" is what
+        # naming it anyway produced.
+        return f"{round((1 - ratio) * 100)}% fewer tokens"
+    words = {2: "half", 3: "a third", 4: "a quarter", 5: "a fifth"}
+    return f"{words.get(denom, f'a {denom}th')} of the tokens"
+
+
 def headline(runs: list[dict]) -> dict | None:
     """The latest valid run — a stated rule, never a best-of."""
     return next((r for r in runs if valid(r)), None)
@@ -192,7 +243,10 @@ def fill(value, largest, colour) -> str:
     Scaled against the largest value any arm recorded, so the rows in one panel
     are comparable and no bar is scaled to make a point.
     """
-    light, dark = colour
+    # A reference row (the field's best, the field's average) is context, not the
+    # subject, so it draws in the neutral rather than competing with the arm's
+    # own bar for the same colour.
+    light, dark = colour if colour else ("#8a8f98", "#6c727c")
     if not isinstance(value, (int, float)) or not largest or value <= 0:
         # Zero draws nothing. A minimum-width sliver under chant's account reads
         # would undercut the one number whose whole meaning is that it is zero.
@@ -243,7 +297,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # the agent had to do are three different questions about the same answer,
     # and reading them as one column of nine rows makes none of them land.
     PANELS = [
-        ("Pass rate", "Of 24 trials: eight questions, three attempts each.", [
+        ("Pass rate", pass_rate_blurb(just, tasks), [
             ("pass rate", lambda r: r["score"].get("pass_rate"), lambda v: f"{v:.3f}"),
         ]),
         ("What one answer cost", "The agent's own billed total, not tokens times a rate card.", [
@@ -283,7 +337,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "counts below are buying.",
         "",
         "chant moves the join into the tool. The model writes one query, the tool",
-        "answers it. Same answer, a third of the tokens, and the answer comes back",
+        f"answers it. Same answer, {cheapness(rows)}, and the answer comes back",
         "with the query that produced it. You can read it, re-run it, put it in CI.",
         "",
         "That part is not an efficiency gain. It is the difference between *an agent",
@@ -336,29 +390,83 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # comparison, and a metric only means something next to the others' values
     # for it — the reference plots its selection against the field's best and
     # average for the same reason.
-    out.append('<div class="cb-mpanels">')
-    for title, blurb, metrics in PANELS:
-        out.append('<section class="cb-mpanel">')
-        out.append(f'<h3 class="cb-mpanel-title">{title}</h3>')
-        out.append(f'<p class="cb-mpanel-note">{blurb}</p>')
-        for label, get, show in metrics:
-            if len(metrics) > 1:
-                out.append(f'<div class="cb-mpanel-sub">{label}</div>')
+    # One panel set per arm; the radio decides which is on screen. Every arm has
+    # the same panels, so switching compares like with like.
+    #
+    # A panel shows the picked arm against the field's best and average for that
+    # metric, not a row per tool. A row per tool made every panel a copy of the
+    # leaderboard, and the thing you actually want to know — is this good — was
+    # left to the reader to work out by scanning.
+    out.append('<div class="cb-panelsets">')
+    for arm, r, n in entries:
+        out.append('<div class="cb-panelset">')
+        if r is None:
+            why = (
+                "the floor every other arm is read against"
+                if arm == "bare"
+                else "declared, no runs yet"
+            )
+            out.append(
+                f'<section class="cb-mpanel"><p class="cb-pending-note">'
+                f"Not yet run — {why}.</p></section></div>"
+            )
+            continue
+
+        # Pass rate breaks down by question: a headline rate should be checkable
+        # against where it came from.
+        s = r["score"]
+        out.append('<section class="cb-mpanel wide">')
+        out.append('<h3 class="cb-mpanel-title">Pass rate by question</h3>')
+        out.append(f'<p class="cb-mpanel-note">{pass_rate_blurb(just, tasks)}</p>')
+        out.append('<div class="cb-mrows">')
+        for task, attempts in sorted(s["by_task"].items()):
+            got, of = sum(attempts), len(attempts)
+            out.append(
+                '<div class="cb-mrow">'
+                f'<span class="cb-mrow-name"><code>{task}</code></span>'
+                f"{fill(got, of, OUTCOME)}"
+                f'<span class="cb-mrow-value">{got}/{of}</span>'
+                "</div>"
+            )
+        out.append("</div></section>")
+
+        for title, blurb, metrics in PANELS:
+            if title == "Pass rate":
+                continue
+            out.append('<section class="cb-mpanel">')
+            out.append(f'<h3 class="cb-mpanel-title">{title}</h3>')
+            out.append(f'<p class="cb-mpanel-note">{blurb}</p>')
             out.append('<div class="cb-mrows">')
-            for arm, r, _ in entries:
-                name, _b = ARMS.get(arm, (arm, ""))
-                v = get(r) if r is not None else None
-                shown = show(v) if isinstance(v, (int, float)) else "—"
-                colour = OUTCOME if title == "Pass rate" else SPEND
-                out.append(
-                    '<div class="cb-mrow">'
-                    f'<span class="cb-mrow-name">{name}</span>'
-                    f"{fill(v, largest[label], colour)}"
-                    f'<span class="cb-mrow-value">{shown}</span>'
-                    "</div>"
+            for label, get, show in metrics:
+                v = get(r)
+                field = [
+                    x for x in (get(o) for o in just) if isinstance(x, (int, float))
+                ]
+                best = min(field) if field else None
+                # Rounded to the precision the arms' own figures carry, so an
+                # average does not read as more precise than what it averages.
+                avg = round(sum(field) / len(field), 2) if field else None
+                note = (
+                    " <em>by design</em>"
+                    if label == "account reads" and arm in STATELESS
+                    else ""
                 )
-            out.append("</div>")
-        out.append("</section>")
+                out.append(f'<div class="cb-mpanel-sub">{label}{note}</div>')
+                for who, val, cls in (
+                    ("this tool", v, "self"),
+                    ("best", best, "ref"),
+                    ("field average", avg, "ref"),
+                ):
+                    shown = show(val) if isinstance(val, (int, float)) else "—"
+                    out.append(
+                        f'<div class="cb-mrow {cls}">'
+                        f'<span class="cb-mrow-name">{who}</span>'
+                        f"{fill(val, largest[label], SPEND if cls == 'self' else None)}"
+                        f'<span class="cb-mrow-value">{shown}</span>'
+                        "</div>"
+                    )
+            out.append("</div></section>")
+        out.append("</div>")
     out.append("</div>")
     out += ["</div>", ""]
 
@@ -374,7 +482,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "",
         "## By question",
         "",
-        "Passes out of three attempts.",
+        f"Passes out of {attempts_each(just, tasks)} attempts.",
         "",
     ]
     header = "| task | " + " | ".join(ARMS.get(a, (a,))[0] for a, _, _ in rows) + " |"

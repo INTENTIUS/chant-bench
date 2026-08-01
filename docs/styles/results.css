@@ -120,22 +120,23 @@
 }
 .cb-board-row { border-left: 2px solid transparent; }
 
-/* Every panel holds every arm, and the picked one is the one you are reading.
-   The rest stay legible rather than hidden: a metric only means something next
-   to the others' values for it. */
-.cb-mrow { opacity: 0.42; transition: opacity 120ms ease; }
-.cb-explorer > .cb-pick:nth-of-type(1):checked ~ .cb-mpanels .cb-mrow:nth-child(1),
-.cb-explorer > .cb-pick:nth-of-type(2):checked ~ .cb-mpanels .cb-mrow:nth-child(2),
-.cb-explorer > .cb-pick:nth-of-type(3):checked ~ .cb-mpanels .cb-mrow:nth-child(3),
-.cb-explorer > .cb-pick:nth-of-type(4):checked ~ .cb-mpanels .cb-mrow:nth-child(4),
-.cb-explorer > .cb-pick:nth-of-type(5):checked ~ .cb-mpanels .cb-mrow:nth-child(5),
-.cb-explorer > .cb-pick:nth-of-type(6):checked ~ .cb-mpanels .cb-mrow:nth-child(6),
-.cb-explorer > .cb-pick:nth-of-type(7):checked ~ .cb-mpanels .cb-mrow:nth-child(7),
-.cb-explorer > .cb-pick:nth-of-type(8):checked ~ .cb-mpanels .cb-mrow:nth-child(8),
-.cb-explorer > .cb-pick:nth-of-type(9):checked ~ .cb-mpanels .cb-mrow:nth-child(9),
-.cb-explorer > .cb-pick:nth-of-type(10):checked ~ .cb-mpanels .cb-mrow:nth-child(10) {
-  opacity: 1;
-  font-weight: 700;
+/* One panel set on screen at a time — the picked arm's. Every arm has the same
+   panels, so switching compares like with like. */
+.cb-panelset { display: none; }
+.cb-explorer > .cb-pick:nth-of-type(1):checked ~ .cb-panelsets > .cb-panelset:nth-child(1),
+.cb-explorer > .cb-pick:nth-of-type(2):checked ~ .cb-panelsets > .cb-panelset:nth-child(2),
+.cb-explorer > .cb-pick:nth-of-type(3):checked ~ .cb-panelsets > .cb-panelset:nth-child(3),
+.cb-explorer > .cb-pick:nth-of-type(4):checked ~ .cb-panelsets > .cb-panelset:nth-child(4),
+.cb-explorer > .cb-pick:nth-of-type(5):checked ~ .cb-panelsets > .cb-panelset:nth-child(5),
+.cb-explorer > .cb-pick:nth-of-type(6):checked ~ .cb-panelsets > .cb-panelset:nth-child(6),
+.cb-explorer > .cb-pick:nth-of-type(7):checked ~ .cb-panelsets > .cb-panelset:nth-child(7),
+.cb-explorer > .cb-pick:nth-of-type(8):checked ~ .cb-panelsets > .cb-panelset:nth-child(8),
+.cb-explorer > .cb-pick:nth-of-type(9):checked ~ .cb-panelsets > .cb-panelset:nth-child(9),
+.cb-explorer > .cb-pick:nth-of-type(10):checked ~ .cb-panelsets > .cb-panelset:nth-child(10) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.6rem;
 }
 
 /* ── the metric panels ────────────────────────────────────────────────── */
@@ -190,6 +191,18 @@
   text-overflow: ellipsis;
 }
 .cb-mrow-value { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* The arm's own value leads; best and field average are context behind it. */
+.cb-mrow.self { font-weight: 700; }
+.cb-mrow.ref { opacity: 0.6; }
+.cb-mrow.ref .cb-mrow-name { font-style: italic; }
+
+/* Pass rate by question is eight rows of long task names, so it gets the full
+   width rather than being squeezed into a column beside the three-row panels. */
+.cb-mpanel.wide { grid-column: 1 / -1; }
+.cb-mpanel.wide .cb-mrow {
+  grid-template-columns: minmax(9rem, 18rem) minmax(0, 1fr) 3rem;
+}
 .cb-mrow .cb-track { height: 0.85rem; }
 
 /* ── the bars ──────────────────────────────────────────────────────────── */
