@@ -1,6 +1,6 @@
 # AWS CDK
 
-Latest valid run: **18/24** (0.750), 89 account read(s), 12.88 commands and 16.71 turns per trial.
+Latest valid run: **17/24** (0.708), 74 account read(s), 10.71 commands and 13 turns per trial.
 
 ## Reproducing this
 
@@ -22,8 +22,9 @@ low score.
 
 | # | run | passed | rate | reads | commands | turns | harness | |
 |---|---|---|---|---|---|---|---|---|
-| 2 | [`cdk-cur`](runs/cdk-cur.md) | 18/24 | 0.750 | 89 | 12.88 | 16.71 | `9894bca` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`cdk-s1-rerun`](runs/cdk-s1-rerun.md) | 17/24 | 0.708 | 77 | 11.04 | 14.88 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
+| 3 | [`cdk-m1`](runs/cdk-m1.md) | 17/24 | 0.708 | 74 | 10.71 | 13 | `1fa8317` | <span class="cb-badge ok">gates passed</span> |
+| 2 | [`cdk-cur`](runs/cdk-cur.md) | 17/24 | 0.708 | 104 | 12.79 | 15.17 | `1fa8317` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`cdk-s1-rerun`](runs/cdk-s1-rerun.md) | 17/24 | 0.708 | 77 | 11.04 | 14.88 | `1fa8317` | <span class="cb-badge invalid">invalid</span> |
 
 ## The agent's context
 

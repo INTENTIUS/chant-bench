@@ -1,4 +1,4 @@
-# chant — run 5 of 12
+# chant — run 16 of 24
 
 `chant-s14-sgfix` <span class="cb-badge ok">gates passed</span>
 
@@ -22,9 +22,9 @@
 | | |
 |---|---|
 | finished | 2026-07-31T09:58:50.412958 |
-| harness | `0d7178c` |
+| harness | `1fa8317` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
-| briefing | `8af55640cf40` |
+| briefing | `9ce3707f885e` |
 | substrate | floci |
 | trials | 24 of 24 expected |
 
@@ -34,6 +34,8 @@ the briefing hash. Different either, different experiment.
 ## Logs
 
 - *(whole-run log not captured; this run predates it)*
+- `jobs/chant-s14-sgfix/job.log` — the scored run
+- `jobs/chant-s14-sgfix/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 

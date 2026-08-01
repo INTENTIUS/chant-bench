@@ -1,18 +1,18 @@
-# chant — run 20 of 24
+# chant — run 4 of 24
 
-`chant-s18-region` <span class="cb-badge ok">gates passed</span>
+`chant-s2-fixed` <span class="cb-badge ok">gates passed</span>
 
-**20 of 24** (0.833) · 0 account read(s) · 4.17 commands, 6.21 turns, 39s per trial
+**15 of 24** (0.625) · 207 account read(s) · 9.12 commands, 11.25 turns, 94s per trial
 
 ## By question
 
 | task | attempts |
 |---|---|
 | `describe-ec-instances-cross-regi` | 3/3 &nbsp; ✓ ✓ ✓ |
-| `ec-instances-without-default-vpc` | 3/3 &nbsp; ✓ ✓ ✓ |
-| `find-ec-instances-in-public-subn` | 2/3 &nbsp; ✗ ✓ ✓ |
-| `list-ec-instances-all-regions` | 3/3 &nbsp; ✓ ✓ ✓ |
-| `list-ec-instances-all-regions-1` | 3/3 &nbsp; ✓ ✓ ✓ |
+| `ec-instances-without-default-vpc` | 2/3 &nbsp; ✓ ✗ ✓ |
+| `find-ec-instances-in-public-subn` | 1/3 &nbsp; ✓ ✗ ✗ |
+| `list-ec-instances-all-regions` | 2/3 &nbsp; ✗ ✓ ✓ |
+| `list-ec-instances-all-regions-1` | 1/3 &nbsp; ✗ ✗ ✓ |
 | `list-ec-instances-by-vpc-across` | 3/3 &nbsp; ✓ ✓ ✓ |
 | `list-ec-private-ips-all-regions` | 3/3 &nbsp; ✓ ✓ ✓ |
 | `list-unused-security-groups-all` | 0/3 &nbsp; ✗ ✗ ✗ |
@@ -21,7 +21,7 @@
 
 | | |
 |---|---|
-| finished | 2026-07-31T12:12:29.475159 |
+| finished | 2026-07-30T21:00:14.159124 |
 | harness | `1fa8317` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `9ce3707f885e` |
@@ -34,13 +34,13 @@ the briefing hash. Different either, different experiment.
 ## Logs
 
 - *(whole-run log not captured; this run predates it)*
-- `jobs/chant-s18-region/job.log` — the scored run
-- `jobs/chant-s18-region/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
+- `jobs/chant-s2-fixed/job.log` — the scored run
+- `jobs/chant-s2-fixed/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 
 ```sh
-./benchmarks/agent-env/run-arm.sh chant chant-s18-region
+./benchmarks/agent-env/run-arm.sh chant chant-s2-fixed
 ```
 
 [← all chant runs](../index.md)

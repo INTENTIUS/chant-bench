@@ -1,4 +1,4 @@
-# chant — run 6 of 12
+# chant — run 17 of 24
 
 `chant-s15-revert` <span class="cb-badge invalid">invalid</span>
 
@@ -27,9 +27,9 @@
 | | |
 |---|---|
 | finished | 2026-07-31T10:10:37.865042 |
-| harness | `a9fe29f` |
+| harness | `1fa8317` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
-| briefing | `8af55640cf40` |
+| briefing | `9ce3707f885e` |
 | substrate | floci |
 | trials | 23 of 24 expected |
 
@@ -39,6 +39,8 @@ the briefing hash. Different either, different experiment.
 ## Logs
 
 - *(whole-run log not captured; this run predates it)*
+- `jobs/chant-s15-revert/job.log` — the scored run
+- `jobs/chant-s15-revert/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 

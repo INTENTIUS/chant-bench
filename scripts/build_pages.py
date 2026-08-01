@@ -123,6 +123,24 @@ def question_page(task: str, tx: dict[str, dict]) -> str:
     return "\n".join(out)
 
 
+def num(v, spec: str = "") -> str:
+    """Format a metric, or an em dash when a run produced none.
+
+    A run the gates stopped can have no trials at all, so every effort number is
+    absent. That is a state worth rendering — the run happened and produced
+    nothing — rather than one that should crash the build.
+    """
+    if not isinstance(v, (int, float)):
+        return "—"
+    return format(v, spec) if spec else f"{v}"
+
+
+def rate(r: dict) -> str:
+    """The pass rate, or an em dash when no trial scored at all."""
+    v = r.get("score", {}).get("pass_rate")
+    return f"{v:.3f}" if isinstance(v, (int, float)) else "—"
+
+
 def valid(r: dict) -> bool:
     g = r.get("gates", {})
     return bool(g.get("audit")) and bool(g.get("complete")) and not g.get("tool_missing")
@@ -191,14 +209,14 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         tin = e.get("tokens_in")
         tout = e.get("tokens_out")
         out.append(
-            f"| {i} | [{name}]({arm}/index.md) | {s['pass_rate']:.3f} | "
+            f"| {i} | [{name}]({arm}/index.md) | {rate(r)} | "
             f"**{tin:,.0f}**" % () if False else
-            f"| {i} | [{name}]({arm}/index.md) | {s['pass_rate']:.3f} | "
-            f"**{tin:,.0f}** | {tout:,.0f} | {e['tool_calls']} | "
-            f"{e['turns']} | {e['wall_seconds']:.0f} | {reads_note} | {n} | {badge(r)} |"
+            f"| {i} | [{name}]({arm}/index.md) | {rate(r)} | "
+            f"**{num(tin, ',.0f')}** | {num(tout, ',.0f')} | {num(e['tool_calls'])} | "
+            f"{num(e['turns'])} | {num(e['wall_seconds'], '.0f')} | {reads_note} | {n} | {badge(r)} |"
             if tin else
             f"| {i} | [{name}]({arm}/index.md) | {s['pass_rate']:.3f} | — | — | "
-            f"{e['tool_calls']} | {e['turns']} | {e['wall_seconds']:.0f} | {reads_note} | {n} | {badge(r)} |"
+            f"{num(e['tool_calls'])} | {num(e['turns'])} | {num(e['wall_seconds'], '.0f')} | {reads_note} | {n} | {badge(r)} |"
         )
 
     out += [
@@ -240,9 +258,9 @@ def arm_page(arm: str, runs: list[dict]) -> str:
     if head:
         s, e = head["score"], head["effort"]
         out += [
-            f"Latest valid run: **{s['passed']}/{s['trials']}** ({s['pass_rate']:.3f}), "
+            f"Latest valid run: **{s['passed']}/{s['trials']}** ({rate(head)}), "
             f"{head['independence']['account_reads']} account read(s), "
-            f"{e['tool_calls']} commands and {e['turns']} turns per trial.",
+            f"{num(e['tool_calls'])} commands and {num(e['turns'])} turns per trial.",
             "",
         ]
     else:
@@ -280,8 +298,8 @@ def arm_page(arm: str, runs: list[dict]) -> str:
         s, e = r["score"], r["effort"]
         out.append(
             f"| {n} | [`{r['run']['id']}`](runs/{r['run']['id']}.md) | "
-            f"{s['passed']}/{s['trials']} | {s['pass_rate']:.3f} | "
-            f"{r['independence']['account_reads']} | {e['tool_calls']} | {e['turns']} | "
+            f"{s['passed']}/{s['trials']} | {rate(r)} | "
+            f"{num(r['independence']['account_reads'])} | {num(e['tool_calls'])} | {num(e['turns'])} | "
             f"`{r['run'].get('harness_commit') or '—'}` | {badge(r)} |"
         )
 
@@ -348,9 +366,9 @@ def run_page(arm: str, number: int, total: int, r: dict) -> str:
         ]
 
     out += [
-        f"**{s['passed']} of {s['trials']}** ({s['pass_rate']:.3f}) · "
+        f"**{s['passed']} of {s['trials']}** ({rate(r)}) · "
         f"{r['independence']['account_reads']} account read(s) · "
-        f"{e['tool_calls']} commands, {e['turns']} turns, {e['wall_seconds']:.0f}s per trial",
+        f"{num(e['tool_calls'])} commands, {num(e['turns'])} turns, {num(e['wall_seconds'], '.0f')}s per trial",
         "",
         "## By question",
         "",
@@ -423,7 +441,23 @@ def main() -> int:
     for arm in ARMS:
         runs = by_arm.get(arm, [])
         if not runs:
-            print(f"skip  {arm}.md  (no runs)")
+            # A stub rather than a missing page: the arm is in the nav because it
+            # is part of the comparison, and "no runs yet" is a truer thing to
+            # show than a dead link or a quietly shortened menu.
+            arm_dir = DOCS / arm
+            arm_dir.mkdir(parents=True, exist_ok=True)
+            (arm_dir / "index.md").write_text(
+                f"# {ARMS[arm][0]}\n\n"
+                "!!! info \"No runs yet\"\n"
+                "    This arm is wired up and part of the comparison, but has not been\n"
+                "    scored yet. It will appear in [Results](../results.md) once it has\n"
+                "    a valid run.\n\n"
+                "Reproduce it once it is running:\n\n"
+                "```sh\n"
+                f"./benchmarks/agent-env/run-arm.sh {arm}\n"
+                "```\n"
+            )
+            print(f"stub  {arm}/index.md  (no runs yet)")
             continue
         arm_dir = DOCS / arm
         (arm_dir / "runs").mkdir(parents=True, exist_ok=True)

@@ -1,4 +1,4 @@
-# Alchemy — run 1 of 2
+# Alchemy — run 1 of 3
 
 `alchemy-s1-rerun` <span class="cb-badge invalid">invalid</span>
 
@@ -27,9 +27,9 @@
 | | |
 |---|---|
 | finished | 2026-07-30T19:31:35.164308 |
-| harness | `a9fe29f` |
+| harness | `1fa8317` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
-| briefing | `799dcc65a424` |
+| briefing | `596be04902b9` |
 | substrate | floci |
 | trials | 24 of 24 expected |
 
@@ -39,6 +39,8 @@ the briefing hash. Different either, different experiment.
 ## Logs
 
 - *(whole-run log not captured; this run predates it)*
+- `jobs/alchemy-s1-rerun/job.log` — the scored run
+- `jobs/alchemy-s1-rerun/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 

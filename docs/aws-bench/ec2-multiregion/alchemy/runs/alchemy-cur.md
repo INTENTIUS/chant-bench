@@ -1,4 +1,4 @@
-# Alchemy — run 2 of 2
+# Alchemy — run 2 of 3
 
 `alchemy-cur` <span class="cb-badge ok">gates passed</span>
 
@@ -22,9 +22,9 @@
 | | |
 |---|---|
 | finished | 2026-07-31T16:40:28.488823 |
-| harness | `a3206f4` |
+| harness | `1fa8317` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
-| briefing | `799dcc65a424` |
+| briefing | `596be04902b9` |
 | substrate | floci |
 | trials | 24 of 24 expected |
 
@@ -34,6 +34,8 @@ the briefing hash. Different either, different experiment.
 ## Logs
 
 - *(whole-run log not captured; this run predates it)*
+- `jobs/alchemy-cur/job.log` — the scored run
+- `jobs/alchemy-cur/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 
