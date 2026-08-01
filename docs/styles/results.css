@@ -253,6 +253,11 @@
 .md-typeset .cb-q-body p { margin: 0 0 0.3rem; font-size: 0.76rem; }
 .cb-q-prompt { font-weight: 600; }
 .cb-q-truth { opacity: 0.75; }
+
+/* How the rest of the field did — whether a question is hard for this tool or
+   hard for everyone. The cross-arm table that used to carry this was the
+   transpose of the panel above it, so it went and this stayed. */
+.cb-q-field { opacity: 0.75; }
 .cb-q-marks { margin-left: 0.5rem; letter-spacing: 0.15em; }
 .md-typeset .cb-q-link { margin: 0.4rem 0 0; font-size: 0.72rem; }
 

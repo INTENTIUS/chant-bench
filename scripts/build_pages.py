@@ -195,6 +195,32 @@ ARM_WORKDIR = {
 }
 
 
+def field_on(task: str, rows: list, mine: str) -> str:
+    """How the rest of the field did on one question.
+
+    This is the one thing the cross-arm table carried that a per-arm panel
+    cannot: whether a question is hard for this tool or hard for everyone.
+    `list-unused-security-groups-all` is why it matters — chant gets it 2 of 3
+    times and all four other arms get it none — and that is the most interesting
+    result on the page, so it should not depend on a reader transposing a table
+    in their head.
+    """
+    others = []
+    for arm, r, _ in rows:
+        if arm == mine:
+            continue
+        v = r["score"]["by_task"].get(task)
+        if v:
+            others.append((ARMS.get(arm, (arm,))[0], sum(v), len(v)))
+    if not others:
+        return "No other arm has answered this one yet."
+    got = sum(1 for _, s, _ in others if s)
+    if got == 0:
+        return f"No other arm answered this at all ({len(others)} tried)."
+    parts = ", ".join(f"{n} {s}/{o}" for n, s, o in others)
+    return f"Everyone else: {parts}."
+
+
 def briefing_text(path: str | None) -> str:
     """The briefing a run used, escaped for a <pre>.
 
@@ -456,6 +482,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
                 f'<div class="cb-q-body"><p class="cb-q-prompt">{prompt}</p>'
                 f'<p class="cb-q-truth">Graded against <b>{truth}</b>'
                 f'<span class="cb-q-marks">{marks}</span></p>'
+                f'<p class="cb-q-field">{field_on(task, rows, arm)}</p>'
                 f'<p class="cb-q-link"><a href="../questions/{task}/">'
                 "What each tool ran</a></p></div>"
                 "</details>"
@@ -576,25 +603,12 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "    that re-reads the cloud. CDK is the honest exception. It keeps no state",
         "    of its own, so its reads are its sanctioned path, not a fallback.",
         "",
-        "## By question",
-        "",
-        f"Passes out of {attempts_each(just, tasks)} attempts.",
-        "",
     ]
-    header = "| task | " + " | ".join(ARMS.get(a, (a,))[0] for a, _, _ in rows) + " |"
-    out += [header, "|---" * (len(rows) + 1) + "|"]
-    for task in sorted(tasks):
-        cells = []
-        for arm, r, _ in rows:
-            v = r["score"]["by_task"].get(task)
-            cells.append(f"{sum(v)}/{len(v)}" if v else "—")
-        out.append(f"| `{task}` | " + " | ".join(cells) + " |")
-
-    out += [
-        "",
-        "Ground truth for each question is on [the scenario page](index.md).",
-        "",
-    ]
+    # The cross-arm table that used to sit here was the transpose of the pass
+    # rate panel: the same numbers, read down instead of across. Its one piece
+    # of information the panel could not carry — how the rest of the field did
+    # on a given question — moved into the question row itself, which is where
+    # someone looking at a 2/3 already is.
     return "\n".join(out)
 
 
