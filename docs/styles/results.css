@@ -83,6 +83,15 @@
 .cb-who-name:hover,
 .cb-who-name:focus { color: var(--md-accent-fg-color); }
 .cb-who-sub { font-size: 0.68rem; opacity: 0.6; }
+/* The control is marked in place rather than moved to the bottom. Where it
+   lands is the point. */
+.cb-who-sub .cb-tag {
+  margin-left: 0.3rem;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 0 0.25rem;
+  opacity: 0.8;
+}
 
 .cb-board-value {
   text-align: right;
