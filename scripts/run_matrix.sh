@@ -54,6 +54,18 @@ for r in $(seq 1 "$REPS"); do
       && echo "    ingested" \
       || echo "    ingest failed for $job"
   done
+  # A full matrix builds a trial image per task per arm and leaves a network
+  # behind each time. Left alone across eighteen runs that fills the Docker
+  # disk and exhausts the address pool — both of which have already taken a
+  # session down, and both of which present as the arms failing rather than as
+  # the machine running out. Only unused artifacts go; arm images are kept, so
+  # nothing has to be rebuilt.
+  say "reclaiming docker space between replicates"
+  docker container prune -f >/dev/null 2>&1 || true
+  docker network prune -f   >/dev/null 2>&1 || true
+  docker image prune -f     >/dev/null 2>&1 || true
+  docker builder prune -f   >/dev/null 2>&1 || true
+  docker system df --format 'table {{.Type}}\t{{.Size}}\t{{.Reclaimable}}' 2>/dev/null | sed 's/^/    /' | head -5
 done
 
 say "matrix complete in $(( ($(date +%s) - started) / 60 )) minutes"
