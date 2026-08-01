@@ -1,4 +1,4 @@
-# chant — run 8 of 24
+# chant — run 7 of 24
 
 `chant-s5-ambient` <span class="cb-badge invalid">invalid</span>
 
@@ -7,7 +7,7 @@
     than this tool, and are published so the failure is visible rather
     than quietly dropped.
 
-**16 of 24** (0.667) · 105 account read(s) · 14.54 commands, 17.17 turns, 102s per trial
+**16 of 24** (—) · 105 account read(s) · 14.54 commands, 17.17 turns, 102s per trial
 
 ## By question
 
@@ -27,7 +27,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T00:33:14.944471 |
-| harness | `1fa8317` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `9ce3707f885e` |
 | substrate | floci |

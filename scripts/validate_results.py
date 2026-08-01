@@ -70,6 +70,18 @@ def check(path: Path) -> list[str]:
             if abs(passed / trials - rate) > 0.001:
                 problems.append(f"pass_rate {rate} does not match {passed}/{trials}")
 
+        # Consistency is not enough. A run that lost 22 of its 24 trials to a
+        # crashed harness once published 2 passed / 2 trials = 1.000, and every
+        # check above was satisfied, because the denominator was already wrong
+        # when it was written down. So check the denominator against what the
+        # run was supposed to do: crashed trials count as trials.
+        expected = score.get("expected_trials")
+        if isinstance(expected, int) and isinstance(trials, int) and trials != expected:
+            problems.append(
+                f"`score.trials` is {trials} but {expected} trials were asked for — "
+                f"pass_rate {rate} is over the survivors, not over the run"
+            )
+
     # The axis the whole comparison turns on. Absent, a reader cannot tell an arm
     # that answered from its own state from one carried by the AWS CLI.
     indep = r.get("independence")

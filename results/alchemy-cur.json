@@ -6,7 +6,7 @@
   "run": {
     "id": "alchemy-cur",
     "finished_at": "2026-07-31T16:40:28.488823",
-    "harness_commit": "1fa8317"
+    "harness_commit": "6303a2f"
   },
   "agent": {
     "name": "claude-code",
@@ -16,6 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
     "passed": 14,
     "pass_rate": 0.5833,
     "by_task": {

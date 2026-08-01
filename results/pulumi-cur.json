@@ -6,7 +6,7 @@
   "run": {
     "id": "pulumi-cur",
     "finished_at": "2026-07-31T16:11:16.832222",
-    "harness_commit": "a3206f4"
+    "harness_commit": "6303a2f"
   },
   "agent": {
     "name": "claude-code",
@@ -16,6 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
     "passed": 18,
     "pass_rate": 0.75,
     "by_task": {
@@ -75,11 +77,18 @@
   "effort": {
     "tool_calls": 8,
     "turns": 10.33,
-    "wall_seconds": 48.26
+    "wall_seconds": 48.26,
+    "tokens_in": 296723.83,
+    "tokens_out": 4333.12
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/pulumi-cur/job.log",
+    "trials": "jobs/pulumi-cur/<task>__<id>/agent/"
   },
   "briefing": {
     "path": "benchmarks/arms/briefing-pulumi.md",
-    "sha256": "483cca6296aa"
+    "sha256": "a06c6b73c0eb"
   },
   "reproduce": "benchmarks/arms/pulumi-ec2-multiregion/REPRODUCE.md"
 }

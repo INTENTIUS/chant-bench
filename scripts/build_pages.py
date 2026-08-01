@@ -136,7 +136,16 @@ def num(v, spec: str = "") -> str:
 
 
 def rate(r: dict) -> str:
-    """The pass rate, or an em dash when no trial scored at all."""
+    """The pass rate, or an em dash when the run does not have one to report.
+
+    An invalid run gets no number. Not a low one, not a caveated one — none.
+    A rate printed in a rate column is read as a rate however it is badged, and
+    terraform-m1 is what that costs: it lost 22 of 24 trials to a crashed
+    harness, scored the 2 that survived, and published `1.000` beside an
+    `invalid` badge. The badge lost to the number, including with me.
+    """
+    if not valid(r):
+        return "—"
     v = r.get("score", {}).get("pass_rate")
     return f"{v:.3f}" if isinstance(v, (int, float)) else "—"
 
@@ -207,15 +216,14 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         reads_note = f"{reads} *(by design)*" if arm in STATELESS else str(reads)
         tin = e.get("tokens_in")
         tout = e.get("tokens_out")
+        # One row shape. The two-branch version this replaces had a dead
+        # `if False else` arm, and its live fallback formatted score.pass_rate
+        # directly — bypassing rate(), so an invalid run printed its survivors'
+        # number, and a run with no rate at all crashed the build.
         out.append(
-            f"| {i} | [{name}]({arm}/index.md) | {rate(r)} | "
-            f"**{tin:,.0f}**" % () if False else
             f"| {i} | [{name}]({arm}/index.md) | {rate(r)} | "
             f"**{num(tin, ',.0f')}** | {num(tout, ',.0f')} | {num(e['tool_calls'])} | "
             f"{num(e['turns'])} | {num(e['wall_seconds'], '.0f')} | {reads_note} | {n} | {badge(r)} |"
-            if tin else
-            f"| {i} | [{name}]({arm}/index.md) | {s['pass_rate']:.3f} | — | — | "
-            f"{num(e['tool_calls'])} | {num(e['turns'])} | {num(e['wall_seconds'], '.0f')} | {reads_note} | {n} | {badge(r)} |"
         )
 
     out += [

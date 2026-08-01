@@ -22,10 +22,10 @@ score.
 
 | # | run | passed | rate | reads | commands | turns | harness | |
 |---|---|---|---|---|---|---|---|---|
-| 4 | [`cdk-m2`](runs/cdk-m2.md) | 19/24 | 0.792 | 118 | 12.92 | 15.46 | `9ba7e95` | <span class="cb-badge invalid">invalid</span> |
-| 3 | [`cdk-m1`](runs/cdk-m1.md) | 17/24 | 0.708 | 74 | 10.71 | 13 | `1fa8317` | <span class="cb-badge ok">gates passed</span> |
-| 2 | [`cdk-cur`](runs/cdk-cur.md) | 17/24 | 0.708 | 104 | 12.79 | 15.17 | `1fa8317` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`cdk-s1-rerun`](runs/cdk-s1-rerun.md) | 17/24 | 0.708 | 77 | 11.04 | 14.88 | `1fa8317` | <span class="cb-badge invalid">invalid</span> |
+| 4 | [`cdk-m2`](runs/cdk-m2.md) | 19/24 | — | 118 | 12.92 | 15.46 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
+| 3 | [`cdk-m1`](runs/cdk-m1.md) | 17/24 | 0.708 | 74 | 10.71 | 13 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| 2 | [`cdk-cur`](runs/cdk-cur.md) | 17/24 | 0.708 | 104 | 12.79 | 15.17 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`cdk-s1-rerun`](runs/cdk-s1-rerun.md) | 17/24 | — | 77 | 11.04 | 14.88 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
 
 ## The agent's context
 

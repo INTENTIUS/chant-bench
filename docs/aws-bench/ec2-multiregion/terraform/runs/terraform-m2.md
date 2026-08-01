@@ -22,7 +22,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T18:52:49.660999 |
-| harness | `9ba7e95` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `7822d55ca7ca` |
 | substrate | floci |

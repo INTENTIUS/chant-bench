@@ -1,4 +1,4 @@
-# chant — run 17 of 24
+# chant — run 16 of 24
 
 `chant-s15-revert` <span class="cb-badge invalid">invalid</span>
 
@@ -7,7 +7,7 @@
     than this tool, and are published so the failure is visible rather
     than quietly dropped.
 
-**19 of 23** (0.826) · 2 account read(s) · 5.43 commands, 7.35 turns, 45s per trial
+**19 of 24** (—) · 2 account read(s) · 5.43 commands, 7.35 turns, 45s per trial
 
 ## By question
 
@@ -27,11 +27,11 @@
 | | |
 |---|---|
 | finished | 2026-07-31T10:10:37.865042 |
-| harness | `1fa8317` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `9ce3707f885e` |
 | substrate | floci |
-| trials | 23 of 24 expected |
+| trials | 24 of 24 expected |
 
 A run only compares with another that shares the harness commit and the
 briefing hash. Different either, different experiment.

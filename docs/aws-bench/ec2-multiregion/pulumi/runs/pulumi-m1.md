@@ -7,7 +7,7 @@
     than this tool, and are published so the failure is visible rather
     than quietly dropped.
 
-**1 of 2** (0.500) · 0 account read(s) · 6.5 commands, 7.5 turns, 45s per trial
+**1 of 24** (—) · 0 account read(s) · 6.5 commands, 7.5 turns, 45s per trial
 
 ## By question
 
@@ -21,11 +21,11 @@
 | | |
 |---|---|
 | finished | 2026-07-31T18:13:45.370424 |
-| harness | `9ba7e95` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `a06c6b73c0eb` |
 | substrate | floci |
-| trials | 2 of 24 expected |
+| trials | 24 of 24 expected |
 
 A run only compares with another that shares the harness commit and the
 briefing hash. Different either, different experiment.

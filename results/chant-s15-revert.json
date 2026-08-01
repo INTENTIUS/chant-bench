@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-s15-revert",
     "finished_at": "2026-07-31T10:10:37.865042",
-    "harness_commit": "1fa8317"
+    "harness_commit": "6303a2f"
   },
   "agent": {
     "name": "claude-code",
@@ -14,10 +14,12 @@
     "k": 3
   },
   "score": {
-    "trials": 23,
+    "trials": 24,
     "expected_trials": 24,
+    "completed": 23,
+    "errored": 1,
     "passed": 19,
-    "pass_rate": 0.8261,
+    "pass_rate": 0.7917,
     "by_task": {
       "describe-ec-instances-cross-regi": [
         1,
