@@ -168,48 +168,11 @@ def usd(v) -> str:
     return f"${v:.4f}" if isinstance(v, (int, float)) else "—"
 
 
-def track(value, others, better: str = "lower") -> str:
-    """A full-width bar whose hue says how this arm did on one metric.
-
-    Length encoded the raw value before, which meant the columns argued with each
-    other: a long `pass rate` bar was a win and a long `cost` bar was the
-    opposite, and the eye reads length as magnitude in one direction whatever the
-    colour says. So length is constant and hue carries the whole comparison —
-    every bar is the same size, and the only thing that varies is where this arm
-    sits between the best and worst on that metric.
-
-    Teal to amber rather than green to red: it is the palette the rest of the
-    page already uses, and it stays distinguishable to the ~8% of men who would
-    read a red/green ramp as one colour.
-
-    `others` is every arm's value for this metric, so the ends of the ramp are
-    the real best and worst rather than an assumed range.
-    """
-    if not isinstance(value, (int, float)):
-        return '<span class="cb-bar-track"></span>'
-    vals = [v for v in others if isinstance(v, (int, float))]
-    lo, hi = (min(vals), max(vals)) if vals else (value, value)
-    if hi == lo:
-        # Everyone tied. Nothing to rank, so nothing to shade — a full teal bar
-        # would tell six arms they each won.
-        good = 0.5
-    else:
-        pos = (value - lo) / (hi - lo)
-        good = pos if better == "higher" else 1 - pos
-    # 172 teal (best) to 28 amber (worst). Lightness lifts slightly toward the
-    # amber end so the ramp still separates when the hue does not.
-    hue = round(28 + 144 * good)
-    light = round(46 - 6 * good)
-    return (
-        '<span class="cb-bar-track">'
-        f'<span class="cb-bar" style="--h:{hue};--l:{light}%"></span>'
-        "</span>"
-    )
-
-
-def column(rows: list, get) -> list:
-    """Every arm's value for one metric, so a bar can be shaded against the field."""
-    return [get(r) for r in rows]
+#: One colour per metric, so a bar means the same thing wherever it appears.
+#: Outcome teal, spend amber: the two directions the page cares about, and the
+#: only two it needs, since length now carries magnitude again.
+OUTCOME = ("#0b6e76", "#3fafb6")
+SPEND = ("#9a5b12", "#c9913f")
 
 
 def headline(runs: list[dict]) -> dict | None:
@@ -217,12 +180,48 @@ def headline(runs: list[dict]) -> dict | None:
     return next((r for r in runs if valid(r)), None)
 
 
+def fill(value, largest, colour) -> str:
+    """A proportional bar in a track you can actually see.
+
+    Length carries magnitude and colour carries direction. That is the pairing
+    that failed twice before: first as a thin 6px strip where a 144-degree hue
+    range was still unreadable, then as a constant-length bar shaded by rank,
+    where `hsl(var(--h) …)` dropped out at computed-value time and painted every
+    bar the track colour. A 1rem track with a solid fill has neither problem.
+
+    Scaled against the largest value any arm recorded, so the rows in one panel
+    are comparable and no bar is scaled to make a point.
+    """
+    light, dark = colour
+    if not isinstance(value, (int, float)) or not largest or value <= 0:
+        # Zero draws nothing. A minimum-width sliver under chant's account reads
+        # would undercut the one number whose whole meaning is that it is zero.
+        return '<span class="cb-track"></span>'
+    width = max(1.5, min(100, 100 * value / largest))
+    return (
+        '<span class="cb-track">'
+        f'<span class="cb-fill" style="width:{width:.1f}%;background:{light};--cb-dark:{dark}"></span>'
+        "</span>"
+    )
+
+
+def metric_row(label: str, shown: str, value, largest, colour, note: str = "") -> str:
+    """label | bar | figure — the shape the eye can scan down a column."""
+    return (
+        '<div class="cb-row">'
+        f'<span class="cb-row-label">{label}{note}</span>'
+        f"{fill(value, largest, colour)}"
+        f'<span class="cb-row-value">{shown}</span>'
+        "</div>"
+    )
+
+
 def results_page(by_arm: dict[str, list[dict]]) -> str:
     rows, tasks, pending = [], set(), []
     # Every declared arm, not only the ones with data. An arm that has not run
-    # is a hole in the comparison, and a table that silently omits it reads as
-    # complete. That matters most for `bare`: the page tells you to read every
-    # row against it, so leaving it out makes the instruction unfollowable.
+    # is a hole in the comparison, and a page that silently omits it reads as
+    # complete. That matters most for `bare`: the text tells you to read every
+    # arm against it, so leaving it out makes the instruction unfollowable.
     for arm in ARMS:
         r = headline(by_arm.get(arm) or [])
         if r:
@@ -234,10 +233,44 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # most of these answers eventually, and the question is what that takes.
     #
     # `bare` is pinned last however cheap it turns out to be. It is the floor,
-    # not an entrant, and a baseline that placed third would invite reading the
-    # ranking as though it were competing.
+    # not an entrant, and a baseline placed third invites reading the order as a
+    # ranking it is not part of.
     rows.sort(key=lambda x: (x[0] == "bare", x[1]["effort"].get("cost_usd") or 10**9))
     pending.sort(key=lambda a: (a == "bare", a))
+
+    just = [r for _, r, _ in rows]
+    # Grouped into panels rather than one flat list: money, context, and the work
+    # the agent had to do are three different questions about the same answer,
+    # and reading them as one column of nine rows makes none of them land.
+    PANELS = [
+        ("Pass rate", "Of 24 trials: eight questions, three attempts each.", [
+            ("pass rate", lambda r: r["score"].get("pass_rate"), lambda v: f"{v:.3f}"),
+        ]),
+        ("What one answer cost", "The agent's own billed total, not tokens times a rate card.", [
+            ("dollars", lambda r: r["effort"].get("cost_usd"), lambda v: f"${v:.4f}"),
+            ("tokens in", lambda r: r["effort"].get("tokens_in"), lambda v: f"{v:,.0f}"),
+            ("tokens out", lambda r: r["effort"].get("tokens_out"), lambda v: f"{v:,.0f}"),
+        ]),
+        ("Work per answer", "What the agent had to do to get there.", [
+            ("commands", lambda r: r["effort"].get("tool_calls"), lambda v: f"{v:g}"),
+            ("turns", lambda r: r["effort"].get("turns"), lambda v: f"{v:g}"),
+            ("clock time", lambda r: r["effort"].get("wall_seconds"), lambda v: f"{v:.0f}s"),
+        ]),
+        ("Independence", "Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.", [
+            ("account reads", lambda r: r["independence"]["account_reads"], lambda v: f"{v:g}"),
+        ]),
+    ]
+    METRICS = [m for _, _blurb, ms in PANELS for m in ms]
+    largest = {
+        label: max([v for v in (get(r) for r in just) if isinstance(v, (int, float))] or [0])
+        for label, get, _ in METRICS
+    }
+    largest["pass rate"] = 1.0
+
+    # Every arm gets a row and a panel; the radio in front of them decides which
+    # panel is showing. Same data for everyone, one panel at a time — stacking
+    # seven full panels made the page a scroll instead of a comparison.
+    entries = [(arm, r, n) for arm, r, n in rows] + [(arm, None, 0) for arm in pending]
 
     out = [
         "# Results",
@@ -257,105 +290,82 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "looked at your account and thinks four groups are unused* and a line you can",
         "check.",
         "",
-        "Read every card against **No tool**, which is upstream aws-bench's own",
+        "Read every arm against **No tool**, which is upstream aws-bench's own",
         "experiment. An agent with the AWS CLI and nothing else. A tool that does not",
         "get there more cheaply is not earning its place.",
         "",
+        "## Pass rate",
+        "",
         "Ordered by what one answer costs, cheapest first, with the baseline last.",
-        "Arms have run different numbers of times, so the run count is on each card",
-        "and the figure is never a best-of. Cost is measured per question. Multiply by",
-        "your own volumes for an annual number. We have not, because that swaps one",
-        "measured figure for three assumed ones.",
+        "Pick a tool to see what its answers cost.",
         "",
-        "Bars are all one length. The colour is where that arm sits between the best",
-        "and worst result on that metric, teal best and amber worst, so a low number",
-        "and a high number can both be the good one without the bar arguing.",
-        "",
-        '<div class="cb-cards" markdown="0">',
+        '<div class="cb-explorer" markdown="0">',
     ]
-    # Each metric scales against the largest value any arm recorded for it, so
-    # the same bar length means the same thing on every card.
-    just = [r for _, r, _ in rows]
-    METRICS = [
-        ("cost / answer", lambda r: r["effort"].get("cost_usd"), ".4f", "$"),
-        ("tokens in", lambda r: r["effort"].get("tokens_in"), ",.0f", ""),
-        ("tokens out", lambda r: r["effort"].get("tokens_out"), ",.0f", ""),
-        ("commands", lambda r: r["effort"].get("tool_calls"), "", ""),
-        ("turns", lambda r: r["effort"].get("turns"), "", ""),
-        ("clock time", lambda r: r["effort"].get("wall_seconds"), ".0f", "s"),
-        ("account reads", lambda r: r["independence"]["account_reads"], "", ""),
-    ]
-    # Every arm's value per metric, so each bar can be shaded against the
-    # real best and worst rather than an assumed range.
-    fields = {label: column(just, get) for label, get, _, _ in METRICS}
-    rates = column(just, lambda r: r["score"].get("pass_rate"))
 
-    for arm, r, n in rows:
-        name = ARMS.get(arm, (arm, ""))[0]
-        is_base = arm == "bare"
-        klass = "cb-card baseline" if is_base else "cb-card"
-        s = r["score"]
-        out.append(f'<div class="{klass}">')
+    # The radios sit ahead of both lists so `:checked ~` can reach either.
+    for i, (arm, _, _) in enumerate(entries):
+        checked = " checked" if i == 0 else ""
         out.append(
-            '<div class="cb-card-head">'
-            f'<a class="cb-card-name" href="../{arm}/">{name}</a>'
-            + ('<span class="cb-tag">baseline</span>' if is_base else "")
-            + "</div>"
+            f'<input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-{arm}"{checked}>'
         )
-        # The answer first, and once. It was in the header and repeated as the
-        # first metric row, so it competed with itself and neither one led.
-        #
-        # Its bar is drawn against 1.0 rather than the best arm on the page: a
-        # field where nobody does well must not render as though someone did.
-        out.append(
-            '<div class="cb-hero">'
-            f'<span class="cb-hero-value">{rate(r)}</span>'
-            f'<span class="cb-hero-label">pass rate · {s["passed"]}/{s["trials"]}</span>'
-            f'{track(s.get("pass_rate"), rates, "higher")}'
-            "</div>"
-        )
-        out.append('<div class="cb-metrics">')
-        for label, get, spec, unit in METRICS:
-            v = get(r)
-            shown = "—" if not isinstance(v, (int, float)) else (
-                f'{unit if unit == "$" else ""}{format(v, spec) if spec else v}{unit if unit != "$" else ""}'
-            )
-            note = " <em>by design</em>" if label == "account reads" and arm in STATELESS else ""
-            out.append(
-                f'<div class="cb-metric"><span class="cb-label">{label}{note}</span>'
-                f'<span class="cb-value">{shown}</span>'
-                f'{track(v, fields[label], "lower")}</div>'
-            )
-        out.append("</div>")
-        out.append(f'<div class="cb-card-foot">{n} run(s) · {badge(r)}</div>')
-        out.append("</div>")
 
-    # An arm that has not run is a hole in the comparison, and a page that omits
-    # it reads as complete. `bare` most of all: the text above tells you to read
-    # every arm against it.
-    for arm in pending:
-        name = ARMS.get(arm, (arm, ""))[0]
-        why = (
-            "the floor every other card is read against"
-            if arm == "bare"
-            else "declared, no runs yet"
-        )
-        out.append(f'<div class="cb-card pending">')
+    out.append('<ul class="cb-board">')
+    for i, (arm, r, n) in enumerate(entries, 1):
+        name, _ = ARMS.get(arm, (arm, ""))
+        if r is None:
+            sub = "baseline · not yet run" if arm == "bare" else "not yet run"
+            bar, val, extra = '<span class="cb-track"></span>', "—", " pending"
+        else:
+            sub = "baseline · no infra tooling" if arm == "bare" else f"{n} valid run(s)"
+            bar = fill(r["score"].get("pass_rate"), 1.0, OUTCOME)
+            val, extra = rate(r), ""
         out.append(
-            '<div class="cb-card-head">'
-            f'<a class="cb-card-name" href="../{arm}/">{name}</a></div>'
+            f'<li><label class="cb-board-row{extra}" for="cb-arm-{arm}">'
+            f'<span class="cb-rank">{i}</span>'
+            f'<span class="cb-who"><span class="cb-who-name">{name}</span>'
+            f'<span class="cb-who-sub">{sub}</span></span>'
+            f"{bar}"
+            f'<span class="cb-board-value">{val}</span>'
+            "</label></li>"
         )
-        out.append(
-            '<div class="cb-hero"><span class="cb-hero-value none">—</span>'
-            '<span class="cb-hero-label">pass rate</span>'
-            '<span class="cb-bar-track"></span></div>'
-        )
-        out.append(f'<p class="cb-pending-note">Not yet run — {why}.</p>')
-        out.append("</div>")
+    out.append("</ul>")
 
+    # One panel per metric, every arm in every panel, the picked one lit up.
+    #
+    # Stacking a whole panel per tool made the page a scroll rather than a
+    # comparison, and a metric only means something next to the others' values
+    # for it — the reference plots its selection against the field's best and
+    # average for the same reason.
+    out.append('<div class="cb-mpanels">')
+    for title, blurb, metrics in PANELS:
+        out.append('<section class="cb-mpanel">')
+        out.append(f'<h3 class="cb-mpanel-title">{title}</h3>')
+        out.append(f'<p class="cb-mpanel-note">{blurb}</p>')
+        for label, get, show in metrics:
+            if len(metrics) > 1:
+                out.append(f'<div class="cb-mpanel-sub">{label}</div>')
+            out.append('<div class="cb-mrows">')
+            for arm, r, _ in entries:
+                name, _b = ARMS.get(arm, (arm, ""))
+                v = get(r) if r is not None else None
+                shown = show(v) if isinstance(v, (int, float)) else "—"
+                colour = OUTCOME if title == "Pass rate" else SPEND
+                out.append(
+                    '<div class="cb-mrow">'
+                    f'<span class="cb-mrow-name">{name}</span>'
+                    f"{fill(v, largest[label], colour)}"
+                    f'<span class="cb-mrow-value">{shown}</span>'
+                    "</div>"
+                )
+            out.append("</div>")
+        out.append("</section>")
     out.append("</div>")
+    out += ["</div>", ""]
 
     out += [
+        "Per question, averaged over that arm's latest valid run. Cost is the agent's",
+        "own billed total, not tokens times a rate card. Bars are scaled against the",
+        "highest value any arm recorded, so a short amber bar is the good one.",
         "",
         "!!! note \"Reading account reads\"",
         "    A tool that answers from state it already holds is worth more than one",

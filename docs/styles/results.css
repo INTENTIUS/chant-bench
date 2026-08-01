@@ -36,136 +36,185 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Cards, not a table. Eight metrics across six arms is a grid that scrolls
-   sideways on anything narrower than a desktop, and a comparison you have to
-   scroll to see is not a comparison. One card per arm, metrics stacked, so the
-   whole of one tool is legible at once and the bars line up down the page. */
-.cb-cards {
+/* A leaderboard, then a panel per arm — the shape a benchmark reader already
+   knows. It replaced a card grid whose bars were a 6px strip: too thin for
+   colour to be legible, and too thin for length to be either. These tracks are
+   1rem and 1.25rem, which is the whole reason they read. */
+
+/* ── the leaderboard ───────────────────────────────────────────────────── */
+
+.cb-board {
+  list-style: none;
+  margin: 1.2rem 0 2rem;
+  padding: 0;
+}
+.md-typeset .cb-board li { margin: 0; }
+
+.cb-board-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1.5rem;
-  margin: 1.5rem 0;
-}
-
-.cb-card {
-  border: 1px solid var(--cb-track);
-  border-radius: 6px;
-  padding: 1rem 1.05rem 0.85rem;
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: 1.5rem minmax(8rem, 13rem) minmax(0, 1fr) 3.6rem;
+  align-items: center;
   gap: 0.7rem;
-}
-
-/* The floor, not a competitor. Dashed so it reads as a reference line. */
-.cb-card.baseline { border-style: dashed; }
-.cb-card.pending { opacity: 0.6; }
-
-.cb-card-head {
-  display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
-}
-
-/* Which tool this is, answered before anything is compared. It was set at body
-   size in link blue, so it read as a footnote under a 2rem number instead of as
-   the card's subject. Full text colour, because the accent is doing work
-   elsewhere on this page and a link that looks like a link is not what needs
-   emphasis here. */
-.cb-card-name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  color: var(--md-default-fg-color);
-}
-.cb-card-name:hover,
-.cb-card-name:focus {
-  color: var(--md-accent-fg-color);
-  text-decoration: underline;
-}
-.cb-tag {
-  margin-left: auto;
-  font-size: 0.62rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  opacity: 0.7;
-}
-
-/* The answer, once and first. Everything below it is what the answer cost, so
-   the rate gets the size and the accent and the rest stays quiet. */
-/* Number, then caption beneath it, then the bar. Side by side, a 0.5rem gap
-   next to a 2rem numeral reads as no gap at all — the caption looked joined to
-   the figure. Stacking removes the question. */
-.cb-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.2rem;
-  padding-bottom: 0.6rem;
+  padding: 0.55rem 0.5rem;
   border-bottom: 1px solid var(--cb-track);
 }
-.cb-hero-value {
-  font-size: 2rem;
-  line-height: 1;
+.cb-board-row.pending { opacity: 0.55; }
+
+.cb-rank {
+  font-size: 0.72rem;
+  text-align: right;
+  opacity: 0.55;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Who this is, answered before anything is compared. The name was body-size in
+   link blue under a 2rem figure, which read as a caption rather than the
+   subject. */
+.cb-who { display: flex; flex-direction: column; min-width: 0; }
+.cb-who-name {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--md-default-fg-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cb-who-name:hover,
+.cb-who-name:focus { color: var(--md-accent-fg-color); }
+.cb-who-sub { font-size: 0.68rem; opacity: 0.6; }
+
+.cb-board-value {
+  text-align: right;
+  font-size: 0.85rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--cb-outcome);
 }
-.cb-hero-value.none { color: inherit; opacity: 0.45; }
-.cb-hero-label { font-size: 0.72rem; opacity: 0.75; }
-.cb-hero .cb-bar-track { grid-column: 1 / -1; margin-top: 0.4rem; }
+.cb-board-row .cb-track { height: 1.25rem; border-radius: 3px; }
 
-.cb-metrics { display: flex; flex-direction: column; gap: 0.45rem; }
+/* ── picking an arm ───────────────────────────────────────────────────── */
 
-/* Label and figure on one line, bar beneath it spanning the card. The figure is
-   the data and the bar encodes it, so the number is never displaced by it. */
-.cb-metric {
+/* The radios drive everything and are never seen. Kept focusable and on-screen
+   rather than display:none, so the rows stay reachable from the keyboard. */
+.cb-pick {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.cb-board-row { cursor: pointer; }
+
+.cb-explorer > .cb-pick:nth-of-type(1):checked ~ .cb-board > li:nth-child(1) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(2):checked ~ .cb-board > li:nth-child(2) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(3):checked ~ .cb-board > li:nth-child(3) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(4):checked ~ .cb-board > li:nth-child(4) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(5):checked ~ .cb-board > li:nth-child(5) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(6):checked ~ .cb-board > li:nth-child(6) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(7):checked ~ .cb-board > li:nth-child(7) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(8):checked ~ .cb-board > li:nth-child(8) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(9):checked ~ .cb-board > li:nth-child(9) > .cb-board-row,
+.cb-explorer > .cb-pick:nth-of-type(10):checked ~ .cb-board > li:nth-child(10) > .cb-board-row {
+  background: var(--cb-track);
+  border-left-color: var(--cb-outcome);
+}
+.cb-board-row { border-left: 2px solid transparent; }
+
+/* Every panel holds every arm, and the picked one is the one you are reading.
+   The rest stay legible rather than hidden: a metric only means something next
+   to the others' values for it. */
+.cb-mrow { opacity: 0.42; transition: opacity 120ms ease; }
+.cb-explorer > .cb-pick:nth-of-type(1):checked ~ .cb-mpanels .cb-mrow:nth-child(1),
+.cb-explorer > .cb-pick:nth-of-type(2):checked ~ .cb-mpanels .cb-mrow:nth-child(2),
+.cb-explorer > .cb-pick:nth-of-type(3):checked ~ .cb-mpanels .cb-mrow:nth-child(3),
+.cb-explorer > .cb-pick:nth-of-type(4):checked ~ .cb-mpanels .cb-mrow:nth-child(4),
+.cb-explorer > .cb-pick:nth-of-type(5):checked ~ .cb-mpanels .cb-mrow:nth-child(5),
+.cb-explorer > .cb-pick:nth-of-type(6):checked ~ .cb-mpanels .cb-mrow:nth-child(6),
+.cb-explorer > .cb-pick:nth-of-type(7):checked ~ .cb-mpanels .cb-mrow:nth-child(7),
+.cb-explorer > .cb-pick:nth-of-type(8):checked ~ .cb-mpanels .cb-mrow:nth-child(8),
+.cb-explorer > .cb-pick:nth-of-type(9):checked ~ .cb-mpanels .cb-mrow:nth-child(9),
+.cb-explorer > .cb-pick:nth-of-type(10):checked ~ .cb-mpanels .cb-mrow:nth-child(10) {
+  opacity: 1;
+  font-weight: 700;
+}
+
+/* ── the metric panels ────────────────────────────────────────────────── */
+
+.cb-mpanels {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.15rem 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.6rem;
 }
-.cb-label { font-size: 0.72rem; opacity: 0.75; }
-.cb-label em { font-style: normal; opacity: 0.7; }
-.cb-value {
-  font-size: 0.78rem;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-}
-.cb-metric .cb-bar-track { grid-column: 1 / -1; }
 
-.cb-card-foot {
-  margin-top: auto;
-  padding-top: 0.15rem;
+.cb-mpanel {
+  border: 1px solid var(--cb-track);
+  border-radius: 6px;
+  padding: 1rem 1.1rem 1.15rem;
+}
+.cb-mpanel-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.md-typeset .cb-mpanel-title { margin: 0; }
+.cb-mpanel-note {
+  margin: 0.3rem 0 0.9rem;
+  font-size: 0.7rem;
+  opacity: 0.65;
+  line-height: 1.45;
+}
+.cb-mpanel-sub {
+  margin: 0.9rem 0 0.4rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+.cb-mpanel-sub:first-of-type { margin-top: 0; }
+
+.cb-mrows { display: flex; flex-direction: column; gap: 0.35rem; }
+
+/* name | bar | figure, the same shape as the leaderboard so the eye can move
+   between them without relearning the row. */
+.cb-mrow {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 6.5rem) minmax(0, 1fr) 4.4rem;
+  align-items: center;
+  gap: 0.55rem;
   font-size: 0.72rem;
-  opacity: 0.8;
 }
-.cb-pending-note { font-size: 0.78rem; margin: 0; }
+.cb-mrow-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cb-mrow-value { text-align: right; font-variant-numeric: tabular-nums; }
+.cb-mrow .cb-track { height: 0.85rem; }
 
-/* Every bar is the same length. Hue carries the whole comparison — where this
-   arm sits between the best and worst on that one metric — because length reads
-   as magnitude in a single direction whatever colour it is, and these metrics
-   disagree about which direction is good. */
-.cb-bar-track {
+/* ── the bars ──────────────────────────────────────────────────────────── */
+
+.cb-track {
   display: block;
   width: 100%;
-  height: 0.4rem;
-  border-radius: 2px;
+  height: 1rem;
+  border-radius: 3px;
   background: var(--cb-track);
   overflow: hidden;
 }
-.cb-bar {
+.cb-fill {
   display: block;
-  width: 100%;
   height: 100%;
-  border-radius: 2px;
-  background: hsl(var(--h) 58% var(--l));
+  border-radius: 3px;
 }
-[data-md-color-scheme="slate"] .cb-bar {
-  background: hsl(var(--h) 52% calc(var(--l) + 16%));
-}
+/* The dark value travels with the element rather than being recomputed, so a
+   colour is only ever chosen once. A var() standing alone as the whole value is
+   safe, unlike the var()-inside-hsl() this replaces, which dropped out at
+   computed-value time and painted every bar the track colour. */
+[data-md-color-scheme="slate"] .cb-fill { background: var(--cb-dark) !important; }
 
-/* Bars encode a comparison. Print, and anyone who has asked not to be shown
-   motion or decoration, get the numbers, which were always the point. */
+.cb-pending-note { font-size: 0.78rem; margin: 0; opacity: 0.8; }
+
 @media print {
-  .cb-bar-track { display: none; }
+  .cb-track { display: none; }
 }
