@@ -146,6 +146,44 @@ def main() -> int:
                     f"{usual} — not the same experiment, so it cannot sit beside them"
                 )
 
+    # An arm fighting its own tooling looks exactly like an arm scoring badly.
+    # alchemy v2 ran three matrices at a 15-24% invocation failure rate while no
+    # other arm exceeded 8%, and published 7/24. The cause was our briefing
+    # sending it into an entrypoint that deadlocks its CLI, not the tool. The
+    # harness printed that rate on every run and never once compared arms, so
+    # nobody saw it until the numbers were public.
+    #
+    # Ten percent, not a multiple of the field: the field median here is under
+    # 2%, and three times that flags arms sitting at a perfectly ordinary 7%.
+    # Above ten, an arm is failing one call in ten of its own tooling, which is
+    # worth a look whatever everyone else is doing. The audit already voids a
+    # run above 25%; this is the band that distorts without voiding.
+    UNHEALTHY = 0.10
+    health: dict[str, list[float]] = {}
+    for path in files:
+        try:
+            r = json.loads(path.read_text())
+        except (OSError, ValueError):
+            continue
+        rate = (r.get("tooling") or {}).get("failure_rate")
+        if isinstance(rate, (int, float)):
+            health.setdefault(r.get("arm", "?"), []).append(rate)
+    if health:
+        ranked = sorted(
+            ((a, sorted(v)[len(v) // 2]) for a, v in health.items()),
+            key=lambda x: -x[1],
+        )
+        struggling = [(a, v) for a, v in ranked if v > UNHEALTHY]
+        if struggling:
+            print("\nARMS FIGHTING THEIR OWN TOOLING")
+            for arm, rate in ranked:
+                mark = "  <-- one call in ten failing" if rate > UNHEALTHY else ""
+                print(f"  {arm:<18} {rate:.1%}{mark}")
+            print(
+                "  A high rate is usually the briefing or the wiring, not the tool. "
+                "Check what the agent is being told to run before reading the score."
+            )
+
     failed = 0
     for path in files:
         problems = check(path)

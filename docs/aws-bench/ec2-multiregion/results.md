@@ -118,7 +118,7 @@ environment its agent was given.
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/chant</code></dd>
-<dt>harness</dt><dd><code>7b09168</code></dd>
+<dt>harness</dt><dd><code>8d3bcb2</code></dd>
 <dt>briefing</dt><dd><code>briefing-chant-snapshot.md</code> · <code>9ce3707f885e</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh chant</code></p>
@@ -303,7 +303,7 @@ attribute:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/bare</code></dd>
-<dt>harness</dt><dd><code>7b09168</code></dd>
+<dt>harness</dt><dd><code>8d3bcb2</code></dd>
 <dt>briefing</dt><dd><code>briefing-bare.md</code> · <code>166c7534c252</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh bare</code></p>
@@ -413,7 +413,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/pulumi</code></dd>
-<dt>harness</dt><dd><code>7b09168</code></dd>
+<dt>harness</dt><dd><code>8d3bcb2</code></dd>
 <dt>briefing</dt><dd><code>briefing-pulumi.md</code> · <code>a06c6b73c0eb</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh pulumi</code></p>
@@ -532,7 +532,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/terraform</code></dd>
-<dt>harness</dt><dd><code>7b09168</code></dd>
+<dt>harness</dt><dd><code>8d3bcb2</code></dd>
 <dt>briefing</dt><dd><code>briefing-terraform.md</code> · <code>7822d55ca7ca</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh terraform</code></p>
@@ -651,7 +651,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/cdk</code></dd>
-<dt>harness</dt><dd><code>7b09168</code></dd>
+<dt>harness</dt><dd><code>8d3bcb2</code></dd>
 <dt>briefing</dt><dd><code>briefing-cdk.md</code> · <code>f4b4c7082924</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh cdk</code></p>
@@ -778,7 +778,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/alchemy</code></dd>
-<dt>harness</dt><dd><code>7b09168</code></dd>
+<dt>harness</dt><dd><code>8d3bcb2</code></dd>
 <dt>briefing</dt><dd><code>briefing-alchemy.md</code> · <code>596be04902b9</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh alchemy</code></p>
@@ -903,7 +903,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/alchemy</code></dd>
-<dt>harness</dt><dd><code>f205cb9</code></dd>
+<dt>harness</dt><dd><code>8d3bcb2</code></dd>
 <dt>briefing</dt><dd><code>briefing-alchemy-effect.md</code> · <code>6e6e55fd2fc6</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh alchemy-effect</code></p>

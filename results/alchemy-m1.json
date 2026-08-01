@@ -5,8 +5,9 @@
   "arm": "alchemy",
   "run": {
     "id": "alchemy-m1",
+    "workspace": null,
     "finished_at": "2026-07-31T18:36:10.639035",
-    "harness_commit": "7b09168"
+    "harness_commit": "8d3bcb2"
   },
   "agent": {
     "name": "claude-code",
@@ -69,6 +70,11 @@
     "exceptions": {},
     "errored_trials": 0,
     "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 166,
+    "invocations_failed": 2,
+    "failure_rate": 0.0119
   },
   "independence": {
     "account_reads": 25,
