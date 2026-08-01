@@ -70,22 +70,20 @@ cd /workspace/alchemy && for resource in instance defaultVpcServer ltServer priv
 cat > /logs/agent/agent-output.txt << 'EOF' EC2 Instances and Private IPs by Region ======================================== Region | Instance ID | Private IP -------------|--------------------------|------------- us-east-1 | i-921e46837aeb1bc8f | 172.31.32.10 us-east-1 | i-90e9ce2cb766dcb16 | 10.0.0.11 us-east-1 | i-6c989581751564893 | 10.0.1.10 us-east-1 | i-995f3ae70ec3f33e5 | 10.0.0.10 us-west-1 | i-f1d7273a68dfda9c7 | 10.0.0.10 us-west-2 | i-50e1953f84e69d261 | 10.0.0.10 Summary ======= Total Instances: 6 - us-east-1: 4 instances - us-west-1: 1 instance - us-west-2: 1 instance EOF cat /logs/agent/agent-output.txt
 ```
 
-## Alchemy v2 (Effect) — missed
+## Alchemy v2 (Effect) — answered
 
-13 commands, from `alchemy-effect-m3`.
+11 commands, from `alchemy-effect-m3`.
 
 ```sh
-cd /workspace/alchemy && alchemy state stacks us-east-1.run.ts --local
 cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local
-cd /workspace/alchemy && alchemy state stacks us-west-2.run.ts --local
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage prod us-east-1.run.ts --local 2>/dev/null | grep -i instance
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage prod us-west-1.run.ts --local 2>/dev/null | grep -i instance
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage prod us-west-2.run.ts --local 2>/dev/null | grep -i instance
-find /workspace/alchemy/.alchemy/state -name "*.json" -type f | head -20
-cat /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/WebServer.json | jq .
-cat /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-west-1/bench/WebServer.json | jq .
-cat /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-west-2/bench/WebServer.json | jq .
-find /workspace/alchemy/.alchemy/state -name "*.json" -type f | xargs grep -l '"resourceType": "AWS.EC2.Instance"' | sort
-cat /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/DefaultVpcServer.json | jq .
-# … 1 more
+cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local
+cd /workspace/alchemy && \ for stack in alchemy-effect-ec2-multiregion-us-east-1 alchemy-effect-ec2-multiregion-us-west-1 alchemy-effect-ec2-multiregion-us-west-2; do echo "=== Stack: $stack ===" alchemy state resources --stack "$stack" --stage bench us-west-1.run.ts --local | grep -i instance || true done
+cd /workspace/alchemy && \ for stack in alchemy-effect-ec2-multiregion-us-east-1 alchemy-effect-ec2-multiregion-us-west-1 alchemy-effect-ec2-multiregion-us-west-2; do echo "=== Stack: $stack ===" alchemy state resources --stack "$stack" --stage bench us-west-1.run.ts --local | head -30 done
+for region in us-east-1 us-west-1 us-west-2; do echo "=== Region: $region ===" stack_dir="/workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-${region}/bench" ls "$stack_dir" | grep -i instance || true done
+for region in us-east-1 us-west-1 us-west-2; do echo "=== Region: $region ===" stack_dir="/workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-${region}/bench" for file in "$stack_dir"/*.json; do if jq -e '.resourceType == "AWS::EC2::Instance"' "$file" > /dev/null 2>&1; then echo "Found instance: $(basename $file)" fi done done
+for region in us-east-1 us-west-1 us-west-2; do echo "=== Region: $region ===" stack_dir="/workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-${region}/bench" jq -r '.resourceType' "$stack_dir"/*.json 2>/dev/null | sort -u done
+for region in us-east-1 us-west-1 us-west-2; do echo "=== Region: $region ===" stack_dir="/workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-${region}/bench" for file in "$stack_dir"/*.json; do resource_type=$(jq -r '.resourceType' "$file" 2>/dev/null) if [ "$resource_type" = "AWS.EC2.Instance" ] || [ "$resource_type" = "AWS.EC2.LaunchTemplateInstance" ]; then name=$(jq -r '.name' "$file" 2>/dev/null) instance_id=$(jq -r '.attr.InstanceId // .attr.id' "$file" 2>/dev/null) private_ip=$(jq -r '.attr.PrivateIp' "$file" 2>/dev/null) echo "Name: $name, Type: $resource_type, Instance ID: $instance_id, Private IP: $private_ip" fi done done
+stack_dir="/workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench" for file in "$stack_dir"/*.json; do resource_type=$(jq -r '.resourceType' "$file" 2>/dev/null) if [ "$resource_type" = "AWS.EC2.Instance" ]; then echo "File: $(basename $file)" jq '.' "$file" 2>/dev/null | head -50 break fi done
+cat > /tmp/get_instances.sh << 'EOF' #!/bin/bash # Create a combined list of all instances across regions declare -a instances for region in us-east-1 us-west-1 us-west-2; do stack_dir="/workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-${region}/bench" for file in "$stack_dir"/*.json; do resource_type=$(jq -r '.resourceType' "$file" 2>/dev/null) if [ "$resource_type" = "AWS.EC2.Instance" ] || [ "$resource_type" = "AWS.EC2.LaunchTemplateInstance" ]; then logical_id=$(jq -r '.logicalId' "$file" 2>/dev/null) instance_id=$(jq -r '.attr.instanceId' "$file" 2>/dev/null) private_ip=$(jq -r '.attr.privateIpAddress' "$file" 2>/dev/null) tag_name=$(jq -r '.attr.tags.Name // "N/A"' "$file" 2>/dev/null) if [ -n "$instance_id" ] && [ "$instance_id" != "null" ]; then echo "$region|$logical_id|$tag_name|$instance_id|$private_ip" fi fi done done EOF chmod +x /tmp/get_instances.sh /tmp/get_instances.sh
+cat > /tmp/format_table.py << 'EOF' #!/usr/bin/env python3 import sys # Get the data instances = [ ("us-east-1", "DefaultVpcServer", "MyEC2Instance", "i-866ecbcb0c3539eb6", "172.31.32.10"), ("us-east-1", "LaunchTemplateServer", "N/A", "i-6e2bfa2e69398375f", "10.0.0.11"), ("us-east-1", "PrivateServer", "PrivateInstance", "i-82022bfe3dc0ef2c8", "10.0.1.10"), ("us-east-1", "WebServer", "WebServerInstance", "i-44aad298d11867aa6", "10.0.0.10"), ("us-west-1", "WebServer", "WebServerInstance", "i-583215fd3a2732541", "10.0.0.10"), ("us-west-2", "WebServer", "WebServerInstance", "i-c55cdc877c08961ad", "10.0.0.10"), ] # Sort by region and logical ID instances.sort(key=lambda x: (x[0], x[1])) # Create table headers = ["Region", "Logical ID", "Name Tag", "Instance ID", "Private IP"] col_widths = [max(len(h), max(len(str(row[i])) for row in instances)) for i, h in enumerate(headers)] # Print header header_line = " | ".join(h.ljust(col_widths[i]) for i, h in enumerate(headers)) print(header_line) print("-" * len(header_line)) # Print rows for row in instances: print(" | ".join(str(row[i]).ljust(col_widths[i]) for i in range(len(headers)))) print("\nTotal EC2 Instances: {}".format(len(instances))) EOF python3 /tmp/format_table.py
 ```

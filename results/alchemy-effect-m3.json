@@ -5,8 +5,8 @@
   "arm": "alchemy-effect",
   "run": {
     "id": "alchemy-effect-m3",
-    "finished_at": "2026-07-31T23:45:51.498366",
-    "harness_commit": "7b09168"
+    "finished_at": "2026-08-01T10:39:39.697610",
+    "harness_commit": "f205cb9"
   },
   "agent": {
     "name": "claude-code",
@@ -18,27 +18,27 @@
     "expected_trials": 24,
     "completed": 24,
     "errored": 0,
-    "passed": 7,
-    "pass_rate": 0.2917,
+    "passed": 16,
+    "pass_rate": 0.6667,
     "by_task": {
       "describe-ec-instances-cross-regi": [
-        0,
-        0,
+        1,
+        1,
         0
       ],
       "ec-instances-without-default-vpc": [
-        0,
         1,
-        0
+        1,
+        1
       ],
       "find-ec-instances-in-public-subn": [
-        0,
         1,
-        0
+        1,
+        1
       ],
       "list-ec-instances-all-regions": [
-        0,
         1,
+        0,
         0
       ],
       "list-ec-instances-all-regions-1": [
@@ -48,13 +48,13 @@
       ],
       "list-ec-instances-by-vpc-across": [
         0,
-        0,
-        1
+        1,
+        0
       ],
       "list-ec-private-ips-all-regions": [
-        0,
-        0,
-        0
+        1,
+        1,
+        1
       ],
       "list-unused-security-groups-all": [
         0,
@@ -71,17 +71,17 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 0,
-    "answered_from_own_state": true
+    "account_reads": 6,
+    "answered_from_own_state": false
   },
   "effort": {
-    "tool_calls": 13.29,
-    "turns": 18.58,
-    "wall_seconds": 68.12,
-    "tokens_in": 367363.25,
-    "tokens_out": 4478.92,
-    "cost_usd": 0.0803,
-    "cost_usd_run": 1.9272
+    "tool_calls": 14.04,
+    "turns": 17.21,
+    "wall_seconds": 156.71,
+    "tokens_in": 395045.21,
+    "tokens_out": 4638.62,
+    "cost_usd": 0.0825,
+    "cost_usd_run": 1.9793
   },
   "logs": {
     "run": "jobs/alchemy-effect-m3/run-arm.log",
@@ -90,7 +90,7 @@
   },
   "briefing": {
     "path": "benchmarks/arms/briefing-alchemy-effect.md",
-    "sha256": "ff3208b4ced3"
+    "sha256": "6e6e55fd2fc6"
   },
   "reproduce": "benchmarks/arms/alchemy-effect-ec2-multiregion/REPRODUCE.md"
 }

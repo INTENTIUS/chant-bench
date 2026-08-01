@@ -5,8 +5,8 @@
   "arm": "alchemy-effect",
   "run": {
     "id": "alchemy-effect-m2",
-    "finished_at": "2026-07-31T23:35:55.701031",
-    "harness_commit": "7b09168"
+    "finished_at": "2026-08-01T10:24:57.291543",
+    "harness_commit": "f205cb9"
   },
   "agent": {
     "name": "claude-code",
@@ -18,8 +18,8 @@
     "expected_trials": 24,
     "completed": 24,
     "errored": 0,
-    "passed": 10,
-    "pass_rate": 0.4167,
+    "passed": 16,
+    "pass_rate": 0.6667,
     "by_task": {
       "describe-ec-instances-cross-regi": [
         1,
@@ -27,14 +27,14 @@
         1
       ],
       "ec-instances-without-default-vpc": [
-        1,
         0,
-        0
+        1,
+        1
       ],
       "find-ec-instances-in-public-subn": [
+        1,
         0,
-        0,
-        0
+        1
       ],
       "list-ec-instances-all-regions": [
         0,
@@ -48,12 +48,12 @@
       ],
       "list-ec-instances-by-vpc-across": [
         1,
-        0,
+        1,
         1
       ],
       "list-ec-private-ips-all-regions": [
-        0,
-        0,
+        1,
+        1,
         0
       ],
       "list-unused-security-groups-all": [
@@ -71,17 +71,17 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 0,
-    "answered_from_own_state": true
+    "account_reads": 10,
+    "answered_from_own_state": false
   },
   "effort": {
-    "tool_calls": 11.83,
-    "turns": 18.29,
-    "wall_seconds": 69.96,
-    "tokens_in": 414899.88,
-    "tokens_out": 4802.5,
-    "cost_usd": 0.0877,
-    "cost_usd_run": 2.1041
+    "tool_calls": 15.25,
+    "turns": 19.04,
+    "wall_seconds": 134.07,
+    "tokens_in": 382718.71,
+    "tokens_out": 4785,
+    "cost_usd": 0.0818,
+    "cost_usd_run": 1.9639
   },
   "logs": {
     "run": "jobs/alchemy-effect-m2/run-arm.log",
@@ -90,7 +90,7 @@
   },
   "briefing": {
     "path": "benchmarks/arms/briefing-alchemy-effect.md",
-    "sha256": "ff3208b4ced3"
+    "sha256": "6e6e55fd2fc6"
   },
   "reproduce": "benchmarks/arms/alchemy-effect-ec2-multiregion/REPRODUCE.md"
 }

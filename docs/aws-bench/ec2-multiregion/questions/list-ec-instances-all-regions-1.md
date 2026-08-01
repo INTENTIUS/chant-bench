@@ -100,10 +100,20 @@ cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && for f in *.json;
 
 ## Alchemy v2 (Effect) — answered
 
-3 commands, from `alchemy-effect-m3`.
+16 commands, from `alchemy-effect-m3`.
 
 ```sh
-cd /workspace/alchemy && alchemy state resources --stack prod --stage bench us-east-1.run.ts --local 2>&1 | head -50
-find /workspace/alchemy -name "*.run.ts" -type f | head -5
-grep -r "sg-default" /workspace/alchemy/.alchemy/state/ | head -5
+cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local 2>/dev/null | head -20
+cd /workspace/alchemy && for stack in "alchemy-effect-ec2-multiregion-us-east-1" "alchemy-effect-ec2-multiregion-us-west-1" "alchemy-effect-ec2-multiregion-us-west-2"; do echo "=== $stack ===" && alchemy state resources --stack "$stack" --stage bench us-west-1.run.ts --local 2>/dev/null; done
+cd /workspace/alchemy && for stack in "alchemy-effect-ec2-multiregion-us-east-1" "alchemy-effect-ec2-multiregion-us-west-1" "alchemy-effect-ec2-multiregion-us-west-2"; do echo "=== Instance details for $stack ===" && alchemy state get --stack "$stack" --stage bench --fqn "WebServer" us-west-1.run.ts --local 2>/dev/null | jq '.'; done
+cd /workspace/alchemy && for resource in "LaunchTemplateServer" "PrivateServer"; do echo "=== $resource ===" && alchemy state get --stack "alchemy-effect-ec2-multiregion-us-east-1" --stage bench --fqn "$resource" us-west-1.run.ts --local 2>/dev/null | jq '.'; done
+cd /workspace/alchemy && for resource in "WebSecurityGroup" "WebLaunchTemplate"; do echo "=== $resource ===" && alchemy state get --stack "alchemy-effect-ec2-multiregion-us-east-1" --stage bench --fqn "$resource" us-west-1.run.ts --local 2>/dev/null | jq '.'; done
+cd /workspace/alchemy && aws ec2 describe-security-groups --group-ids sg-default --region us-west-1 2>/dev/null | jq '.SecurityGroups[0].IpPermissions[] | select(.FromPort == 22 or .FromPort == null)' && echo "---" && aws ec2 describe-security-groups --group-ids sg-default --region us-west-2 2>/dev/null | jq '.SecurityGroups[0].IpPermissions[] | select(.FromPort == 22 or .FromPort == null)'
+cd /workspace/alchemy && find .alchemy/state -type f -name "*.json" | xargs grep -l "SecurityGroup\|securityGroupIds" | head -20
+cd /workspace/alchemy && cat .alchemy/state/alchemy-effect-ec2-multiregion-us-west-1/bench/WebServer.json | jq '.attr.securityGroupIds, .props'
+cd /workspace/alchemy && alchemy state resources --stack "alchemy-effect-ec2-multiregion-us-west-1" --stage bench us-west-1.run.ts --local 2>/dev/null | grep -i security
+cd /workspace/alchemy && find .alchemy/state -type f -name "*.json" -exec grep -l '"resourceType".*"Instance"' {} \; | while read f; do echo "=== $f ===" && jq '.fqn, .attr | {instanceId, instanceId: .instanceId, publicIpAddress: .publicIpAddress, securityGroupIds: .securityGroupIds}' "$f"; done
+cd /workspace/alchemy && for stack in "alchemy-effect-ec2-multiregion-us-east-1" "alchemy-effect-ec2-multiregion-us-west-1" "alchemy-effect-ec2-multiregion-us-west-2"; do echo "=== $stack ===" && find ".alchemy/state/$stack/bench" -type f -name "*.json" -exec jq -r 'select(.resourceType | contains("Instance")) | "\(.fqn): \(.attr.instanceId // "N/A") - Public IP: \(.attr.publicIpAddress // "N/A") - SGs: \(.attr.securityGroupIds | join(","))"' {} \; 2>/dev/null; done
+cd /workspace/alchemy && alchemy state get --stack "alchemy-effect-ec2-multiregion-us-east-1" --stage bench --fqn "DefaultVpcServer" us-west-1.run.ts --local 2>/dev/null | jq '{fqn: .fqn, instanceId: .attr.instanceId, publicIp: .attr.publicIpAddress, securityGroupIds: .attr.securityGroupIds, isExternal: .props.isExternal}'
+# … 4 more
 ```

@@ -83,21 +83,14 @@ cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-Def
 cd /workspace/alchemy && alchemy state list | grep "aws::Instance"
 ```
 
-## Alchemy v2 (Effect) — missed
+## Alchemy v2 (Effect) — answered
 
-12 commands, from `alchemy-effect-m3`.
+5 commands, from `alchemy-effect-m3`.
 
 ```sh
-cd /workspace/alchemy && alchemy state tree us-east-1.run.ts --local 2>&1 | head -50
-cd /workspace/alchemy && alchemy state stacks us-east-1.run.ts --local
 cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local
-cd /workspace/alchemy && alchemy state stacks us-west-2.run.ts --local
-find /workspace/alchemy/.alchemy/state -type d | head -20
-cd /workspace/alchemy && find .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench -name "*.json" -exec grep -l '"resourceType": "aws:ec2/instance"' {} \;
-cd /workspace/alchemy && find .alchemy/state/alchemy-effect-ec2-multiregion-us-west-1/bench -name "*.json" -exec grep -l '"resourceType": "aws:ec2/instance"' {} \;
-cd /workspace/alchemy && find .alchemy/state/alchemy-effect-ec2-multiregion-us-west-2/bench -name "*.json" -exec grep -l '"resourceType": "aws:ec2/instance"' {} \;
-cat /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/DefaultVpcServer.json
-cd /workspace/alchemy && for file in .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/*.json; do if grep -q '"resourceType": "AWS.EC2.Instance"' "$file"; then jq -r '.fqn + " | VPC: " + .attr.vpcId + " | Instance ID: " + .attr.instanceId' "$file" fi done
-cd /workspace/alchemy && for file in .alchemy/state/alchemy-effect-ec2-multiregion-us-west-1/bench/*.json; do if grep -q '"resourceType": "AWS.EC2.Instance"' "$file"; then jq -r '.fqn + " | VPC: " + .attr.vpcId + " | Instance ID: " + .attr.instanceId' "$file" fi done
-cd /workspace/alchemy && for file in .alchemy/state/alchemy-effect-ec2-multiregion-us-west-2/bench/*.json; do if grep -q '"resourceType": "AWS.EC2.Instance"' "$file"; then jq -r '.fqn + " | VPC: " + .attr.vpcId + " | Instance ID: " + .attr.instanceId' "$file" fi done
+cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local 2>&1 | head -50
+find /workspace/alchemy/.alchemy/state/ -type f -name "*.json" | head -20
+find /workspace/alchemy/.alchemy/state/ -type f -name "*.json" | sort
 ```
