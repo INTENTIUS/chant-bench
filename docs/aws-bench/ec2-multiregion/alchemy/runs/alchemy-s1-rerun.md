@@ -7,7 +7,7 @@
     than this tool, and are published so the failure is visible rather
     than quietly dropped.
 
-**16 of 24** (0.667) · 0 account read(s) · 8.67 commands, 18.75 turns, 55s per trial
+**16 of 24** (—) · 0 account read(s) · 8.67 commands, 18.75 turns, 55s per trial
 
 ## By question
 
@@ -27,7 +27,7 @@
 | | |
 |---|---|
 | finished | 2026-07-30T19:31:35.164308 |
-| harness | `1fa8317` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `596be04902b9` |
 | substrate | floci |

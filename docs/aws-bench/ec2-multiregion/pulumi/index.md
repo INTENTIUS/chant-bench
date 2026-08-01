@@ -22,10 +22,10 @@ score.
 
 | # | run | passed | rate | reads | commands | turns | harness | |
 |---|---|---|---|---|---|---|---|---|
-| 4 | [`pulumi-m2`](runs/pulumi-m2.md) | 19/24 | 0.792 | 6 | 8.21 | 10.5 | `9ba7e95` | <span class="cb-badge ok">gates passed</span> |
-| 3 | [`pulumi-m1`](runs/pulumi-m1.md) | 1/2 | 0.500 | 0 | 6.5 | 7.5 | `9ba7e95` | <span class="cb-badge invalid">invalid</span> |
-| 2 | [`pulumi-cur`](runs/pulumi-cur.md) | 18/24 | 0.750 | 0 | 8 | 10.33 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`pulumi-s1-rerun`](runs/pulumi-s1-rerun.md) | 20/24 | 0.833 | 0 | 7.67 | 9.92 | `a9fe29f` | <span class="cb-badge ok">gates passed</span> |
+| 4 | [`pulumi-m2`](runs/pulumi-m2.md) | 19/24 | 0.792 | 6 | 8.21 | 10.5 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| 3 | [`pulumi-m1`](runs/pulumi-m1.md) | 1/24 | — | 0 | 6.5 | 7.5 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
+| 2 | [`pulumi-cur`](runs/pulumi-cur.md) | 18/24 | 0.750 | 0 | 8 | 10.33 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`pulumi-s1-rerun`](runs/pulumi-s1-rerun.md) | 20/24 | 0.833 | 0 | 7.67 | 9.92 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

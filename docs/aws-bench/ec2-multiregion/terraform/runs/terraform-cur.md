@@ -22,9 +22,9 @@
 | | |
 |---|---|
 | finished | 2026-07-31T16:02:46.413816 |
-| harness | `a3206f4` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
-| briefing | `8e434c349c1a` |
+| briefing | `7822d55ca7ca` |
 | substrate | floci |
 | trials | 24 of 24 expected |
 
@@ -34,6 +34,8 @@ briefing hash. Different either, different experiment.
 ## Logs
 
 - *(whole-run log not captured; this run predates it)*
+- `jobs/terraform-cur/job.log` — the scored run
+- `jobs/terraform-cur/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 

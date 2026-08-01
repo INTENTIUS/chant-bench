@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-s17-eni",
     "finished_at": "2026-07-31T11:50:55.397922",
-    "harness_commit": "1fa8317"
+    "harness_commit": "6303a2f"
   },
   "agent": {
     "name": "claude-code",
@@ -16,6 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
     "passed": 22,
     "pass_rate": 0.9167,
     "by_task": {

@@ -26,7 +26,7 @@ not, because that swaps a measured figure for three assumed ones.
 
 | | arm | rate | tokens in | tokens out | commands | turns | secs | reads | n | |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | [chant](chant/index.md) | 0.958 | **123,068** | 2,209 | 2.88 | 4.88 | 32 | 0 | 19 | <span class="cb-badge ok">gates passed</span> |
+| 1 | [chant](chant/index.md) | 0.958 | **129,446** | 2,350 | 3.25 | 5.21 | 32 | 0 | 20 | <span class="cb-badge ok">gates passed</span> |
 | 2 | [Pulumi](pulumi/index.md) | 0.792 | **302,064** | 4,094 | 8.21 | 10.5 | 48 | 6 | 3 | <span class="cb-badge ok">gates passed</span> |
 | 3 | [AWS CDK](cdk/index.md) | 0.708 | **317,640** | 5,636 | 10.71 | 13 | 109 | 74 *(by design)* | 2 | <span class="cb-badge ok">gates passed</span> |
 | 4 | [Terraform](terraform/index.md) | 0.792 | **359,447** | 4,612 | 9.62 | 12.21 | 69 | 0 | 2 | <span class="cb-badge ok">gates passed</span> |

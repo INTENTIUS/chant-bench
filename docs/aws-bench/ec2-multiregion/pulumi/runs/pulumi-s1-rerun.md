@@ -22,9 +22,9 @@
 | | |
 |---|---|
 | finished | 2026-07-30T16:21:46.124137 |
-| harness | `a9fe29f` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
-| briefing | `483cca6296aa` |
+| briefing | `a06c6b73c0eb` |
 | substrate | floci |
 | trials | 24 of 24 expected |
 
@@ -34,6 +34,8 @@ briefing hash. Different either, different experiment.
 ## Logs
 
 - *(whole-run log not captured; this run predates it)*
+- `jobs/pulumi-s1-rerun/job.log` — the scored run
+- `jobs/pulumi-s1-rerun/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 

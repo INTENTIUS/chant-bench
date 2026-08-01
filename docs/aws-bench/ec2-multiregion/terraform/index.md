@@ -22,10 +22,10 @@ score.
 
 | # | run | passed | rate | reads | commands | turns | harness | |
 |---|---|---|---|---|---|---|---|---|
-| 4 | [`terraform-m2`](runs/terraform-m2.md) | 19/24 | 0.792 | 0 | 9.62 | 12.21 | `9ba7e95` | <span class="cb-badge ok">gates passed</span> |
-| 3 | [`terraform-m1`](runs/terraform-m1.md) | 2/2 | 1.000 | 0 | 7 | 8 | `9ba7e95` | <span class="cb-badge invalid">invalid</span> |
-| 2 | [`terraform-cur`](runs/terraform-cur.md) | 20/24 | 0.833 | 0 | 11.71 | 14.79 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`terraform-s1-rerun`](runs/terraform-s1-rerun.md) | 19/24 | 0.792 | 0 | 10.67 | 13.67 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
+| 4 | [`terraform-m2`](runs/terraform-m2.md) | 19/24 | 0.792 | 0 | 9.62 | 12.21 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| 3 | [`terraform-m1`](runs/terraform-m1.md) | 2/24 | — | 0 | 7 | 8 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
+| 2 | [`terraform-cur`](runs/terraform-cur.md) | 20/24 | 0.833 | 0 | 11.71 | 14.79 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`terraform-s1-rerun`](runs/terraform-s1-rerun.md) | 19/24 | — | 0 | 10.67 | 13.67 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
 
 ## The agent's context
 

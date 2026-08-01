@@ -1,4 +1,4 @@
-# chant — run 16 of 24
+# chant — run 15 of 24
 
 `chant-s14-sgfix` <span class="cb-badge ok">gates passed</span>
 
@@ -22,7 +22,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T09:58:50.412958 |
-| harness | `1fa8317` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `9ce3707f885e` |
 | substrate | floci |

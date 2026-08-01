@@ -6,7 +6,7 @@
   "run": {
     "id": "terraform-cur",
     "finished_at": "2026-07-31T16:02:46.413816",
-    "harness_commit": "a3206f4"
+    "harness_commit": "6303a2f"
   },
   "agent": {
     "name": "claude-code",
@@ -16,6 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
     "passed": 20,
     "pass_rate": 0.8333,
     "by_task": {
@@ -75,11 +77,18 @@
   "effort": {
     "tool_calls": 11.71,
     "turns": 14.79,
-    "wall_seconds": 71.25
+    "wall_seconds": 71.25,
+    "tokens_in": 399976.58,
+    "tokens_out": 4813.62
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/terraform-cur/job.log",
+    "trials": "jobs/terraform-cur/<task>__<id>/agent/"
   },
   "briefing": {
     "path": "benchmarks/arms/briefing-terraform.md",
-    "sha256": "8e434c349c1a"
+    "sha256": "7822d55ca7ca"
   },
   "reproduce": "benchmarks/arms/terraform-ec2-multiregion/REPRODUCE.md"
 }

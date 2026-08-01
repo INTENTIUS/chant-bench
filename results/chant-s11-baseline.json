@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-s11-baseline",
     "finished_at": "2026-07-31T09:19:46.823995",
-    "harness_commit": "1fa8317"
+    "harness_commit": "6303a2f"
   },
   "agent": {
     "name": "claude-code",
@@ -16,6 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
     "passed": 21,
     "pass_rate": 0.875,
     "by_task": {

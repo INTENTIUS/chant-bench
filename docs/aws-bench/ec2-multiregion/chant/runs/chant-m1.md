@@ -1,4 +1,4 @@
-# chant — run 24 of 24
+# chant — run 23 of 24
 
 `chant-m1` <span class="cb-badge invalid">invalid</span>
 
@@ -7,7 +7,7 @@
     than this tool, and are published so the failure is visible rather
     than quietly dropped.
 
-**2 of 2** (1.000) · 0 account read(s) · 3.5 commands, 5.5 turns, 32s per trial
+**2 of 24** (—) · 0 account read(s) · 3.5 commands, 5.5 turns, 32s per trial
 
 ## By question
 
@@ -21,11 +21,11 @@
 | | |
 |---|---|
 | finished | 2026-07-31T18:07:44.478868 |
-| harness | `1fa8317` |
+| harness | `6303a2f` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `9ce3707f885e` |
 | substrate | floci |
-| trials | 2 of 24 expected |
+| trials | 24 of 24 expected |
 
 A run only compares with another that shares the harness commit and the
 briefing hash. Different either, different experiment.
