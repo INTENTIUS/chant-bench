@@ -442,10 +442,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "",
         "## Pass rate",
         "",
-        "Ranked by what one **correct answer** costs: the spend on one question",
-        "divided by the share the tool gets right. Being cheap at being wrong does",
-        "not help. Every figure here is per question, not per run — a whole run is",
-        "24 of them. Pick a tool to see the rest of its numbers.",
+        "Ranked by what **100 correct answers** cost: the spend on one question,",
+        "divided by the share the tool gets right, times a hundred. Being cheap at",
+        "being wrong does not help, and a hundred is a number worth having rather",
+        "than four decimal places of cents. Pick a tool to see the rest.",
         "",
         '<div class="cb-explorer" markdown="0">',
     ]
@@ -470,12 +470,31 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         else:
             pc = per_correct(r)
             runs_note = "baseline" if arm == "bare" else f"{n} run(s)"
-            sub = (
-                f"{rate(r)} answered · {usd(r['effort'].get('cost_usd'))} per question"
-                f" · {runs_note}"
+            total = r["effort"].get("cost_usd_run")
+            # Four decimals on the run total is false precision next to a
+            # two-dollar figure, and the row is already carrying three numbers.
+            each = r["effort"].get("cost_usd")
+            sub = " · ".join(
+                x for x in (
+                    f"{rate(r)} answered",
+                    f"${each:.3f} a question" if isinstance(each, (int, float)) else None,
+                    f"${total:.2f} a run" if isinstance(total, (int, float)) else None,
+                    runs_note,
+                ) if x
             )
             bar = fill(pc, worst, SPEND)
-            val, extra = usd(pc), ""
+            # Per hundred rather than per one. The ranking is identical — it is
+            # the same figure times a constant — but $3.44 against $16.45 is a
+            # difference a reader can feel, where $0.0344 against $0.1645 is four
+            # decimal places of cents and reads as noise.
+            #
+            # Not the run total, which was the other candidate: that is the cost
+            # of 24 attempts however many of them worked, so AWS CDK comes out
+            # below Terraform on it ($2.04 against $2.05) while being the worse
+            # tool per answer. Ranking on it would be back to rewarding a tool
+            # for being cheap at being wrong.
+            val = f"${pc * 100:,.2f}" if pc is not None else "—"
+            extra = ""
         out.append(
             f'<li><label class="cb-board-row{extra}" for="cb-arm-{arm}">'
             f'<span class="cb-rank">{i}</span>'

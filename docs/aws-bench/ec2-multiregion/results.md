@@ -5,10 +5,10 @@ estate for the least money. Pick a tool to see what its answers cost.
 
 ## Pass rate
 
-Ranked by what one **correct answer** costs: the spend on one question
-divided by the share the tool gets right. Being cheap at being wrong does
-not help. Every figure here is per question, not per run — a whole run is
-24 of them. Pick a tool to see the rest of its numbers.
+Ranked by what **100 correct answers** cost: the spend on one question,
+divided by the share the tool gets right, times a hundred. Being cheap at
+being wrong does not help, and a hundred is a number worth having rather
+than four decimal places of cents. Pick a tool to see the rest.
 
 <div class="cb-explorer" markdown="0">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-chant" checked>
@@ -19,11 +19,11 @@ not help. Every figure here is per question, not per run — a whole run is
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-alchemy-effect">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-bare">
 <ul class="cb-board">
-<li><label class="cb-board-row" for="cb-arm-chant"><span class="cb-rank">1</span><span class="cb-who"><span class="cb-who-name">chant</span><span class="cb-who-sub">0.958 answered · $0.0330 per question · 3 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.0344</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-pulumi"><span class="cb-rank">2</span><span class="cb-who"><span class="cb-who-name">Pulumi</span><span class="cb-who-sub">0.792 answered · $0.0704 per question · 3 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.0889</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-terraform"><span class="cb-rank">3</span><span class="cb-who"><span class="cb-who-name">Terraform</span><span class="cb-who-sub">0.792 answered · $0.0853 per question · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:65.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.1077</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-cdk"><span class="cb-rank">4</span><span class="cb-who"><span class="cb-who-name">AWS CDK</span><span class="cb-who-sub">0.708 answered · $0.0849 per question · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:72.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.1199</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-alchemy"><span class="cb-rank">5</span><span class="cb-who"><span class="cb-who-name">Alchemy</span><span class="cb-who-sub">0.625 answered · $0.1028 per question · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.1645</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-chant"><span class="cb-rank">1</span><span class="cb-who"><span class="cb-who-name">chant</span><span class="cb-who-sub">0.958 answered · $0.033 a question · $0.79 a run · 3 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$3.44</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-pulumi"><span class="cb-rank">2</span><span class="cb-who"><span class="cb-who-name">Pulumi</span><span class="cb-who-sub">0.792 answered · $0.070 a question · $1.69 a run · 3 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$8.89</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-terraform"><span class="cb-rank">3</span><span class="cb-who"><span class="cb-who-name">Terraform</span><span class="cb-who-sub">0.792 answered · $0.085 a question · $2.05 a run · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:65.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$10.77</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-cdk"><span class="cb-rank">4</span><span class="cb-who"><span class="cb-who-name">AWS CDK</span><span class="cb-who-sub">0.708 answered · $0.085 a question · $2.04 a run · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:72.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$11.99</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-alchemy"><span class="cb-rank">5</span><span class="cb-who"><span class="cb-who-name">Alchemy</span><span class="cb-who-sub">0.625 answered · $0.103 a question · $2.47 a run · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$16.45</span></label></li>
 <li><label class="cb-board-row pending" for="cb-arm-alchemy-effect"><span class="cb-rank">6</span><span class="cb-who"><span class="cb-who-name">Alchemy v2 (Effect)</span><span class="cb-who-sub">not yet run</span></span><span class="cb-track"></span><span class="cb-board-value">—</span></label></li>
 <li><label class="cb-board-row pending" for="cb-arm-bare"><span class="cb-rank">7</span><span class="cb-who"><span class="cb-who-name">No tool (AWS CLI)</span><span class="cb-who-sub">baseline · not yet run</span></span><span class="cb-track"></span><span class="cb-board-value">—</span></label></li>
 </ul>
