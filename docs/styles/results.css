@@ -319,3 +319,5 @@
 /* Keyboard users get the same signal: the label is what has focus. */
 .cb-pick:focus-visible ~ .cb-board .cb-board-row { outline: none; }
 .cb-pick:focus-visible + * { outline: none; }
+
+.cb-panelsets { scroll-margin-top: 3.5rem; }

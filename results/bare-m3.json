@@ -71,7 +71,7 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 90,
+    "account_reads": 81,
     "answered_from_own_state": false
   },
   "effort": {

@@ -6,7 +6,7 @@
   "run": {
     "id": "alchemy-m2",
     "finished_at": "2026-07-31T19:23:06.267307",
-    "harness_commit": "3fe2d0d"
+    "harness_commit": "87ca0c3"
   },
   "agent": {
     "name": "claude-code",
@@ -71,7 +71,7 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 22,
+    "account_reads": 21,
     "answered_from_own_state": false
   },
   "effort": {

@@ -90,7 +90,7 @@ environment its agent was given.
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:36.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:37.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">30</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
@@ -103,7 +103,7 @@ environment its agent was given.
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/chant</code></dd>
-<dt>harness</dt><dd><code>3fe2d0d</code></dd>
+<dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-chant-snapshot.md</code> · <code>9ce3707f885e</code></dd>
 </dl>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions with `chant search` — the recorded state is the source of truth
@@ -272,9 +272,9 @@ attribute:
 <p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads <em>by design</em></div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">90</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">81</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:36.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:37.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">30</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
@@ -383,7 +383,7 @@ Path to estate facts, in order:
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Terraform, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:36.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:37.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">30</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
@@ -396,7 +396,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/pulumi</code></dd>
-<dt>harness</dt><dd><code>3fe2d0d</code></dd>
+<dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-pulumi.md</code> · <code>a06c6b73c0eb</code></dd>
 </dl>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the Pulumi state — it is the source of truth
@@ -501,7 +501,7 @@ Path to estate facts, in order:
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:36.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:37.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">30</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
@@ -514,7 +514,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/terraform</code></dd>
-<dt>harness</dt><dd><code>3fe2d0d</code></dd>
+<dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-terraform.md</code> · <code>7822d55ca7ca</code></dd>
 </dl>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from Terraform state — it is the source of truth
@@ -617,9 +617,9 @@ Path to estate facts, in order:
 <p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads <em>by design</em></div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:82.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">74</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:87.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">71</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:36.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:37.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">30</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
@@ -632,7 +632,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/cdk</code></dd>
-<dt>harness</dt><dd><code>2a38abd</code></dd>
+<dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-cdk.md</code> · <code>f4b4c7082924</code></dd>
 </dl>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the CDK app and its stacks — they are the source of truth
@@ -743,9 +743,9 @@ Path to estate facts, in order:
 <p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:34.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">31</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:34.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">28</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:36.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:37.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">30</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
@@ -758,7 +758,7 @@ Path to estate facts, in order:
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/alchemy</code></dd>
-<dt>harness</dt><dd><code>3fe2d0d</code></dd>
+<dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-alchemy.md</code> · <code>596be04902b9</code></dd>
 </dl>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the Alchemy state — it is the source of truth

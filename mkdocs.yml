@@ -50,6 +50,9 @@ markdown_extensions:
 extra_css:
   - styles/results.css
 
+extra_javascript:
+  - scripts/results.js
+
 # Run pages are generated — one per result set, and there will be dozens. They
 # are linked from each arm's page rather than listed here, and declared so
 # `--strict` does not treat "not in nav" as an error.

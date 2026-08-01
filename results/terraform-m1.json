@@ -6,7 +6,7 @@
   "run": {
     "id": "terraform-m1",
     "finished_at": "2026-07-31T21:21:45.680800",
-    "harness_commit": "3fe2d0d"
+    "harness_commit": "87ca0c3"
   },
   "agent": {
     "name": "claude-code",
