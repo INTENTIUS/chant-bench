@@ -5,8 +5,9 @@ estate for the least money. Pick a tool to see what its answers cost.
 
 ## Pass rate
 
-Ranked by share of questions answered, with cost breaking ties and the
-baseline last. Pick a tool to see what its answers cost.
+Ranked by what one **correct** answer costs: spend per attempt divided by
+the share of questions the tool gets right. Being cheap at being wrong
+does not help. Pick a tool to see the rest of its numbers.
 
 <div class="cb-explorer" markdown="0">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-chant" checked>
@@ -17,11 +18,11 @@ baseline last. Pick a tool to see what its answers cost.
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-alchemy-effect">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-bare">
 <ul class="cb-board">
-<li><label class="cb-board-row" for="cb-arm-chant"><span class="cb-rank">1</span><span class="cb-who"><span class="cb-who-name">chant</span><span class="cb-who-sub">3 valid run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:95.8%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-board-value">0.958</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-pulumi"><span class="cb-rank">2</span><span class="cb-who"><span class="cb-who-name">Pulumi</span><span class="cb-who-sub">3 valid run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:79.2%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-board-value">0.792</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-terraform"><span class="cb-rank">3</span><span class="cb-who"><span class="cb-who-name">Terraform</span><span class="cb-who-sub">2 valid run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:79.2%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-board-value">0.792</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-cdk"><span class="cb-rank">4</span><span class="cb-who"><span class="cb-who-name">AWS CDK</span><span class="cb-who-sub">2 valid run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:70.8%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-board-value">0.708</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-alchemy"><span class="cb-rank">5</span><span class="cb-who"><span class="cb-who-name">Alchemy</span><span class="cb-who-sub">2 valid run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:62.5%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-board-value">0.625</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-chant"><span class="cb-rank">1</span><span class="cb-who"><span class="cb-who-name">chant</span><span class="cb-who-sub">0.958 answered · $0.0330 per attempt · 3 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.0344</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-pulumi"><span class="cb-rank">2</span><span class="cb-who"><span class="cb-who-name">Pulumi</span><span class="cb-who-sub">0.792 answered · $0.0704 per attempt · 3 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.0889</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-terraform"><span class="cb-rank">3</span><span class="cb-who"><span class="cb-who-name">Terraform</span><span class="cb-who-sub">0.792 answered · $0.0853 per attempt · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:65.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.1077</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-cdk"><span class="cb-rank">4</span><span class="cb-who"><span class="cb-who-name">AWS CDK</span><span class="cb-who-sub">0.708 answered · $0.0849 per attempt · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:72.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.1199</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-alchemy"><span class="cb-rank">5</span><span class="cb-who"><span class="cb-who-name">Alchemy</span><span class="cb-who-sub">0.625 answered · $0.1028 per attempt · 2 run(s)</span></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$0.1645</span></label></li>
 <li><label class="cb-board-row pending" for="cb-arm-alchemy-effect"><span class="cb-rank">6</span><span class="cb-who"><span class="cb-who-name">Alchemy v2 (Effect)</span><span class="cb-who-sub">not yet run</span></span><span class="cb-track"></span><span class="cb-board-value">—</span></label></li>
 <li><label class="cb-board-row pending" for="cb-arm-bare"><span class="cb-rank">7</span><span class="cb-who"><span class="cb-who-name">No tool (AWS CLI)</span><span class="cb-who-sub">baseline · not yet run</span></span><span class="cb-track"></span><span class="cb-board-value">—</span></label></li>
 </ul>
@@ -42,9 +43,13 @@ baseline last. Pick a tool to see what its answers cost.
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
 <div class="cb-mrows">
-<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mpanel-sub">per correct answer</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0889</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
+<div class="cb-mpanel-sub">dollars per attempt</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:68.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0704</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
@@ -215,9 +220,13 @@ attribute:
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
 <div class="cb-mrows">
-<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mpanel-sub">per correct answer</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0889</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
+<div class="cb-mpanel-sub">dollars per attempt</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:68.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0704</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
@@ -328,9 +337,13 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
 <div class="cb-mrows">
-<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mpanel-sub">per correct answer</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:65.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1077</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
+<div class="cb-mpanel-sub">dollars per attempt</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:83.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0853</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
@@ -441,9 +454,13 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
 <div class="cb-mrows">
-<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mpanel-sub">per correct answer</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:72.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1199</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
+<div class="cb-mpanel-sub">dollars per attempt</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:82.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0849</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
@@ -562,9 +579,13 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
 <div class="cb-mrows">
-<div class="cb-mpanel-sub">dollars</div>
+<div class="cb-mpanel-sub">per correct answer</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1645</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
+<div class="cb-mpanel-sub">dollars per attempt</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1028</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>

@@ -236,6 +236,24 @@ def briefing_text(path: str | None) -> str:
     return raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def per_correct(r: dict) -> float | None:
+    """What one *correct* answer costs: spend divided by the share it gets right.
+
+    Ranking on raw cost rewarded a tool for being cheap at being wrong, and
+    ranking on accuracy hid a 3x spread in what that accuracy cost. This is both,
+    and it is not a weighting anyone chose: if an attempt costs c and succeeds
+    with probability p, the expected spend before you have an answer you can use
+    is c/p. Accuracy is punished superlinearly because that is what dividing by
+    it does — AWS CDK is cheaper per attempt than Terraform and lands below it
+    here, because it is right less often.
+    """
+    cost = (r.get("effort") or {}).get("cost_usd")
+    rate = (r.get("score") or {}).get("pass_rate")
+    if not isinstance(cost, (int, float)) or not isinstance(rate, (int, float)) or not rate:
+        return None
+    return cost / rate
+
+
 def attempts_each(runs: list[dict], tasks: set) -> str:
     """k, counted from the runs. Written out, it silently lies the day k changes."""
     trials = {r["score"].get("expected_trials") or r["score"]["trials"] for r in runs}
@@ -358,8 +376,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     rows.sort(
         key=lambda x: (
             x[0] == "bare",
-            -(x[1]["score"].get("pass_rate") or 0),
-            x[1]["effort"].get("cost_usd") or 10**9,
+            per_correct(x[1]) if per_correct(x[1]) is not None else 10**9,
         )
     )
     pending.sort(key=lambda a: (a == "bare", a))
@@ -372,8 +389,9 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         ("Pass rate", pass_rate_blurb(just, tasks), [
             ("pass rate", lambda r: r["score"].get("pass_rate"), lambda v: f"{v:.3f}"),
         ]),
-        ("What one answer cost", "The agent's own billed total, not tokens times a rate card.", [
-            ("dollars", lambda r: r["effort"].get("cost_usd"), lambda v: f"${v:.4f}"),
+        ("What one answer cost", "The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.", [
+            ("per correct answer", per_correct, lambda v: f"${v:.4f}"),
+            ("dollars per attempt", lambda r: r["effort"].get("cost_usd"), lambda v: f"${v:.4f}"),
             ("tokens in", lambda r: r["effort"].get("tokens_in"), lambda v: f"{v:,.0f}"),
             ("tokens out", lambda r: r["effort"].get("tokens_out"), lambda v: f"{v:,.0f}"),
         ]),
@@ -406,8 +424,9 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "",
         "## Pass rate",
         "",
-        "Ranked by share of questions answered, with cost breaking ties and the",
-        "baseline last. Pick a tool to see what its answers cost.",
+        "Ranked by what one **correct** answer costs: spend per attempt divided by",
+        "the share of questions the tool gets right. Being cheap at being wrong",
+        "does not help. Pick a tool to see the rest of its numbers.",
         "",
         '<div class="cb-explorer" markdown="0">',
     ]
@@ -419,6 +438,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             f'<input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-{arm}"{checked}>'
         )
 
+    # The bar is the ranking metric, amber, so the shortest sits at the top and
+    # they lengthen downward. Drawing pass rate here instead would put a bar that
+    # grows the other way next to a rank it does not explain.
+    worst = max([x for x in (per_correct(r) for _, r, _ in rows) if x] or [0])
     out.append('<ul class="cb-board">')
     for i, (arm, r, n) in enumerate(entries, 1):
         name, _ = ARMS.get(arm, (arm, ""))
@@ -426,9 +449,14 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             sub = "baseline · not yet run" if arm == "bare" else "not yet run"
             bar, val, extra = '<span class="cb-track"></span>', "—", " pending"
         else:
-            sub = "baseline · no infra tooling" if arm == "bare" else f"{n} valid run(s)"
-            bar = fill(r["score"].get("pass_rate"), 1.0, OUTCOME)
-            val, extra = rate(r), ""
+            pc = per_correct(r)
+            runs_note = "baseline" if arm == "bare" else f"{n} run(s)"
+            sub = (
+                f"{rate(r)} answered · {usd(r['effort'].get('cost_usd'))} per attempt"
+                f" · {runs_note}"
+            )
+            bar = fill(pc, worst, SPEND)
+            val, extra = usd(pc), ""
         out.append(
             f'<li><label class="cb-board-row{extra}" for="cb-arm-{arm}">'
             f'<span class="cb-rank">{i}</span>'
