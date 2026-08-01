@@ -11,9 +11,9 @@ has the AWS CLI, `jq` and boto3. No Terraform, no CDK, no Pulumi, no state file.
 The agent gets a question and an account, and assembles the answer from API
 calls.
 
-## What we use it for
+## What it is used for here
 
-That baseline is a floor. Our question is different:
+That baseline is a floor. The question here is different:
 
 > Given an agent is going to do this work anyway, which tool makes it cheapest?
 
@@ -24,7 +24,7 @@ baseline. The tool sits on top of it.
 Most of these tools reach most of these answers eventually. The agent keeps
 calling the API until it does. What differs is the bill.
 
-Read every arm against [**No tool**](ec2-multiregion/bare/index.md), which
+Read every arm against **No tool**, which
 reproduces upstream exactly. A tool that does not get there more cheaply is not
 earning its place.
 
@@ -53,3 +53,17 @@ With that unset it is upstream.
 - **[ec2-multiregion](ec2-multiregion/index.md)**. Six EC2 instances across
   three regions. Eight questions about reachability, placement, and what is
   unused.
+
+## What gets published
+
+Every number links to what produced it. For each run:
+
+- the score, and the per-question breakdown
+- what it cost in tokens, commands, turns, seconds
+- whether the tool had to read the cloud or already knew
+- the exact briefing the agent was given, in full
+- the logs, including both gates
+- the one command that reproduces it
+
+A run whose tooling broke is not published at all. A tool that never ran is not
+a tool that did badly, and a row that says so still reads like a score.

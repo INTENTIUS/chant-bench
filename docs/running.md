@@ -13,7 +13,7 @@ just setup
 That fetches [aws-bench](https://github.com/aws-bench/aws-bench), installs
 dependencies, builds each arm's image, and checks the emulator starts.
 
-We do not vendor the benchmark. The estates, questions, reference answers and
+The benchmark is not vendored here. The estates, questions, reference answers and
 judge are aws-bench's. The fork adds six hook points, all behind
 `AWS_BENCH_EMULATOR=floci`, so with that unset it behaves as upstream.
 

@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-s13-hintfix",
     "finished_at": "2026-07-31T09:47:22.031207",
-    "harness_commit": "c7bfd82"
+    "harness_commit": "2a38abd"
   },
   "agent": {
     "name": "claude-code",
@@ -80,7 +80,8 @@
     "wall_seconds": 49.55,
     "tokens_in": 224564.75,
     "tokens_out": 3118.25,
-    "cost_usd": 0.0545
+    "cost_usd": 0.0545,
+    "cost_usd_run": 1.3086
   },
   "logs": {
     "run": null,

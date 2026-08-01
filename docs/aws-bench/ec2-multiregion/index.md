@@ -8,11 +8,11 @@ They look easy and are not.
 *Which servers can be reached from the internet?* A server is reachable if its
 security group allows port 22. But one instance gets its group from a launch
 template, not from the instance record. And only if its subnet routes to an
-internet gateway, via a route table you look up separately.
+internet gateway, via a route table that has to be looked up separately.
 
 *Which security groups are unused?* aws-bench defines unused as **not attached
 to any network interface**, and computes that live per run. A group nothing
-references cannot be found by listing what you deployed, because it is not
+references cannot be found by listing what was deployed, because it is not
 attached to any of it.
 
 Neither answer is written down anywhere. Both get assembled from things stored
@@ -59,23 +59,23 @@ Ground truth is published so the numbers can be checked rather than trusted.
 
 Every trial gets the question plus one briefing, a short page teaching that
 toolchain's read commands. Nothing else. **Every briefing is published in full**
-on its tool's page. If the comparison is fair you can check that yourself.
+on the results page. If the comparison is fair, that is checkable.
 
 They are held to the same shape so no arm is told more than another:
 
-- Three rungs, same order. Read your own state, then your own source, then raw
+- Three rungs, same order. Read the tool's own state, then its source, then raw
   `aws` for runtime values state cannot carry.
 - No arm is taught a route the others lack. chant's briefing once had a fourth
   rung pointing at its own live-read mode. Removing it is what made the
   instruction comparable rather than merely similar.
 - Every arm hears the same fact about launch templates, because knowing the
-  relationship exists should not be what separates them. What each tool lets you
+  relationship exists should not be what separates them. What each tool allows
   *do* with it should be.
 - No briefing contains an answer, a count, or a resource name from the estate.
 
 Tuning a briefing is fine. It is how each arm was brought to its best. But the
 briefing is part of the experiment, so every result records its hash. A tuned
-briefing produces a different result set. You cannot accidentally compare across
+briefing produces a different result set. Nothing can accidentally compare across
 two.
 
 ## Results
