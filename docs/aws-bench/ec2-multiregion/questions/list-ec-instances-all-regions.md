@@ -7,31 +7,38 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-1 commands, from `chant-b1`.
+1 commands, from `chant-m3`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region --explain
+```
+
+## No tool (AWS CLI) — answered
+
+1 commands, from `bare-m3`.
+
+```sh
+# Query EC2 instances in all three regions for region in us-east-1 us-west-1 us-west-2; do echo "=== $region ===" >&2 aws ec2 describe-instances --region "$region" --output json | \ jq -r '.Reservations[].Instances[] | .InstanceId' 2>/dev/null done
 ```
 
 ## Terraform — answered
 
-3 commands, from `terraform-m2`.
+4 commands, from `terraform-m3`.
 
 ```sh
-cd /workspace/terraform && ./terraform state list | grep -E 'aws_instance'
-cd /workspace/terraform && ./terraform show -json | jq '.values.root_module.child_modules[] | {module_name: .address, instances: [.resources[] | select(.type == "aws_instance") | {resource_address: .address, instance_id: .values.id, region: .values.provider[0]}]}'
-cd /workspace/terraform && find . -name "*.tf" -type f | head -20
+cd /workspace/terraform && ./terraform state list | grep -E 'aws_instance|aws_ec2_instance'
+cd /workspace/terraform && ./terraform state show -json | jq -r '.values.root_module.child_modules[] | select(.resources != null) | .resources[] | select(.type == "aws_instance") | {address: .address, instance_id: .values.id, region: .values.tags.Region, availability_zone: .values.availability_zone}'
+cd /workspace/terraform && ./terraform show -json | jq -r '.values.root_module.child_modules[] | select(.resources != null) | .resources[] | select(.type == "aws_instance") | {address: .address, instance_id: .values.id, region: (.values.tags.Region // .values.availability_zone | split("-")[:-1] | join("-")), availability_zone: .values.availability_zone}'
+cd /workspace/terraform && ./terraform show -json | jq -r '.values.root_module.child_modules[] | select(.resources != null) | .resources[] | select(.type == "aws_instance") | "\(.values.availability_zone | split("-")[:-1] | join("-")): \(.values.id)"' | sort | uniq
 ```
 
 ## Pulumi — answered
 
-4 commands, from `pulumi-m2`.
+2 commands, from `pulumi-m3`.
 
 ```sh
-cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn: .urn, id: .outputs.id, region: .outputs.availabilityZone}'
-cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | "\(.outputs.availabilityZone[0:-1])\t\(.outputs.id)\t\(.urn | split("::")[2])"' | sort
-cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {region: .outputs.availabilityZone[0:-1], instance_id: .outputs.id, resource_name: .outputs.tags.Name // (.urn | split("::")[-1])} | @tsv' | sort && echo "" && echo "Summary:" && cd /workspace/pulumi && ./pulumi-export | jq -r '[.deployment.resources[] | select(.type == "aws:ec2/instance:Instance")] | group_by(.outputs.availabilityZone[0:-1]) | map({region: .[0].outputs.availabilityZone[0:-1], count: length}) | .[] | "\(.region): \(.count) instances"' | sort
-cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | "\(.outputs.availabilityZone[0:-1]): \(.outputs.id) (\(.urn | split("::")[-1]))"' | sort
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn: .urn, instanceId: .outputs.id, region: .outputs.availabilityZone}' 2>/dev/null
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: (.urn | split("::") | .[3]), instanceId: .outputs.id, region: (.outputs.availabilityZone | sub("[a-z]$"; ""))}' | jq -s 'sort_by(.region, .name) | group_by(.region) | map({region: .[0].region, instances: map({name: .name, instanceId: .instanceId})})' 2>/dev/null
 ```
 
 ## AWS CDK — answered
@@ -47,4 +54,14 @@ cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 
 aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {Region: "us-east-1", LogicalId: .LogicalResourceId, InstanceId: .PhysicalResourceId}'
 aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {Region: "us-west-1", LogicalId: .LogicalResourceId, InstanceId: .PhysicalResourceId}'
 aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {Region: "us-west-2", LogicalId: .LogicalResourceId, InstanceId: .PhysicalResourceId}'
+```
+
+## Alchemy — answered
+
+3 commands, from `alchemy-m3`.
+
+```sh
+cd /workspace/alchemy && alchemy state list | grep -i instance
+cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/instance
+cd /workspace/alchemy && for resource in "alchemy-ec2-multiregion/bench/exp-InstanceId" "alchemy-ec2-multiregion/bench/exp-DefaultVPCInstanceId" "alchemy-ec2-multiregion/bench/exp-LaunchTemplateInstanceId" "alchemy-ec2-multiregion/bench/exp-PrivateInstanceId" "alchemy-ec2-multiregion/bench/usw1-exp-InstanceId" "alchemy-ec2-multiregion/bench/usw2-exp-InstanceId"; do echo "=== $resource ===" alchemy state get "$resource" 2>/dev/null | jq '.output // .props' 2>/dev/null || echo "Not found" done
 ```

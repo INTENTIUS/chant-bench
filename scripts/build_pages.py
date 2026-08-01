@@ -388,16 +388,14 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # Cost breaks ties, cheaper first, because two tools that answer the same
     # share of the questions are separated by what that took.
     #
-    # `bare` is pinned last whatever it scores. It is the floor, not an entrant,
-    # and a baseline placed third invites reading the order as a ranking it is
-    # not part of.
+    # `bare` ranks where its number puts it. It was pinned last as "the floor,
+    # not an entrant", and that quietly softened the one thing the control was
+    # built to show: it answers more cheaply than four of the five tools. A
+    # baseline sitting second is uncomfortable reading, which is the finding.
     rows.sort(
-        key=lambda x: (
-            x[0] == "bare",
-            per_correct(x[1]) if per_correct(x[1]) is not None else 10**9,
-        )
+        key=lambda x: per_correct(x[1]) if per_correct(x[1]) is not None else 10**9
     )
-    pending.sort(key=lambda a: (a == "bare", a))
+    pending.sort()
 
     just = [r for _, r, _ in rows]
     # Grouped into panels rather than one flat list: money, context, and the work
@@ -474,6 +472,11 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             # and repeated in different units what the figure on the right
             # already says. The rest is a click away in the panel.
             sub = f"{r['score']['passed']}/{r['score']['trials']} correct"
+            # Still marked, just not moved. It ranks on its number like everyone
+            # else, and a reader still needs to know it is an agent with the AWS
+            # CLI and no infrastructure tooling rather than another product.
+            if arm == "bare":
+                sub += ' <span class="cb-tag">baseline · no tooling</span>'
             bar = fill(pc, worst, SPEND)
             # Per hundred rather than per one. The ranking is identical — it is
             # the same figure times a constant — but $3.44 against $16.45 is a

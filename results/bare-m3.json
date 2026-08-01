@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "bare",
+  "run": {
+    "id": "bare-m3",
+    "finished_at": "2026-07-31T21:50:54.922236",
+    "harness_commit": "87ca0c3"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 17,
+    "pass_rate": 0.7083,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        1,
+        0
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        0,
+        0,
+        0
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": 90,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 4.08,
+    "turns": 5.96,
+    "wall_seconds": 30.49,
+    "tokens_in": 107958.04,
+    "tokens_out": 2690.17,
+    "cost_usd": 0.0352,
+    "cost_usd_run": 0.846
+  },
+  "logs": {
+    "run": "jobs/bare-m3/run-arm.log",
+    "job": "jobs/bare-m3/job.log",
+    "trials": "jobs/bare-m3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-bare.md",
+    "sha256": "166c7534c252"
+  },
+  "reproduce": "benchmarks/arms/bare/REPRODUCE.md"
+}

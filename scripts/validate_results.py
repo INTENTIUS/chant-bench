@@ -122,9 +122,35 @@ def main() -> int:
         print(f"no result sets in {root} — nothing to validate")
         return 0
 
+    # A scenario's runs have to be the same experiment to sit beside each other,
+    # and the trial count is the cheapest way that stops being true. chant-toolcheck
+    # was a one-trial smoke test that satisfied every check above — 1 of 1 expected
+    # reads as complete — and landed on the board as an arm scoring 0.
+    by_scenario: dict[tuple, list[tuple[str, int]]] = {}
+    for path in files:
+        try:
+            r = json.loads(path.read_text())
+        except (OSError, ValueError):
+            continue
+        n = (r.get("score") or {}).get("expected_trials")
+        if isinstance(n, int):
+            by_scenario.setdefault((r.get("bench"), r.get("scenario")), []).append((path.name, n))
+    odd: dict[str, str] = {}
+    for (bench, scenario), entries in by_scenario.items():
+        counts = [n for _, n in entries]
+        usual = max(set(counts), key=counts.count)
+        for name, n in entries:
+            if n != usual:
+                odd[name] = (
+                    f"ran {n} trial(s) where every other {bench}/{scenario} run ran "
+                    f"{usual} — not the same experiment, so it cannot sit beside them"
+                )
+
     failed = 0
     for path in files:
         problems = check(path)
+        if path.name in odd:
+            problems.append(odd[path.name])
         if problems:
             failed += 1
             print(f"FAIL  {path.name}")

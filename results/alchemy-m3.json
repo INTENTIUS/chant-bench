@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "alchemy",
+  "run": {
+    "id": "alchemy-m3",
+    "finished_at": "2026-07-31T20:18:45.145246",
+    "harness_commit": "3fe2d0d"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 20,
+    "pass_rate": 0.8333,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        0,
+        1
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": 31,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 14.42,
+    "turns": 17.42,
+    "wall_seconds": 87.25,
+    "tokens_in": 514978,
+    "tokens_out": 5327.88,
+    "cost_usd": 0.1022,
+    "cost_usd_run": 2.4528
+  },
+  "logs": {
+    "run": "jobs/alchemy-m3/run-arm.log",
+    "job": "jobs/alchemy-m3/job.log",
+    "trials": "jobs/alchemy-m3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-alchemy.md",
+    "sha256": "596be04902b9"
+  },
+  "reproduce": "benchmarks/arms/alchemy-ec2-multiregion/REPRODUCE.md"
+}
