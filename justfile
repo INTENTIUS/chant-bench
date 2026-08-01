@@ -27,13 +27,21 @@ build:
     python3 scripts/build_pages.py
     mkdocs build --strict
 
-# Preview locally on http://127.0.0.1:8000, regenerating the pages first.
+# Preview locally, regenerating the pages first.
+#
+#   just serve          # http://127.0.0.1:8000
+#   just serve 8123
 #
 # The generated pages are committed, so serving without regenerating shows you
 # whatever was last built rather than what your edit does — which is a slow way
 # to find out you were looking at the old page the whole time.
+#
+# Everything is served under /chant-bench/, because site_url carries the project
+# path this deploys to. The root redirects there, so the bare URL is fine to
+# open; a deep link typed without the prefix will 404.
 serve port="8000":
     python3 scripts/build_pages.py
+    @echo "  -> http://127.0.0.1:{{port}}/chant-bench/"
     mkdocs serve -a 127.0.0.1:{{port}}
 
 # What CI runs.
