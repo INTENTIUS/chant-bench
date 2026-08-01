@@ -15,6 +15,26 @@ cd /workspace/chant && chant search "kind:EC2::Instance attr:internetFacing=true
 cd /workspace/chant && chant search "kind:EC2::Instance attr:internetFacing=true attr:region=us-west-2" --at latest --env floci --explain
 ```
 
+## No tool (AWS CLI) — answered
+
+22 commands, from `bare-m2`.
+
+```sh
+aws ec2 describe-instances --region us-east-1 --output json --query 'Reservations[*].Instances[*].[InstanceId,State.Name,SubnetId,VpcId,PrivateIpAddress,PublicIpAddress]' | jq -r '.[][] | @csv'
+aws ec2 describe-instances --region us-west-1 --output json --query 'Reservations[*].Instances[*].[InstanceId,State.Name,SubnetId,VpcId,PrivateIpAddress,PublicIpAddress]' | jq -r '.[][] | @csv'
+aws ec2 describe-instances --region us-west-2 --output json --query 'Reservations[*].Instances[*].[InstanceId,State.Name,SubnetId,VpcId,PrivateIpAddress,PublicIpAddress]' | jq -r '.[][] | @csv'
+aws ec2 describe-route-tables --region us-east-1 --output json --query 'RouteTables[*].[RouteTableId,Associations[*].SubnetId,Routes[*].[DestinationCidrBlock,GatewayId]]' | jq -c '.'
+aws ec2 describe-route-tables --region us-west-1 --output json --query 'RouteTables[*].[RouteTableId,Associations[*].SubnetId,Routes[*].[DestinationCidrBlock,GatewayId]]' | jq -c '.'
+aws ec2 describe-route-tables --region us-west-2 --output json --query 'RouteTables[*].[RouteTableId,Associations[*].SubnetId,Routes[*].[DestinationCidrBlock,GatewayId]]' | jq -c '.'
+aws ec2 describe-subnets --region us-east-1 --output json --query 'Subnets[*].[SubnetId,VpcId,CidrBlock]' | jq -c '.'
+aws ec2 describe-subnets --region us-west-1 --output json --query 'Subnets[*].[SubnetId,VpcId,CidrBlock]' | jq -c '.'
+aws ec2 describe-subnets --region us-west-2 --output json --query 'Subnets[*].[SubnetId,VpcId,CidrBlock]' | jq -c '.'
+# For us-east-1 echo "=== us-east-1 Route Table Associations ===" aws ec2 describe-route-tables --region us-east-1 --output json | jq -r '.RouteTables[] | "\(.RouteTableId): Subnets: \(.Associations[] | select(.SubnetId != null) | .SubnetId), Routes: \(.Routes[] | select(.GatewayId | startswith("igw")) | "\(.DestinationCidrBlock) -> \(.GatewayId)")"'
+# For us-west-1 echo "=== us-west-1 Route Table Associations ===" aws ec2 describe-route-tables --region us-west-1 --output json | jq -r '.RouteTables[] | "\(.RouteTableId): Subnets: \(.Associations[] | select(.SubnetId != null) | .SubnetId), Routes: \(.Routes[] | select(.GatewayId | startswith("igw")) | "\(.DestinationCidrBlock) -> \(.GatewayId)")"'
+# For us-west-2 echo "=== us-west-2 Route Table Associations ===" aws ec2 describe-route-tables --region us-west-2 --output json | jq -r '.RouteTables[] | "\(.RouteTableId): Subnets: \(.Associations[] | select(.SubnetId != null) | .SubnetId), Routes: \(.Routes[] | select(.GatewayId | startswith("igw")) | "\(.DestinationCidrBlock) -> \(.GatewayId)")"'
+# … 10 more
+```
+
 ## Terraform — answered
 
 16 commands, from `terraform-m3`.

@@ -13,6 +13,16 @@ answered. This says how, and the how is where they differ most.
 cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region --explain
 ```
 
+## No tool (AWS CLI) — answered
+
+3 commands, from `bare-m2`.
+
+```sh
+aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].InstanceId' --output text
+aws ec2 describe-instances --region us-west-1 --query 'Reservations[*].Instances[*].InstanceId' --output text
+aws ec2 describe-instances --region us-west-2 --query 'Reservations[*].Instances[*].InstanceId' --output text
+```
+
 ## Terraform — answered
 
 4 commands, from `terraform-m3`.

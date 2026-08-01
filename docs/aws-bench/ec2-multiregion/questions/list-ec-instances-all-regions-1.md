@@ -13,6 +13,16 @@ answered. This says how, and the how is where they differ most.
 cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,PublicIpAddress,PrivateIpAddress,effectiveIngress,internetFacing 2>&1
 ```
 
+## No tool (AWS CLI) — missed
+
+3 commands, from `bare-m2`.
+
+```sh
+for region in us-east-1 us-west-1 us-west-2; do echo "=== $region ===" aws ec2 describe-instances --region "$region" --output json --query 'Reservations[].Instances[].[InstanceId,InstanceType,State.Name,SecurityGroups[].GroupId,LaunchTemplate]' | jq -c '.[]' done
+for region in us-east-1 us-west-1 us-west-2; do echo "=== $region Security Groups ===" aws ec2 describe-security-groups --region "$region" --output json | jq -c '.SecurityGroups[] | select(.GroupName == "default" or .GroupId == "sg-ad116af2c9fab45df") | {GroupId: .GroupId, GroupName: .GroupName, IpPermissions: .IpPermissions}' done
+aws ec2 describe-instances --region us-east-1 --instance-ids i-e722b733ce65157b5 --output json | jq '.Reservations[].Instances[] | {InstanceId, InstanceType, State: .State.Name, PublicIpAddress, PublicDnsName, SecurityGroups, LaunchTime}'
+```
+
 ## Terraform — answered
 
 15 commands, from `terraform-m3`.

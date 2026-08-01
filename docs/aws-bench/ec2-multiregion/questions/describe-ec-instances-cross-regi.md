@@ -13,6 +13,16 @@ answered. This says how, and the how is where they differ most.
 cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,VpcId,PrivateIpAddress --explain
 ```
 
+## No tool (AWS CLI) — answered
+
+3 commands, from `bare-m2`.
+
+```sh
+aws ec2 describe-instances --region us-east-1 --output json | jq '.Reservations[].Instances[] | {InstanceId, State: .State.Name, InstanceType, VpcId, SubnetId, PrivateIpAddress}'
+aws ec2 describe-instances --region us-west-1 --output json | jq '.Reservations[].Instances[] | {InstanceId, State: .State.Name, InstanceType, VpcId, SubnetId, PrivateIpAddress}'
+aws ec2 describe-instances --region us-west-2 --output json | jq '.Reservations[].Instances[] | {InstanceId, State: .State.Name, InstanceType, VpcId, SubnetId, PrivateIpAddress}'
+```
+
 ## Terraform — answered
 
 21 commands, from `terraform-m3`.
