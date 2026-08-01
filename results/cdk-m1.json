@@ -2,10 +2,10 @@
   "schema": 1,
   "bench": "aws-bench",
   "scenario": "ec2-multiregion",
-  "arm": "chant",
+  "arm": "cdk",
   "run": {
-    "id": "chant-b1",
-    "finished_at": "2026-07-31T12:43:29.336086",
+    "id": "cdk-m1",
+    "finished_at": "2026-07-31T18:25:56.545910",
     "harness_commit": "1fa8317"
   },
   "agent": {
@@ -16,8 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
-    "passed": 24,
-    "pass_rate": 1.0,
+    "passed": 17,
+    "pass_rate": 0.7083,
     "by_task": {
       "describe-ec-instances-cross-regi": [
         1,
@@ -25,9 +25,9 @@
         1
       ],
       "ec-instances-without-default-vpc": [
+        0,
         1,
-        1,
-        1
+        0
       ],
       "find-ec-instances-in-public-subn": [
         1,
@@ -46,8 +46,8 @@
       ],
       "list-ec-instances-by-vpc-across": [
         1,
-        1,
-        1
+        0,
+        0
       ],
       "list-ec-private-ips-all-regions": [
         1,
@@ -55,9 +55,9 @@
         1
       ],
       "list-unused-security-groups-all": [
-        1,
-        1,
-        1
+        0,
+        0,
+        0
       ]
     }
   },
@@ -69,24 +69,24 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 0,
-    "answered_from_own_state": true
+    "account_reads": 74,
+    "answered_from_own_state": false
   },
   "effort": {
-    "tool_calls": 2.67,
-    "turns": 4.67,
-    "wall_seconds": 31.26,
-    "tokens_in": 121637.92,
-    "tokens_out": 2136.67
+    "tool_calls": 10.71,
+    "turns": 13,
+    "wall_seconds": 109.02,
+    "tokens_in": 317640.29,
+    "tokens_out": 5635.83
   },
   "logs": {
-    "run": null,
-    "job": "jobs/chant-b1/job.log",
-    "trials": "jobs/chant-b1/<task>__<id>/agent/"
+    "run": "jobs/cdk-m1/run-arm.log",
+    "job": "jobs/cdk-m1/job.log",
+    "trials": "jobs/cdk-m1/<task>__<id>/agent/"
   },
   "briefing": {
-    "path": "benchmarks/arms/briefing-chant-snapshot.md",
-    "sha256": "9ce3707f885e"
+    "path": "benchmarks/arms/briefing-cdk.md",
+    "sha256": "f4b4c7082924"
   },
-  "reproduce": "benchmarks/arms/chant-ec2-multiregion-search-v2/REPRODUCE.md"
+  "reproduce": "benchmarks/arms/cdk_app/REPRODUCE.md"
 }

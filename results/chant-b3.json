@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-b3",
     "finished_at": "2026-07-31T13:00:45.568272",
-    "harness_commit": "58d5cb5"
+    "harness_commit": "1fa8317"
   },
   "agent": {
     "name": "claude-code",
@@ -75,11 +75,18 @@
   "effort": {
     "tool_calls": 2.88,
     "turns": 4.88,
-    "wall_seconds": 31.92
+    "wall_seconds": 31.92,
+    "tokens_in": 123067.62,
+    "tokens_out": 2209.25
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/chant-b3/job.log",
+    "trials": "jobs/chant-b3/<task>__<id>/agent/"
   },
   "briefing": {
     "path": "benchmarks/arms/briefing-chant-snapshot.md",
-    "sha256": "d5c806e8c846"
+    "sha256": "9ce3707f885e"
   },
   "reproduce": "benchmarks/arms/chant-ec2-multiregion-search-v2/REPRODUCE.md"
 }

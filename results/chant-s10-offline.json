@@ -4,8 +4,8 @@
   "scenario": "ec2-multiregion",
   "arm": "chant",
   "run": {
-    "id": "chant-b1",
-    "finished_at": "2026-07-31T12:43:29.336086",
+    "id": "chant-s10-offline",
+    "finished_at": "2026-07-31T09:03:28.903307",
     "harness_commit": "1fa8317"
   },
   "agent": {
@@ -16,8 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
-    "passed": 24,
-    "pass_rate": 1.0,
+    "passed": 20,
+    "pass_rate": 0.8333,
     "by_task": {
       "describe-ec-instances-cross-regi": [
         1,
@@ -35,8 +35,8 @@
         1
       ],
       "list-ec-instances-all-regions": [
-        1,
-        1,
+        0,
+        0,
         1
       ],
       "list-ec-instances-all-regions-1": [
@@ -45,7 +45,7 @@
         1
       ],
       "list-ec-instances-by-vpc-across": [
-        1,
+        0,
         1,
         1
       ],
@@ -57,7 +57,7 @@
       "list-unused-security-groups-all": [
         1,
         1,
-        1
+        0
       ]
     }
   },
@@ -69,20 +69,20 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 0,
-    "answered_from_own_state": true
+    "account_reads": 31,
+    "answered_from_own_state": false
   },
   "effort": {
-    "tool_calls": 2.67,
-    "turns": 4.67,
-    "wall_seconds": 31.26,
-    "tokens_in": 121637.92,
-    "tokens_out": 2136.67
+    "tool_calls": 6.29,
+    "turns": 8.71,
+    "wall_seconds": 69.27,
+    "tokens_in": 247269.42,
+    "tokens_out": 2951.42
   },
   "logs": {
     "run": null,
-    "job": "jobs/chant-b1/job.log",
-    "trials": "jobs/chant-b1/<task>__<id>/agent/"
+    "job": "jobs/chant-s10-offline/job.log",
+    "trials": "jobs/chant-s10-offline/<task>__<id>/agent/"
   },
   "briefing": {
     "path": "benchmarks/arms/briefing-chant-snapshot.md",

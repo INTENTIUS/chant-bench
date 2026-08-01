@@ -2,10 +2,10 @@
   "schema": 1,
   "bench": "aws-bench",
   "scenario": "ec2-multiregion",
-  "arm": "chant",
+  "arm": "alchemy",
   "run": {
-    "id": "chant-b1",
-    "finished_at": "2026-07-31T12:43:29.336086",
+    "id": "alchemy-m1",
+    "finished_at": "2026-07-31T18:36:10.639035",
     "harness_commit": "1fa8317"
   },
   "agent": {
@@ -16,8 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
-    "passed": 24,
-    "pass_rate": 1.0,
+    "passed": 15,
+    "pass_rate": 0.625,
     "by_task": {
       "describe-ec-instances-cross-regi": [
         1,
@@ -30,23 +30,23 @@
         1
       ],
       "find-ec-instances-in-public-subn": [
-        1,
+        0,
         1,
         1
       ],
       "list-ec-instances-all-regions": [
-        1,
+        0,
         1,
         1
       ],
       "list-ec-instances-all-regions-1": [
-        1,
-        1,
-        1
+        0,
+        0,
+        0
       ],
       "list-ec-instances-by-vpc-across": [
         1,
-        1,
+        0,
         1
       ],
       "list-ec-private-ips-all-regions": [
@@ -55,9 +55,9 @@
         1
       ],
       "list-unused-security-groups-all": [
-        1,
-        1,
-        1
+        0,
+        0,
+        0
       ]
     }
   },
@@ -69,24 +69,24 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 0,
-    "answered_from_own_state": true
+    "account_reads": 25,
+    "answered_from_own_state": false
   },
   "effort": {
-    "tool_calls": 2.67,
-    "turns": 4.67,
-    "wall_seconds": 31.26,
-    "tokens_in": 121637.92,
-    "tokens_out": 2136.67
+    "tool_calls": 12.46,
+    "turns": 16.67,
+    "wall_seconds": 85.06,
+    "tokens_in": 486456.54,
+    "tokens_out": 5278.42
   },
   "logs": {
-    "run": null,
-    "job": "jobs/chant-b1/job.log",
-    "trials": "jobs/chant-b1/<task>__<id>/agent/"
+    "run": "jobs/alchemy-m1/run-arm.log",
+    "job": "jobs/alchemy-m1/job.log",
+    "trials": "jobs/alchemy-m1/<task>__<id>/agent/"
   },
   "briefing": {
-    "path": "benchmarks/arms/briefing-chant-snapshot.md",
-    "sha256": "9ce3707f885e"
+    "path": "benchmarks/arms/briefing-alchemy.md",
+    "sha256": "596be04902b9"
   },
-  "reproduce": "benchmarks/arms/chant-ec2-multiregion-search-v2/REPRODUCE.md"
+  "reproduce": "benchmarks/arms/alchemy-ec2-multiregion/REPRODUCE.md"
 }

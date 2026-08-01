@@ -47,6 +47,7 @@ QUESTIONS = {
 #: Display name and the briefing each arm is given.
 ARMS = {
     "chant": ("chant", "briefing-chant-snapshot.md"),
+    "bare": ("No tool (AWS CLI)", "briefing-bare.md"),
     "terraform": ("Terraform", "briefing-terraform.md"),
     "pulumi": ("Pulumi", "briefing-pulumi.md"),
     "cdk": ("AWS CDK", "briefing-cdk.md"),
@@ -56,7 +57,7 @@ ARMS = {
 
 #: Arms with no state of their own, whose account reads are the sanctioned path
 #: rather than a fallback. Judging these against zero would be a category error.
-STATELESS = {"cdk"}
+STATELESS = {"cdk", "bare"}
 
 
 def load() -> dict[str, list[dict]]:
@@ -147,27 +148,57 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         if r:
             rows.append((arm, r, len([x for x in runs if valid(x)])))
             tasks |= set(r["score"]["by_task"])
-    rows.sort(key=lambda x: -x[1]["score"]["pass_rate"])
+    # Ordered by what an answer costs, not by rate: most of these tools reach
+    # most of these answers eventually, and the question is what that takes.
+    rows.sort(key=lambda x: (x[1]["effort"].get("tokens_in") or 10**9))
 
     out = [
         "# Results",
         "",
-        "Each arm's **latest valid run**. Arms have run different numbers of times,",
-        "so `n` is given and the figure is never a best-of. Full history is on each",
-        "arm's page.",
+        "Every tool here can reach these answers — the agent keeps calling the API",
+        "until it does. What differs is **who does the work**.",
         "",
-        "| | arm | passed | rate | account reads | commands | turns | secs | n | |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "For most arms the model *is* the query engine: it sweeps, joins, and reasons",
+        "over results, holding the estate in its context. That is what the token",
+        "counts below are buying.",
+        "",
+        "chant moves the join into the tool. The model writes one query; the tool",
+        "answers it. Same answer, a third of the tokens — and the answer arrives with",
+        "the query that produced it, which you can read, re-run, and put in CI.",
+        "",
+        "That last part is not an efficiency gain. It is the difference between *an",
+        "agent looked at your account and thinks four groups are unused* and a line",
+        "you can check.",
+        "",
+        "Read every row against **No tool** — upstream aws-bench's own experiment, an",
+        "agent with the AWS CLI and nothing else. A tool that does not get there more",
+        "cheaply than that is not earning its place.",
+        "",
+        "Each arm's latest valid run, ordered by what one answer costs. Arms have run",
+        "different numbers of times, so `n` is given and the figure is never a",
+        "best-of. Per-question cost is measured; multiply by your own volumes if you",
+        "want an annual number — we have not, because that would replace a measured",
+        "figure with three assumed ones.",
+        "",
+        "| | arm | rate | tokens in | tokens out | commands | turns | secs | reads | n | |",
+        "|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for i, (arm, r, n) in enumerate(rows, 1):
         s, e = r["score"], r["effort"]
         name = ARMS.get(arm, (arm, ""))[0]
         reads = r["independence"]["account_reads"]
         reads_note = f"{reads} *(by design)*" if arm in STATELESS else str(reads)
+        tin = e.get("tokens_in")
+        tout = e.get("tokens_out")
         out.append(
-            f"| {i} | [{name}]({arm}/index.md) | {s['passed']}/{s['trials']} | "
-            f"**{s['pass_rate']:.3f}** | {reads_note} | {e['tool_calls']} | "
-            f"{e['turns']} | {e['wall_seconds']:.0f} | {n} | {badge(r)} |"
+            f"| {i} | [{name}]({arm}/index.md) | {s['pass_rate']:.3f} | "
+            f"**{tin:,.0f}**" % () if False else
+            f"| {i} | [{name}]({arm}/index.md) | {s['pass_rate']:.3f} | "
+            f"**{tin:,.0f}** | {tout:,.0f} | {e['tool_calls']} | "
+            f"{e['turns']} | {e['wall_seconds']:.0f} | {reads_note} | {n} | {badge(r)} |"
+            if tin else
+            f"| {i} | [{name}]({arm}/index.md) | {s['pass_rate']:.3f} | — | — | "
+            f"{e['tool_calls']} | {e['turns']} | {e['wall_seconds']:.0f} | {reads_note} | {n} | {badge(r)} |"
         )
 
     out += [
@@ -197,6 +228,8 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "",
     ]
     return "\n".join(out)
+
+
 
 
 def arm_page(arm: str, runs: list[dict]) -> str:

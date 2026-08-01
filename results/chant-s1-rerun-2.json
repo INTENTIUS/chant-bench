@@ -4,8 +4,8 @@
   "scenario": "ec2-multiregion",
   "arm": "chant",
   "run": {
-    "id": "chant-b1",
-    "finished_at": "2026-07-31T12:43:29.336086",
+    "id": "chant-s1-rerun-2",
+    "finished_at": "2026-07-30T15:11:38.259457",
     "harness_commit": "1fa8317"
   },
   "agent": {
@@ -16,8 +16,8 @@
   "score": {
     "trials": 24,
     "expected_trials": 24,
-    "passed": 24,
-    "pass_rate": 1.0,
+    "passed": 19,
+    "pass_rate": 0.7917,
     "by_task": {
       "describe-ec-instances-cross-regi": [
         1,
@@ -35,13 +35,13 @@
         1
       ],
       "list-ec-instances-all-regions": [
-        1,
+        0,
         1,
         1
       ],
       "list-ec-instances-all-regions-1": [
-        1,
-        1,
+        0,
+        0,
         1
       ],
       "list-ec-instances-by-vpc-across": [
@@ -55,9 +55,9 @@
         1
       ],
       "list-unused-security-groups-all": [
+        0,
         1,
-        1,
-        1
+        0
       ]
     }
   },
@@ -69,20 +69,20 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 0,
-    "answered_from_own_state": true
+    "account_reads": 200,
+    "answered_from_own_state": false
   },
   "effort": {
-    "tool_calls": 2.67,
-    "turns": 4.67,
-    "wall_seconds": 31.26,
-    "tokens_in": 121637.92,
-    "tokens_out": 2136.67
+    "tool_calls": 9.33,
+    "turns": 11.79,
+    "wall_seconds": 97.41,
+    "tokens_in": 318501.33,
+    "tokens_out": 3811
   },
   "logs": {
     "run": null,
-    "job": "jobs/chant-b1/job.log",
-    "trials": "jobs/chant-b1/<task>__<id>/agent/"
+    "job": "jobs/chant-s1-rerun-2/job.log",
+    "trials": "jobs/chant-s1-rerun-2/<task>__<id>/agent/"
   },
   "briefing": {
     "path": "benchmarks/arms/briefing-chant-snapshot.md",

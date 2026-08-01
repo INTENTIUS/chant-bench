@@ -1,16 +1,37 @@
 # Results
 
-Each arm's **latest valid run**. Arms have run different numbers of times,
-so `n` is given and the figure is never a best-of. Full history is on each
-arm's page.
+Every tool here can reach these answers — the agent keeps calling the API
+until it does. What differs is **who does the work**.
 
-| | arm | passed | rate | account reads | commands | turns | secs | n | |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | [chant](chant/index.md) | 23/24 | **0.958** | 0 | 2.88 | 4.88 | 32 | 11 | <span class="cb-badge ok">gates passed</span> |
-| 2 | [Terraform](terraform/index.md) | 20/24 | **0.833** | 0 | 11.71 | 14.79 | 71 | 1 | <span class="cb-badge ok">gates passed</span> |
-| 3 | [AWS CDK](cdk/index.md) | 18/24 | **0.750** | 89 *(by design)* | 12.88 | 16.71 | 118 | 1 | <span class="cb-badge ok">gates passed</span> |
-| 4 | [Pulumi](pulumi/index.md) | 18/24 | **0.750** | 0 | 8 | 10.33 | 48 | 2 | <span class="cb-badge ok">gates passed</span> |
-| 5 | [Alchemy](alchemy/index.md) | 14/24 | **0.583** | 25 | 11.67 | 14.71 | 74 | 1 | <span class="cb-badge ok">gates passed</span> |
+For most arms the model *is* the query engine: it sweeps, joins, and reasons
+over results, holding the estate in its context. That is what the token
+counts below are buying.
+
+chant moves the join into the tool. The model writes one query; the tool
+answers it. Same answer, a third of the tokens — and the answer arrives with
+the query that produced it, which you can read, re-run, and put in CI.
+
+That last part is not an efficiency gain. It is the difference between *an
+agent looked at your account and thinks four groups are unused* and a line
+you can check.
+
+Read every row against **No tool** — upstream aws-bench's own experiment, an
+agent with the AWS CLI and nothing else. A tool that does not get there more
+cheaply than that is not earning its place.
+
+Each arm's latest valid run, ordered by what one answer costs. Arms have run
+different numbers of times, so `n` is given and the figure is never a
+best-of. Per-question cost is measured; multiply by your own volumes if you
+want an annual number — we have not, because that would replace a measured
+figure with three assumed ones.
+
+| | arm | rate | tokens in | tokens out | commands | turns | secs | reads | n | |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | [chant](chant/index.md) | 0.958 | **123,068** | 2,209 | 2.88 | 4.88 | 32 | 0 | 19 | <span class="cb-badge ok">gates passed</span> |
+| 2 | [AWS CDK](cdk/index.md) | 0.708 | **317,640** | 5,636 | 10.71 | 13 | 109 | 74 *(by design)* | 2 | <span class="cb-badge ok">gates passed</span> |
+| 3 | [Alchemy](alchemy/index.md) | 0.625 | **486,457** | 5,278 | 12.46 | 16.67 | 85 | 25 | 2 | <span class="cb-badge ok">gates passed</span> |
+| 4 | [Pulumi](pulumi/index.md) | 0.750 | — | — | 8 | 10.33 | 48 | 0 | 2 | <span class="cb-badge ok">gates passed</span> |
+| 5 | [Terraform](terraform/index.md) | 0.833 | — | — | 11.71 | 14.79 | 71 | 0 | 1 | <span class="cb-badge ok">gates passed</span> |
 
 !!! note "Reading the account-reads column"
     A tool that answers from state it already holds is worth more than one
@@ -21,15 +42,15 @@ arm's page.
 
 Passes out of three attempts.
 
-| task | chant | Terraform | AWS CDK | Pulumi | Alchemy |
+| task | chant | AWS CDK | Alchemy | Pulumi | Terraform |
 |---|---|---|---|---|---|
-| `describe-ec-instances-cross-regi` | 3/3 | 2/3 | 3/3 | 3/3 | 3/3 |
-| `ec-instances-without-default-vpc` | 3/3 | 3/3 | 2/3 | 3/3 | 2/3 |
-| `find-ec-instances-in-public-subn` | 3/3 | 3/3 | 2/3 | 0/3 | 2/3 |
-| `list-ec-instances-all-regions` | 3/3 | 3/3 | 3/3 | 3/3 | 2/3 |
-| `list-ec-instances-all-regions-1` | 3/3 | 3/3 | 1/3 | 3/3 | 0/3 |
-| `list-ec-instances-by-vpc-across` | 3/3 | 3/3 | 3/3 | 3/3 | 2/3 |
-| `list-ec-private-ips-all-regions` | 3/3 | 3/3 | 3/3 | 3/3 | 2/3 |
-| `list-unused-security-groups-all` | 2/3 | 0/3 | 1/3 | 0/3 | 1/3 |
+| `describe-ec-instances-cross-regi` | 3/3 | 3/3 | 3/3 | 3/3 | 2/3 |
+| `ec-instances-without-default-vpc` | 3/3 | 1/3 | 3/3 | 3/3 | 3/3 |
+| `find-ec-instances-in-public-subn` | 3/3 | 3/3 | 2/3 | 0/3 | 3/3 |
+| `list-ec-instances-all-regions` | 3/3 | 3/3 | 2/3 | 3/3 | 3/3 |
+| `list-ec-instances-all-regions-1` | 3/3 | 3/3 | 0/3 | 3/3 | 3/3 |
+| `list-ec-instances-by-vpc-across` | 3/3 | 1/3 | 2/3 | 3/3 | 3/3 |
+| `list-ec-private-ips-all-regions` | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| `list-unused-security-groups-all` | 2/3 | 0/3 | 0/3 | 0/3 | 0/3 |
 
 Ground truth for each question is on [the scenario page](index.md).

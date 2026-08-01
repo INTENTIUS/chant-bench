@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "chant",
+  "run": {
+    "id": "chant-m1",
+    "finished_at": "2026-07-31T18:07:44.478868",
+    "harness_commit": "1fa8317"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 2,
+    "expected_trials": 24,
+    "passed": 2,
+    "pass_rate": 1.0,
+    "by_task": {
+      "list-ec-instances-all-regions": [
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": false,
+    "tool_missing": false,
+    "exceptions": {
+      "RuntimeError": 22
+    },
+    "errored_trials": 22,
+    "complete": false
+  },
+  "independence": {
+    "account_reads": 0,
+    "answered_from_own_state": true
+  },
+  "effort": {
+    "tool_calls": 3.5,
+    "turns": 5.5,
+    "wall_seconds": 31.58,
+    "tokens_in": 147346.5,
+    "tokens_out": 2252
+  },
+  "logs": {
+    "run": "jobs/chant-m1/run-arm.log",
+    "job": "jobs/chant-m1/job.log",
+    "trials": "jobs/chant-m1/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-chant-snapshot.md",
+    "sha256": "9ce3707f885e"
+  },
+  "reproduce": "benchmarks/arms/chant-ec2-multiregion-search-v2/REPRODUCE.md"
+}

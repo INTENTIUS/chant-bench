@@ -6,7 +6,7 @@
   "run": {
     "id": "alchemy-cur",
     "finished_at": "2026-07-31T16:40:28.488823",
-    "harness_commit": "a3206f4"
+    "harness_commit": "1fa8317"
   },
   "agent": {
     "name": "claude-code",
@@ -75,11 +75,18 @@
   "effort": {
     "tool_calls": 11.67,
     "turns": 14.71,
-    "wall_seconds": 74.42
+    "wall_seconds": 74.42,
+    "tokens_in": 411152.33,
+    "tokens_out": 4234.71
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/alchemy-cur/job.log",
+    "trials": "jobs/alchemy-cur/<task>__<id>/agent/"
   },
   "briefing": {
     "path": "benchmarks/arms/briefing-alchemy.md",
-    "sha256": "799dcc65a424"
+    "sha256": "596be04902b9"
   },
   "reproduce": "benchmarks/arms/alchemy-ec2-multiregion/REPRODUCE.md"
 }
