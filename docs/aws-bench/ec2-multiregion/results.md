@@ -27,10 +27,10 @@ not, because that swaps a measured figure for three assumed ones.
 | | arm | rate | tokens in | tokens out | commands | turns | secs | reads | n | |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | [chant](chant/index.md) | 0.958 | **123,068** | 2,209 | 2.88 | 4.88 | 32 | 0 | 19 | <span class="cb-badge ok">gates passed</span> |
-| 2 | [AWS CDK](cdk/index.md) | 0.708 | **317,640** | 5,636 | 10.71 | 13 | 109 | 74 *(by design)* | 2 | <span class="cb-badge ok">gates passed</span> |
-| 3 | [Alchemy](alchemy/index.md) | 0.625 | **486,457** | 5,278 | 12.46 | 16.67 | 85 | 25 | 2 | <span class="cb-badge ok">gates passed</span> |
-| 4 | [Pulumi](pulumi/index.md) | 0.750 | — | — | 8 | 10.33 | 48 | 0 | 2 | <span class="cb-badge ok">gates passed</span> |
-| 5 | [Terraform](terraform/index.md) | 0.833 | — | — | 11.71 | 14.79 | 71 | 0 | 1 | <span class="cb-badge ok">gates passed</span> |
+| 2 | [Pulumi](pulumi/index.md) | 0.792 | **302,064** | 4,094 | 8.21 | 10.5 | 48 | 6 | 3 | <span class="cb-badge ok">gates passed</span> |
+| 3 | [AWS CDK](cdk/index.md) | 0.708 | **317,640** | 5,636 | 10.71 | 13 | 109 | 74 *(by design)* | 2 | <span class="cb-badge ok">gates passed</span> |
+| 4 | [Terraform](terraform/index.md) | 0.792 | **359,447** | 4,612 | 9.62 | 12.21 | 69 | 0 | 2 | <span class="cb-badge ok">gates passed</span> |
+| 5 | [Alchemy](alchemy/index.md) | 0.625 | **486,457** | 5,278 | 12.46 | 16.67 | 85 | 25 | 2 | <span class="cb-badge ok">gates passed</span> |
 
 !!! note "Reading the account-reads column"
     A tool that answers from state it already holds is worth more than one
@@ -41,14 +41,14 @@ not, because that swaps a measured figure for three assumed ones.
 
 Passes out of three attempts.
 
-| task | chant | AWS CDK | Alchemy | Pulumi | Terraform |
+| task | chant | Pulumi | AWS CDK | Terraform | Alchemy |
 |---|---|---|---|---|---|
-| `describe-ec-instances-cross-regi` | 3/3 | 3/3 | 3/3 | 3/3 | 2/3 |
-| `ec-instances-without-default-vpc` | 3/3 | 1/3 | 3/3 | 3/3 | 3/3 |
-| `find-ec-instances-in-public-subn` | 3/3 | 3/3 | 2/3 | 0/3 | 3/3 |
-| `list-ec-instances-all-regions` | 3/3 | 3/3 | 2/3 | 3/3 | 3/3 |
-| `list-ec-instances-all-regions-1` | 3/3 | 3/3 | 0/3 | 3/3 | 3/3 |
-| `list-ec-instances-by-vpc-across` | 3/3 | 1/3 | 2/3 | 3/3 | 3/3 |
+| `describe-ec-instances-cross-regi` | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| `ec-instances-without-default-vpc` | 3/3 | 3/3 | 1/3 | 3/3 | 3/3 |
+| `find-ec-instances-in-public-subn` | 3/3 | 1/3 | 3/3 | 2/3 | 2/3 |
+| `list-ec-instances-all-regions` | 3/3 | 3/3 | 3/3 | 3/3 | 2/3 |
+| `list-ec-instances-all-regions-1` | 3/3 | 3/3 | 3/3 | 2/3 | 0/3 |
+| `list-ec-instances-by-vpc-across` | 3/3 | 3/3 | 1/3 | 3/3 | 2/3 |
 | `list-ec-private-ips-all-regions` | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
 | `list-unused-security-groups-all` | 2/3 | 0/3 | 0/3 | 0/3 | 0/3 |
 

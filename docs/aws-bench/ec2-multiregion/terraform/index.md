@@ -1,6 +1,6 @@
 # Terraform
 
-Latest valid run: **20/24** (0.833), 0 account read(s), 11.71 commands and 14.79 turns per trial.
+Latest valid run: **19/24** (0.792), 0 account read(s), 9.62 commands and 12.21 turns per trial.
 
 ## Reproducing this
 
@@ -22,6 +22,8 @@ score.
 
 | # | run | passed | rate | reads | commands | turns | harness | |
 |---|---|---|---|---|---|---|---|---|
+| 4 | [`terraform-m2`](runs/terraform-m2.md) | 19/24 | 0.792 | 0 | 9.62 | 12.21 | `9ba7e95` | <span class="cb-badge ok">gates passed</span> |
+| 3 | [`terraform-m1`](runs/terraform-m1.md) | 2/2 | 1.000 | 0 | 7 | 8 | `9ba7e95` | <span class="cb-badge invalid">invalid</span> |
 | 2 | [`terraform-cur`](runs/terraform-cur.md) | 20/24 | 0.833 | 0 | 11.71 | 14.79 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
 | 1 | [`terraform-s1-rerun`](runs/terraform-s1-rerun.md) | 19/24 | 0.792 | 0 | 10.67 | 13.67 | `a9fe29f` | <span class="cb-badge invalid">invalid</span> |
 
@@ -56,6 +58,12 @@ its own run rather than replacing one.
     raw `aws ec2` sweep returns per-resource facts with no relationships; the state
     already holds how resources reference one another, and `state list` gives you
     the complete set under management, so you know the denominator.
+
+    A security group can reach an instance indirectly: a launch template can carry
+    security-group ids that the instance's own record never lists. Anything you
+    conclude about what reaches an instance has to account for both the groups
+    attached to it directly and any it picks up from a template it was launched
+    from.
 
     Run from the project root (use the vendored binary, `./terraform`):
 

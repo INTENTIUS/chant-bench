@@ -1,8 +1,8 @@
-# Pulumi — run 2 of 4
+# Pulumi — run 4 of 4
 
-`pulumi-cur` <span class="cb-badge ok">gates passed</span>
+`pulumi-m2` <span class="cb-badge ok">gates passed</span>
 
-**18 of 24** (0.750) · 0 account read(s) · 8 commands, 10.33 turns, 48s per trial
+**19 of 24** (0.792) · 6 account read(s) · 8.21 commands, 10.5 turns, 48s per trial
 
 ## By question
 
@@ -10,7 +10,7 @@
 |---|---|
 | `describe-ec-instances-cross-regi` | 3/3 &nbsp; ✓ ✓ ✓ |
 | `ec-instances-without-default-vpc` | 3/3 &nbsp; ✓ ✓ ✓ |
-| `find-ec-instances-in-public-subn` | 0/3 &nbsp; ✗ ✗ ✗ |
+| `find-ec-instances-in-public-subn` | 1/3 &nbsp; ✗ ✓ ✗ |
 | `list-ec-instances-all-regions` | 3/3 &nbsp; ✓ ✓ ✓ |
 | `list-ec-instances-all-regions-1` | 3/3 &nbsp; ✓ ✓ ✓ |
 | `list-ec-instances-by-vpc-across` | 3/3 &nbsp; ✓ ✓ ✓ |
@@ -21,10 +21,10 @@
 
 | | |
 |---|---|
-| finished | 2026-07-31T16:11:16.832222 |
-| harness | `a3206f4` |
+| finished | 2026-07-31T19:00:39.279037 |
+| harness | `9ba7e95` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
-| briefing | `483cca6296aa` |
+| briefing | `a06c6b73c0eb` |
 | substrate | floci |
 | trials | 24 of 24 expected |
 
@@ -33,12 +33,14 @@ briefing hash. Different either, different experiment.
 
 ## Logs
 
-- *(whole-run log not captured; this run predates it)*
+- `jobs/pulumi-m2/run-arm.log` — wipe, deploy, both gates, and the scored run
+- `jobs/pulumi-m2/job.log` — the scored run
+- `jobs/pulumi-m2/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 
 ```sh
-./benchmarks/agent-env/run-arm.sh pulumi pulumi-cur
+./benchmarks/agent-env/run-arm.sh pulumi pulumi-m2
 ```
 
 [← all Pulumi runs](../index.md)

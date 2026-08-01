@@ -1,6 +1,6 @@
 # Pulumi
 
-Latest valid run: **18/24** (0.750), 0 account read(s), 8 commands and 10.33 turns per trial.
+Latest valid run: **19/24** (0.792), 6 account read(s), 8.21 commands and 10.5 turns per trial.
 
 ## Reproducing this
 
@@ -22,6 +22,8 @@ score.
 
 | # | run | passed | rate | reads | commands | turns | harness | |
 |---|---|---|---|---|---|---|---|---|
+| 4 | [`pulumi-m2`](runs/pulumi-m2.md) | 19/24 | 0.792 | 6 | 8.21 | 10.5 | `9ba7e95` | <span class="cb-badge ok">gates passed</span> |
+| 3 | [`pulumi-m1`](runs/pulumi-m1.md) | 1/2 | 0.500 | 0 | 6.5 | 7.5 | `9ba7e95` | <span class="cb-badge invalid">invalid</span> |
 | 2 | [`pulumi-cur`](runs/pulumi-cur.md) | 18/24 | 0.750 | 0 | 8 | 10.33 | `a3206f4` | <span class="cb-badge ok">gates passed</span> |
 | 1 | [`pulumi-s1-rerun`](runs/pulumi-s1-rerun.md) | 20/24 | 0.833 | 0 | 7.67 | 9.92 | `a9fe29f` | <span class="cb-badge ok">gates passed</span> |
 
@@ -56,6 +58,12 @@ its own run rather than replacing one.
     raw `aws ec2` sweep returns per-resource facts with no relationships; the state
     export already holds the graph, and it is the complete set of managed resources,
     so you know the denominator.
+
+    A security group can reach an instance indirectly: a launch template can carry
+    security-group ids that the instance's own record never lists. Anything you
+    conclude about what reaches an instance has to account for both the groups
+    attached to it directly and any it picks up from a template it was launched
+    from.
 
     Run from the project root:
 

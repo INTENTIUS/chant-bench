@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "terraform",
+  "run": {
+    "id": "terraform-m2",
+    "finished_at": "2026-07-31T18:52:49.660999",
+    "harness_commit": "9ba7e95"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "passed": 19,
+    "pass_rate": 0.7917,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        0,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        1,
+        0
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": 0,
+    "answered_from_own_state": true
+  },
+  "effort": {
+    "tool_calls": 9.62,
+    "turns": 12.21,
+    "wall_seconds": 68.55,
+    "tokens_in": 359447.42,
+    "tokens_out": 4611.5
+  },
+  "logs": {
+    "run": "jobs/terraform-m2/run-arm.log",
+    "job": "jobs/terraform-m2/job.log",
+    "trials": "jobs/terraform-m2/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-terraform.md",
+    "sha256": "7822d55ca7ca"
+  },
+  "reproduce": "benchmarks/arms/terraform-ec2-multiregion/REPRODUCE.md"
+}
