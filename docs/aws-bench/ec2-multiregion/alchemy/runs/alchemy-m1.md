@@ -37,7 +37,7 @@ billed total, not tokens times a rate card.
 | | |
 |---|---|
 | finished | 2026-07-31T18:36:10.639035 |
-| harness | `c7bfd82` |
+| harness | `2a38abd` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `596be04902b9` |
 | substrate | floci |

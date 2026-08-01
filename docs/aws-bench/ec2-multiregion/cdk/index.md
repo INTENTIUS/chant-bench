@@ -22,8 +22,8 @@ happen again. A tool that never ran is not a tool that did badly.
 
 | # | run | passed | rate | cost | secs | reads | commands | turns | harness | |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 2 | [`cdk-m1`](runs/cdk-m1.md) | 17/24 | 0.708 | $0.0849 | 109 | 74 | 10.71 | 13 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`cdk-cur`](runs/cdk-cur.md) | 17/24 | 0.708 | $0.0906 | 143 | 104 | 12.79 | 15.17 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
+| 2 | [`cdk-m1`](runs/cdk-m1.md) | 17/24 | 0.708 | $0.0849 | 109 | 74 | 10.71 | 13 | `2a38abd` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`cdk-cur`](runs/cdk-cur.md) | 17/24 | 0.708 | $0.0906 | 143 | 104 | 12.79 | 15.17 | `2a38abd` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

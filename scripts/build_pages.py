@@ -236,6 +236,24 @@ def briefing_text(path: str | None) -> str:
     return raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def cost_note(r: dict) -> str:
+    """The whole run's bill, and the arithmetic that gets there from one question.
+
+    Every other cost on the page is per question, which is two orders of
+    magnitude from the total and easy to read as the total — three cents for a
+    benchmark run is not a believable number, and the right response to seeing it
+    is to doubt the figure.
+    """
+    e = r.get("effort") or {}
+    total, each = e.get("cost_usd_run"), e.get("cost_usd")
+    n = (r.get("score") or {}).get("trials")
+    if not isinstance(total, (int, float)):
+        return "—"
+    if isinstance(each, (int, float)) and n:
+        return f"<b>{usd(total)}</b> — {n} questions at {usd(each)} each"
+    return f"<b>{usd(total)}</b>"
+
+
 def per_correct(r: dict) -> float | None:
     """What one *correct* answer costs: spend divided by the share it gets right.
 
@@ -391,7 +409,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         ]),
         ("What one answer cost", "The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.", [
             ("per correct answer", per_correct, lambda v: f"${v:.4f}"),
-            ("dollars per attempt", lambda r: r["effort"].get("cost_usd"), lambda v: f"${v:.4f}"),
+            ("per question asked", lambda r: r["effort"].get("cost_usd"), lambda v: f"${v:.4f}"),
             ("tokens in", lambda r: r["effort"].get("tokens_in"), lambda v: f"{v:,.0f}"),
             ("tokens out", lambda r: r["effort"].get("tokens_out"), lambda v: f"{v:,.0f}"),
         ]),
@@ -424,9 +442,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "",
         "## Pass rate",
         "",
-        "Ranked by what one **correct** answer costs: spend per attempt divided by",
-        "the share of questions the tool gets right. Being cheap at being wrong",
-        "does not help. Pick a tool to see the rest of its numbers.",
+        "Ranked by what one **correct answer** costs: the spend on one question",
+        "divided by the share the tool gets right. Being cheap at being wrong does",
+        "not help. Every figure here is per question, not per run — a whole run is",
+        "24 of them. Pick a tool to see the rest of its numbers.",
         "",
         '<div class="cb-explorer" markdown="0">',
     ]
@@ -452,7 +471,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             pc = per_correct(r)
             runs_note = "baseline" if arm == "bare" else f"{n} run(s)"
             sub = (
-                f"{rate(r)} answered · {usd(r['effort'].get('cost_usd'))} per attempt"
+                f"{rate(r)} answered · {usd(r['effort'].get('cost_usd'))} per question"
                 f" · {runs_note}"
             )
             bar = fill(pc, worst, SPEND)
@@ -593,6 +612,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         out.append('<dl class="cb-env">')
         for k, v in (
             ("run", f"<code>{r['run']['id']}</code>"),
+            ("what the run cost", cost_note(r)),
             ("agent", f"{agent.get('name', '—')}"),
             ("model", f"<code>{agent.get('model', '—')}</code>"),
             ("attempts per question", f"k={agent.get('k', '—')}"),
