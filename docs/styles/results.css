@@ -66,19 +66,34 @@
   gap: 0.45rem;
 }
 .cb-card-name { font-weight: 700; }
-.cb-card-rate {
-  margin-left: auto;
-  font-size: 1.35rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  color: var(--cb-outcome);
-}
 .cb-tag {
+  margin-left: auto;
   font-size: 0.62rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   opacity: 0.7;
 }
+
+/* The answer, once and first. Everything below it is what the answer cost, so
+   the rate gets the size and the accent and the rest stays quiet. */
+.cb-hero {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.1rem 0.5rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--cb-track);
+}
+.cb-hero-value {
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cb-outcome);
+}
+.cb-hero-value.none { color: inherit; opacity: 0.45; }
+.cb-hero-label { font-size: 0.72rem; opacity: 0.75; }
+.cb-hero .cb-bar-track { grid-column: 1 / -1; margin-top: 0.4rem; }
 
 .cb-metrics { display: flex; flex-direction: column; gap: 0.45rem; }
 
