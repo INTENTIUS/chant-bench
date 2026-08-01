@@ -25,6 +25,28 @@ answer, a count, or a resource name.
 
 Every briefing is published in full, and its hash is recorded with every result.
 
+They are not the same length, and the gap is not small:
+
+| arm | words |
+|---|--:|
+| chant | 861 |
+| Alchemy v2 (Effect) | 446 |
+| AWS CDK | 395 |
+| Terraform | 326 |
+| Pulumi | 295 |
+| No tool (AWS CLI) | 232 |
+
+chant's is two to three times the others. Every extra word is query grammar and
+the attributes its search exposes — none of it is about this estate, and the
+audit above still holds: same rungs, same launch-template fact, no counts, no
+resource names.
+
+The reason is that a model has read years of Terraform, Pulumi and CDK and has
+never seen chant. Describing a query language it does not know is what puts it on
+the same footing as tools it already knows, rather than an advantage over them.
+That is a judgement, and it is the one most worth arguing with, so the lengths
+are here rather than left to be discovered.
+
 ## Two gates, both blocking
 
 **Preflight.** Before a run is scored, each arm's own read commands must run
