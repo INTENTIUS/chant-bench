@@ -18,7 +18,7 @@ changes wall-clock and nothing a trial can see.
 
 ## Same shape of briefing
 
-Three rungs in the same order. Your own state, your own source, then raw `aws`
+Three rungs in the same order. The tool's own state, then its source, then raw `aws`
 for runtime values state cannot carry. No arm is taught a route the others lack.
 Every arm hears the same fact about launch templates. No briefing contains an
 answer, a count, or a resource name.

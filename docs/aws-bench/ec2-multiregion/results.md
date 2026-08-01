@@ -44,7 +44,7 @@ not help. Every figure here is per question, not per run — a whole run is
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0344</span></div>
@@ -222,7 +222,7 @@ attribute:
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0889</span></div>
@@ -340,7 +340,7 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:65.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1077</span></div>
@@ -458,7 +458,7 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:72.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1199</span></div>
@@ -584,7 +584,7 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.</p>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1645</span></div>
@@ -708,8 +708,8 @@ Path to estate facts, in order:
     with the query that produced it. You can read it, re-run it, put it in CI.
 
     That part is not an efficiency gain. It is the difference between *an
-    agent looked at your account and thinks four groups are unused* and a line
-    you can check.
+    agent read the account and thinks four groups are unused* and a line
+    that can be checked.
 
     Read every arm against **No tool**, which is upstream aws-bench's own
     experiment: an agent with the AWS CLI and nothing else. A tool that does

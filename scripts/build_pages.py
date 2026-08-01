@@ -407,7 +407,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         ("Pass rate", pass_rate_blurb(just, tasks), [
             ("pass rate", lambda r: r["score"].get("pass_rate"), lambda v: f"{v:.3f}"),
         ]),
-        ("What one answer cost", "The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before you have an answer you can use.", [
+        ("What one answer cost", "The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.", [
             ("per correct answer", per_correct, lambda v: f"${v:.4f}"),
             ("per question asked", lambda r: r["effort"].get("cost_usd"), lambda v: f"${v:.4f}"),
             ("tokens in", lambda r: r["effort"].get("tokens_in"), lambda v: f"{v:,.0f}"),
@@ -653,8 +653,8 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "    with the query that produced it. You can read it, re-run it, put it in CI.",
         "",
         "    That part is not an efficiency gain. It is the difference between *an",
-        "    agent looked at your account and thinks four groups are unused* and a line",
-        "    you can check.",
+        "    agent read the account and thinks four groups are unused* and a line",
+        "    that can be checked.",
         "",
         "    Read every arm against **No tool**, which is upstream aws-bench's own",
         "    experiment: an agent with the AWS CLI and nothing else. A tool that does",
@@ -681,193 +681,6 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
 
 
 
-def arm_page(arm: str, runs: list[dict]) -> str:
-    name, briefing_file = ARMS[arm]
-    head = headline(runs)
-    out = [f"# {name}", ""]
-
-    if head:
-        s, e = head["score"], head["effort"]
-        out += [
-            f"Latest valid run: **{s['passed']}/{s['trials']}** ({rate(head)}), "
-            f"{head['independence']['account_reads']} account read(s), "
-            f"{num(e['tool_calls'])} commands and {num(e['turns'])} turns per trial.",
-            "",
-        ]
-    else:
-        out += [
-            "!!! warning \"No valid run yet\"",
-            "    Every run of this arm so far failed a gate. The runs are published",
-            "    below with the reason — a tool that never ran is not a tool that did",
-            "    badly.",
-            "",
-        ]
-
-    out += [
-        "## Reproducing this",
-        "",
-        "Everything below came from one command against a local emulator — no AWS",
-        "account, no spend:",
-        "",
-        "```sh",
-        f"./benchmarks/agent-env/run-arm.sh {arm}",
-        "```",
-        "",
-        "That wipes the emulator, deploys this arm's estate, proves the tool can",
-        "answer before scoring it, runs all eight questions three times, then checks",
-        "the tool was used. About ten minutes.",
-        "",
-        "If a gate fails the run stops and is not published at all. It has to",
-        "happen again. A tool that never ran is not a tool that did badly.",
-        "",
-        "## Runs",
-        "",
-        "| # | run | passed | rate | cost | secs | reads | commands | turns | harness | |",
-        "|---|---|---|---|---|---|---|---|---|---|---|",
-    ]
-    for n, r in numbered(runs):
-        s, e = r["score"], r["effort"]
-        out.append(
-            f"| {n} | [`{r['run']['id']}`](runs/{r['run']['id']}.md) | "
-            f"{s['passed']}/{s['trials']} | {rate(r)} | "
-            f"{usd(e.get('cost_usd'))} | {num(e.get('wall_seconds'), '.0f')} | "
-            f"{num(r['independence']['account_reads'])} | {num(e['tool_calls'])} | {num(e['turns'])} | "
-            f"`{r['run'].get('harness_commit') or '—'}` | {badge(r)} |"
-        )
-
-    out += [
-        "",
-        "## The agent's context",
-        "",
-        "This is the whole briefing this arm's agent receives, appended to each",
-        "question. It is published so the comparison can be checked rather than",
-        "trusted. No arm is taught a route the others lack, and no briefing contains",
-        "an answer.",
-        "",
-        "To change it and measure the difference:",
-        "",
-        "```sh",
-        f"$EDITOR benchmarks/arms/{briefing_file}",
-        f"./benchmarks/agent-env/run-arm.sh {arm} {arm}-mytest",
-        f"python3 benchmarks/agent-env/emit-result.py {arm}-mytest --out benchmarks/results",
-        "```",
-        "",
-        "The new result records your briefing's SHA, so it sits beside the others as",
-        "its own run rather than replacing one.",
-        "",
-    ]
-
-    briefing = BRIEFINGS / briefing_file
-    if briefing.is_file():
-        out += ["??? abstract \"" + briefing_file + "\"", ""]
-        out += ["    " + line if line.strip() else "" for line in briefing.read_text().split("\n")]
-        out.append("")
-    return "\n".join(out)
-
-
-
-
-def run_page(arm: str, number: int, total: int, r: dict) -> str:
-    """One run, with everything needed to judge whether its number counts."""
-    name = ARMS[arm][0]
-    s, e, g = r["score"], r["effort"], r["gates"]
-    run, agent = r["run"], r["agent"]
-    ok = valid(r)
-
-    out = [
-        f"# {name} — run {number} of {total}",
-        "",
-        f"`{run['id']}` {badge(r)}",
-        "",
-    ]
-
-    if not ok:
-        reasons = []
-        if not g.get("audit"):
-            reasons.append("the postflight audit failed")
-        if not g.get("complete"):
-            reasons.append("not every trial completed")
-        if g.get("tool_missing"):
-            reasons.append("trials could not find the arm's own CLI")
-        out += [
-            '!!! danger "This run does not count"',
-            f"    {', '.join(reasons)}. The numbers below describe something other",
-            "    than this tool, and are published so the failure is visible rather",
-            "    than quietly dropped.",
-            "",
-        ]
-
-    out += [
-        f"**{s['passed']} of {s['trials']}** ({rate(r)}) · "
-        f"{r['independence']['account_reads']} account read(s)",
-        "",
-        "## What one answer cost",
-        "",
-        "Per question, averaged over this run's trials. Cost is the agent's own",
-        "billed total, not tokens times a rate card.",
-        "",
-        "| | |",
-        "|---|--:|",
-        f"| dollars | **{usd(e.get('cost_usd'))}** |",
-        f"| tokens in | {num(e.get('tokens_in'), ',.0f')} |",
-        f"| tokens out | {num(e.get('tokens_out'), ',.0f')} |",
-        f"| commands | {num(e.get('tool_calls'))} |",
-        f"| turns | {num(e.get('turns'))} |",
-        f"| clock time | {num(e.get('wall_seconds'), '.0f')}s |",
-        f"| account reads | {r['independence']['account_reads']} |",
-        "",
-        "## By question",
-        "",
-        "| task | attempts |",
-        "|---|---|",
-    ]
-    for task, runs_ in sorted(s["by_task"].items()):
-        marks = " ".join("✓" if v else "✗" for v in runs_)
-        out.append(f"| `{task}` | {sum(runs_)}/{len(runs_)} &nbsp; {marks} |")
-
-    out += [
-        "",
-        "## What produced this",
-        "",
-        "| | |",
-        "|---|---|",
-        f"| finished | {run.get('finished_at') or '—'} |",
-        f"| harness | `{run.get('harness_commit') or '—'}` |",
-        f"| agent | {agent.get('name')} / `{agent.get('model')}`, k={agent.get('k')} |",
-        f"| briefing | `{(r.get('briefing') or {}).get('sha256') or '—'}` |",
-        f"| substrate | {run.get('substrate', 'floci')} |",
-        f"| trials | {s['trials']} of {s.get('expected_trials') or s['trials']} expected |",
-        "",
-        "A run only compares with another that shares the harness commit and the",
-        "briefing hash. Different either, different experiment.",
-        "",
-        "## Logs",
-        "",
-    ]
-    logs = r.get("logs") or {}
-    if logs.get("run"):
-        out.append(f"- `{logs['run']}` — wipe, deploy, both gates, and the scored run")
-    else:
-        out.append("- *(whole-run log not captured; this run predates it)*")
-    if logs.get("job"):
-        out.append(f"- `{logs['job']}` — the scored run")
-    if logs.get("trials"):
-        out.append(f"- `{logs['trials']}` — per trial: every command, its output, the answer, the verdict")
-
-    out += [
-        "",
-        "## Reproducing",
-        "",
-        "```sh",
-        f"./benchmarks/agent-env/run-arm.sh {arm} {run['id']}",
-        "```",
-        "",
-        f"[← all {name} runs](../index.md)",
-        "",
-    ]
-    return "\n".join(out)
-
-
 def main() -> int:
     by_arm = load()
     if not by_arm:
@@ -884,33 +697,10 @@ def main() -> int:
                 (qdir / f"{task}.md").write_text(question_page(task, tx))
         print(f"ok    questions/  ({len(tx)} arm(s) with transcripts)")
     print(f"ok    results.md  ({len(by_arm)} arm(s))")
-    for arm in ARMS:
-        runs = by_arm.get(arm, [])
-        if not runs:
-            # A stub rather than a missing page: the arm is in the nav because it
-            # is part of the comparison, and "no runs yet" is a truer thing to
-            # show than a dead link or a quietly shortened menu.
-            arm_dir = DOCS / arm
-            arm_dir.mkdir(parents=True, exist_ok=True)
-            (arm_dir / "index.md").write_text(
-                f"# {ARMS[arm][0]}\n\n"
-                "!!! info \"No runs yet\"\n"
-                "    This arm is wired up and part of the comparison, but has not been\n"
-                "    scored yet. It will appear in [Results](../results.md) once it has\n"
-                "    a valid run.\n\n"
-                "Reproduce it once it is running:\n\n"
-                "```sh\n"
-                f"./benchmarks/agent-env/run-arm.sh {arm}\n"
-                "```\n"
-            )
-            print(f"stub  {arm}/index.md  (no runs yet)")
-            continue
-        arm_dir = DOCS / arm
-        (arm_dir / "runs").mkdir(parents=True, exist_ok=True)
-        (arm_dir / "index.md").write_text(arm_page(arm, runs))
-        for number, r in numbered(runs):
-            (arm_dir / "runs" / f"{r['run']['id']}.md").write_text(run_page(arm, number, len(runs), r))
-        print(f"ok    {arm}.md  ({len(runs)} run(s))")
+    # No per-arm or per-run pages. Everything they held — the headline, the
+    # effort figures, the provenance, the briefing — is on the results page, in
+    # a panel that switches. A second, plainer copy of it behind a nav link was
+    # one more thing to keep in step and a worse read when you got there.
     return 0
 
 
