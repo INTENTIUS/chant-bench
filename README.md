@@ -1,22 +1,49 @@
 # chant-bench
 
-Benchmarks for agentic infrastructure — how much does the tool an agent is
-holding help it answer questions about the estate it built?
+Result sets for benchmarking chant against other infrastructure toolchains.
 
-A static docs site. Results are generated from the published result sets rather
-than written by hand.
+Benchmarks come from whoever publishes them. What lives here is what came back:
+one record per run, the prompt the agent was given, what it ran, and what it
+cost. The site is generated from those records, so nothing on it can disagree
+with what produced it.
 
-```sh
-uv tool install mkdocs --with mkdocs-material   # once
-python3 scripts/validate_results.py             # results satisfy the contract
-python3 scripts/build_pages.py                  # regenerate the results pages
-mkdocs serve                                    # preview
-```
+**https://intentius.github.io/chant-bench**
 
-- `results/` — one JSON per run, the contract everything else derives from
-- `briefings/` — the exact prompt each arm's agent receives, published verbatim
-- `scripts/` — validation and page generation
-- `PLAN.md` — the design, and why each decision was made
+## Benchmarks
 
-Benchmarks and scenarios are not ours: [aws-bench](https://github.com/aws-bench/aws-bench)
-defines the estates, questions, reference answers and judge.
+| benchmark | scenarios | who defines it |
+|---|---|---|
+| [aws-bench](https://github.com/aws-bench/aws-bench) | ec2-multiregion | aws-bench |
+
+More get added as they are published. The result contract does not change, which
+is what lets a new one slot in.
+
+## What a result set is
+
+One JSON per run under `results/`. It carries the score, the per-question
+breakdown, what the run cost in tokens and commands and time, whether the tool
+had to read the cloud, whether the gates passed, and the hashes of the harness
+and briefing that produced it.
+
+A run whose gates failed is published and marked invalid. A run whose provenance
+is incomplete is rejected, because a number nobody can trace is worse than no
+number.
+
+## Layout
+
+    results/      one record per run
+    transcripts/  what each tool actually ran, per question
+    briefings/    the exact prompt each arm's agent receives
+    scripts/      setup, running, ingest, validation, page generation
+    skills/       the same two loops, for an agent to drive
+    docs/         the site
+    PLAN.md       the design and why each call was made
+
+## Running one
+
+    just setup            # fetch the benchmark, build the arms
+    just run chant        # one arm, about ten minutes, costs nothing
+    just matrix           # every arm, three runs each
+    just ingest ../aws-bench
+
+See [Run it yourself](https://intentius.github.io/chant-bench/running/).
