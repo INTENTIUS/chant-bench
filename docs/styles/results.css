@@ -231,3 +231,54 @@
 @media print {
   .cb-track { display: none; }
 }
+
+/* ── an expandable question ───────────────────────────────────────────── */
+
+/* The slug is a filename. Opening the row shows what was actually asked and
+   what the answer is graded against, so a 2/3 can be looked into rather than
+   just noted. */
+.cb-q > summary {
+  cursor: pointer;
+  list-style: none;
+}
+.cb-q > summary::-webkit-details-marker { display: none; }
+.cb-q > summary:hover .cb-mrow-name { color: var(--md-accent-fg-color); }
+.cb-q[open] > summary .cb-mrow-name { font-weight: 700; }
+
+.cb-q-body {
+  padding: 0.5rem 0 0.7rem 0.4rem;
+  border-left: 2px solid var(--cb-track);
+  margin: 0.35rem 0 0.6rem 0.4rem;
+}
+.md-typeset .cb-q-body p { margin: 0 0 0.3rem; font-size: 0.76rem; }
+.cb-q-prompt { font-weight: 600; }
+.cb-q-truth { opacity: 0.75; }
+.cb-q-marks { margin-left: 0.5rem; letter-spacing: 0.15em; }
+.md-typeset .cb-q-link { margin: 0.4rem 0 0; font-size: 0.72rem; }
+
+/* ── the agent environment ────────────────────────────────────────────── */
+
+/* Two arms differing on a number only means something if they were set up the
+   same way, so the setup is published rather than described. */
+.cb-env {
+  display: grid;
+  grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr);
+  gap: 0.3rem 0.9rem;
+  margin: 0;
+  font-size: 0.74rem;
+}
+.md-typeset .cb-env dt { opacity: 0.65; margin: 0; }
+.md-typeset .cb-env dd { margin: 0; }
+
+.cb-briefing { margin-top: 0.9rem; }
+.cb-briefing > summary {
+  cursor: pointer;
+  font-size: 0.74rem;
+  opacity: 0.8;
+}
+.cb-briefing pre {
+  max-height: 24rem;
+  overflow: auto;
+  font-size: 0.7rem;
+  line-height: 1.5;
+}

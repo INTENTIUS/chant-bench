@@ -59,6 +59,13 @@ ARMS = {
 #: rather than a fallback. Judging these against zero would be a category error.
 STATELESS = {"cdk", "bare"}
 
+#: How many recent runs an arm is judged on. chant has twenty valid runs because
+#: it was the tool under development — every fix got a run — and counting them
+#: all made it look twenty times better attested than an arm that ran three
+#: times. The comparison is between the latest replicate set of each arm, so the
+#: history stays published on the arm's own page and stays out of the headline.
+REPLICATES = 3
+
 
 def load() -> dict[str, list[dict]]:
     """Result sets by arm, newest first."""
@@ -175,6 +182,34 @@ OUTCOME = ("#0b6e76", "#3fafb6")
 SPEND = ("#9a5b12", "#c9913f")
 
 
+#: Where each arm's workspace is mounted in the trial container — part of the
+#: environment the agent is handed, and the path every briefing refers to.
+ARM_WORKDIR = {
+    "chant": "/workspace/chant",
+    "bare": "/workspace/bare",
+    "terraform": "/workspace/terraform",
+    "pulumi": "/workspace/pulumi",
+    "cdk": "/workspace/cdk",
+    "alchemy": "/workspace/alchemy",
+    "alchemy-effect": "/workspace/alchemy",
+}
+
+
+def briefing_text(path: str | None) -> str:
+    """The briefing a run used, escaped for a <pre>.
+
+    Read from `briefings/`, which ingest copies per run, so the page shows the
+    prompt that produced these numbers rather than whatever the file says today.
+    """
+    if not path:
+        return ""
+    f = BRIEFINGS / Path(path).name
+    if not f.is_file():
+        return ""
+    raw = f.read_text()
+    return raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 def attempts_each(runs: list[dict], tasks: set) -> str:
     """k, counted from the runs. Written out, it silently lies the day k changes."""
     trials = {r["score"].get("expected_trials") or r["score"]["trials"] for r in runs}
@@ -277,9 +312,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # complete. That matters most for `bare`: the text tells you to read every
     # arm against it, so leaving it out makes the instruction unfollowable.
     for arm in ARMS:
-        r = headline(by_arm.get(arm) or [])
+        recent = [x for x in (by_arm.get(arm) or []) if valid(x)][:REPLICATES]
+        r = recent[0] if recent else None
         if r:
-            rows.append((arm, r, len([x for x in by_arm[arm] if valid(x)])))
+            rows.append((arm, r, len(recent)))
             tasks |= set(r["score"]["by_task"])
         else:
             pending.append(arm)
@@ -329,24 +365,8 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     out = [
         "# Results",
         "",
-        "Every tool here can reach these answers. The agent keeps calling the API",
-        "until it does. What differs is **who does the work**.",
-        "",
-        "For most arms the model *is* the query engine. It sweeps, joins, and reasons",
-        "over results, holding the estate in its context. That is what the token",
-        "counts below are buying.",
-        "",
-        "chant moves the join into the tool. The model writes one query, the tool",
-        f"answers it. Same answer, {cheapness(rows)}, and the answer comes back",
-        "with the query that produced it. You can read it, re-run it, put it in CI.",
-        "",
-        "That part is not an efficiency gain. It is the difference between *an agent",
-        "looked at your account and thinks four groups are unused* and a line you can",
-        "check.",
-        "",
-        "Read every arm against **No tool**, which is upstream aws-bench's own",
-        "experiment. An agent with the AWS CLI and nothing else. A tool that does not",
-        "get there more cheaply is not earning its place.",
+        "Which infrastructure toolchain lets an agent answer questions about an AWS",
+        "estate for the least money. Pick a tool to see what its answers cost.",
         "",
         "## Pass rate",
         "",
@@ -399,6 +419,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # left to the reader to work out by scanning.
     out.append('<div class="cb-panelsets">')
     for arm, r, n in entries:
+        name, _b = ARMS.get(arm, (arm, ""))
         out.append('<div class="cb-panelset">')
         if r is None:
             why = (
@@ -421,12 +442,23 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         out.append('<div class="cb-mrows">')
         for task, attempts in sorted(s["by_task"].items()):
             got, of = sum(attempts), len(attempts)
+            # The slug is a filename, not a question. Open the row to see what was
+            # actually asked and what aws-bench grades the answer against.
+            prompt, truth = QUESTIONS.get(task, (task, "—"))
+            marks = " ".join("&#10003;" if a else "&#10007;" for a in attempts)
             out.append(
-                '<div class="cb-mrow">'
+                '<details class="cb-q">'
+                '<summary class="cb-mrow">'
                 f'<span class="cb-mrow-name"><code>{task}</code></span>'
                 f"{fill(got, of, OUTCOME)}"
                 f'<span class="cb-mrow-value">{got}/{of}</span>'
-                "</div>"
+                "</summary>"
+                f'<div class="cb-q-body"><p class="cb-q-prompt">{prompt}</p>'
+                f'<p class="cb-q-truth">Graded against <b>{truth}</b>'
+                f'<span class="cb-q-marks">{marks}</span></p>'
+                f'<p class="cb-q-link"><a href="../questions/{task}/">'
+                "What each tool ran</a></p></div>"
+                "</details>"
             )
         out.append("</div></section>")
 
@@ -452,9 +484,13 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
                     else ""
                 )
                 out.append(f'<div class="cb-mpanel-sub">{label}{note}</div>')
+                # The tool's own name, not "this tool" and not the run id. The
+                # run id is a filename — it says nothing to a reader — so it
+                # lives in the environment panel with the rest of the
+                # provenance, where someone checking a number will look for it.
                 for who, val, cls in (
-                    ("this tool", v, "self"),
-                    ("best", best, "ref"),
+                    (name, v, "self"),
+                    ("best of field", best, "ref"),
                     ("field average", avg, "ref"),
                 ):
                     shown = show(val) if isinstance(val, (int, float)) else "—"
@@ -466,14 +502,74 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
                         "</div>"
                     )
             out.append("</div></section>")
+
+        # What this arm's agent was actually given. Two arms differing on a
+        # number is only meaningful if they were set up the same way, and the
+        # briefing is the part of the setup that differs on purpose — so it is
+        # published in full rather than described.
+        out.append('<section class="cb-mpanel wide">')
+        out.append('<h3 class="cb-mpanel-title">Agent environment</h3>')
+        out.append(
+            '<p class="cb-mpanel-note">Identical for every arm except the briefing, '
+            "which is the one thing the comparison is about. A run only compares with "
+            "another that shares the harness commit and the briefing hash.</p>"
+        )
+        agent = r.get("agent") or {}
+        b = r.get("briefing") or {}
+        out.append('<dl class="cb-env">')
+        for k, v in (
+            ("run", f"<code>{r['run']['id']}</code>"),
+            ("agent", f"{agent.get('name', '—')}"),
+            ("model", f"<code>{agent.get('model', '—')}</code>"),
+            ("attempts per question", f"k={agent.get('k', '—')}"),
+            ("substrate", "floci emulator, no AWS account and no spend"),
+            ("workdir", f"<code>{ARM_WORKDIR.get(arm, '—')}</code>"),
+            ("harness", f"<code>{r['run'].get('harness_commit', '—')}</code>"),
+            ("briefing", f"<code>{Path(b.get('path') or '—').name}</code> · "
+                         f"<code>{b.get('sha256', '—')}</code>"),
+        ):
+            out.append(f"<dt>{k}</dt><dd>{v}</dd>")
+        out.append("</dl>")
+
+        text = briefing_text(b.get("path"))
+        if text:
+            out.append(
+                '<details class="cb-briefing"><summary>The briefing this agent '
+                "received, in full</summary>"
+                f"<pre><code>{text}</code></pre></details>"
+            )
+        out.append("</section>")
         out.append("</div>")
     out.append("</div>")
     out += ["</div>", ""]
 
     out += [
-        "Per question, averaged over that arm's latest valid run. Cost is the agent's",
-        "own billed total, not tokens times a rate card. Bars are scaled against the",
-        "highest value any arm recorded, so a short amber bar is the good one.",
+        "",
+        '??? info "What this is measuring"',
+        "",
+        "    Every tool here can reach these answers. The agent keeps calling the API",
+        "    until it does. What differs is **who does the work**.",
+        "",
+        "    For most arms the model *is* the query engine. It sweeps, joins, and",
+        "    reasons over results, holding the estate in its context. That is what the",
+        "    token counts are buying.",
+        "",
+        f"    chant moves the join into the tool. The model writes one query, the tool",
+        f"    answers it. Same answer, {cheapness(rows)}, and the answer comes back",
+        "    with the query that produced it. You can read it, re-run it, put it in CI.",
+        "",
+        "    That part is not an efficiency gain. It is the difference between *an",
+        "    agent looked at your account and thinks four groups are unused* and a line",
+        "    you can check.",
+        "",
+        "    Read every arm against **No tool**, which is upstream aws-bench's own",
+        "    experiment: an agent with the AWS CLI and nothing else. A tool that does",
+        "    not get there more cheaply is not earning its place.",
+        "",
+        "    Figures are per question, averaged over that arm's latest valid run. Cost",
+        "    is the agent's own billed total, not tokens times a rate card. Bars are",
+        "    scaled against the highest value any arm recorded, so a short amber bar is",
+        "    the good one.",
         "",
         "!!! note \"Reading account reads\"",
         "    A tool that answers from state it already holds is worth more than one",
