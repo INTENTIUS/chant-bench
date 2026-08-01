@@ -13,6 +13,21 @@ than four decimal places of cents.
 **Select a row** to see what that tool spent, how hard it worked, and the
 environment its agent was given.
 
+!!! tip "Reproduce any of this"
+
+    Every number here comes from a run anyone can repeat. It deploys to a
+    local emulator, so it costs nothing and touches no AWS account.
+
+    ```sh
+    git clone https://github.com/INTENTIUS/chant-bench && cd chant-bench
+    just setup                 # fetches the benchmark, builds every arm
+    just run chant             # one arm, about ten minutes
+    just ingest ../aws-bench   # bring the result into this site
+    ```
+
+    [Full instructions](../../running.md) · each arm's exact command and
+    briefing are under **Agent environment** on its panel below.
+
 <div class="cb-explorer" markdown="0">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-chant" checked>
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-bare">
@@ -106,6 +121,7 @@ environment its agent was given.
 <dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-chant-snapshot.md</code> · <code>9ce3707f885e</code></dd>
 </dl>
+<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh chant</code></p>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions with `chant search` — the recorded state is the source of truth
 
 This AWS estate was deployed from the chant project mounted at
@@ -290,6 +306,7 @@ attribute:
 <dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-bare.md</code> · <code>166c7534c252</code></dd>
 </dl>
+<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh bare</code></p>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the AWS API
 
 There is no infrastructure toolchain here — no state file, no synthesized
@@ -399,6 +416,7 @@ Path to estate facts, in order:
 <dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-pulumi.md</code> · <code>a06c6b73c0eb</code></dd>
 </dl>
+<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh pulumi</code></p>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the Pulumi state — it is the source of truth
 
 This AWS estate was deployed from the Pulumi program mounted read-only at
@@ -517,6 +535,7 @@ Path to estate facts, in order:
 <dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-terraform.md</code> · <code>7822d55ca7ca</code></dd>
 </dl>
+<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh terraform</code></p>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from Terraform state — it is the source of truth
 
 This AWS estate was deployed from the Terraform configuration mounted read-only
@@ -635,6 +654,7 @@ Path to estate facts, in order:
 <dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-cdk.md</code> · <code>f4b4c7082924</code></dd>
 </dl>
+<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh cdk</code></p>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the CDK app and its stacks — they are the source of truth
 
 This AWS estate was deployed from the AWS CDK application mounted read-only at
@@ -761,6 +781,7 @@ Path to estate facts, in order:
 <dt>harness</dt><dd><code>87ca0c3</code></dd>
 <dt>briefing</dt><dd><code>briefing-alchemy.md</code> · <code>596be04902b9</code></dd>
 </dl>
+<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-arm.sh alchemy</code></p>
 <details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the Alchemy state — it is the source of truth
 
 This AWS estate was deployed from the Alchemy program mounted read-only at

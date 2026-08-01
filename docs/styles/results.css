@@ -321,3 +321,13 @@
 .cb-pick:focus-visible + * { outline: none; }
 
 .cb-panelsets { scroll-margin-top: 3.5rem; }
+
+/* The command that repeats the run sits with the rest of that run's
+   provenance, because "can I check this" and "what produced this" are the
+   same question. */
+.cb-env-repro {
+  margin: 0.8rem 0 0;
+  font-size: 0.74rem;
+  opacity: 0.85;
+}
+.cb-env-repro code { margin-left: 0.4rem; }

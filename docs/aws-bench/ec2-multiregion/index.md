@@ -5,6 +5,20 @@ six security groups. Eight questions get asked about it.
 
 They look easy and are not.
 
+!!! tip "Reproduce the whole scenario"
+
+    The estate deploys to a local emulator, so a full run costs nothing and
+    touches no AWS account. About ten minutes per arm.
+
+    ```sh
+    git clone https://github.com/INTENTIUS/chant-bench && cd chant-bench
+    just setup              # fetch the benchmark, build every arm
+    just run chant          # deploy, gate, score one arm
+    just matrix 3           # every arm, three runs each
+    ```
+
+    [Full instructions](../../running.md) · [what each tool scored](results.md)
+
 *Which servers can be reached from the internet?* A server is reachable if its
 security group allows port 22. But one instance gets its group from a launch
 template, not from the instance record. And only if its subnet routes to an

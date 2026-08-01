@@ -448,6 +448,21 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "**Select a row** to see what that tool spent, how hard it worked, and the",
         "environment its agent was given.",
         "",
+        '!!! tip "Reproduce any of this"',
+        "",
+        "    Every number here comes from a run anyone can repeat. It deploys to a",
+        "    local emulator, so it costs nothing and touches no AWS account.",
+        "",
+        "    ```sh",
+        "    git clone https://github.com/INTENTIUS/chant-bench && cd chant-bench",
+        "    just setup                 # fetches the benchmark, builds every arm",
+        "    just run chant             # one arm, about ten minutes",
+        "    just ingest ../aws-bench   # bring the result into this site",
+        "    ```",
+        "",
+        "    [Full instructions](../../running.md) · each arm's exact command and",
+        "    briefing are under **Agent environment** on its panel below.",
+        "",
         '<div class="cb-explorer" markdown="0">',
     ]
 
@@ -655,6 +670,11 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         ):
             out.append(f"<dt>{k}</dt><dd>{v}</dd>")
         out.append("</dl>")
+
+        out.append(
+            '<p class="cb-env-repro">Repeat this run:'
+            f'<code>./benchmarks/agent-env/run-arm.sh {arm}</code></p>'
+        )
 
         text = briefing_text(b.get("path"))
         if text:
