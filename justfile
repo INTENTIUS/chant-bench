@@ -27,9 +27,14 @@ build:
     python3 scripts/build_pages.py
     mkdocs build --strict
 
-# Preview locally.
-serve:
-    mkdocs serve
+# Preview locally on http://127.0.0.1:8000, regenerating the pages first.
+#
+# The generated pages are committed, so serving without regenerating shows you
+# whatever was last built rather than what your edit does — which is a slow way
+# to find out you were looking at the old page the whole time.
+serve port="8000":
+    python3 scripts/build_pages.py
+    mkdocs serve -a 127.0.0.1:{{port}}
 
 # What CI runs.
 check:
