@@ -574,11 +574,24 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
                 # repeated back at it — a reference row that agrees with the
                 # subject by construction is not a reference.
                 rivals = [
-                    x
-                    for o, x in ((o, get(o)) for o in just)
+                    (x, ARMS.get(a, (a,))[0])
+                    for a, o, _ in rows
+                    for x in [get(o)]
                     if isinstance(x, (int, float)) and o is not r
                 ]
-                best = min(rivals) if rivals else None
+                best, rival_name = min(rivals) if rivals else (None, None)
+                # Name the tool, and say what it is *relative to this row*.
+                # "best other tool" was accurate and told nobody anything. But
+                # "runner up" alone would be wrong on most rows: for Pulumi the
+                # best other tool is chant, which is the leader, not a runner up.
+                # Only when this row holds the best figure is the comparison
+                # actually against second place.
+                mine_is_best = isinstance(v, (int, float)) and (
+                    best is None or v <= best
+                )
+                rival_label = (
+                    f"{rival_name}, runner up" if mine_is_best else f"{rival_name}, best"
+                ) if rival_name else "best other tool"
                 # Rounded to the precision the arms' own figures carry, so an
                 # average does not read as more precise than what it averages.
                 avg = round(sum(field) / len(field), 2) if field else None
@@ -594,7 +607,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
                 # provenance, where someone checking a number will look for it.
                 for who, val, cls in (
                     (name, v, "self"),
-                    ("best other tool", best, "ref"),
+                    (rival_label, best, "ref"),
                     ("field average", avg, "ref"),
                 ):
                     shown = show(val) if isinstance(val, (int, float)) else "—"

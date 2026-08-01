@@ -48,19 +48,19 @@ than four decimal places of cents. Pick a tool to see the rest.
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0344</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0889</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0889</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0330</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:68.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0704</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"><span class="cb-fill" style="width:68.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0704</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">129,446</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:62.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">302,064</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"><span class="cb-fill" style="width:62.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">302,064</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">2,350</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:72.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,094</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"><span class="cb-fill" style="width:72.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,094</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -69,15 +69,15 @@ than four decimal places of cents. Pick a tool to see the rest.
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">3.25</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:65.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"><span class="cb-fill" style="width:65.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.21</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
 <div class="cb-mpanel-sub">turns</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5.21</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:63.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">10.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"><span class="cb-fill" style="width:63.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">10.5</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
 <div class="cb-mpanel-sub">clock time</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">32s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:44.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">48s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"><span class="cb-fill" style="width:44.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">48s</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -86,7 +86,7 @@ than four decimal places of cents. Pick a tool to see the rest.
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Terraform, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
 </div></section>
 <section class="cb-mpanel wide">
@@ -226,19 +226,19 @@ attribute:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:54.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0889</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:68.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0704</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:62.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">302,064</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:72.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,094</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -247,15 +247,15 @@ attribute:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:65.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">8.21</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
 <div class="cb-mpanel-sub">turns</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:63.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">10.5</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
 <div class="cb-mpanel-sub">clock time</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:44.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">48s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -264,7 +264,7 @@ attribute:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:8.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">6</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Terraform, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
 </div></section>
 <section class="cb-mpanel wide">
@@ -344,19 +344,19 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:65.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1077</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:83.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0853</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:73.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">359,447</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:81.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,612</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -365,15 +365,15 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:77.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">9.62</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
 <div class="cb-mpanel-sub">turns</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:73.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">12.21</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
 <div class="cb-mpanel-sub">clock time</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">69s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -382,7 +382,7 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
 </div></section>
 <section class="cb-mpanel wide">
@@ -462,19 +462,19 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:72.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1199</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:82.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0849</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:65.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">317,640</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5,636</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -483,15 +483,15 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:86.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">10.71</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
 <div class="cb-mpanel-sub">turns</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">13</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
 <div class="cb-mpanel-sub">clock time</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">109s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -500,7 +500,7 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads <em>by design</em></div>
 <div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">74</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Terraform, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
 </div></section>
 <section class="cb-mpanel wide">
@@ -588,19 +588,19 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1645</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:20.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0344</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1000</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1028</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0330</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">486,457</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">129,446</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:65.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">319,011</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:93.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5,278</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:41.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,350</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,394</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -609,15 +609,15 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">12.46</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:26.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.25</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:71.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">8.85</span></div>
 <div class="cb-mpanel-sub">turns</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">16.67</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:31.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.21</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:69.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.52</span></div>
 <div class="cb-mpanel-sub">clock time</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:78.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">85s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">32s</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:62.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">69s</span></div>
 </div></section>
 <section class="cb-mpanel">
@@ -626,7 +626,7 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:33.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">25</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">best other tool</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Terraform, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:28.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">21</span></div>
 </div></section>
 <section class="cb-mpanel wide">
