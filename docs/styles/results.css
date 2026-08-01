@@ -36,15 +36,75 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Figure over bar, so the column reads as a shape from a distance and as exact
-   numbers up close. The number stays first in the source: it is the data, the
-   bar is the encoding of it. */
-.cb-cell {
+/* Cards, not a table. Eight metrics across six arms is a grid that scrolls
+   sideways on anything narrower than a desktop, and a comparison you have to
+   scroll to see is not a comparison. One card per arm, metrics stacked, so the
+   whole of one tool is legible at once and the bars line up down the page. */
+.cb-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.9rem;
+  margin: 1.2rem 0;
+}
+
+.cb-card {
+  border: 1px solid var(--cb-track);
+  border-radius: 6px;
+  padding: 0.85rem 0.95rem 0.7rem;
   display: flex;
   flex-direction: column;
-  gap: 0.22rem;
-  min-width: 3.4rem;
+  gap: 0.65rem;
 }
+
+/* The floor, not a competitor. Dashed so it reads as a reference line. */
+.cb-card.baseline { border-style: dashed; }
+.cb-card.pending { opacity: 0.6; }
+
+.cb-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+.cb-card-name { font-weight: 700; }
+.cb-card-rate {
+  margin-left: auto;
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cb-outcome);
+}
+.cb-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.cb-metrics { display: flex; flex-direction: column; gap: 0.45rem; }
+
+/* Label and figure on one line, bar beneath it spanning the card. The figure is
+   the data and the bar encodes it, so the number is never displaced by it. */
+.cb-metric {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 0.5rem;
+}
+.cb-label { font-size: 0.72rem; opacity: 0.75; }
+.cb-label em { font-style: normal; opacity: 0.7; }
+.cb-value {
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.cb-metric .cb-bar-track { grid-column: 1 / -1; }
+
+.cb-card-foot {
+  margin-top: auto;
+  padding-top: 0.15rem;
+  font-size: 0.72rem;
+  opacity: 0.8;
+}
+.cb-pending-note { font-size: 0.78rem; margin: 0; }
 
 .cb-bar-track {
   display: block;
