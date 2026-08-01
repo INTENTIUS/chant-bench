@@ -43,17 +43,16 @@ cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.
 
 ## AWS CDK — answered
 
-8 commands, from `cdk-cur`.
+7 commands, from `cdk-m2`.
 
 ```sh
-cd /workspace/cdk_app && npx cdk ls
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-QARoles-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, type: .value.Type, properties: .value.Properties}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, type: .value.Type}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, type: .value.Type}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, type: .value.Type}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {Region: "us-east-1", LogicalId: .LogicalResourceId, InstanceId: .PhysicalResourceId}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {Region: "us-west-1", LogicalId: .LogicalResourceId, InstanceId: .PhysicalResourceId}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {Region: "us-west-2", LogicalId: .LogicalResourceId, InstanceId: .PhysicalResourceId}'
+cd /workspace/cdk_app && npx cdk ls 2>/dev/null
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {LogicalId: .key, Properties: .value.Properties}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {LogicalId: .key, Properties: .value.Properties}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {LogicalId: .key, Properties: .value.Properties}'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Stack: "us-east-1"}'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Stack: "us-west-1"}'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Stack: "us-west-2"}'
 ```
 
 ## Alchemy — answered
@@ -64,4 +63,24 @@ aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9
 cd /workspace/alchemy && alchemy state list | grep -i instance
 cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/instance
 cd /workspace/alchemy && for resource in "alchemy-ec2-multiregion/bench/exp-InstanceId" "alchemy-ec2-multiregion/bench/exp-DefaultVPCInstanceId" "alchemy-ec2-multiregion/bench/exp-LaunchTemplateInstanceId" "alchemy-ec2-multiregion/bench/exp-PrivateInstanceId" "alchemy-ec2-multiregion/bench/usw1-exp-InstanceId" "alchemy-ec2-multiregion/bench/usw2-exp-InstanceId"; do echo "=== $resource ===" alchemy state get "$resource" 2>/dev/null | jq '.output // .props' 2>/dev/null || echo "Not found" done
+```
+
+## Alchemy v2 (Effect) — answered
+
+17 commands, from `alchemy-effect-m3`.
+
+```sh
+cd /workspace/alchemy && alchemy state tree us-east-1.run.ts --local 2>&1 | head -50
+cd /workspace/alchemy && alchemy state tree us-west-1.run.ts --local 2>&1 | head -50
+cd /workspace/alchemy && alchemy state tree us-west-2.run.ts --local 2>&1 | head -50
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-east-1.run.ts --local 2>&1 | grep -i instance
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local 2>&1 | grep -i instance
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-2.run.ts --local 2>&1 | grep -i instance
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-east-1.run.ts --local 2>&1
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local 2>&1
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-2.run.ts --local 2>&1
+find /workspace/alchemy/.alchemy/state -name "*.json" -type f | head -20
+find /workspace/alchemy/.alchemy/state -name "*.json" -type f | xargs grep -l '"resourceType".*Instance' | sort
+cat /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/DefaultVpcServer.json | jq '{resource: .resourceType, name: .props.instanceName, instanceId: .attr.instanceId}'
+# … 5 more
 ```

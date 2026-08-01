@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-s14-sgfix",
     "finished_at": "2026-07-31T09:58:50.412958",
-    "harness_commit": "2a38abd"
+    "harness_commit": "7b09168"
   },
   "agent": {
     "name": "claude-code",

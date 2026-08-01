@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-b3",
     "finished_at": "2026-07-31T13:00:45.568272",
-    "harness_commit": "2a38abd"
+    "harness_commit": "7b09168"
   },
   "agent": {
     "name": "claude-code",

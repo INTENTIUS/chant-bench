@@ -2,10 +2,10 @@
   "schema": 1,
   "bench": "aws-bench",
   "scenario": "ec2-multiregion",
-  "arm": "terraform",
+  "arm": "cdk",
   "run": {
-    "id": "terraform-m1",
-    "finished_at": "2026-07-31T21:21:45.680800",
+    "id": "cdk-m2",
+    "finished_at": "2026-07-31T19:13:04.914043",
     "harness_commit": "7b09168"
   },
   "agent": {
@@ -32,7 +32,7 @@
         1
       ],
       "find-ec-instances-in-public-subn": [
-        0,
+        1,
         1,
         1
       ],
@@ -44,16 +44,16 @@
       "list-ec-instances-all-regions-1": [
         1,
         1,
-        1
+        0
       ],
       "list-ec-instances-by-vpc-across": [
         1,
         1,
-        0
+        1
       ],
       "list-ec-private-ips-all-regions": [
         1,
-        1,
+        0,
         1
       ],
       "list-unused-security-groups-all": [
@@ -71,26 +71,26 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 0,
-    "answered_from_own_state": true
+    "account_reads": 105,
+    "answered_from_own_state": false
   },
   "effort": {
-    "tool_calls": 10.08,
-    "turns": 12.83,
-    "wall_seconds": 66.86,
-    "tokens_in": 357100.33,
-    "tokens_out": 4817.96,
-    "cost_usd": 0.0879,
-    "cost_usd_run": 2.1086
+    "tool_calls": 12.92,
+    "turns": 15.46,
+    "wall_seconds": 130.37,
+    "tokens_in": 360764.83,
+    "tokens_out": 5734.12,
+    "cost_usd": 0.0889,
+    "cost_usd_run": 2.133
   },
   "logs": {
-    "run": "jobs/terraform-m1/run-arm.log",
-    "job": "jobs/terraform-m1/job.log",
-    "trials": "jobs/terraform-m1/<task>__<id>/agent/"
+    "run": "jobs/cdk-m2/run-arm.log",
+    "job": "jobs/cdk-m2/job.log",
+    "trials": "jobs/cdk-m2/<task>__<id>/agent/"
   },
   "briefing": {
-    "path": "benchmarks/arms/briefing-terraform.md",
-    "sha256": "7822d55ca7ca"
+    "path": "benchmarks/arms/briefing-cdk.md",
+    "sha256": "f4b4c7082924"
   },
-  "reproduce": "benchmarks/arms/terraform-ec2-multiregion/REPRODUCE.md"
+  "reproduce": "benchmarks/arms/cdk_app/REPRODUCE.md"
 }

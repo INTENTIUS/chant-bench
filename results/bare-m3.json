@@ -6,7 +6,7 @@
   "run": {
     "id": "bare-m3",
     "finished_at": "2026-07-31T21:50:54.922236",
-    "harness_commit": "87ca0c3"
+    "harness_commit": "7b09168"
   },
   "agent": {
     "name": "claude-code",
@@ -71,7 +71,7 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 90,
+    "account_reads": 81,
     "answered_from_own_state": false
   },
   "effort": {
