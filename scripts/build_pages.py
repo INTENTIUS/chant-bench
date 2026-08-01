@@ -163,44 +163,33 @@ def badge(r: dict) -> str:
     )
 
 
-def bar(value, peak, kind: str = "cost", spec: str = "", prefix: str = "") -> str:
-    """A figure with a bar behind it, scaled against the largest in its column.
-
-    Hue carries direction, length stays honest to the raw value. That split
-    matters because the columns disagree about which way is good: a long `rate`
-    bar is a win and a long `cost` bar is the opposite, and drawing both in the
-    same colour would make an expensive arm look like a strong one at a glance.
-    So `outcome` is teal and everything you are trying to spend less of is amber,
-    and neither is ever scaled to make a point.
-
-    Scaling against the column's own peak, rather than a fixed ceiling, is what
-    makes the shape readable: with cost per question running from $0.03 to $0.10
-    a 0-to-1 axis would render every arm as a stub.
-    """
-    if not isinstance(value, (int, float)):
-        return "—"
-    text = f"{prefix}{format(value, spec) if spec else value}"
-    # Zero draws nothing. The 2% floor keeps a small non-zero value visible, but
-    # applying it to zero would put a sliver under chant's account reads, which
-    # is the one number on the page whose whole meaning is that it is zero.
-    if not peak or value <= 0:
-        width = 0
-    else:
-        width = max(2, min(100, round(100 * value / peak)))
-    return (
-        f'<span class="cb-cell">{text}'
-        f'<span class="cb-bar-track"><span class="cb-bar {kind}" style="width:{width}%"></span></span>'
-        "</span>"
-    )
-
-
 def usd(v) -> str:
     """A dollar figure, or an em dash. Four decimals: the arms differ in the third."""
     return f"${v:.4f}" if isinstance(v, (int, float)) else "—"
 
 
+def track(value, peak, kind: str = "cost") -> str:
+    """Just the bar, scaled against the largest value any arm recorded for it.
+
+    Hue carries direction, length stays honest to the raw value. The columns
+    disagree about which way is good — a long `pass rate` bar is a win and a long
+    `cost` bar is the opposite — and one colour for both would read them the
+    same. So outcome is teal and anything you want less of is amber.
+
+    Scaling against the metric's own peak rather than a fixed ceiling is what
+    makes the shape legible: cost per answer runs from $0.03 to $0.10, and on a
+    0-to-1 axis every arm would be a stub.
+    """
+    if not isinstance(value, (int, float)) or not peak or value <= 0:
+        # Zero draws nothing. A minimum-width sliver under chant's account reads
+        # would undercut the one number whose whole meaning is that it is zero.
+        return '<span class="cb-bar-track"></span>'
+    width = max(2, min(100, round(100 * value / peak)))
+    return f'<span class="cb-bar-track"><span class="cb-bar {kind}" style="width:{width}%"></span></span>'
+
+
 def peak(rows: list, get) -> float:
-    """The largest value in a column, so its bars scale against each other."""
+    """The largest value for a metric, so bars scale against each other."""
     vals = [v for v in (get(r) for r in rows) if isinstance(v, (int, float))]
     return max(vals) if vals else 0
 
@@ -211,15 +200,26 @@ def headline(runs: list[dict]) -> dict | None:
 
 
 def results_page(by_arm: dict[str, list[dict]]) -> str:
-    rows, tasks = [], set()
-    for arm, runs in by_arm.items():
-        r = headline(runs)
+    rows, tasks, pending = [], set(), []
+    # Every declared arm, not only the ones with data. An arm that has not run
+    # is a hole in the comparison, and a table that silently omits it reads as
+    # complete. That matters most for `bare`: the page tells you to read every
+    # row against it, so leaving it out makes the instruction unfollowable.
+    for arm in ARMS:
+        r = headline(by_arm.get(arm) or [])
         if r:
-            rows.append((arm, r, len([x for x in runs if valid(x)])))
+            rows.append((arm, r, len([x for x in by_arm[arm] if valid(x)])))
             tasks |= set(r["score"]["by_task"])
+        else:
+            pending.append(arm)
     # Ordered by what an answer costs, not by rate: most of these tools reach
     # most of these answers eventually, and the question is what that takes.
-    rows.sort(key=lambda x: (x[1]["effort"].get("tokens_in") or 10**9))
+    #
+    # `bare` is pinned last however cheap it turns out to be. It is the floor,
+    # not an entrant, and a baseline that placed third would invite reading the
+    # ranking as though it were competing.
+    rows.sort(key=lambda x: (x[0] == "bare", x[1]["effort"].get("cost_usd") or 10**9))
+    pending.sort(key=lambda a: (a == "bare", a))
 
     out = [
         "# Results",
@@ -239,57 +239,91 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "looked at your account and thinks four groups are unused* and a line you can",
         "check.",
         "",
-        "Read every row against **No tool**, which is upstream aws-bench's own",
+        "Read every card against **No tool**, which is upstream aws-bench's own",
         "experiment. An agent with the AWS CLI and nothing else. A tool that does not",
         "get there more cheaply is not earning its place.",
         "",
-        "Ordered by what one answer costs. Arms have run different numbers of times,",
-        "so `n` is given and the figure is never a best-of. Per-question cost is",
-        "measured. Multiply by your own volumes if you want an annual number. We have",
-        "not, because that swaps a measured figure for three assumed ones.",
+        "Ordered by what one answer costs, cheapest first, with the baseline last.",
+        "Arms have run different numbers of times, so the run count is on each card",
+        "and the figure is never a best-of. Cost is measured per question. Multiply by",
+        "your own volumes for an annual number. We have not, because that swaps one",
+        "measured figure for three assumed ones.",
         "",
-        "| | arm | cost / answer | rate | tokens in | tokens out | commands | turns | secs | reads | n | |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|",
+        '<div class="cb-cards" markdown="0">',
     ]
-    # Each column scales against its own largest value — see bar().
+    # Each metric scales against the largest value any arm recorded for it, so
+    # the same bar length means the same thing on every card.
     just = [r for _, r, _ in rows]
-    p_cost = peak(just, lambda r: r["effort"].get("cost_usd"))
-    p_tin = peak(just, lambda r: r["effort"].get("tokens_in"))
-    p_tout = peak(just, lambda r: r["effort"].get("tokens_out"))
-    p_cmd = peak(just, lambda r: r["effort"].get("tool_calls"))
-    p_turn = peak(just, lambda r: r["effort"].get("turns"))
-    p_wall = peak(just, lambda r: r["effort"].get("wall_seconds"))
-    p_read = peak(just, lambda r: r["independence"]["account_reads"])
+    METRICS = [
+        ("cost / answer", lambda r: r["effort"].get("cost_usd"), ".4f", "$"),
+        ("tokens in", lambda r: r["effort"].get("tokens_in"), ",.0f", ""),
+        ("tokens out", lambda r: r["effort"].get("tokens_out"), ",.0f", ""),
+        ("commands", lambda r: r["effort"].get("tool_calls"), "", ""),
+        ("turns", lambda r: r["effort"].get("turns"), "", ""),
+        ("clock time", lambda r: r["effort"].get("wall_seconds"), ".0f", "s"),
+        ("account reads", lambda r: r["independence"]["account_reads"], "", ""),
+    ]
+    peaks = {label: peak(just, get) for label, get, _, _ in METRICS}
 
-    for i, (arm, r, n) in enumerate(rows, 1):
-        s, e = r["score"], r["effort"]
+    for arm, r, n in rows:
         name = ARMS.get(arm, (arm, ""))[0]
-        reads = r["independence"]["account_reads"]
-        reads_cell = bar(reads, p_read, "cost")
-        if arm in STATELESS:
-            reads_cell += " *(by design)*"
-        # The rate bar is drawn against 1.0 rather than the column's best, so a
-        # field where nobody does well cannot render as though someone did.
-        rate_cell = bar(s.get("pass_rate"), 1.0, "outcome", ".3f") if valid(r) else "—"
-        # One row shape. The two-branch version this replaces had a dead
-        # `if False else` arm, and its live fallback formatted score.pass_rate
-        # directly — bypassing rate(), so an invalid run printed its survivors'
-        # number, and a run with no rate at all crashed the build.
+        is_base = arm == "bare"
+        klass = "cb-card baseline" if is_base else "cb-card"
+        out.append(f'<div class="{klass}">')
         out.append(
-            f"| {i} | [{name}]({arm}/index.md) "
-            f"| {bar(e.get('cost_usd'), p_cost, 'cost', '.4f', '$')} "
-            f"| {rate_cell} "
-            f"| {bar(e.get('tokens_in'), p_tin, 'cost', ',.0f')} "
-            f"| {bar(e.get('tokens_out'), p_tout, 'cost', ',.0f')} "
-            f"| {bar(e.get('tool_calls'), p_cmd, 'cost')} "
-            f"| {bar(e.get('turns'), p_turn, 'cost')} "
-            f"| {bar(e.get('wall_seconds'), p_wall, 'cost', '.0f')} "
-            f"| {reads_cell} | {n} | {badge(r)} |"
+            '<div class="cb-card-head">'
+            f'<a class="cb-card-name" href="../{arm}/">{name}</a>'
+            + ('<span class="cb-tag">baseline</span>' if is_base else "")
+            + f'<span class="cb-card-rate">{rate(r)}</span>'
+            "</div>"
         )
+        # The rate bar is drawn against 1.0 rather than the best arm, so a field
+        # where nobody does well cannot render as though someone did.
+        out.append('<div class="cb-metrics">')
+        out.append(
+            '<div class="cb-metric"><span class="cb-label">pass rate</span>'
+            f'<span class="cb-value">{rate(r)}</span>'
+            f'{track(r["score"].get("pass_rate"), 1.0, "outcome")}</div>'
+        )
+        for label, get, spec, unit in METRICS:
+            v = get(r)
+            shown = "—" if not isinstance(v, (int, float)) else (
+                f'{unit if unit == "$" else ""}{format(v, spec) if spec else v}{unit if unit != "$" else ""}'
+            )
+            note = " <em>by design</em>" if label == "account reads" and arm in STATELESS else ""
+            out.append(
+                f'<div class="cb-metric"><span class="cb-label">{label}{note}</span>'
+                f'<span class="cb-value">{shown}</span>'
+                f'{track(v, peaks[label], "cost")}</div>'
+            )
+        out.append("</div>")
+        out.append(f'<div class="cb-card-foot">{n} run(s) · {badge(r)}</div>')
+        out.append("</div>")
+
+    # An arm that has not run is a hole in the comparison, and a page that omits
+    # it reads as complete. `bare` most of all: the text above tells you to read
+    # every arm against it.
+    for arm in pending:
+        name = ARMS.get(arm, (arm, ""))[0]
+        why = (
+            "the floor every other card is read against"
+            if arm == "bare"
+            else "declared, no runs yet"
+        )
+        out.append(f'<div class="cb-card pending">')
+        out.append(
+            '<div class="cb-card-head">'
+            f'<a class="cb-card-name" href="../{arm}/">{name}</a>'
+            '<span class="cb-card-rate">—</span></div>'
+        )
+        out.append(f'<p class="cb-pending-note">Not yet run — {why}.</p>')
+        out.append("</div>")
+
+    out.append("</div>")
 
     out += [
         "",
-        "!!! note \"Reading the account-reads column\"",
+        "!!! note \"Reading account reads\"",
         "    A tool that answers from state it already holds is worth more than one",
         "    that re-reads the cloud. CDK is the honest exception. It keeps no state",
         "    of its own, so its reads are its sanctioned path, not a fallback.",
