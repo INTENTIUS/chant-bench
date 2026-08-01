@@ -469,19 +469,11 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             bar, val, extra = '<span class="cb-track"></span>', "—", " pending"
         else:
             pc = per_correct(r)
-            runs_note = "baseline" if arm == "bare" else f"{n} run(s)"
-            total = r["effort"].get("cost_usd_run")
-            # Four decimals on the run total is false precision next to a
-            # two-dollar figure, and the row is already carrying three numbers.
-            each = r["effort"].get("cost_usd")
-            sub = " · ".join(
-                x for x in (
-                    f"{rate(r)} answered",
-                    f"${each:.3f} a question" if isinstance(each, (int, float)) else None,
-                    f"${total:.2f} a run" if isinstance(total, (int, float)) else None,
-                    runs_note,
-                ) if x
-            )
+            # Just the count. The row carried the rate, the per-question cost,
+            # the run cost and the run count, which wrapped onto a second line
+            # and repeated in different units what the figure on the right
+            # already says. The rest is a click away in the panel.
+            sub = f"{r['score']['passed']}/{r['score']['trials']} correct"
             bar = fill(pc, worst, SPEND)
             # Per hundred rather than per one. The ranking is identical — it is
             # the same figure times a constant — but $3.44 against $16.45 is a
