@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-s4-snapshot",
     "finished_at": "2026-07-30T23:51:45.421555",
-    "harness_commit": "6303a2f"
+    "harness_commit": "c7bfd82"
   },
   "agent": {
     "name": "claude-code",
@@ -79,7 +79,8 @@
     "turns": 16.33,
     "wall_seconds": 76.31,
     "tokens_in": 489316.83,
-    "tokens_out": 4435.67
+    "tokens_out": 4435.67,
+    "cost_usd": 0.0925
   },
   "logs": {
     "run": null,

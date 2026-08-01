@@ -1,8 +1,23 @@
-# chant — run 21 of 24
+# chant — run 18 of 20
 
 `chant-b2` <span class="cb-badge ok">gates passed</span>
 
-**21 of 24** (0.875) · 23 account read(s) · 3.92 commands, 5.92 turns, 37s per trial
+**21 of 24** (0.875) · 23 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.0363** |
+| tokens in | 167,139 |
+| tokens out | 2,528 |
+| commands | 3.92 |
+| turns | 5.92 |
+| clock time | 37s |
+| account reads | 23 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T12:52:29.991931 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `9ce3707f885e` |
 | substrate | floci |

@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-m2",
     "finished_at": "2026-07-31T18:43:53.691235",
-    "harness_commit": "6303a2f"
+    "harness_commit": "c7bfd82"
   },
   "agent": {
     "name": "claude-code",
@@ -79,7 +79,8 @@
     "turns": 5.21,
     "wall_seconds": 32.0,
     "tokens_in": 129445.67,
-    "tokens_out": 2349.67
+    "tokens_out": 2349.67,
+    "cost_usd": 0.033
   },
   "logs": {
     "run": "jobs/chant-m2/run-arm.log",

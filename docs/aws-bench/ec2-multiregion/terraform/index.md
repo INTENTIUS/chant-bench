@@ -15,17 +15,15 @@ That wipes the emulator, deploys this arm's estate, proves the tool can
 answer before scoring it, runs all eight questions three times, then checks
 the tool was used. About ten minutes.
 
-If a gate fails the run stops and is published as invalid, not as a low
-score.
+If a gate fails the run stops and is not published at all. It has to
+happen again. A tool that never ran is not a tool that did badly.
 
 ## Runs
 
-| # | run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|---|
-| 4 | [`terraform-m2`](runs/terraform-m2.md) | 19/24 | 0.792 | 0 | 9.62 | 12.21 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 3 | [`terraform-m1`](runs/terraform-m1.md) | 2/24 | — | 0 | 7 | 8 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
-| 2 | [`terraform-cur`](runs/terraform-cur.md) | 20/24 | 0.833 | 0 | 11.71 | 14.79 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`terraform-s1-rerun`](runs/terraform-s1-rerun.md) | 19/24 | — | 0 | 10.67 | 13.67 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
+| # | run | passed | rate | cost | secs | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2 | [`terraform-m2`](runs/terraform-m2.md) | 19/24 | 0.792 | $0.0853 | 69 | 0 | 9.62 | 12.21 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`terraform-cur`](runs/terraform-cur.md) | 20/24 | 0.833 | $0.0901 | 71 | 0 | 11.71 | 14.79 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

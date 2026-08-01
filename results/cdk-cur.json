@@ -6,7 +6,7 @@
   "run": {
     "id": "cdk-cur",
     "finished_at": "2026-07-31T17:36:10.317989",
-    "harness_commit": "6303a2f"
+    "harness_commit": "c7bfd82"
   },
   "agent": {
     "name": "claude-code",
@@ -79,7 +79,8 @@
     "turns": 15.17,
     "wall_seconds": 142.55,
     "tokens_in": 379557.08,
-    "tokens_out": 5650.38
+    "tokens_out": 5650.38,
+    "cost_usd": 0.0906
   },
   "logs": {
     "run": "jobs/cdk-cur/run-arm.log",

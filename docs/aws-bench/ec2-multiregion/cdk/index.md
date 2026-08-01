@@ -15,17 +15,15 @@ That wipes the emulator, deploys this arm's estate, proves the tool can
 answer before scoring it, runs all eight questions three times, then checks
 the tool was used. About ten minutes.
 
-If a gate fails the run stops and is published as invalid, not as a low
-score.
+If a gate fails the run stops and is not published at all. It has to
+happen again. A tool that never ran is not a tool that did badly.
 
 ## Runs
 
-| # | run | passed | rate | reads | commands | turns | harness | |
-|---|---|---|---|---|---|---|---|---|
-| 4 | [`cdk-m2`](runs/cdk-m2.md) | 19/24 | — | 118 | 12.92 | 15.46 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
-| 3 | [`cdk-m1`](runs/cdk-m1.md) | 17/24 | 0.708 | 74 | 10.71 | 13 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 2 | [`cdk-cur`](runs/cdk-cur.md) | 17/24 | 0.708 | 104 | 12.79 | 15.17 | `6303a2f` | <span class="cb-badge ok">gates passed</span> |
-| 1 | [`cdk-s1-rerun`](runs/cdk-s1-rerun.md) | 17/24 | — | 77 | 11.04 | 14.88 | `6303a2f` | <span class="cb-badge invalid">invalid</span> |
+| # | run | passed | rate | cost | secs | reads | commands | turns | harness | |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2 | [`cdk-m1`](runs/cdk-m1.md) | 17/24 | 0.708 | $0.0849 | 109 | 74 | 10.71 | 13 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
+| 1 | [`cdk-cur`](runs/cdk-cur.md) | 17/24 | 0.708 | $0.0906 | 143 | 104 | 12.79 | 15.17 | `c7bfd82` | <span class="cb-badge ok">gates passed</span> |
 
 ## The agent's context
 

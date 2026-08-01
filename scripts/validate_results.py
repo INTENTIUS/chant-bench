@@ -88,6 +88,26 @@ def check(path: Path) -> list[str]:
     if isinstance(indep, dict) and not isinstance(indep.get("account_reads"), int):
         problems.append("`independence.account_reads` missing or not an integer")
 
+    # A run the gates rejected does not belong here at all. It used to be
+    # published and rendered as invalid, on the reasoning that "the tool never
+    # ran" is a finding worth showing. In practice it is a row that looks like
+    # every other row, and terraform-m1 spent a week on the site reading 1.000
+    # after losing 22 of its 24 trials to docker.
+    #
+    # A run that did not measure the arm is a run that has to happen again, so
+    # it is refused here rather than displayed with a caveat.
+    g = r.get("gates")
+    if isinstance(g, dict):
+        why = []
+        if not g.get("complete"):
+            why.append("not every trial completed")
+        if not g.get("audit"):
+            why.append("the postflight audit failed")
+        if g.get("tool_missing"):
+            why.append("the arm's tooling was not found")
+        if why:
+            problems.append(f"gates rejected this run ({'; '.join(why)}) — re-run it, do not publish it")
+
     return problems
 
 

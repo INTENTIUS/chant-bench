@@ -1,8 +1,23 @@
-# Alchemy — run 3 of 3
+# Alchemy — run 2 of 2
 
 `alchemy-m1` <span class="cb-badge ok">gates passed</span>
 
-**15 of 24** (0.625) · 25 account read(s) · 12.46 commands, 16.67 turns, 85s per trial
+**15 of 24** (0.625) · 25 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.1028** |
+| tokens in | 486,457 |
+| tokens out | 5,278 |
+| commands | 12.46 |
+| turns | 16.67 |
+| clock time | 85s |
+| account reads | 25 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T18:36:10.639035 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `596be04902b9` |
 | substrate | floci |

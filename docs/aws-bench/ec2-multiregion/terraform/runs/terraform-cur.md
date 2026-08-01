@@ -1,8 +1,23 @@
-# Terraform — run 2 of 4
+# Terraform — run 1 of 2
 
 `terraform-cur` <span class="cb-badge ok">gates passed</span>
 
-**20 of 24** (0.833) · 0 account read(s) · 11.71 commands, 14.79 turns, 71s per trial
+**20 of 24** (0.833) · 0 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.0901** |
+| tokens in | 399,977 |
+| tokens out | 4,814 |
+| commands | 11.71 |
+| turns | 14.79 |
+| clock time | 71s |
+| account reads | 0 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T16:02:46.413816 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `7822d55ca7ca` |
 | substrate | floci |

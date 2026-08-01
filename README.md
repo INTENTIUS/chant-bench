@@ -25,9 +25,9 @@ breakdown, what the run cost in tokens and commands and time, whether the tool
 had to read the cloud, whether the gates passed, and the hashes of the harness
 and briefing that produced it.
 
-A run whose gates failed is published and marked invalid. A run whose provenance
-is incomplete is rejected, because a number nobody can trace is worse than no
-number.
+A run the gates rejected is not published. Neither is one whose provenance is
+incomplete. A number nobody can trace, or one that measured a broken harness
+rather than a tool, is worse than no number.
 
 ## Layout
 

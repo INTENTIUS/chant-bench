@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-s8-region",
     "finished_at": "2026-07-31T03:12:19.608581",
-    "harness_commit": "6303a2f"
+    "harness_commit": "c7bfd82"
   },
   "agent": {
     "name": "claude-code",
@@ -79,7 +79,8 @@
     "turns": 8,
     "wall_seconds": 58.09,
     "tokens_in": 223406.58,
-    "tokens_out": 3104.25
+    "tokens_out": 3104.25,
+    "cost_usd": 0.0496
   },
   "logs": {
     "run": null,

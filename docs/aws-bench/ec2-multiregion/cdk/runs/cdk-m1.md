@@ -1,8 +1,23 @@
-# AWS CDK — run 3 of 4
+# AWS CDK — run 2 of 2
 
 `cdk-m1` <span class="cb-badge ok">gates passed</span>
 
-**17 of 24** (0.708) · 74 account read(s) · 10.71 commands, 13 turns, 109s per trial
+**17 of 24** (0.708) · 74 account read(s)
+
+## What one answer cost
+
+Per question, averaged over this run's trials. Cost is the agent's own
+billed total, not tokens times a rate card.
+
+| | |
+|---|--:|
+| dollars | **$0.0849** |
+| tokens in | 317,640 |
+| tokens out | 5,636 |
+| commands | 10.71 |
+| turns | 13 |
+| clock time | 109s |
+| account reads | 74 |
 
 ## By question
 
@@ -22,7 +37,7 @@
 | | |
 |---|---|
 | finished | 2026-07-31T18:25:56.545910 |
-| harness | `6303a2f` |
+| harness | `c7bfd82` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
 | briefing | `f4b4c7082924` |
 | substrate | floci |

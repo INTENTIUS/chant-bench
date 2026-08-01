@@ -42,7 +42,7 @@ for r in $(seq 1 "$REPS"); do
     if (cd "$BENCH" && ./benchmarks/agent-env/run-arm.sh "$arm" "$job" > "/tmp/${job}.log" 2>&1); then
       grep -oE "Pass_Rate: [0-9.]+" "/tmp/${job}.log" | tail -1 | sed 's/^/    /'
     else
-      # A gate stopping the run is a result too — it gets published as invalid.
+      # A gate stopping the run means it measured nothing; ingest refuses it.
       # Only note it; do not abandon the rest of the matrix.
       echo "    run-arm exited nonzero (see /tmp/${job}.log)"
       failed+=("$job")

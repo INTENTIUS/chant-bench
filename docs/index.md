@@ -37,8 +37,8 @@ Every number links to what produced it. For each run:
 - the logs, including both gates
 - the one command that reproduces it
 
-A run whose tooling broke is published as invalid, not as a low score. A tool
-that never ran is not a tool that did badly.
+A run whose tooling broke is not published at all. A tool that never ran is not
+a tool that did badly, and a row that says so still reads like a score.
 
 ## What is not ours
 
