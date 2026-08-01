@@ -126,6 +126,7 @@
 .cb-explorer > .cb-pick:nth-of-type(10):checked ~ .cb-board > li:nth-child(10) > .cb-board-row {
   background: var(--cb-track);
   border-left-color: var(--cb-outcome);
+  font-weight: 600;
 }
 .cb-board-row { border-left: 2px solid transparent; }
 
@@ -296,3 +297,25 @@
   font-size: 0.7rem;
   line-height: 1.5;
 }
+
+/* ── the rows are controls ────────────────────────────────────────────── */
+
+/* Nothing said these were clickable: no chevron, no hover, and the only
+   selected-state was a left border most people would read as decoration. A row
+   that does something has to look like it does something before it is clicked. */
+.cb-chev {
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0.35;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+.cb-board-row { grid-template-columns: 1.5rem minmax(8rem, 13rem) minmax(0, 1fr) 3.6rem 1rem; }
+.cb-board-row:hover { background: var(--cb-track); }
+.cb-board-row:hover .cb-chev { opacity: 0.8; transform: translateX(2px); }
+.cb-board-row.pending { cursor: default; }
+.cb-board-row.pending:hover { background: none; }
+
+/* Keyboard users get the same signal: the label is what has focus. */
+.cb-pick:focus-visible ~ .cb-board .cb-board-row { outline: none; }
+.cb-pick:focus-visible + * { outline: none; }

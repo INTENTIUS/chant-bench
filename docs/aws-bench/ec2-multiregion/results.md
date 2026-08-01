@@ -8,7 +8,10 @@ estate for the least money. Pick a tool to see what its answers cost.
 Ranked by what **100 correct answers** cost: the spend on one question,
 divided by the share the tool gets right, times a hundred. Being cheap at
 being wrong does not help, and a hundred is a number worth having rather
-than four decimal places of cents. Pick a tool to see the rest.
+than four decimal places of cents.
+
+**Select a row** to see what that tool spent, how hard it worked, and the
+environment its agent was given.
 
 <div class="cb-explorer" markdown="0">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-chant" checked>
@@ -19,13 +22,13 @@ than four decimal places of cents. Pick a tool to see the rest.
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-alchemy">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-alchemy-effect">
 <ul class="cb-board">
-<li><label class="cb-board-row" for="cb-arm-chant"><span class="cb-rank">1</span><span class="cb-who"><span class="cb-who-name">chant</span><span class="cb-who-sub">22/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:26.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$3.27</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-bare"><span class="cb-rank">2</span><span class="cb-who"><span class="cb-who-name">No tool (AWS CLI)</span><span class="cb-who-sub">17/24 correct <span class="cb-tag">baseline · no tooling</span></span></span><span class="cb-track"><span class="cb-fill" style="width:40.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$4.97</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-pulumi"><span class="cb-rank">3</span><span class="cb-who"><span class="cb-who-name">Pulumi</span><span class="cb-who-sub">19/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:70.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$8.59</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-terraform"><span class="cb-rank">4</span><span class="cb-who"><span class="cb-who-name">Terraform</span><span class="cb-who-sub">19/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:90.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$11.10</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-cdk"><span class="cb-rank">5</span><span class="cb-who"><span class="cb-who-name">AWS CDK</span><span class="cb-who-sub">17/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:97.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$11.99</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-alchemy"><span class="cb-rank">6</span><span class="cb-who"><span class="cb-who-name">Alchemy</span><span class="cb-who-sub">20/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$12.26</span></label></li>
-<li><label class="cb-board-row pending" for="cb-arm-alchemy-effect"><span class="cb-rank">7</span><span class="cb-who"><span class="cb-who-name">Alchemy v2 (Effect)</span><span class="cb-who-sub">not yet run</span></span><span class="cb-track"></span><span class="cb-board-value">—</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-chant"><span class="cb-rank">1</span><span class="cb-who"><span class="cb-who-name">chant</span><span class="cb-who-sub">22/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:26.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$3.27</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-bare"><span class="cb-rank">2</span><span class="cb-who"><span class="cb-who-name">No tool (AWS CLI)</span><span class="cb-who-sub">17/24 correct <span class="cb-tag">baseline · no tooling</span></span></span><span class="cb-track"><span class="cb-fill" style="width:40.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$4.97</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-pulumi"><span class="cb-rank">3</span><span class="cb-who"><span class="cb-who-name">Pulumi</span><span class="cb-who-sub">19/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:70.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$8.59</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-terraform"><span class="cb-rank">4</span><span class="cb-who"><span class="cb-who-name">Terraform</span><span class="cb-who-sub">19/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:90.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$11.10</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-cdk"><span class="cb-rank">5</span><span class="cb-who"><span class="cb-who-name">AWS CDK</span><span class="cb-who-sub">17/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:97.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$11.99</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-alchemy"><span class="cb-rank">6</span><span class="cb-who"><span class="cb-who-name">Alchemy</span><span class="cb-who-sub">20/24 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$12.26</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row pending" for="cb-arm-alchemy-effect"><span class="cb-rank">7</span><span class="cb-who"><span class="cb-who-name">Alchemy v2 (Effect)</span><span class="cb-who-sub">not yet run</span></span><span class="cb-track"></span><span class="cb-board-value">—</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
 </ul>
 <div class="cb-panelsets">
 <div class="cb-panelset">

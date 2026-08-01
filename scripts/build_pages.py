@@ -443,7 +443,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "Ranked by what **100 correct answers** cost: the spend on one question,",
         "divided by the share the tool gets right, times a hundred. Being cheap at",
         "being wrong does not help, and a hundred is a number worth having rather",
-        "than four decimal places of cents. Pick a tool to see the rest.",
+        "than four decimal places of cents.",
+        "",
+        "**Select a row** to see what that tool spent, how hard it worked, and the",
+        "environment its agent was given.",
         "",
         '<div class="cb-explorer" markdown="0">',
     ]
@@ -497,6 +500,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             f'<span class="cb-who-sub">{sub}</span></span>'
             f"{bar}"
             f'<span class="cb-board-value">{val}</span>'
+            '<span class="cb-chev" aria-hidden="true">&rsaquo;</span>'
             "</label></li>"
         )
     out.append("</ul>")
