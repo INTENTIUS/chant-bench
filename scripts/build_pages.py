@@ -345,13 +345,23 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             tasks |= set(r["score"]["by_task"])
         else:
             pending.append(arm)
-    # Ordered by what an answer costs, not by rate: most of these tools reach
-    # most of these answers eventually, and the question is what that takes.
+    # Ranked by the number the row shows. It was ranked by cost while displaying
+    # pass rate, so the order and the figure beside it disagreed — a row could
+    # sit above one with a better score and look like it had won.
     #
-    # `bare` is pinned last however cheap it turns out to be. It is the floor,
-    # not an entrant, and a baseline placed third invites reading the order as a
-    # ranking it is not part of.
-    rows.sort(key=lambda x: (x[0] == "bare", x[1]["effort"].get("cost_usd") or 10**9))
+    # Cost breaks ties, cheaper first, because two tools that answer the same
+    # share of the questions are separated by what that took.
+    #
+    # `bare` is pinned last whatever it scores. It is the floor, not an entrant,
+    # and a baseline placed third invites reading the order as a ranking it is
+    # not part of.
+    rows.sort(
+        key=lambda x: (
+            x[0] == "bare",
+            -(x[1]["score"].get("pass_rate") or 0),
+            x[1]["effort"].get("cost_usd") or 10**9,
+        )
+    )
     pending.sort(key=lambda a: (a == "bare", a))
 
     just = [r for _, r, _ in rows]
@@ -396,8 +406,8 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "",
         "## Pass rate",
         "",
-        "Ordered by what one answer costs, cheapest first, with the baseline last.",
-        "Pick a tool to see what its answers cost.",
+        "Ranked by share of questions answered, with cost breaking ties and the",
+        "baseline last. Pick a tool to see what its answers cost.",
         "",
         '<div class="cb-explorer" markdown="0">',
     ]
@@ -501,7 +511,16 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
                 field = [
                     x for x in (get(o) for o in just) if isinstance(x, (int, float))
                 ]
-                best = min(field) if field else None
+                # The best *other* tool, not the best including this one. chant
+                # leads every metric, so "best of field" was its own figure
+                # repeated back at it — a reference row that agrees with the
+                # subject by construction is not a reference.
+                rivals = [
+                    x
+                    for o, x in ((o, get(o)) for o in just)
+                    if isinstance(x, (int, float)) and o is not r
+                ]
+                best = min(rivals) if rivals else None
                 # Rounded to the precision the arms' own figures carry, so an
                 # average does not read as more precise than what it averages.
                 avg = round(sum(field) / len(field), 2) if field else None
@@ -517,7 +536,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
                 # provenance, where someone checking a number will look for it.
                 for who, val, cls in (
                     (name, v, "self"),
-                    ("best of field", best, "ref"),
+                    ("best other tool", best, "ref"),
                     ("field average", avg, "ref"),
                 ):
                     shown = show(val) if isinstance(val, (int, float)) else "—"
