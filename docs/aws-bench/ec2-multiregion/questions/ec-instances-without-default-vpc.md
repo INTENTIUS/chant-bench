@@ -7,13 +7,14 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-4 commands, from `chant-b1`.
+5 commands, from `chant-m1`.
 
 ```sh
+cd /workspace/chant && chant search "kind:EC2::Instance ->kind:EC2::VPC !attr:providerDefault=true" --at latest --env floci --show VpcId,region --explain
 cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show VpcId,region --explain
-cd /workspace/chant && chant search "kind:EC2::VPC" --at latest --env floci --show providerDefault
-cd /workspace/chant && chant search "kind:EC2::Instance !->kind:EC2::VPC ->attr:providerDefault=true" --at latest --env floci --show VpcId,region
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show VpcId,region --explain | grep -v "vpc-default"
+cd /workspace/chant && chant search "kind:EC2::VPC" --at latest --env floci --show providerDefault,region --explain
+cd /workspace/chant && chant search "kind:EC2::Instance ->kind:EC2::VPC attr:providerDefault=true" --at latest --env floci --show VpcId,region
+cd /workspace/chant && chant search "kind:EC2::Instance ->kind:EC2::VPC" --at latest --env floci --show VpcId,region
 ```
 
 ## Terraform — answered

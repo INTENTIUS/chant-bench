@@ -7,12 +7,10 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-3 commands, from `chant-b1`.
+1 commands, from `chant-m1`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-east-1" --at latest --env floci --show PrivateIpAddress,region --explain
-cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-west-1" --at latest --env floci --show PrivateIpAddress,region --explain
-cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-west-2" --at latest --env floci --show PrivateIpAddress,region --explain
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show PrivateIpAddress,region --explain
 ```
 
 ## Terraform — answered

@@ -7,21 +7,13 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-12 commands, from `chant-b1`.
+4 commands, from `chant-m1`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --show region --explain
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup <-kind:EC2::Instance" --at latest --env floci --show region
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance" --at latest --env floci --show region
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.to | startswith("sg-"))' | head -20
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.to | startswith("sg-")) | {from, to}' | grep -E '(from|to)' | sort | uniq
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.to | startswith("sg-"))' | jq -s 'group_by(.to) | map({sg: .[0].to, referenced_by: map(.from)})'
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --show region,attr:GroupId --explain | tail -20
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.nodes[] | select(.kind == "AWS::EC2::SecurityGroup")' | head -40
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.nodes[] | select(.kind == "AWS::EC2::SecurityGroup") | {id: .id, physicalId: .physicalId, region: .attrs.region, groupId: .attrs.GroupId, groupName: .attrs.GroupName}' | jq -s .
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.to | startswith("sg-")) | .to' | sort | uniq -c
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.to | contains("542e41f87a27f2e7f") or contains("webSecurityGroup"))'
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.to | contains("77efebef71bc10baa") or contains("0c8b1f14fce19f942") or contains("275c48ff2903437e9") or contains("be9466a0faa8825f3") or contains("unusedSecurityGroup"))'
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface" --at latest --env floci --show region,GroupId --explain
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface !<-kind:EC2::LaunchTemplate" --at latest --env floci --show region,GroupId --explain
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --show region,GroupId --explain
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --show region,GroupId,providerDefault --explain
 ```
 
 ## Terraform — missed
