@@ -1,8 +1,8 @@
-# AWS CDK — run 2 of 4
+# Terraform — run 4 of 4
 
-`cdk-cur` <span class="cb-badge ok">gates passed</span>
+`terraform-m2` <span class="cb-badge ok">gates passed</span>
 
-**17 of 24** (0.708) · 104 account read(s) · 12.79 commands, 15.17 turns, 143s per trial
+**19 of 24** (0.792) · 0 account read(s) · 9.62 commands, 12.21 turns, 69s per trial
 
 ## By question
 
@@ -12,8 +12,8 @@
 | `ec-instances-without-default-vpc` | 3/3 &nbsp; ✓ ✓ ✓ |
 | `find-ec-instances-in-public-subn` | 2/3 &nbsp; ✗ ✓ ✓ |
 | `list-ec-instances-all-regions` | 3/3 &nbsp; ✓ ✓ ✓ |
-| `list-ec-instances-all-regions-1` | 2/3 &nbsp; ✓ ✗ ✓ |
-| `list-ec-instances-by-vpc-across` | 1/3 &nbsp; ✗ ✓ ✗ |
+| `list-ec-instances-all-regions-1` | 2/3 &nbsp; ✓ ✓ ✗ |
+| `list-ec-instances-by-vpc-across` | 3/3 &nbsp; ✓ ✓ ✓ |
 | `list-ec-private-ips-all-regions` | 3/3 &nbsp; ✓ ✓ ✓ |
 | `list-unused-security-groups-all` | 0/3 &nbsp; ✗ ✗ ✗ |
 
@@ -21,10 +21,10 @@
 
 | | |
 |---|---|
-| finished | 2026-07-31T17:36:10.317989 |
-| harness | `1fa8317` |
+| finished | 2026-07-31T18:52:49.660999 |
+| harness | `9ba7e95` |
 | agent | claude-code / `claude-haiku-4-5-20251001`, k=3 |
-| briefing | `f4b4c7082924` |
+| briefing | `7822d55ca7ca` |
 | substrate | floci |
 | trials | 24 of 24 expected |
 
@@ -33,14 +33,14 @@ briefing hash. Different either, different experiment.
 
 ## Logs
 
-- `jobs/cdk-cur/run-arm.log` — wipe, deploy, both gates, and the scored run
-- `jobs/cdk-cur/job.log` — the scored run
-- `jobs/cdk-cur/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
+- `jobs/terraform-m2/run-arm.log` — wipe, deploy, both gates, and the scored run
+- `jobs/terraform-m2/job.log` — the scored run
+- `jobs/terraform-m2/<task>__<id>/agent/` — per trial: every command, its output, the answer, the verdict
 
 ## Reproducing
 
 ```sh
-./benchmarks/agent-env/run-arm.sh cdk cdk-cur
+./benchmarks/agent-env/run-arm.sh terraform terraform-m2
 ```
 
-[← all AWS CDK runs](../index.md)
+[← all Terraform runs](../index.md)

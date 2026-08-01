@@ -1,4 +1,4 @@
-# Terraform — run 2 of 2
+# Terraform — run 2 of 4
 
 `terraform-cur` <span class="cb-badge ok">gates passed</span>
 
