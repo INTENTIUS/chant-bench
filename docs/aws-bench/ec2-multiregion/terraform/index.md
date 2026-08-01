@@ -13,10 +13,10 @@ account, no spend:
 
 That wipes the emulator, deploys this arm's estate, proves the tool can
 answer before scoring it, runs all eight questions three times, then checks
-the tool was actually used. About ten minutes.
+the tool was used. About ten minutes.
 
-If a gate fails the run stops and is published as invalid rather than as a
-low score.
+If a gate fails the run stops and is published as invalid, not as a low
+score.
 
 ## Runs
 
@@ -29,8 +29,8 @@ low score.
 
 This is the whole briefing this arm's agent receives, appended to each
 question. It is published so the comparison can be checked rather than
-trusted — no arm is taught a route the others lack, and no briefing
-contains an answer.
+trusted. No arm is taught a route the others lack, and no briefing contains
+an answer.
 
 To change it and measure the difference:
 

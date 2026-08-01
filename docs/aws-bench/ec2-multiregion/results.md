@@ -1,29 +1,28 @@
 # Results
 
-Every tool here can reach these answers — the agent keeps calling the API
+Every tool here can reach these answers. The agent keeps calling the API
 until it does. What differs is **who does the work**.
 
-For most arms the model *is* the query engine: it sweeps, joins, and reasons
+For most arms the model *is* the query engine. It sweeps, joins, and reasons
 over results, holding the estate in its context. That is what the token
 counts below are buying.
 
-chant moves the join into the tool. The model writes one query; the tool
-answers it. Same answer, a third of the tokens — and the answer arrives with
-the query that produced it, which you can read, re-run, and put in CI.
+chant moves the join into the tool. The model writes one query, the tool
+answers it. Same answer, a third of the tokens, and the answer comes back
+with the query that produced it. You can read it, re-run it, put it in CI.
 
-That last part is not an efficiency gain. It is the difference between *an
-agent looked at your account and thinks four groups are unused* and a line
-you can check.
+That part is not an efficiency gain. It is the difference between *an agent
+looked at your account and thinks four groups are unused* and a line you can
+check.
 
-Read every row against **No tool** — upstream aws-bench's own experiment, an
-agent with the AWS CLI and nothing else. A tool that does not get there more
-cheaply than that is not earning its place.
+Read every row against **No tool**, which is upstream aws-bench's own
+experiment. An agent with the AWS CLI and nothing else. A tool that does not
+get there more cheaply is not earning its place.
 
-Each arm's latest valid run, ordered by what one answer costs. Arms have run
-different numbers of times, so `n` is given and the figure is never a
-best-of. Per-question cost is measured; multiply by your own volumes if you
-want an annual number — we have not, because that would replace a measured
-figure with three assumed ones.
+Ordered by what one answer costs. Arms have run different numbers of times,
+so `n` is given and the figure is never a best-of. Per-question cost is
+measured. Multiply by your own volumes if you want an annual number. We have
+not, because that swaps a measured figure for three assumed ones.
 
 | | arm | rate | tokens in | tokens out | commands | turns | secs | reads | n | |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -35,7 +34,7 @@ figure with three assumed ones.
 
 !!! note "Reading the account-reads column"
     A tool that answers from state it already holds is worth more than one
-    that re-reads the cloud. CDK is the honest exception — it keeps no state
+    that re-reads the cloud. CDK is the honest exception. It keeps no state
     of its own, so its reads are its sanctioned path, not a fallback.
 
 ## By question

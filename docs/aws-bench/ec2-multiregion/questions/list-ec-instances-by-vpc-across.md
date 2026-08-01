@@ -3,7 +3,7 @@
 `list-ec-instances-by-vpc-across` · the answer aws-bench grades against: **6 instances across 4 VPCs**
 
 Below is what each tool's agent actually ran. The scores say which tools
-answered; this says how — and the how is where the tools differ most.
+answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 

@@ -3,7 +3,7 @@
 `chant-s1-rerun` <span class="cb-badge invalid">invalid</span>
 
 !!! danger "This run does not count"
-    the postflight audit failed; not every trial completed. The numbers below describe something other
+    the postflight audit failed, not every trial completed. The numbers below describe something other
     than this tool, and are published so the failure is visible rather
     than quietly dropped.
 
@@ -25,8 +25,8 @@
 | substrate | floci |
 | trials | 0 of 24 expected |
 
-A run is only comparable with another that shares the harness commit and
-the briefing hash. Different either, different experiment.
+A run only compares with another that shares the harness commit and the
+briefing hash. Different either, different experiment.
 
 ## Logs
 

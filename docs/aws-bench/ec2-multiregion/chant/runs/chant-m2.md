@@ -33,8 +33,8 @@
 | substrate | floci |
 | trials | 23 of 24 expected |
 
-A run is only comparable with another that shares the harness commit and
-the briefing hash. Different either, different experiment.
+A run only compares with another that shares the harness commit and the
+briefing hash. Different either, different experiment.
 
 ## Logs
 
