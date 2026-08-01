@@ -61,20 +61,21 @@ cat > /tmp/analysis.txt << 'EOF' ANALYSIS OF EC2 INSTANCES REACHABLE VIA SSH FRO
 
 ## AWS CDK — answered
 
-11 commands, from `cdk-cur`.
+12 commands, from `cdk-m2`.
 
 ```sh
-cd /workspace/cdk_app && npx cdk ls 2>/dev/null
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance" or .value.Type == "AWS::EC2::SecurityGroup") | {key: .key, type: .value.Type, properties: .value.Properties}' | head -100
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance" or .value.Type == "AWS::EC2::SecurityGroup") | {key: .key, type: .value.Type, properties: .value.Properties}' | head -100
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance" or .value.Type == "AWS::EC2::SecurityGroup") | {key: .key, type: .value.Type, properties: .value.Properties}' | head -100
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {name: .key, instance_name: .value.Properties.Tags[0].Value, security_groups: .value.Properties.SecurityGroupIds}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::SecurityGroup") | {name: .key, ingress: .value.Properties.SecurityGroupIngress}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources.LaunchTemplateInstance'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.key | contains("LaunchTemplate")) | {name: .key, type: .value.Type, properties: .value.Properties}'
+cd /workspace/cdk_app && npx cdk ls
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-QARoles-us-east-1 --json 2>/dev/null | jq . > /tmp/qaroles.json && echo "QARoles template synthesized"
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq . > /tmp/ec2_us_east_1.json && echo "EC2 us-east-1 template synthesized"
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq . > /tmp/ec2_us_west_1.json && echo "EC2 us-west-1 template synthesized"
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq . > /tmp/ec2_us_west_2.json && echo "EC2 us-west-2 template synthesized"
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 --query 'StackResources[?ResourceType==`AWS::EC2::SecurityGroup`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 --query 'StackResources[?ResourceType==`AWS::EC2::SecurityGroup`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 --query 'StackResources[?ResourceType==`AWS::EC2::SecurityGroup`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws ec2 describe-security-groups --group-ids sg-4288aced345ff2f57 --region us-east-1 --query 'SecurityGroups[0].IpPermissions' --output table
 ```
 
 ## Alchemy — answered
@@ -95,4 +96,14 @@ cd /workspace/alchemy && alchemy state get "alchemy-ec2-multiregion/bench/web-ss
 cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && for f in *.json; do jq -r 'select(.kind == "aws::SecurityGroupRule" and (.output.securityGroup.groupName // "" | contains("default")) or (.output.cidrBlocks[]? == "0.0.0.0/0")) | .id + " | " + (.output.type // "N/A") + " | " + (.output.protocol // "N/A") + " | " + ((.output.fromPort // "N/A") | tostring) + ":" + ((.output.toPort // "N/A") | tostring) + " | " + (.output.cidrBlocks[]? // "N/A")' "$f" 2>/dev/null done
 cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && for f in *.json; do kind=$(jq -r '.kind // "unknown"' "$f" 2>/dev/null) if [[ "$kind" == "aws::SecurityGroupRule" ]]; then echo "=== $(basename "$f" .json) ===" jq -c '{type: .output.type, protocol: .output.protocol, fromPort: .output.fromPort, toPort: .output.toPort, cidrBlocks: .output.cidrBlocks, groupName: .output.securityGroup.groupName, region: .output.securityGroup.region}' "$f" 2>/dev/null fi done
 # … 8 more
+```
+
+## Alchemy v2 (Effect) — answered
+
+3 commands, from `alchemy-effect-m3`.
+
+```sh
+cd /workspace/alchemy && alchemy state resources --stack prod --stage bench us-east-1.run.ts --local 2>&1 | head -50
+find /workspace/alchemy -name "*.run.ts" -type f | head -5
+grep -r "sg-default" /workspace/alchemy/.alchemy/state/ | head -5
 ```

@@ -6,7 +6,7 @@
   "run": {
     "id": "alchemy-cur",
     "finished_at": "2026-07-31T16:40:28.488823",
-    "harness_commit": "87ca0c3"
+    "harness_commit": "7b09168"
   },
   "agent": {
     "name": "claude-code",

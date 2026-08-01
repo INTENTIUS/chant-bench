@@ -2,10 +2,10 @@
   "schema": 1,
   "bench": "aws-bench",
   "scenario": "ec2-multiregion",
-  "arm": "terraform",
+  "arm": "alchemy-effect",
   "run": {
-    "id": "terraform-m1",
-    "finished_at": "2026-07-31T21:21:45.680800",
+    "id": "alchemy-effect-m3",
+    "finished_at": "2026-07-31T23:45:51.498366",
     "harness_commit": "7b09168"
   },
   "agent": {
@@ -18,28 +18,28 @@
     "expected_trials": 24,
     "completed": 24,
     "errored": 0,
-    "passed": 19,
-    "pass_rate": 0.7917,
+    "passed": 7,
+    "pass_rate": 0.2917,
     "by_task": {
       "describe-ec-instances-cross-regi": [
-        1,
-        1,
-        1
+        0,
+        0,
+        0
       ],
       "ec-instances-without-default-vpc": [
+        0,
         1,
-        1,
-        1
+        0
       ],
       "find-ec-instances-in-public-subn": [
         0,
         1,
-        1
+        0
       ],
       "list-ec-instances-all-regions": [
+        0,
         1,
-        1,
-        1
+        0
       ],
       "list-ec-instances-all-regions-1": [
         1,
@@ -47,14 +47,14 @@
         1
       ],
       "list-ec-instances-by-vpc-across": [
-        1,
-        1,
-        0
+        0,
+        0,
+        1
       ],
       "list-ec-private-ips-all-regions": [
-        1,
-        1,
-        1
+        0,
+        0,
+        0
       ],
       "list-unused-security-groups-all": [
         0,
@@ -75,22 +75,22 @@
     "answered_from_own_state": true
   },
   "effort": {
-    "tool_calls": 10.08,
-    "turns": 12.83,
-    "wall_seconds": 66.86,
-    "tokens_in": 357100.33,
-    "tokens_out": 4817.96,
-    "cost_usd": 0.0879,
-    "cost_usd_run": 2.1086
+    "tool_calls": 13.29,
+    "turns": 18.58,
+    "wall_seconds": 68.12,
+    "tokens_in": 367363.25,
+    "tokens_out": 4478.92,
+    "cost_usd": 0.0803,
+    "cost_usd_run": 1.9272
   },
   "logs": {
-    "run": "jobs/terraform-m1/run-arm.log",
-    "job": "jobs/terraform-m1/job.log",
-    "trials": "jobs/terraform-m1/<task>__<id>/agent/"
+    "run": "jobs/alchemy-effect-m3/run-arm.log",
+    "job": "jobs/alchemy-effect-m3/job.log",
+    "trials": "jobs/alchemy-effect-m3/<task>__<id>/agent/"
   },
   "briefing": {
-    "path": "benchmarks/arms/briefing-terraform.md",
-    "sha256": "7822d55ca7ca"
+    "path": "benchmarks/arms/briefing-alchemy-effect.md",
+    "sha256": "ff3208b4ced3"
   },
-  "reproduce": "benchmarks/arms/terraform-ec2-multiregion/REPRODUCE.md"
+  "reproduce": "benchmarks/arms/alchemy-effect-ec2-multiregion/REPRODUCE.md"
 }

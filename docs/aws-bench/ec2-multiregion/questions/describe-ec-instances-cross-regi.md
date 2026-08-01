@@ -55,20 +55,22 @@ cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.
 
 ## AWS CDK — answered
 
-11 commands, from `cdk-cur`.
+14 commands, from `cdk-m2`.
 
 ```sh
 cd /workspace/cdk_app && npx cdk ls
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, properties: .value.Properties}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::VPC" or .value.Type == "AWS::EC2::Subnet") | {logicalId: .key, type: .value.Type, properties: .value.Properties}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, subnet: .value.Properties.SubnetId}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, subnet: .value.Properties.SubnetId}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance" or .value.Type == "AWS::EC2::VPC" or .value.Type == "AWS::EC2::Subnet") | {logicalId: .key, type: .value.Type, subnet: .value.Properties.SubnetId, vpcId: .value.Properties.VpcId}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance" or .value.Type == "AWS::EC2::VPC" or .value.Type == "AWS::EC2::Subnet") | {logicalId: .key, type: .value.Type, subnet: .value.Properties.SubnetId, vpcId: .value.Properties.VpcId}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {name: .key, instance_name: .value.Properties.Tags[]? | select(.Key == "Name") | .Value, subnet: .value.Properties.SubnetId}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources.LaunchTemplateInstance'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance")'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance")'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | with_entries(select(.value.Type == "AWS::EC2::Instance"))' > /tmp/east1-instances.json && cat /tmp/east1-instances.json
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | with_entries(select(.value.Type == "AWS::EC2::Instance"))' > /tmp/west1-instances.json && cat /tmp/west1-instances.json
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | with_entries(select(.value.Type == "AWS::EC2::Instance"))' > /tmp/west2-instances.json && cat /tmp/west2-instances.json
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | with_entries(select(.value.Type == "AWS::EC2::Subnet" or .value.Type == "AWS::EC2::VPC")) | map({key: .key, type: .value.Type, properties: .value.Properties})'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | keys' | head -30
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | {vpc: .ResourcesVpc46097686, publicSubnet: .ResourcesVpcPublicSubnet1Subnet7103FD34, privateSubnet: .ResourcesVpcPrivateSubnet1Subnet98586872}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | {vpc: .ResourcesVpc46097686, publicSubnet: .ResourcesVpcPublicSubnet1Subnet7103FD34}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | {vpc: .ResourcesVpc46097686, publicSubnet: .ResourcesVpcPublicSubnet1Subnet7103FD34}'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Type: .ResourceType}'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::VPC" or .ResourceType == "AWS::EC2::Subnet") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Type: .ResourceType}'
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance" or .ResourceType == "AWS::EC2::VPC" or .ResourceType == "AWS::EC2::Subnet") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Type: .ResourceType}'
+# … 2 more
 ```
 
 ## Alchemy — answered
@@ -79,4 +81,23 @@ cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 
 cd /workspace/alchemy && alchemy state list | grep -i instance
 cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-DefaultVPCInstanceId
 cd /workspace/alchemy && alchemy state list | grep "aws::Instance"
+```
+
+## Alchemy v2 (Effect) — missed
+
+12 commands, from `alchemy-effect-m3`.
+
+```sh
+cd /workspace/alchemy && alchemy state tree us-east-1.run.ts --local 2>&1 | head -50
+cd /workspace/alchemy && alchemy state stacks us-east-1.run.ts --local
+cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state stacks us-west-2.run.ts --local
+find /workspace/alchemy/.alchemy/state -type d | head -20
+cd /workspace/alchemy && find .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench -name "*.json" -exec grep -l '"resourceType": "aws:ec2/instance"' {} \;
+cd /workspace/alchemy && find .alchemy/state/alchemy-effect-ec2-multiregion-us-west-1/bench -name "*.json" -exec grep -l '"resourceType": "aws:ec2/instance"' {} \;
+cd /workspace/alchemy && find .alchemy/state/alchemy-effect-ec2-multiregion-us-west-2/bench -name "*.json" -exec grep -l '"resourceType": "aws:ec2/instance"' {} \;
+cat /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/DefaultVpcServer.json
+cd /workspace/alchemy && for file in .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/*.json; do if grep -q '"resourceType": "AWS.EC2.Instance"' "$file"; then jq -r '.fqn + " | VPC: " + .attr.vpcId + " | Instance ID: " + .attr.instanceId' "$file" fi done
+cd /workspace/alchemy && for file in .alchemy/state/alchemy-effect-ec2-multiregion-us-west-1/bench/*.json; do if grep -q '"resourceType": "AWS.EC2.Instance"' "$file"; then jq -r '.fqn + " | VPC: " + .attr.vpcId + " | Instance ID: " + .attr.instanceId' "$file" fi done
+cd /workspace/alchemy && for file in .alchemy/state/alchemy-effect-ec2-multiregion-us-west-2/bench/*.json; do if grep -q '"resourceType": "AWS.EC2.Instance"' "$file"; then jq -r '.fqn + " | VPC: " + .attr.vpcId + " | Instance ID: " + .attr.instanceId' "$file" fi done
 ```

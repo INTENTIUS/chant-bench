@@ -6,7 +6,7 @@
   "run": {
     "id": "chant-control-0330",
     "finished_at": "2026-07-30T21:23:12.184675",
-    "harness_commit": "87ca0c3"
+    "harness_commit": "7b09168"
   },
   "agent": {
     "name": "claude-code",
