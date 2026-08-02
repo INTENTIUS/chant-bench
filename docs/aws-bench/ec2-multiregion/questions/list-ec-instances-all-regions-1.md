@@ -68,21 +68,22 @@ cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/s
 
 ## AWS CDK — answered
 
-12 commands, from `cdk-m2`.
+15 commands, from `cdk-m3`.
 
 ```sh
-cd /workspace/cdk_app && npx cdk ls
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-QARoles-us-east-1 --json 2>/dev/null | jq . > /tmp/qaroles.json && echo "QARoles template synthesized"
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq . > /tmp/ec2_us_east_1.json && echo "EC2 us-east-1 template synthesized"
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq . > /tmp/ec2_us_west_1.json && echo "EC2 us-west-1 template synthesized"
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq . > /tmp/ec2_us_west_2.json && echo "EC2 us-west-2 template synthesized"
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 --query 'StackResources[?ResourceType==`AWS::EC2::SecurityGroup`].[LogicalResourceId,PhysicalResourceId]' --output table
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 --query 'StackResources[?ResourceType==`AWS::EC2::SecurityGroup`].[LogicalResourceId,PhysicalResourceId]' --output table
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 --query 'StackResources[?ResourceType==`AWS::EC2::SecurityGroup`].[LogicalResourceId,PhysicalResourceId]' --output table
-aws ec2 describe-security-groups --group-ids sg-4288aced345ff2f57 --region us-east-1 --query 'SecurityGroups[0].IpPermissions' --output table
+cd /workspace/cdk_app && npx cdk ls 2>/dev/null
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | keys' | head -50
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance" or .value.Type == "AWS::EC2::SecurityGroup" or .value.Type == "AWS::EC2::LaunchTemplate") | {logicalId: .key, type: .value.Type, properties: .value.Properties}' | head -200
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources.MyEC2InstanceB097982C.Properties'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources.MyEC2InstanceLaunchTemplate7D3AFA7C.Properties'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, properties: .value.Properties}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources.PrivateInstanceInstanceSecurityGroup181877AD.Properties'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, securityGroups: .value.Properties.SecurityGroupIds, launchTemplate: .value.Properties.LaunchTemplate}' | head -100
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::SecurityGroup") | {logicalId: .key, ingress: .value.Properties.SecurityGroupIngress}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, name: .value.Properties.Tags[]? | select(.Key == "Name") | .Value}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, name: .value.Properties.Tags[]? | select(.Key == "Name") | .Value, securityGroups: .value.Properties.SecurityGroupIds}'
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources.WebServerInstanceInstanceSecurityGroupCA0A5891.Properties.SecurityGroupIngress'
+# … 3 more
 ```
 
 ## Alchemy — answered

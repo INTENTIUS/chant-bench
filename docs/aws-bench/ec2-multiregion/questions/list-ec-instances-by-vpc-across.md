@@ -57,22 +57,17 @@ cat > /logs/agent/agent-output.txt << 'EOF' EC2 INSTANCES BY VPC AND REGION ====
 
 ## AWS CDK — answered
 
-13 commands, from `cdk-m2`.
+8 commands, from `cdk-m3`.
 
 ```sh
-cd /workspace/cdk_app && npx cdk ls 2>/dev/null
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance" or .ResourceType=="AWS::EC2::VPC") | {LogicalId, PhysicalId, ResourceType, StackRegion: .StackId | split(":")[3]}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance" or .ResourceType=="AWS::EC2::VPC") | {LogicalId, PhysicalId, ResourceType, StackRegion: .StackId | split(":")[3]}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance" or .ResourceType=="AWS::EC2::VPC") | {LogicalId, PhysicalId, ResourceType, StackRegion: .StackId | split(":")[3]}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance" or .ResourceType=="AWS::EC2::VPC") | {LogicalId, PhysicalId, ResourceType}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance" or .ResourceType=="AWS::EC2::VPC") | {LogicalId, PhysicalId, ResourceType}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance" or .ResourceType=="AWS::EC2::VPC") | {LogicalId, PhysicalId, ResourceType}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance")'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::VPC")'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance")'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::VPC")'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance")'
-# … 1 more
+cd /workspace/cdk_app && npx cdk ls
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-QARoles-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type=="AWS::EC2::Instance" or .value.Type=="AWS::EC2::VPC" or .value.Type=="AWS::EC2::Subnet") | {logicalId: .key, type: .value.Type, properties: .value.Properties}'
+cd /workspace/cdk_app && for stack in "ec2-multiregion-QARoles-us-east-1" "ec2-multiregion-EC2-ks84v1fh12-us-east-1" "ec2-multiregion-EC2-ls9fuhb522-us-west-1" "ec2-multiregion-EC2-ls9fuhb522-us-west-2"; do echo "=== Stack: $stack ===" npx cdk synth "$stack" --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type=="AWS::EC2::Instance") | {logicalId: .key, vpcId: .value.Properties.SubnetId, securityGroups: .value.Properties.SecurityGroupIds}' 2>/dev/null done
+cd /workspace/cdk_app && for stack in "ec2-multiregion-QARoles-us-east-1" "ec2-multiregion-EC2-ks84v1fh12-us-east-1" "ec2-multiregion-EC2-ls9fuhb522-us-west-1" "ec2-multiregion-EC2-ls9fuhb522-us-west-2"; do echo "=== Template for: $stack ===" npx cdk synth "$stack" --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type=="AWS::EC2::VPC" or .value.Type=="AWS::EC2::Subnet") | {logicalId: .key, type: .value.Type, vpcId: .value.Properties.VpcId}' 2>/dev/null | head -30 done
+cd /workspace/cdk_app && for stack in "ec2-multiregion-QARoles-us-east-1" "ec2-multiregion-EC2-ks84v1fh12-us-east-1" "ec2-multiregion-EC2-ls9fuhb522-us-west-1" "ec2-multiregion-EC2-ls9fuhb522-us-west-2"; do region=$(echo $stack | grep -oE '(us-east-1|us-west-1|us-west-2)') echo "=== Stack: $stack (Region: $region) ===" aws cloudformation describe-stack-resources --stack-name "$stack" --region "$region" 2>/dev/null | jq '.StackResources[] | select(.ResourceType=="AWS::EC2::Instance" or .ResourceType=="AWS::EC2::VPC" or .ResourceType=="AWS::EC2::Subnet") | {logicalId: .LogicalResourceId, physicalId: .PhysicalResourceId, type: .ResourceType}' 2>/dev/null done
+aws ec2 describe-instances --instance-ids i-6a62f03f1b63e02cb i-d49fa51ee7943b064 i-99a5057f76dd16760 i-3e459933b4e4a49c1 --region us-east-1 --query 'Reservations[*].Instances[*].[InstanceId,SubnetId,VpcId]' --output json
+aws ec2 describe-instances --instance-ids i-006e65b4905bccbb5 --region us-west-1 --query 'Reservations[*].Instances[*].[InstanceId,SubnetId,VpcId]' --output json
+aws ec2 describe-instances --instance-ids i-1018901c5ceef586e --region us-west-2 --query 'Reservations[*].Instances[*].[InstanceId,SubnetId,VpcId]' --output json
 ```
 
 ## Alchemy — answered

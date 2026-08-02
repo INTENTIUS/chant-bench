@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "cdk",
+  "run": {
+    "id": "cdk-m3",
+    "workspace": "937a149fb832",
+    "finished_at": "2026-08-02T14:05:41.936847",
+    "harness_commit": "4e24173"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 18,
+    "pass_rate": 0.75,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        0
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        1,
+        0
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        0,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 126,
+    "invocations_failed": 3,
+    "failure_rate": 0.0233
+  },
+  "independence": {
+    "account_reads": 84,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 11,
+    "turns": 13.38,
+    "wall_seconds": 129.52,
+    "tokens_in": 338863.04,
+    "tokens_out": 4973.83,
+    "cost_usd": 0.0785,
+    "cost_usd_run": 1.8844
+  },
+  "logs": {
+    "run": "jobs/cdk-m3/run-arm.log",
+    "job": "jobs/cdk-m3/job.log",
+    "trials": "jobs/cdk-m3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-cdk.md",
+    "sha256": "f4b4c7082924"
+  },
+  "reproduce": "benchmarks/arms/cdk_app/REPRODUCE.md"
+}

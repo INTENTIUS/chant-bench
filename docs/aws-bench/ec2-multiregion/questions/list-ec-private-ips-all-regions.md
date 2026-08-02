@@ -53,12 +53,16 @@ cat > /logs/agent/agent-output.txt << 'EOF' EC2 INSTANCES AND PRIVATE IPs - ALL 
 
 ## AWS CDK — answered
 
-3 commands, from `cdk-m2`.
+7 commands, from `cdk-m3`.
 
 ```sh
-aws ec2 describe-instances --region us-east-1 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`].Value|[0]]' --output json 2>/dev/null
-aws ec2 describe-instances --region us-west-1 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`].Value|[0]]' --output json 2>/dev/null
-aws ec2 describe-instances --region us-west-2 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`].Value|[0]]' --output json 2>/dev/null
+cd /workspace/cdk_app && npx cdk ls 2>/dev/null
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output table
+aws ec2 describe-instances --instance-ids i-6a62f03f1b63e02cb i-d49fa51ee7943b064 i-99a5057f76dd16760 i-3e459933b4e4a49c1 --region us-east-1 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress]' --output table
+aws ec2 describe-instances --instance-ids i-006e65b4905bccbb5 --region us-west-1 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress]' --output table
+aws ec2 describe-instances --instance-ids i-1018901c5ceef586e --region us-west-2 --query 'Reservations[].Instances[].[InstanceId,PrivateIpAddress]' --output table
 ```
 
 ## Alchemy — answered

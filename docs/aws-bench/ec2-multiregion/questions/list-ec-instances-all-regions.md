@@ -47,16 +47,12 @@ cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | selec
 
 ## AWS CDK — answered
 
-7 commands, from `cdk-m2`.
+3 commands, from `cdk-m3`.
 
 ```sh
-cd /workspace/cdk_app && npx cdk ls 2>/dev/null
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {LogicalId: .key, Properties: .value.Properties}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {LogicalId: .key, Properties: .value.Properties}'
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {LogicalId: .key, Properties: .value.Properties}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ks84v1fh12-us-east-1 --region us-east-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Stack: "us-east-1"}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-1 --region us-west-1 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Stack: "us-west-1"}'
-aws cloudformation describe-stack-resources --stack-name ec2-multiregion-EC2-ls9fuhb522-us-west-2 --region us-west-2 2>/dev/null | jq '.StackResources[] | select(.ResourceType == "AWS::EC2::Instance") | {LogicalId: .LogicalResourceId, PhysicalId: .PhysicalResourceId, Stack: "us-west-2"}'
+cd /workspace/cdk_app && npx cdk ls
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq -r '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | "\(.key): \(.value.Properties.ImageId // "N/A")"'
+cd /workspace/cdk_app # Get all stacks STACKS=( "ec2-multiregion-QARoles-us-east-1" "ec2-multiregion-EC2-ks84v1fh12-us-east-1" "ec2-multiregion-EC2-ls9fuhb522-us-west-1" "ec2-multiregion-EC2-ls9fuhb522-us-west-2" ) # Extract region from stack name declare -A regions regions[ec2-multiregion-QARoles-us-east-1]="us-east-1" regions[ec2-multiregion-EC2-ks84v1fh12-us-east-1]="us-east-1" regions[ec2-multiregion-EC2-ls9fuhb522-us-west-1]="us-west-1" regions[ec2-multiregion-EC2-ls9fuhb522-us-west-2]="us-west-2" echo "EC2 Instance IDs by Region:" echo "============================" for stack in "${STACKS[@]}"; do region=${regions[$stack]} echo "" echo "Stack: $stack (Region: $region)" # Get stack resources and filter for EC2 instances aws cloudformation describe-stack-resources \ --stack-name "$stack" \ --region "$region" \ --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' \ --output text 2>/dev/null | while read -r logical physical; do if [ ! -z "$logical" ]; then echo " $logical: $physical" fi done || echo " (Stack not found or no EC2 instances)" done
 ```
 
 ## Alchemy — answered
