@@ -21,6 +21,15 @@ matrix reps="3" dir="../aws-bench" *arms:
 ingest dir="../aws-bench" *runs:
     ./scripts/ingest.sh {{dir}} {{runs}}
 
+# Classify the job directories that never became results, and optionally delete
+# them. Published runs are never touched — their logs are what a published
+# number links to.
+#
+#   just prune                  # say what would go
+#   just prune --yes            # delete the spent ones
+prune *args:
+    python3 scripts/prune.py ../aws-bench {{args}}
+
 # Regenerate the results pages from what is already published.
 build:
     python3 scripts/validate_results.py

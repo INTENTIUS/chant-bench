@@ -7,10 +7,14 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-1 commands, from `chant-m3`.
+5 commands, from `chant-m1`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,PublicIpAddress,PrivateIpAddress,effectiveIngress,internetFacing 2>&1
+cd /workspace/chant && chant lifecycle show floci
+cd /workspace/chant && chant search "kind:EC2::Instance attr:internetFacing=true" --at latest --env floci --show PrivateIpAddress,PublicIpAddress,effectiveIngress --explain
+cd /workspace/chant && chant search "kind:EC2::Instance attr:internetFacing=true attr:effectiveIngress=*tcp:22:0.0.0.0/0*" --at latest --env floci --show region,PrivateIpAddress,PublicIpAddress --explain
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,PrivateIpAddress,PublicIpAddress,effectiveIngress
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,PrivateIpAddress,PublicIpAddress,internetFacing,effectiveIngress
 ```
 
 ## No tool (AWS CLI) — missed
@@ -24,39 +28,42 @@ cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci
 
 ## Terraform — answered
 
-15 commands, from `terraform-m3`.
+14 commands, from `terraform-m1`.
 
 ```sh
-cd /workspace/terraform && ./terraform show -json | jq '.values.root_module' > /tmp/state.json && cat /tmp/state.json | head -100
-cd /workspace/terraform && ./terraform show -json | jq '.values.root_module.resources[] | select(.type == "aws_instance" or .type == "aws_security_group" or .type == "aws_security_group_rule" or .type == "aws_launch_template") | {address, type, values: {id: .values.id, region: .values.region, availability_zone: .values.availability_zone, security_groups: .values.security_groups, vpc_security_group_ids: .values.vpc_security_group_ids, launch_template: .values.launch_template, ingress: .values.ingress, tags: .values.tags}}' 2>/dev/null
-cd /workspace/terraform && ./terraform state list | grep -E 'aws_instance|aws_security_group|aws_launch_template'
-cd /workspace/terraform && ./terraform state show module.primary.aws_instance.default_vpc_server
-cd /workspace/terraform && ./terraform state show module.primary.aws_instance.launch_template_server
-cd /workspace/terraform && ./terraform state show module.primary.aws_instance.private_server
-cd /workspace/terraform && ./terraform state show module.primary.aws_instance.web_server
-cd /workspace/terraform && ./terraform state show module.west1.aws_instance.server
-cd /workspace/terraform && ./terraform state show module.west2.aws_instance.server
-cd /workspace/terraform && ./terraform state show module.primary.aws_security_group.web
-cd /workspace/terraform && ./terraform state show module.primary.aws_security_group.unused
-cd /workspace/terraform && ./terraform state show module.primary.aws_launch_template.this
-# … 3 more
+cd /workspace/terraform && ./terraform show -json | head -100
+cd /workspace/terraform && ./terraform show -json > /tmp/terraform_state.json 2>&1 && echo "State saved successfully"
+cd /tmp && jq '.values.root_module.resources[] | select(.type == "aws_instance") | {address: .address, region: .values.availability_zone[:-1], instance_id: .values.id, security_groups: .values.security_groups, vpc_security_group_ids: .values.vpc_security_group_ids}' terraform_state.json | head -200
+cd /tmp && jq '.values.root_module.resources[] | select(.type == "aws_instance")' terraform_state.json
+cd /tmp && jq '.values.root_module.resources[].type' terraform_state.json | sort | uniq
+cd /tmp && jq '.values.root_module | keys' terraform_state.json
+cd /tmp && jq '.values.root_module.child_modules[] | .address' terraform_state.json
+cd /tmp && jq '.values.root_module.child_modules[] | select(.address == "module.primary") | .resources[] | select(.type == "aws_instance" or .type == "aws_security_group" or .type == "aws_launch_template")' terraform_state.json
+cd /tmp && jq '.values.root_module.child_modules[] | select(.address == "module.west1" or .address == "module.west2") | {module: .address, resources: [.resources[] | select(.type == "aws_instance" or .type == "aws_security_group" or .type == "aws_launch_template") | {type, address, id: .values.id, sg: .values.vpc_security_group_ids, security_groups: .values.security_groups, ingress: .values.ingress, public_ip: .values.public_ip}]}' terraform_state.json
+cd /tmp && jq '.values.root_module.child_modules[] | select(.address == "module.west1" or .address == "module.west2") | {module: .address, security_groups: [.resources[] | select(.type == "aws_security_group")]}' terraform_state.json
+cd /tmp && jq '.values.root_module.child_modules[] | select(.address == "module.primary") | .resources[] | select(.type == "aws_default_security_group")' terraform_state.json
+cd /workspace/terraform && ./terraform state show 'module.primary.data.aws_security_group.default' 2>/dev/null || echo "No data source for default security group"
+# … 2 more
 ```
 
 ## Pulumi — answered
 
-10 commands, from `pulumi-m3`.
+16 commands, from `pulumi-m1`.
 
 ```sh
 cd /workspace/pulumi && ./pulumi-export > /tmp/pulumi-state.json && jq '.deployment.resources | length' /tmp/pulumi-state.json
-cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, outputs: {id: .outputs.id, vpc_security_group_ids: .outputs.vpc_security_group_ids, availability_zone: .outputs.availability_zone}, inputs: {vpc_security_group_ids: .inputs.vpc_security_group_ids, associate_public_ip_address: .inputs.associate_public_ip_address, launch_template: .inputs.launch_template}}' /tmp/pulumi-state.json
-cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, outputs: .outputs, dependencies: .dependencies}' /tmp/pulumi-state.json | head -100
-cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn: .urn, id: .outputs.id, region: (.outputs.arn | split(":")[3]), availabilityZone: .outputs.availabilityZone, securityGroups: .outputs.securityGroups, vpcSecurityGroupIds: .outputs.vpcSecurityGroupIds, publicIp: .outputs.publicIp, associatePublicIpAddress: .outputs.associatePublicIpAddress, launchTemplate: .outputs.launchTemplate}' /tmp/pulumi-state.json
-cd /workspace/pulumi && jq '.deployment.resources[] | select(.type | contains("SecurityGroup")) | {urn, id: .outputs.id, outputs: .outputs}' /tmp/pulumi-state.json | head -200
-cd /workspace/pulumi && jq '.deployment.resources[] | select(.type | contains("SecurityGroup")) | {name: .outputs.name, id: .outputs.id, region: (.outputs.arn | split(":")[3]), ingress: .outputs.ingress}' /tmp/pulumi-state.json
-cd /workspace/pulumi && jq '.deployment.resources[] | select(.type | contains("LaunchTemplate")) | {urn, outputs: {id: .outputs.id, securityGroupNames: .outputs.securityGroupNames, vpcSecurityGroupIds: .outputs.vpcSecurityGroupIds}}' /tmp/pulumi-state.json
-cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance" and .outputs.id == "i-78e8a59ba46fb6c42") | {urn, inputs: .inputs, outputs: {id: .outputs.id, launchTemplate: .outputs.launchTemplate, vpcSecurityGroupIds: .outputs.vpcSecurityGroupIds}}' /tmp/pulumi-state.json
-cd /workspace/pulumi && jq '.deployment.resources[] | select(.type | contains("SecurityGroupRule")) | {type, id: .outputs.id, groupId: .outputs.groupId, ingressRule: (.outputs | select(.isEgress == false)), egressRule: (.outputs | select(.isEgress == true))}' /tmp/pulumi-state.json
-cat > /tmp/analysis.txt << 'EOF' ANALYSIS OF EC2 INSTANCES REACHABLE VIA SSH FROM THE INTERNET Instance Summary: 1. defaultVpcServer (i-9ba197454f1e877e8) - us-east-1 - Public IP: 54.144.201.147 - Security Group: default (AWS default VPC security group) - SSH Reachable: NO - default VPC SG does not allow SSH from internet 2. privateServer (i-a7c4a355f370bbbb6) - us-east-1 - Public IP: NONE (private subnet) - SSH Reachable: NO - no public IP 3. webServer (i-74619d8f0954593db) - us-east-1 - Public IP: 54.144.16.191 - Security Group: sg-d17e6bf064b23680f (webSg) - Ingress Rules: * Port 22 (SSH) from 0.0.0.0/0 ✓ * Port 80 (HTTP) from 0.0.0.0/0 * Port 443 (HTTPS) from 0.0.0.0/0 - SSH Reachable: YES ✓ 4. ltServer (i-78e8a59ba46fb6c42) - us-east-1 - Public IP: 54.144.181.75 - Security Group: sg-d17e6bf064b23680f (inherited from launch template lt) - Same security group as webServer (webSg) - SSH Reachable: YES ✓ 5. usw1-server (i-7da3b7c91f5e6f842) - us-west-1 - Public IP: 54.144.147.201 - Security Group: default (AWS default VPC security group) - SSH Reachable: NO - default VPC SG does not allow SSH from internet 6. usw2-server (i-49228acd82333760d) - us-west-2 - Public IP: 54.144.153.4 - Security Group: default (AWS default VPC security group) - SSH Reachable: NO - default VPC SG does not allow SSH from internet EOF cat /tmp/analysis.txt
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, region: .outputs.availabilityZone | split("-")[:-1] | join("-"), launchTemplate: .inputs.launchTemplate, securityGroups: .inputs.securityGroups, outputs: {id: .outputs.id, subnetId: .outputs.subnetId}}' /tmp/pulumi-state.json
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], az: .outputs.availabilityZone, instanceId: .outputs.id, launchTemplateId: .inputs.launchTemplate.id, securityGroupIds: .inputs.securityGroups, vpcSecurityGroups: .outputs.vpcSecurityGroups}' /tmp/pulumi-state.json
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance")' /tmp/pulumi-state.json | head -200
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/securityGroup:SecurityGroup")' /tmp/pulumi-state.json | jq -r '.id, .outputs.vpcId, .outputs.ingress' | head -100
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/securityGroup:SecurityGroup") | {id: .id, groupId: .outputs.id, groupName: .outputs.name, vpcId: .outputs.vpcId, ingressRules: [.outputs.ingress[] | select(.fromPort == 22 or .toPort == 22)]}' /tmp/pulumi-state.json
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/securityGroupIngress:SecurityGroupIngress")' /tmp/pulumi-state.json | jq -r '.id, .inputs' | head -150
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], az: .outputs.availabilityZone, instanceId: .outputs.id, publicIp: .outputs.publicIp, securityGroupIds: .outputs.vpcSecurityGroupIds, launchTemplateId: .inputs.launchTemplate.id}' /tmp/pulumi-state.json
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type | contains("SecurityGroup")) | select(.outputs.name == "default" or .id == "sg-default")' /tmp/pulumi-state.json | jq '{id: .id, name: .outputs.name, ingress: .outputs.ingress}'
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.outputs.securityGroups? | contains(["default"]))' /tmp/pulumi-state.json | jq '.outputs | {id: .id, securityGroups: .securityGroups}' | head -20
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type | contains("Vpc")) | {id: .id, vpcId: .outputs.id, defaultSecurityGroupId: .outputs.defaultSecurityGroupId}' /tmp/pulumi-state.json
+cd /workspace/pulumi && jq '.deployment.resources[] | select(.type == "aws:ec2/securityGroup:SecurityGroup") | select(.id | IN("sg-fba3692107247a7d2", "sg-ce9e6997a20a3e6cd", "sg-ec37bb9634ae50a5b"))' /tmp/pulumi-state.json | jq '{id: .id, name: .outputs.name, ingress: .outputs.ingress}'
+# … 4 more
 ```
 
 ## AWS CDK — answered

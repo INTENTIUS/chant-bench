@@ -89,13 +89,41 @@ def numbered(runs: list[dict]) -> list[tuple[int, dict]]:
     return [(len(runs) - i, r) for i, r in enumerate(runs)] if oldest_first else []
 
 
-def transcripts() -> dict[str, dict]:
-    """Latest transcript per arm — how that tool answered, not just whether."""
-    latest: dict[str, dict] = {}
-    for path in sorted(TRANSCRIPTS.glob("*.json")):
+def transcripts(by_arm: dict[str, list[dict]]) -> dict[str, dict]:
+    """The transcript belonging to each arm's headline run.
+
+    Tied to the headline rather than picked independently, so the commands a
+    question page shows are the commands behind the number the results page
+    shows. Those were two separate selections before, and they did not have to
+    agree.
+
+    They agreed only by luck. This took the last filename in sorted order, and
+    for chant that had been `chant-s9-offline` — a run made with the agent's
+    AWS endpoint closed, whose transcript happened to be labelled with an arm
+    (`chant-s9`) that no page knew about, so it rendered nowhere. Fixing the
+    label alone would have made it sort last under `chant` and quietly replaced
+    every chant command on every question page with the offline run's.
+
+    Falls back to the newest transcript the arm has when the headline run has
+    none, since most runs predate transcripts entirely.
+    """
+    have: dict[str, dict] = {}
+    for path in TRANSCRIPTS.glob("*.json"):
         t = json.loads(path.read_text())
-        latest[t["arm"]] = t          # sorted, so the last wins
-    return latest
+        have.setdefault(t["arm"], {})[t["run"]] = t
+
+    when = {r["run"]["id"]: (r["run"].get("finished_at") or "") for runs in by_arm.values() for r in runs}
+    out: dict[str, dict] = {}
+    for arm, runs in by_arm.items():
+        mine = have.get(arm)
+        if not mine:
+            continue
+        head = headline(runs)
+        if head and head["run"]["id"] in mine:
+            out[arm] = mine[head["run"]["id"]]
+        else:
+            out[arm] = max(mine.values(), key=lambda t: (when.get(t["run"], ""), t["run"]))
+    return out
 
 
 def question_page(task: str, tx: dict[str, dict]) -> str:
@@ -738,8 +766,18 @@ def main() -> int:
         print("no result sets for ec2-multiregion")
         return 0
 
+    # An arm with results but no entry here renders nowhere: `results_page` and
+    # `question_page` both iterate ARMS, so the run is dropped rather than
+    # shown. A silently missing arm is the failure this whole file is arranged
+    # to prevent, so it stops the build instead.
+    unknown = sorted(set(by_arm) - set(ARMS))
+    if unknown:
+        print(f"result set(s) for arm(s) this page has no entry for: {', '.join(unknown)}")
+        print("add them to ARMS in scripts/build_pages.py, or they render nowhere")
+        return 1
+
     (DOCS / "results.md").write_text(results_page(by_arm))
-    tx = transcripts()
+    tx = transcripts(by_arm)
     if tx:
         qdir = DOCS / "questions"
         qdir.mkdir(parents=True, exist_ok=True)

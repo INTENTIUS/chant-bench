@@ -7,10 +7,10 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-1 commands, from `chant-m3`.
+1 commands, from `chant-m1`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,VpcId,PrivateIpAddress --explain
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,VpcId --explain
 ```
 
 ## No tool (AWS CLI) — answered
@@ -25,32 +25,29 @@ aws ec2 describe-instances --region us-west-2 --output json
 
 ## Terraform — answered
 
-21 commands, from `terraform-m3`.
+5 commands, from `terraform-m1`.
 
 ```sh
-cd /workspace/terraform && ./terraform show -json | jq . > /tmp/tf_state.json && wc -l /tmp/tf_state.json
-cd /workspace/terraform && jq -r '.values.root_module.resources[] | select(.type=="aws_instance") | "\(.address) | \(.values.availability_zone) | \(.values.vpc_id) | \(.values.tags // {})' /tmp/tf_state.json
-cd /workspace/terraform && jq '.values.root_module.resources[] | select(.type=="aws_instance") | {address: .address, region: .values.availability_zone, vpc: .values.vpc_id, instance_id: .values.id}' /tmp/tf_state.json
-jq 'keys' /tmp/tf_state.json
-jq '.values.root_module | keys' /tmp/tf_state.json
-jq '.values.root_module.resources | length' /tmp/tf_state.json
-jq '.values.root_module.resources[] | {type: .type, address: .address}' /tmp/tf_state.json
-jq '.values.root_module.child_modules | length' /tmp/tf_state.json
-jq '.values.root_module.child_modules[] | .address' /tmp/tf_state.json
-jq -r ' def get_instances: (.resources // []) | map(select(.type=="aws_instance") | { address: .address, instance_id: .values.id, availability_zone: .values.availability_zone, vpc_id: .values.vpc_id, subnet_id: .values.subnet_id, tags: .values.tags }) as $root_instances | $root_instances + ((.child_modules // []) | map(get_instances | .[])); [.values.root_module | get_instances] ' /tmp/tf_state.json
-jq '.values.root_module.child_modules[] | select(.address | startswith("module")) | {module: .address, instance_count: (.resources // [] | map(select(.type=="aws_instance")) | length)}' /tmp/tf_state.json
-jq ' .values.root_module.child_modules[] | { module: .address, instances: [(.resources // [] | map(select(.type=="aws_instance") | { address: .address, instance_id: .values.id, availability_zone: .values.availability_zone, vpc_id: .values.vpc_id, subnet_id: .values.subnet_id, private_ip: .values.private_ip, tags: .values.tags }))] } ' /tmp/tf_state.json
-# … 9 more
+cd /workspace/terraform && ./terraform state list
+cd /workspace/terraform && ./terraform show -json | jq '.' > /tmp/terraform_state.json && wc -l /tmp/terraform_state.json
+cd /workspace/terraform && jq '.values.root_module.child_modules[] | select(.address | startswith("module.primary") or startswith("module.west1") or startswith("module.west2")) | .resources[] | select(.type == "aws_instance")' /tmp/terraform_state.json
+cd /workspace/terraform && jq '.values.root_module.child_modules[] | select(.address | startswith("module.primary") or startswith("module.west1") or startswith("module.west2")) | .resources[] | select(.type == "aws_vpc" or .type == "aws_subnet") | {address: .address, type: .type, vpc_id: .values.id, cidr_block: .values.cidr_block}' /tmp/terraform_state.json
+cd /workspace/terraform && jq '.values.root_module.child_modules[] | select(.address | startswith("module.primary") or startswith("module.west1") or startswith("module.west2")) | .resources[] | select(.type == "aws_subnet" or .type == "aws_vpc") | {address: .address, type: .type, id: .values.id, vpc_id: .values.vpc_id, availability_zone: .values.availability_zone}' /tmp/terraform_state.json
 ```
 
 ## Pulumi — answered
 
-3 commands, from `pulumi-m3`.
+8 commands, from `pulumi-m1`.
 
 ```sh
-cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, inputs: {availability_zone: .inputs.availability_zone}, outputs: {id: .outputs.id, vpc_id: .outputs.vpc_id, subnet_id: .outputs.subnet_id, security_groups: .outputs.vpc_security_group_ids}}' 2>/dev/null
-cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance")' 2>/dev/null
-cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/subnet:Subnet") | {urn: .urn, outputs: {id: .outputs.id, vpcId: .outputs.vpcId}}' 2>/dev/null
+cd /workspace/pulumi && ./pulumi-export 2>/dev/null | head -200
+cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, region: (.inputs.availabilityZone | sub("[a-z]$"; "")), vpc: .inputs.vpcId, instance_id: .outputs.id, availability_zone: .inputs.availabilityZone}'
+cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, vpc: .inputs.vpcId, instance_id: .outputs.id, private_ip: .outputs.privateIp, availability_zone: .outputs.availabilityZone}'
+cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, instance_id: .outputs.id, subnet_id: .outputs.subnetId, primary_network_interface_id: .outputs.primaryNetworkInterfaceId}'
+cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/subnet:Subnet") | {id: .outputs.id, vpc_id: .outputs.vpcId, availability_zone: .outputs.availabilityZone}'
+cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/subnet:Subnet" or (.type == "aws:ec2/default" and "VpcSubnet" | IN(.[].type))) | {type, id: .outputs.id, vpc_id: .outputs.vpcId}'
+cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type | contains("vpc") or contains("Vpc")) | {type, id: .outputs.id}'
+cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], availability_zone: .outputs.availabilityZone, inputs: {subnet_id: .inputs.subnetId, vpc_id: .inputs.vpcId}, outputs: {subnet_id: .outputs.subnetId}}'
 ```
 
 ## AWS CDK — answered

@@ -209,6 +209,28 @@ def main() -> int:
         if orphans:
             print(f"orphaned transcript(s) with no result set: {', '.join(orphans)}")
             return 1
+
+        # Matching by filename is not enough. The result and the transcript for
+        # one run are written by two different emitters, and they used to
+        # derive the arm by two different rules: `chant-s9-offline` was arm
+        # `chant` in its result and arm `chant-s9` in its transcript. Nothing
+        # caught it, because the filenames matched perfectly and this check
+        # never looked inside.
+        mismatched = []
+        for path in sorted(transcripts.glob("*.json")):
+            try:
+                t = json.loads(path.read_text())
+                r = json.loads((root / path.name).read_text())
+            except (OSError, ValueError):
+                continue
+            if t.get("arm") != r.get("arm"):
+                mismatched.append(f"{path.stem}: transcript says {t.get('arm')!r}, result says {r.get('arm')!r}")
+        if mismatched:
+            print("transcript and result disagree about the arm:")
+            for line in mismatched:
+                print(f"        {line}")
+            return 1
+
         print(f"{len(list(transcripts.glob('*.json')))} transcript(s), all matched to a result")
 
     return 1 if failed else 0

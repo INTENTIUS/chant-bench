@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "run": "chant-s9-offline",
-  "arm": "chant-s9",
+  "arm": "chant",
   "by_task": {
     "describe-ec-instances-cross-regi": {
       "trial": "describe-ec-instances-cross-regi__CoJU2Cr",

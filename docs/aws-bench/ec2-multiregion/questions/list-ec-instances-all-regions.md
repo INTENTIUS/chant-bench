@@ -7,10 +7,10 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-1 commands, from `chant-m3`.
+1 commands, from `chant-m1`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region --explain
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region
 ```
 
 ## No tool (AWS CLI) — answered
@@ -23,22 +23,26 @@ cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci
 
 ## Terraform — answered
 
-4 commands, from `terraform-m3`.
+8 commands, from `terraform-m1`.
 
 ```sh
-cd /workspace/terraform && ./terraform state list | grep -E 'aws_instance|aws_ec2_instance'
-cd /workspace/terraform && ./terraform state show -json | jq -r '.values.root_module.child_modules[] | select(.resources != null) | .resources[] | select(.type == "aws_instance") | {address: .address, instance_id: .values.id, region: .values.tags.Region, availability_zone: .values.availability_zone}'
-cd /workspace/terraform && ./terraform show -json | jq -r '.values.root_module.child_modules[] | select(.resources != null) | .resources[] | select(.type == "aws_instance") | {address: .address, instance_id: .values.id, region: (.values.tags.Region // .values.availability_zone | split("-")[:-1] | join("-")), availability_zone: .values.availability_zone}'
-cd /workspace/terraform && ./terraform show -json | jq -r '.values.root_module.child_modules[] | select(.resources != null) | .resources[] | select(.type == "aws_instance") | "\(.values.availability_zone | split("-")[:-1] | join("-")): \(.values.id)"' | sort | uniq
+cd /workspace/terraform && ./terraform state list | grep -E '^aws_instance\.' | head -20
+cd /workspace/terraform && ./terraform show -json | jq -r '.values.root_module.resources[] | select(.type=="aws_instance") | "\(.address): \(.values.id) (region: \(.values.availability_zone | gsub("[a-z]$"; "")))"' 2>/dev/null
+/workspace/terraform/terraform -chdir=/workspace/terraform state list | grep -E 'aws_instance\.'
+/workspace/terraform/terraform -chdir=/workspace/terraform show -json | jq -r '.values.root_module.child_modules[] | select(.resources[] | select(.type=="aws_instance")) | .resources[] | select(.type=="aws_instance") | "\(.values.id) (module: \(.address | split(".")[0]), region: \(.values.availability_zone | gsub("[a-z]$"; "")))"'
+/workspace/terraform/terraform -chdir=/workspace/terraform state show -json module.primary.aws_instance.default_vpc_server | jq '{instance_id: .values.id, availability_zone: .values.availability_zone}'
+cd /workspace/terraform && ./terraform show -json > /tmp/state.json && cat /tmp/state.json | jq '.values.root_module.resources[] | select(.type=="aws_instance") | {address, id: .values.id, availability_zone: .values.availability_zone}'
+grep -A 5 '"type": "aws_instance"' /workspace/terraform/terraform.tfstate | grep -E '"id"|"availability_zone"|"module"|"name"' | head -50
+grep -E '(\"id\":|\"region\":|\"availability_zone\":|"module":)' /workspace/terraform/terraform.tfstate | grep -E '(aws_instance|\"id\"|\"region\"|\"availability_zone\")' | paste - - - - | head -20
 ```
 
 ## Pulumi — answered
 
-2 commands, from `pulumi-m3`.
+2 commands, from `pulumi-m1`.
 
 ```sh
-cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn: .urn, instanceId: .outputs.id, region: .outputs.availabilityZone}' 2>/dev/null
-cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: (.urn | split("::") | .[3]), instanceId: .outputs.id, region: (.outputs.availabilityZone | sub("[a-z]$"; ""))}' | jq -s 'sort_by(.region, .name) | group_by(.region) | map({region: .[0].region, instances: map({name: .name, instanceId: .instanceId})})' 2>/dev/null
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn: .urn, instance_id: .outputs.id, region: .outputs.tags.aws_region, availability_zone: .outputs.availabilityZone}'
+cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: (.urn | split("::")[-1]), instance_id: .outputs.id, availability_zone: .outputs.availabilityZone} | (.availability_zone | match("([a-z]+-[a-z]+-\\d+)").captures[0].string) as $region | "\($region)\t\(.instance_id)\t\(.name)"' | sort
 ```
 
 ## AWS CDK — answered
