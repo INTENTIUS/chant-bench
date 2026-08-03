@@ -7,85 +7,104 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-1 commands, from `chant-m1`.
+3 commands, from `chant-g3`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,VpcId --explain
+cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-east-1" --at latest --env floci --show VpcId,PrivateIpAddress
+cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-west-1" --at latest --env floci --show VpcId,PrivateIpAddress
+cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-west-2" --at latest --env floci --show VpcId,PrivateIpAddress
 ```
 
 ## No tool (AWS CLI) — answered
 
-3 commands, from `bare-m3`.
+4 commands, from `bare-g3`.
 
 ```sh
-aws ec2 describe-instances --region us-east-1 --output json
-aws ec2 describe-instances --region us-west-1 --output json
-aws ec2 describe-instances --region us-west-2 --output json
+aws ec2 describe-instances --region us-east-1 --output json | jq '.Reservations[].Instances[] | {InstanceId: .InstanceId, InstanceType: .InstanceType, State: .State.Name, VpcId: .VpcId, PrivateIpAddress: .PrivateIpAddress, Tags: .Tags}' > /tmp/us-east-1-instances.json
+aws ec2 describe-instances --region us-west-1 --output json | jq '.Reservations[].Instances[] | {InstanceId: .InstanceId, InstanceType: .InstanceType, State: .State.Name, VpcId: .VpcId, PrivateIpAddress: .PrivateIpAddress, Tags: .Tags}' > /tmp/us-west-1-instances.json
+aws ec2 describe-instances --region us-west-2 --output json | jq '.Reservations[].Instances[] | {InstanceId: .InstanceId, InstanceType: .InstanceType, State: .State.Name, VpcId: .VpcId, PrivateIpAddress: .PrivateIpAddress, Tags: .Tags}' > /tmp/us-west-2-instances.json
+cat > /tmp/summary.txt << 'EOF' EC2 INSTANCES ACROSS REGIONS ============================ INSTANCE COUNT BY REGION: - us-east-1: 4 instances - us-west-1: 1 instance - us-west-2: 1 instance TOTAL: 6 instances US-EAST-1 INSTANCES (Grouped by VPC): ====================================== VPC: vpc-default (1 instance) ---- • i-a43810d9812ac7df0 (MyEC2Instance) - Type: t3.micro - State: running - Private IP: 172.31.32.10 VPC: vpc-dd9a4e4c (3 instances - SHARE NETWORK CONNECTIVITY) ----- • i-ce170d8eeade8435a (WebServerInstance) - Type: t3.micro - State: running - Private IP: 10.0.0.10 • i-debeba7e0e617a8ba (LaunchTemplateInstance) - Type: t3.micro - State: running - Private IP: 10.0.0.11 • i-de23d8cd841d5ea4a (PrivateInstance) - Type: t3.micro - State: running - Private IP: 10.0.1.10 OTHER REGIONS: ============== US-WEST-1 (1 instance): • i-5e9bf0c5296ba27f8 (WebServerInstance) - VPC: vpc-f5602c6d - Type: t3.micro - State: running - Private IP: 10.0.0.10 US-WEST-2 (1 instance): • i-a579a9be83b34ef4f (WebServerInstance) - VPC: vpc-deb73ab2 - Type: t3.micro - State: running - Private IP: 10.0.0.10 NETWORK CONNECTIVITY SUMMARY: ============================= The 3 instances in us-east-1 that share vpc-dd9a4e4c have network connectivity to each other within the same VPC. They can communicate directly via their private IP addresses: - 10.0.0.10 (WebServerInstance) - 10.0.0.11 (LaunchTemplateInstance) - 10.0.1.10 (PrivateInstance) The instance in vpc-default (172.31.32.10) is isolated in the default VPC and does not share network connectivity with the other three instances in us-east-1. EOF cat /tmp/summary.txt
 ```
 
 ## Terraform — answered
 
-5 commands, from `terraform-m1`.
+11 commands, from `terraform-g3`.
 
 ```sh
-cd /workspace/terraform && ./terraform state list
-cd /workspace/terraform && ./terraform show -json | jq '.' > /tmp/terraform_state.json && wc -l /tmp/terraform_state.json
-cd /workspace/terraform && jq '.values.root_module.child_modules[] | select(.address | startswith("module.primary") or startswith("module.west1") or startswith("module.west2")) | .resources[] | select(.type == "aws_instance")' /tmp/terraform_state.json
-cd /workspace/terraform && jq '.values.root_module.child_modules[] | select(.address | startswith("module.primary") or startswith("module.west1") or startswith("module.west2")) | .resources[] | select(.type == "aws_vpc" or .type == "aws_subnet") | {address: .address, type: .type, vpc_id: .values.id, cidr_block: .values.cidr_block}' /tmp/terraform_state.json
-cd /workspace/terraform && jq '.values.root_module.child_modules[] | select(.address | startswith("module.primary") or startswith("module.west1") or startswith("module.west2")) | .resources[] | select(.type == "aws_subnet" or .type == "aws_vpc") | {address: .address, type: .type, id: .values.id, vpc_id: .values.vpc_id, availability_zone: .values.availability_zone}' /tmp/terraform_state.json
+cd /workspace/terraform && ./terraform show -json > /tmp/state.json && jq '.values.root_module.resources[] | select(.type == "aws_instance") | {address, values: {instance_id, availability_zone, subnet_id, vpc_id, associate_public_ip_address, security_groups}}' /tmp/state.json
+cd /workspace/terraform && ./terraform show -json | jq '.values.root_module.resources[] | select(.type == "aws_instance")'
+cd /workspace/terraform && ./terraform show -json | head -50
+cd /workspace/terraform && ./terraform show -json | jq '.values.root_module.resources[] | select(.type == "aws_instance") | {address, region: .values.availability_zone | .[:-1], availability_zone: .values.availability_zone, instance_id: .values.id, vpc_id: .values.vpc_id, subnet_id: .values.subnet_id, security_groups: .values.security_groups}'
+cd /workspace/terraform && ./terraform state list | grep -i instance
+cd /workspace/terraform && ./terraform state show module.primary.aws_instance.default_vpc_server && echo "---" && ./terraform state show module.primary.aws_instance.launch_template_server && echo "---" && ./terraform state show module.primary.aws_instance.private_server && echo "---" && ./terraform state show module.primary.aws_instance.web_server
+cd /workspace/terraform && ./terraform state show module.primary.aws_instance.default_vpc_server | grep -E "subnet_id|vpc_security_group" && echo "---" && ./terraform state show module.primary.aws_instance.launch_template_server | grep -E "subnet_id|vpc_security_group" && echo "---" && ./terraform state show module.primary.aws_instance.private_server | grep -E "subnet_id|vpc_security_group" && echo "---" && ./terraform state show module.primary.aws_instance.web_server | grep -E "subnet_id|vpc_security_group"
+cd /workspace/terraform && ./terraform state list | grep -E "aws_subnet|aws_vpc"
+cd /workspace/terraform && ./terraform state show module.primary.aws_vpc.main && echo "---" && ./terraform state show module.primary.aws_subnet.public && echo "---" && ./terraform state show module.primary.aws_subnet.private && echo "---" && ./terraform state show 'module.primary.data.aws_vpc.default'
+cd /workspace/terraform && ./terraform state show module.west1.aws_instance.server && echo "---" && ./terraform state show module.west2.aws_instance.server
+cd /workspace/terraform && ./terraform state show module.west1.aws_vpc.main && echo "---" && ./terraform state show module.west2.aws_vpc.main
 ```
 
 ## Pulumi — answered
 
-8 commands, from `pulumi-m1`.
+12 commands, from `pulumi-g3`.
 
 ```sh
-cd /workspace/pulumi && ./pulumi-export 2>/dev/null | head -200
-cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, region: (.inputs.availabilityZone | sub("[a-z]$"; "")), vpc: .inputs.vpcId, instance_id: .outputs.id, availability_zone: .inputs.availabilityZone}'
-cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, vpc: .inputs.vpcId, instance_id: .outputs.id, private_ip: .outputs.privateIp, availability_zone: .outputs.availabilityZone}'
-cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, instance_id: .outputs.id, subnet_id: .outputs.subnetId, primary_network_interface_id: .outputs.primaryNetworkInterfaceId}'
-cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/subnet:Subnet") | {id: .outputs.id, vpc_id: .outputs.vpcId, availability_zone: .outputs.availabilityZone}'
-cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/subnet:Subnet" or (.type == "aws:ec2/default" and "VpcSubnet" | IN(.[].type))) | {type, id: .outputs.id, vpc_id: .outputs.vpcId}'
-cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type | contains("vpc") or contains("Vpc")) | {type, id: .outputs.id}'
-cd /workspace/pulumi && ./pulumi-export 2>/dev/null | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], availability_zone: .outputs.availabilityZone, inputs: {subnet_id: .inputs.subnetId, vpc_id: .inputs.vpcId}, outputs: {subnet_id: .outputs.subnetId}}'
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {urn, region: .outputs.availabilityZone | gsub("[a-z]$"; ""), vpcId: .outputs.vpcId, instanceId: .outputs.id}' | head -100
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | .outputs | keys' | head -50
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], region: (.outputs.availabilityZone | gsub("[a-z]$"; "")), subnetId: .outputs.networkInterfaces[0].subnetId, instanceId: .outputs.id, launchTemplate: .outputs.launchTemplate}' 2>/dev/null
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], region: (.outputs.availabilityZone | gsub("[a-z]$"; "")), instanceId: .outputs.id, networkInterfaces: .outputs.networkInterfaces}' 2>/dev/null | head -150
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], inputs: .inputs | keys, dependencies: .dependencies}' 2>/dev/null | head -200
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/subnet:Subnet") | {name: .urn | split("::")[-1], vpcId: .outputs.vpcId, subnetId: .outputs.id, availabilityZone: .outputs.availabilityZone}' 2>/dev/null
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], region: (.outputs.availabilityZone | gsub("[a-z]$"; "")), subnetId: .inputs.subnetId}' 2>/dev/null
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/vpc:Vpc") | {name: .urn | split("::")[-1], vpcId: .outputs.id, cidr: .outputs.cidrBlock}' 2>/dev/null
+cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | [.urn | split("::")[-1], (.outputs.availabilityZone | gsub("[a-z]$"; "")), .outputs.id, .outputs.instanceType] | @csv' | sort
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/instance:Instance") | {name: .urn | split("::")[-1], instanceId: .outputs.id, instanceType: .outputs.instanceType, region: (.outputs.availabilityZone | gsub("[a-z]$"; "")), subnetId: .inputs.subnetId}' 2>/dev/null | jq -s 'sort_by(.region, .name)'
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/subnet:Subnet") | {subnetId: .outputs.id, vpcId: .outputs.vpcId, name: .urn | split("::")[-1]}' 2>/dev/null | jq -s 'index_by(.subnetId)'
+cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == "aws:ec2/subnet:Subnet") | {subnetId: .outputs.id, vpcId: .outputs.vpcId, name: .urn | split("::")[-1]}' 2>/dev/null | jq -s 'map({(.subnetId): .vpcId}) | add'
 ```
 
 ## AWS CDK — answered
 
-11 commands, from `cdk-m3`.
+6 commands, from `cdk-g3`.
 
 ```sh
 cd /workspace/cdk_app && npx cdk ls
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, properties: .value.Properties}' | head -200
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::VPC" or .value.Type == "AWS::EC2::Subnet") | {logicalId: .key, type: .value.Type, vpcId: .value.Properties.VpcId, subnetId: (.value | select(.Type=="AWS::EC2::Subnet") | .Properties.CidrBlock)}' | head -100
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, subnet: .value.Properties.SubnetId}' | head -100
-cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logicalId: .key, subnet: .value.Properties.SubnetId}' | head -100
-for region in us-east-1 us-west-1 us-west-2; do echo "=== Region: $region ===" for stack in $(aws cloudformation list-stacks --region "$region" --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE --query 'StackSummaries[*].StackName' --output text | grep ec2-multiregion-EC2); do echo "Stack: $stack" aws cloudformation describe-stack-resources --stack-name "$stack" --region "$region" --query 'StackResources[?ResourceType==`AWS::EC2::Instance`].[LogicalResourceId,PhysicalResourceId]' --output text done done
-for instance_id in i-6a62f03f1b63e02cb i-d49fa51ee7943b064 i-99a5057f76dd16760 i-3e459933b4e4a49c1; do echo "Instance: $instance_id" aws ec2 describe-instances --region us-east-1 --instance-ids "$instance_id" --query 'Reservations[0].Instances[0].[Tags[?Key==`Name`].Value[0],VpcId,SubnetId,PrivateIpAddress]' --output text done
-aws ec2 describe-instances --region us-east-1 --filters "Name=vpc-id,Values=vpc-50375e93" --query 'Reservations[0].Instances[*].[Tags[?Key==`Name`].Value[0],InstanceId,SubnetId]' --output text
-aws ec2 describe-instances --region us-east-1 --instance-ids i-6a62f03f1b63e02cb i-99a5057f76dd16760 i-3e459933b4e4a49c1 --query 'Reservations[*].Instances[*].[InstanceId,Tags[?Key==`Name`].Value[0],VpcId]' --output table
-aws ec2 describe-instances --region us-east-1 --instance-ids i-6a62f03f1b63e02cb i-99a5057f76dd16760 i-3e459933b4e4a49c1 --query 'Reservations[*].Instances[*].[InstanceId,VpcId]' --output text
-cat > /logs/agent/agent-output.txt << 'EOF' # EC2 Instances Across Regions ## Instance Count by Region **us-east-1:** 4 instances **us-west-1:** 1 instance **us-west-2:** 1 instance **Total:** 6 instances across all three regions --- ## Detailed Breakdown ### us-east-1 (4 instances) 1. **WebServerInstance** (i-6a62f03f1b63e02cb) - VPC: vpc-50375e93 - Subnet: subnet-d0c287b5 (10.0.0.0/24) - Instance Type: t3.micro 2. **MyEC2Instance** (i-d49fa51ee7943b064) - VPC: vpc-default (EC2-Classic) - Subnet: subnet-default-a - Instance Type: t3.micro 3. **PrivateInstance** (i-99a5057f76dd16760) - VPC: vpc-50375e93 - Subnet: subnet-788d6413 (10.0.1.0/24) - Instance Type: t3.micro 4. **LaunchTemplateInstance** (i-3e459933b4e4a49c1) - VPC: vpc-50375e93 - Subnet: subnet-d0c287b5 (10.0.0.0/24) - Instance Type: t3.micro ### us-west-1 (1 instance) 1. **WebServerInstance** (i-006e65b4905bccbb5) - Instance Type: t3.micro ### us-west-2 (1 instance) 1. **WebServerInstance** (i-1018901c5ceef586e) - Instance Type: t3.micro --- ## VPC Connectivity in us-east-1 **Instances sharing network connectivity (same VPC: vpc-50375e93):** 1. WebServerInstance (i-6a62f03f1b63e02cb) - Public subnet (10.0.0.0/24) 2. PrivateInstance (i-99a5057f76dd16760) - Private subnet (10.0.1.0/24) 3. LaunchTemplateInstance (i-3e459933b4e4a49c1) - Public subnet (10.0.0.0/24) **Isolated instance (different VPC):** - MyEC2Instance (i-d49fa51ee7943b064) - vpc-default (EC2-Classic VPC) **Summary:** In us-east-1, 3 instances share network connectivity through VPC vpc-50375e93, while 1 instance (MyEC2Instance) is in a separate VPC and is not directly connected to the others at the VPC level. EOF cat /logs/agent/agent-output.txt
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logical_id: .key, properties: .value.Properties}' > /tmp/us-east-1-instances.json && cat /tmp/us-east-1-instances.json
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logical_id: .key, properties: .value.Properties}' > /tmp/us-west-1-instances.json && cat /tmp/us-west-1-instances.json
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ls9fuhb522-us-west-2 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Instance") | {logical_id: .key, properties: .value.Properties}' > /tmp/us-west-2-instances.json && cat /tmp/us-west-2-instances.json
+cd /workspace/cdk_app && npx cdk synth ec2-multiregion-EC2-ks84v1fh12-us-east-1 --json 2>/dev/null | jq '.Resources | to_entries[] | select(.value.Type == "AWS::EC2::Subnet" or .value.Type == "AWS::EC2::VPC") | {logical_id: .key, type: .value.Type, properties: .value.Properties}'
+cat > /logs/agent/agent-output.txt << 'EOF' # EC2 Instances Across Regions ## Summary by Region ### us-east-1: 4 instances - **WebServerInstance** (t3.micro) - Subnet: ResourcesVpcPublicSubnet1Subnet7103FD34 (Public, 10.0.0.0/24) - VPC: ResourcesVpc (10.0.0.0/16) - AZ: us-east-1a - **LaunchTemplateInstance** (t3.micro) - Subnet: ResourcesVpcPublicSubnet1Subnet7103FD34 (Public, 10.0.0.0/24) - VPC: ResourcesVpc (10.0.0.0/16) - AZ: us-east-1a - **PrivateInstance** (t3.micro) - Subnet: ResourcesVpcPrivateSubnet1Subnet98586872 (Private, 10.0.1.0/24) - VPC: ResourcesVpc (10.0.0.0/16) - AZ: us-east-1a - **MyEC2Instance** (t3.micro) - Subnet: subnet-default-a - VPC: Default VPC - AZ: us-east-1a ### us-west-1: 1 instance - **WebServerInstance** (t3.micro) - Subnet: ResourcesVpcPublicSubnet1Subnet7103FD34 (Public) - VPC: ResourcesVpc - AZ: us-west-1a ### us-west-2: 1 instance - **WebServerInstance** (t3.micro) - Subnet: ResourcesVpcPublicSubnet1Subnet7103FD34 (Public) - VPC: ResourcesVpc - AZ: us-west-2a --- ## Network Connectivity in us-east-1 ### Instances Sharing the Same VPC (ResourcesVpc - 10.0.0.0/16): **Same Subnet (Public - 10.0.0.0/24):** - WebServerInstance - LaunchTemplateInstance - → These two share the same public subnet and VPC, so they have direct Layer 2 connectivity **Different Subnet (Private - 10.0.1.0/24) in Same VPC:** - PrivateInstance - → Connected to the above two via the VPC's internal routing, assuming the route tables allow inter-subnet traffic **Isolated in Default VPC:** - MyEC2Instance - → In a separate VPC (default VPC), no VPC-native connectivity to the ResourcesVpc instances without VPC peering or Transit Gateway --- ## Total Instance Count: - **us-east-1**: 4 instances (3 in ResourcesVpc, 1 in default VPC) - **us-west-1**: 1 instance (in ResourcesVpc) - **us-west-2**: 1 instance (in ResourcesVpc) - **TOTAL**: 6 instances across all three regions --- ## Key Findings: 1. **WebServerInstance** is deployed consistently across all three regions (one per region). 2. **us-east-1 has specialized instance types**: - LaunchTemplateInstance (appears only in us-east-1) - PrivateInstance (appears only in us-east-1) - MyEC2Instance (appears only in us-east-1) 3. **VPC Network Topology in us-east-1**: - 3 instances are in the same custom VPC (ResourcesVpc): WebServerInstance, LaunchTemplateInstance, PrivateInstance - 1 instance is isolated in the default VPC: MyEC2Instance - The three instances in ResourcesVpc can communicate if security groups and NACLs permit - MyEC2Instance is network-isolated from the other three unless you set up VPC peering or a Transit Gateway EOF cat /logs/agent/agent-output.txt
 ```
 
 ## Alchemy — answered
 
-3 commands, from `alchemy-m3`.
+6 commands, from `alchemy-g3`.
 
 ```sh
-cd /workspace/alchemy && alchemy state list | grep -i instance
-cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-DefaultVPCInstanceId
-cd /workspace/alchemy && alchemy state list | grep "aws::Instance"
+cd /workspace/alchemy && alchemy state list
+cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/instance
+cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/webServer alchemy-ec2-multiregion/bench/ltServer alchemy-ec2-multiregion/bench/defaultVpcServer alchemy-ec2-multiregion/bench/privateServer alchemy-ec2-multiregion/bench/usw1-server alchemy-ec2-multiregion/bench/usw2-server
+cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/webServer
+cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/ltServer && echo "---" && alchemy state get alchemy-ec2-multiregion/bench/defaultVpcServer && echo "---" && alchemy state get alchemy-ec2-multiregion/bench/privateServer
+cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/usw1-server && echo "---" && alchemy state get alchemy-ec2-multiregion/bench/usw2-server
 ```
 
 ## Alchemy v2 (Effect) — answered
 
-5 commands, from `alchemy-effect-m3`.
+15 commands, from `alchemy-effect-g2`.
 
 ```sh
 cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local
 cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local
-cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local 2>&1 | head -50
-find /workspace/alchemy/.alchemy/state/ -type f -name "*.json" | head -20
-find /workspace/alchemy/.alchemy/state/ -type f -name "*.json" | sort
+cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | grep -i instance
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local | grep -i instance
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-1.run.ts --local | grep -i instance
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn DefaultVpcServer us-west-1.run.ts --local 2>&1
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebServer us-west-1.run.ts --local 2>&1
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn PrivateServer us-west-1.run.ts --local 2>&1
+cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn LaunchTemplateServer us-west-1.run.ts --local 2>&1
+cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local
+# … 3 more
 ```

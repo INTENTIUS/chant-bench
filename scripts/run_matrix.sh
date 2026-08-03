@@ -21,8 +21,20 @@ SITE="$(cd "$(dirname "$0")/.." && pwd)"
 
 ARMS=("$@")
 if [ ${#ARMS[@]} -eq 0 ]; then
-  ARMS=(chant terraform pulumi cdk alchemy alchemy-effect)
+  # `bare` belongs in the default sweep. It was missing, so "every arm" ran six
+  # of the seven on the board and skipped the control — the one arm the method
+  # says every other number has to be read against, which makes it the last one
+  # a matrix should quietly omit.
+  ARMS=(chant bare terraform pulumi cdk alchemy alchemy-effect)
 fi
+
+# What the replicate is called. `m` is the matrix series; anything else lands
+# beside it rather than on top of it, which is what a re-run of the whole board
+# wants — the previous series stays published as history and the new one becomes
+# the headline by being more recent.
+#
+#   MATRIX_LABEL=g ./scripts/run_matrix.sh 3
+LABEL="${MATRIX_LABEL:-m}"
 
 [ -d "$BENCH/benchmarks/agent-env" ] || {
   echo "not an aws-bench checkout: $BENCH — run ./scripts/bootstrap.sh first" >&2
@@ -35,9 +47,23 @@ declare -a failed=()
 
 for r in $(seq 1 "$REPS"); do
   for arm in "${ARMS[@]}"; do
-    job="${arm}-m${r}"
+    job="${arm}-${LABEL}${r}"
     say "$job  (replicate $r of $REPS)"
-    rm -rf "$BENCH/jobs/${job}" "$SITE/results/${job}.json" "$SITE/transcripts/${job}.json"
+
+    # The published result for this job id is set aside rather than deleted.
+    # Deleting it up front meant a re-run that failed its gates destroyed the
+    # number it was meant to replace: nothing is written for a refused run, so
+    # the arm simply lost a result and the board lost a row. Over a matrix that
+    # runs for hours unattended, against gates that have since got stricter,
+    # that is a bad trade for avoiding a stale file.
+    # Mirrored subdirectories, because the result and the transcript for one run
+    # share a filename and a flat stash would silently keep only the second.
+    stash="$(mktemp -d)"
+    mkdir -p "$stash/results" "$stash/transcripts"
+    for d in results transcripts; do
+      [ -f "$SITE/$d/${job}.json" ] && mv "$SITE/$d/${job}.json" "$stash/$d/" || true
+    done
+    rm -rf "$BENCH/jobs/${job}"
 
     if (cd "$BENCH" && ./benchmarks/agent-env/run-arm.sh "$arm" "$job" > "/tmp/${job}.log" 2>&1); then
       grep -oE "Pass_Rate: [0-9.]+" "/tmp/${job}.log" | tail -1 | sed 's/^/    /'
@@ -50,9 +76,21 @@ for r in $(seq 1 "$REPS"); do
 
     # Publish immediately: a matrix that dies at hour three should keep what it
     # already earned.
-    "$SITE/scripts/ingest.sh" "$BENCH" "$job" >/dev/null 2>&1 \
-      && echo "    ingested" \
-      || echo "    ingest failed for $job"
+    if "$SITE/scripts/ingest.sh" "$BENCH" "$job" >/dev/null 2>&1; then
+      echo "    ingested"
+      rm -rf "$stash"
+    else
+      # Refused, or the emit failed. Put back whatever this job had published
+      # before, so a failed replicate costs the run and not the record.
+      restored=""
+      for d in results transcripts; do
+        if [ -f "$stash/$d/${job}.json" ]; then
+          mv "$stash/$d/${job}.json" "$SITE/$d/" && restored="yes"
+        fi
+      done
+      rm -rf "$stash"
+      echo "    not published${restored:+ — the previous ${job} record was put back}"
+    fi
   done
   # A full matrix builds a trial image per task per arm and leaves a network
   # behind each time. Left alone across eighteen runs that fills the Docker
