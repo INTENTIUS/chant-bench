@@ -68,3 +68,7 @@ nav:
       - ec2-multiregion:
           - The scenario: aws-bench/ec2-multiregion/index.md
           - Results: aws-bench/ec2-multiregion/results.md
+      # Ours, not aws-bench's, and scored over 6 trials rather than 24. Its own
+      # section for exactly that reason — the numbers must not read as part of
+      # the board.
+      - Questions aws-bench does not ask: aws-bench/ec2-multiregion-negatives/results.md
