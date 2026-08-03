@@ -7,11 +7,13 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-2 commands, from `chant-g3`.
+4 commands, from `chant-r5`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-east-1 attr:region=us-west-1 attr:region=us-west-2" --at latest --env floci --show InstanceId,State,PrivateIpAddress,internetFacing,effectiveIngress --explain
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show InstanceId,Placement,PrivateIpAddress,PublicIpAddress,State,internetFacing,effectiveIngress --explain
+cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-east-1 attr:effectiveIngress=tcp:22:0.0.0.0/0" --at latest --env floci --show PrivateIpAddress,PublicIpAddress,Tags --explain
+cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-west-1 attr:effectiveIngress=tcp:22:0.0.0.0/0" --at latest --env floci --show PrivateIpAddress,PublicIpAddress,Tags --explain
+cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-west-2 attr:effectiveIngress=tcp:22:0.0.0.0/0" --at latest --env floci --show PrivateIpAddress,PublicIpAddress,Tags --explain
+cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-east-1 attr:effectiveIngress=tcp:22:0.0.0.0/0" --at latest --env floci --show internetFacing,PublicIpAddress,VpcId,SubnetId
 ```
 
 ## No tool (AWS CLI) — missed

@@ -7,15 +7,15 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-6 commands, from `chant-g3`.
+6 commands, from `chant-r5`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --explain --show GroupId,GroupName,region
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show SecurityGroupIds
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance" --at latest --env floci --show GroupId,GroupName,region,providerDefault
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface !<-kind:EC2::LaunchTemplate !<-kind:EC2::SecurityGroup" --at latest --env floci --show GroupId,GroupName,region,providerDefault --explain
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup !attr:providerDefault=true !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface !<-kind:EC2::LaunchTemplate" --at latest --env floci --show GroupId,GroupName,region --explain
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface !<-kind:EC2::LaunchTemplate" --at latest --env floci --show GroupId,GroupName,region,providerDefault
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --show region,GroupName,GroupId --explain
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface" --at latest --env floci --show region,GroupName,GroupId,providerDefault --explain
+cd /workspace/chant && chant search "kind:EC2::Instance ->kind:EC2::SecurityGroup" --at latest --env floci --show GroupName --explain
+cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq -r '.edges[] | select(.from | startswith("i-")) | select(.to | startswith("sg-")) | "\(.from) -> \(.to)"' | sort
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface !attr:providerDefault=true" --at latest --env floci --show region,GroupName,GroupId --explain
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface" --at latest --env floci --show region,GroupName,GroupId,providerDefault
 ```
 
 ## No tool (AWS CLI) — answered
