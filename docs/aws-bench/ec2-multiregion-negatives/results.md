@@ -29,18 +29,27 @@ without that sentence.
 
 ## Results
 
-| arm | score | account reads | answered from own state |
-|---|--:|--:|---|
-| chant | **5/6** | 0 | yes |
+| arm | score | replicates | account reads | answered from own state |
+|---|--:|--:|--:|---|
+| chant | **6/6** | 6/6/6 | 0 | yes |
 
-The arm's most recent run, k=3, on an estate holding 13 subnets (8 empty)
-and 6 VPCs (2 empty). Every run here passed the audit — an arm that did not
-use its own tooling is not published, exactly as on the board.
+The **middle** of the arm's replicate set, k=3, on an estate holding 13
+subnets (8 empty) and 6 VPCs (2 empty). Six trials move further than the
+board's 24 do — one build of chant returned 3, 4 and 6 of 6 with nothing
+changed between the runs — so the replicates column is there to be read
+beside the figure, not after it. Every run passed the audit; an arm that
+did not use its own tooling is not published, exactly as on the board.
 
 ### Every run
 
 | run | arm | score | workspace | harness |
 |---|---|--:|---|---|
+| `chant-neg-8` | chant | 6/6 | `30c405b9a8f5` | `4f3ab36-dirty` |
+| `chant-neg-7` | chant | 6/6 | `30c405b9a8f5` | `4f3ab36-dirty` |
+| `chant-neg-6` | chant | 6/6 | `30c405b9a8f5` | `4f3ab36-dirty` |
+| `chant-neg-5` | chant | 6/6 | `787ab0fd5bd0` | `4f3ab36-dirty` |
+| `chant-neg-4` | chant | 4/6 | `787ab0fd5bd0` | `4f3ab36-dirty` |
+| `chant-neg-3` | chant | 3/6 | `787ab0fd5bd0` | `4f3ab36-dirty` |
 | `chant-neg-2` | chant | 5/6 | `88c575a712a0` | `4f3ab36-dirty` |
 | `chant-neg-1` | chant | 3/6 | `6c490aa2f305` | `4f3ab36-dirty` |
 
@@ -52,7 +61,7 @@ says two of these are not the same experiment.
 | question | answer | chant |
 |---|---|--:|
 | Which of my subnets have no network interfaces in them? | 8 of 13, across three regions | 3/3 |
-| Which of my VPCs have no running instances? | 2 of 6 | 2/3 |
+| Which of my VPCs have no running instances? | 2 of 6 | 3/3 |
 
 ## The conditions these were written under
 

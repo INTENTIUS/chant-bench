@@ -854,15 +854,20 @@ def negatives_page(by_arm: dict[str, list[dict]]) -> str:
     own state can find things that state does not contain — so that is what the
     page shows.
     """
+    # The middle of the arm's replicate set, the same rule the board uses. Six
+    # trials move further than 24 do: on one build these questions returned 3,
+    # 4 and 6 of 6 with nothing changed between the runs, so a single run here
+    # says even less than a single run there.
     rows = []
     for arm in ARMS:
-        runs = [r for r in (by_arm.get(arm) or []) if valid(r)]
+        runs = [r for r in (by_arm.get(arm) or []) if valid(r)][:REPLICATES]
         if runs:
-            rows.append((arm, runs[0]))
+            middle = sorted(runs, key=lambda r: r["score"].get("pass_rate") or 0)[len(runs) // 2]
+            rows.append((arm, middle, runs))
     rows.sort(key=lambda x: -(x[1]["score"].get("pass_rate") or 0))
 
     tasks: list[str] = []
-    for _, r in rows:
+    for _, r, _runs in rows:
         for task in r["score"]["by_task"]:
             if task not in tasks:
                 tasks.append(task)
@@ -905,18 +910,22 @@ def negatives_page(by_arm: dict[str, list[dict]]) -> str:
         out += ["No runs published yet.", ""]
         return "\n".join(out)
 
-    header = ["arm", "score", "account reads", "answered from own state"]
-    out += ["| " + " | ".join(header) + " |", "|---|--:|--:|---|"]
-    for arm, r in rows:
+    header = ["arm", "score", "replicates", "account reads", "answered from own state"]
+    out += ["| " + " | ".join(header) + " |", "|---|--:|--:|--:|---|"]
+    for arm, r, runs in rows:
         label = ARMS[arm][0]
         score = r["score"]
         passed, trials = score["passed"], score["trials"]
         reads = r["independence"]["account_reads"]
         own = "yes" if r["independence"].get("answered_from_own_state") else "no"
-        out.append(f"| {label} | **{passed}/{trials}** | {reads:g} | {own} |")
-    out += ["", "The arm's most recent run, k=3, on an estate holding 13 subnets (8 empty)",
-            "and 6 VPCs (2 empty). Every run here passed the audit — an arm that did not",
-            "use its own tooling is not published, exactly as on the board.", ""]
+        spread = "/".join(f"{x['score']['passed']}" for x in sorted(runs, key=lambda x: x["run"]["id"]))
+        out.append(f"| {label} | **{passed}/{trials}** | {spread} | {reads:g} | {own} |")
+    out += ["", "The **middle** of the arm's replicate set, k=3, on an estate holding 13",
+            "subnets (8 empty) and 6 VPCs (2 empty). Six trials move further than the",
+            "board's 24 do — one build of chant returned 3, 4 and 6 of 6 with nothing",
+            "changed between the runs — so the replicates column is there to be read",
+            "beside the figure, not after it. Every run passed the audit; an arm that",
+            "did not use its own tooling is not published, exactly as on the board.", ""]
 
     # Every run, not just the one in the table. A second run of the same arm is
     # usually a different build, and which build produced a number is the whole
@@ -937,12 +946,12 @@ def negatives_page(by_arm: dict[str, list[dict]]) -> str:
                 "says two of these are not the same experiment.", ""]
 
     out += ["## Per question", ""]
-    out += ["| question | answer | " + " | ".join(ARMS[a][0] for a, _ in rows) + " |"]
+    out += ["| question | answer | " + " | ".join(ARMS[a][0] for a, _, _ in rows) + " |"]
     out += ["|---|---|" + "--:|" * len(rows)]
     for task in tasks:
         prompt, truth = negative_prompt(task)
         cells = []
-        for _, r in rows:
+        for _, r, _runs in rows:
             got = (r["score"]["by_task"] or {}).get(task)
             cells.append(f"{sum(got)}/{len(got)}" if got else "—")
         out.append(f"| {prompt} | {truth} | " + " | ".join(cells) + " |")
