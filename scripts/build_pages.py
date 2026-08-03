@@ -28,7 +28,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "results"
-DOCS = ROOT / "docs" / "aws-bench" / "ec2-multiregion"
+
+#: The eight questions aws-bench defines. Every published board figure is over
+#: these, at k=3, so 24 trials.
+BOARD = "ec2-multiregion"
+#: Two questions we wrote, against the same estate (#27). Scored and rendered
+#: separately: they are 6 trials, not 24, and they are not aws-bench's.
+NEGATIVES = "ec2-multiregion-negatives"
+
+DOCS = ROOT / "docs" / "aws-bench" / BOARD
+NEGATIVES_DOCS = ROOT / "docs" / "aws-bench" / NEGATIVES
 BRIEFINGS = ROOT / "briefings"
 TRANSCRIPTS = ROOT / "transcripts"
 
@@ -68,12 +77,18 @@ STATELESS = {"cdk", "bare"}
 REPLICATES = 3
 
 
-def load() -> dict[str, list[dict]]:
-    """Result sets by arm, newest first."""
+def load(scenario: str = BOARD) -> dict[str, list[dict]]:
+    """One scenario's result sets by arm, newest first.
+
+    Scenario is a parameter rather than a constant because the negative question
+    set (#27) is a second set of questions against the same estate, and folding
+    it into the board would move every arm's denominator: the board is over 24
+    trials and the negatives are over 6.
+    """
     by_arm: dict[str, list[dict]] = defaultdict(list)
     for path in sorted(RESULTS.glob("*.json")):
         r = json.loads(path.read_text())
-        if r.get("scenario") == "ec2-multiregion":
+        if r.get("scenario") == scenario:
             by_arm[r["arm"]].append(r)
     for runs in by_arm.values():
         runs.sort(key=lambda r: (r["run"].get("finished_at") or "", r["run"]["id"]), reverse=True)
@@ -807,6 +822,141 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
 
 
 
+#: The two negative questions, and the answer each is graded against. Keyed by
+#: the truncated task name the harness writes, matched by prefix so a rename of
+#: the tail does not silently drop a row.
+NEGATIVE_QUESTIONS = {
+    "subnets-with-no-network-interfac": (
+        "Which of my subnets have no network interfaces in them?",
+        "8 of 13, across three regions",
+    ),
+    "vpcs-with-no-running-instances": (
+        "Which of my VPCs have no running instances?",
+        "2 of 6",
+    ),
+}
+
+
+def negative_prompt(task: str) -> tuple[str, str]:
+    for key, value in NEGATIVE_QUESTIONS.items():
+        if task.startswith(key) or key.startswith(task):
+            return value
+    return task, "—"
+
+
+def negatives_page(by_arm: dict[str, list[dict]]) -> str:
+    """The two questions we wrote, scored on their own.
+
+    Deliberately not the board. The board ranks replicate sets by what a hundred
+    correct answers cost; this is one run per arm of a two-question set, and
+    dressing six trials in that machinery would give it a confidence it has not
+    earned. What it is for is one comparison — whether an arm reading only its
+    own state can find things that state does not contain — so that is what the
+    page shows.
+    """
+    rows = []
+    for arm in ARMS:
+        runs = [r for r in (by_arm.get(arm) or []) if valid(r)]
+        if runs:
+            rows.append((arm, runs[0]))
+    rows.sort(key=lambda x: -(x[1]["score"].get("pass_rate") or 0))
+
+    tasks: list[str] = []
+    for _, r in rows:
+        for task in r["score"]["by_task"]:
+            if task not in tasks:
+                tasks.append(task)
+
+    out = [
+        "# Questions aws-bench does not ask",
+        "",
+        "Two introspection questions of a shape the upstream set contains exactly",
+        "one of. **They are not aws-bench's. They are ours**, and the numbers here",
+        "are not comparable with the ones on [the board](../ec2-multiregion/results.md):",
+        "that is eight questions at k=3, or 24 trials, and this is two questions at",
+        "k=3, or 6.",
+        "",
+        "## Why these two",
+        "",
+        "`list-unused-security-groups-all-regions` is the most interesting result on",
+        "the board and the least representative. Every arm that keeps a state file",
+        "is at zero on it — Pulumi, Terraform and AWS CDK are 0 for 66 attempts",
+        "between them — and an agent with no infrastructure tooling beats all three.",
+        "The answer is a negative about things a state file does not contain, and",
+        "reading your own state cannot find what nothing points at.",
+        "",
+        "That is one question out of eight, which is an anecdote. These two share",
+        "the property that makes it hard: the account's default VPCs and their",
+        "subnets were created by no deployment, so an arm reading only its own state",
+        "sees a subset and cannot know what it is missing.",
+        "",
+        "**They are easier than the question they are modelled on.** The no-tool",
+        "baseline gets them with a sweep of two API calls, where the security-group",
+        "question needs every network interface cross-referenced and even",
+        "account-reading agents manage only 28%. What they test is the same",
+        "*structure*, not the same difficulty, and the page would be misleading",
+        "without that sentence.",
+        "",
+        "## Results",
+        "",
+    ]
+
+    if not rows:
+        out += ["No runs published yet.", ""]
+        return "\n".join(out)
+
+    header = ["arm", "score", "account reads", "answered from own state"]
+    out += ["| " + " | ".join(header) + " |", "|---|--:|--:|---|"]
+    for arm, r in rows:
+        label = ARMS[arm][0]
+        score = r["score"]
+        passed, trials = score["passed"], score["trials"]
+        reads = r["independence"]["account_reads"]
+        own = "yes" if r["independence"].get("answered_from_own_state") else "no"
+        out.append(f"| {label} | **{passed}/{trials}** | {reads:g} | {own} |")
+    out += ["", "One run per arm, k=3, on an estate holding 13 subnets (8 empty) and 6 VPCs",
+            "(2 empty). Every run here passed the audit — an arm that did not use its",
+            "own tooling is not published, exactly as on the board.", ""]
+
+    out += ["## Per question", ""]
+    out += ["| question | answer | " + " | ".join(ARMS[a][0] for a, _ in rows) + " |"]
+    out += ["|---|---|" + "--:|" * len(rows)]
+    for task in tasks:
+        prompt, truth = negative_prompt(task)
+        cells = []
+        for _, r in rows:
+            got = (r["score"]["by_task"] or {}).get(task)
+            cells.append(f"{sum(got)}/{len(got)}" if got else "—")
+        out.append(f"| {prompt} | {truth} | " + " | ".join(cells) + " |")
+    out.append("")
+
+    out += [
+        "## The conditions these were written under",
+        "",
+        "**Written before any arm ran them.** The estate was queried to check the",
+        "answers are non-trivial — a question whose answer is \"none\" measures",
+        "nothing — and then the tasks were written. Nothing was tuned to a result,",
+        "because there were no results.",
+        "",
+        "**Five other candidates were discarded**, because the estate does not",
+        "support them: unattached network interfaces (0), route tables with no",
+        "association (0), security groups referenced only by other groups (0),",
+        "unattached volumes (0), and security groups with no ingress rules (7 of 8,",
+        "which discriminates nothing). Recorded because the ones that survived look",
+        "cherry-picked without the ones that did not.",
+        "",
+        "**Published either way.** A question set added by the author of one of the",
+        "tools is worth nothing unless the arm that author builds can lose on it.",
+        "",
+        "**Ground truth is computed live** by each task's `pre_invoke`, sweeping the",
+        "account at run time. The estate is redeployed before every run with fresh",
+        "resource ids, so a written-down count would track the scenario only until",
+        "someone edited it.",
+        "",
+    ]
+    return "\n".join(out)
+
+
 def main() -> int:
     by_arm = load()
     if not by_arm:
@@ -833,6 +983,19 @@ def main() -> int:
                 (qdir / f"{task}.md").write_text(question_page(task, tx))
         print(f"ok    questions/  ({len(tx)} arm(s) with transcripts)")
     print(f"ok    results.md  ({len(by_arm)} arm(s))")
+
+    # The negative set, on its own page under its own scenario. Rendered only
+    # when it has results, so the nav does not carry an empty page before the
+    # first run lands.
+    negatives = load(NEGATIVES)
+    unknown_neg = sorted(set(negatives) - set(ARMS))
+    if unknown_neg:
+        print(f"negative result set(s) for arm(s) this page has no entry for: {', '.join(unknown_neg)}")
+        return 1
+    if negatives:
+        NEGATIVES_DOCS.mkdir(parents=True, exist_ok=True)
+        (NEGATIVES_DOCS / "results.md").write_text(negatives_page(negatives))
+        print(f"ok    {NEGATIVES}/results.md  ({len(negatives)} arm(s))")
     # No per-arm or per-run pages. Everything they held — the headline, the
     # effort figures, the provenance, the briefing — is on the results page, in
     # a panel that switches. A second, plainer copy of it behind a nav link was
