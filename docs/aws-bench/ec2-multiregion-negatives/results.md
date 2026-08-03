@@ -31,17 +31,27 @@ without that sentence.
 
 | arm | score | account reads | answered from own state |
 |---|--:|--:|---|
-| chant | **3/6** | 0 | yes |
+| chant | **5/6** | 0 | yes |
 
-One run per arm, k=3, on an estate holding 13 subnets (8 empty) and 6 VPCs
-(2 empty). Every run here passed the audit — an arm that did not use its
-own tooling is not published, exactly as on the board.
+The arm's most recent run, k=3, on an estate holding 13 subnets (8 empty)
+and 6 VPCs (2 empty). Every run here passed the audit — an arm that did not
+use its own tooling is not published, exactly as on the board.
+
+### Every run
+
+| run | arm | score | workspace | harness |
+|---|---|--:|---|---|
+| `chant-neg-2` | chant | 5/6 | `88c575a712a0` | `4f3ab36-dirty` |
+| `chant-neg-1` | chant | 3/6 | `6c490aa2f305` | `4f3ab36-dirty` |
+
+A run is superseded rather than deleted. The workspace fingerprint is what
+says two of these are not the same experiment.
 
 ## Per question
 
 | question | answer | chant |
 |---|---|--:|
-| Which of my subnets have no network interfaces in them? | 8 of 13, across three regions | 1/3 |
+| Which of my subnets have no network interfaces in them? | 8 of 13, across three regions | 3/3 |
 | Which of my VPCs have no running instances? | 2 of 6 | 2/3 |
 
 ## The conditions these were written under

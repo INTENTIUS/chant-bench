@@ -914,9 +914,27 @@ def negatives_page(by_arm: dict[str, list[dict]]) -> str:
         reads = r["independence"]["account_reads"]
         own = "yes" if r["independence"].get("answered_from_own_state") else "no"
         out.append(f"| {label} | **{passed}/{trials}** | {reads:g} | {own} |")
-    out += ["", "One run per arm, k=3, on an estate holding 13 subnets (8 empty) and 6 VPCs",
-            "(2 empty). Every run here passed the audit — an arm that did not use its",
-            "own tooling is not published, exactly as on the board.", ""]
+    out += ["", "The arm's most recent run, k=3, on an estate holding 13 subnets (8 empty)",
+            "and 6 VPCs (2 empty). Every run here passed the audit — an arm that did not",
+            "use its own tooling is not published, exactly as on the board.", ""]
+
+    # Every run, not just the one in the table. A second run of the same arm is
+    # usually a different build, and which build produced a number is the whole
+    # question this repo exists to keep answerable — a page that shows only the
+    # newest quietly drops the evidence that it moved.
+    history = [(arm, r) for arm in ARMS for r in (by_arm.get(arm) or []) if valid(r)]
+    if len(history) > len(rows):
+        out += ["### Every run", "",
+                "| run | arm | score | workspace | harness |", "|---|---|--:|---|---|"]
+        history.sort(key=lambda x: (x[1]["run"].get("finished_at") or ""), reverse=True)
+        for arm, r in history:
+            s = r["score"]
+            out.append(
+                f"| `{r['run']['id']}` | {ARMS[arm][0]} | {s['passed']}/{s['trials']} | "
+                f"`{r['run'].get('workspace') or '—'}` | `{r['run'].get('harness_commit') or '—'}` |"
+            )
+        out += ["", "A run is superseded rather than deleted. The workspace fingerprint is what",
+                "says two of these are not the same experiment.", ""]
 
     out += ["## Per question", ""]
     out += ["| question | answer | " + " | ".join(ARMS[a][0] for a, _ in rows) + " |"]

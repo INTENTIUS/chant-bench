@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "run": "chant-neg-2",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__8zp5Zrp",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --show region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --show region",
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet\" --at latest --env floci --show region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet <-kind:EC2::NetworkInterface\" --at latest --env floci --show region --explain"
+      ],
+      "answer": "he following 8 subnets have no network interfaces attached to them:\n\nus-east-1:\n  - subnet-default-a\n  - subnet-default-b\n\nus-west-1:\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nus-west-2:\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nNote: These are all default VPC subnets (AWS-managed, not declared in the estate).\n\nSubnets WITH network interfaces (for reference):\n  - privateSubnet (subnet-0ba8e1bd) in us-east-1\n  - publicSubnet (subnet-9af06b90) in us-east-1\n  - publicSubnet (subnet-e24c729c) in us-west-1\n  - publicSubnet (subnet-89fec5ef) in us-west-2\n  - subnet-default-c in us-east-1\n\nSource: chant state snapshot 42af034 from 2026-08-03T19:28:05.519Z"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__HZDfHMr",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::VPC !<-kind:EC2::Instance\" --at latest --env floci --show region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC !<-kind:EC2::Instance\" --at latest --env floci --show region --explain | grep \"EC2::VPC\"",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --show region --explain 2>&1 | tail -20",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC <-kind:EC2::Instance\" --at latest --env floci --show region --explain 2>&1 | grep \"EC2::VPC\"",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show region,VpcId --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --show region,VpcId 2>&1 | grep -E \"^[a-z-]+\" | awk '{print $3, \"region=\" $4, $2}' | sort"
+      ],
+      "answer": "PCs with NO instances:\n1. vpc-default (us-west-1)\n2. vpc-default (us-west-2)\n\n---\n\nComplete VPC and Instance Inventory:\n====================================\n\nManaged VPCs (Declared in chant):\n  \u2717 vpc-dd52da55 (us-east-1) - HAS 3 instances: launchTemplateServer, privateServer, webServer\n  \u2713 vpc-78286e22 (us-west-1) - HAS 1 instance: server\n  \u2713 vpc-10aca321 (us-west-2) - HAS 1 instance: server\n\nDefault VPCs (AWS Provider-managed):\n  \u2717 vpc-default (us-east-1) - HAS 1 instance: defaultVpcServer\n  \u2713 vpc-default (us-west-1) - NO instances\n  \u2713 vpc-default (us-west-2) - NO instances\n\nSource: chant estate snapshot 42af034 taken 2026-08-03T19:28:05.519Z\nRegions checked: us-east-1, us-west-1, us-west-2"
+    }
+  }
+}
