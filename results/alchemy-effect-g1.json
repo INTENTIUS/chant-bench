@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "alchemy-effect",
+  "run": {
+    "id": "alchemy-effect-g1",
+    "workspace": "d7ff36d77b13",
+    "finished_at": "2026-08-02T17:49:14.297317",
+    "harness_commit": "bfa85f8-dirty"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 13,
+    "pass_rate": 0.5417,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        0,
+        0,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        0,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions": [
+        0,
+        0,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        1,
+        0
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        0,
+        0
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 238,
+    "invocations_failed": 24,
+    "failure_rate": 0.0916
+  },
+  "independence": {
+    "account_reads": 9,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 14.38,
+    "turns": 17.5,
+    "wall_seconds": 240.01,
+    "tokens_in": 421515.46,
+    "tokens_out": 4965.71,
+    "cost_usd": 0.0882,
+    "cost_usd_run": 2.1166
+  },
+  "logs": {
+    "run": "jobs/alchemy-effect-g1/run-arm.log",
+    "job": "jobs/alchemy-effect-g1/job.log",
+    "trials": "jobs/alchemy-effect-g1/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-alchemy-effect.md",
+    "sha256": "6e6e55fd2fc6"
+  },
+  "reproduce": "benchmarks/arms/alchemy-effect-ec2-multiregion/REPRODUCE.md"
+}

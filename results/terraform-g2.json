@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "terraform",
+  "run": {
+    "id": "terraform-g2",
+    "workspace": "9eb9733025c9",
+    "finished_at": "2026-08-02T18:10:52.051646",
+    "harness_commit": "bfa85f8-dirty"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 20,
+    "pass_rate": 0.8333,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        1,
+        0
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 138,
+    "invocations_failed": 4,
+    "failure_rate": 0.0282
+  },
+  "independence": {
+    "account_reads": 2,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 9.92,
+    "turns": 12.46,
+    "wall_seconds": 66.72,
+    "tokens_in": 362271.42,
+    "tokens_out": 4102.33,
+    "cost_usd": 0.0821,
+    "cost_usd_run": 1.9716
+  },
+  "logs": {
+    "run": "jobs/terraform-g2/run-arm.log",
+    "job": "jobs/terraform-g2/job.log",
+    "trials": "jobs/terraform-g2/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-terraform.md",
+    "sha256": "7822d55ca7ca"
+  },
+  "reproduce": "benchmarks/arms/terraform-ec2-multiregion/REPRODUCE.md"
+}

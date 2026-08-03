@@ -97,8 +97,15 @@ nothing but account reads by definition.
 phrasing rather than capability. A correct six-instance answer was marked wrong
 for not naming regions.
 
-**Run counts differ.** Where a single figure is shown it follows a stated rule,
-the latest valid run, never a best-of, and `n` is always given.
+**Run counts differ.** An arm is judged on its three most recent valid runs, all
+of which are printed, and the middle one is what ranks. Never a best-of, and `n`
+is always given.
+
+That rule replaced "the latest valid run", which could not survive its own
+results. At three attempts a question these arms move about three trials in 24
+with nothing changed between them — the no-tool baseline scored 19, 16 and 18 on
+three consecutive runs. Ranking on the newest one put AWS CDK's worst run and
+Alchemy's best against each other and called the result an order.
 
 **Results come from an emulator**, not AWS. Substrate is recorded on every run,
 and emulator results are never pooled with live-cloud ones.

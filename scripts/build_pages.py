@@ -13,10 +13,11 @@ Gate state is structural. A run that failed a gate renders dimmed and badged, no
 as a low score, because "the tool never ran" and "the tool did badly" are
 different findings and only one of them is about the tool.
 
-`n` is always shown. Arms have wildly different run counts — one has twelve, most
-have one — and a leaderboard that quietly takes the best of twelve flatters
-whoever ran most. The headline is the latest valid run, and the history is
-published beside it.
+`n` is always shown. Arms have wildly different run counts — one has twenty-five,
+most have a handful — and a leaderboard that quietly takes the best of twenty-five
+flatters whoever ran most. So an arm is judged on its most recent REPLICATES runs,
+every one of them is printed, and the middle one ranks. The rest of its history is
+published on its own panel.
 """
 
 from __future__ import annotations
@@ -356,6 +357,23 @@ def headline(runs: list[dict]) -> dict | None:
     return next((r for r in runs if valid(r)), None)
 
 
+def typical(recent: list[dict]) -> float | None:
+    """The middle run's cost per correct answer, over the replicate set shown.
+
+    The board ranked on the latest run alone, and one run of three is not a
+    number these arms can support. Their spread at k=3 is around three trials in
+    24 either way: `bare` went 19, 16, 18 with nothing changed between them, and
+    AWS CDK's worst run lost a whole question to a jq filter its own agent wrote,
+    which silently dropped every instance without a Name tag.
+
+    So the same run set the page already prints decides the order, and the middle
+    of it is what ranks. That drops the two arms whose latest run was their best
+    or their worst from positions they had not earned in either direction.
+    """
+    vals = sorted(v for v in (per_correct(r) for r in recent) if v is not None)
+    return vals[len(vals) // 2] if vals else None
+
+
 def fill(value, largest, colour) -> str:
     """A proportional bar in a track you can actually see.
 
@@ -405,7 +423,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         recent = [x for x in (by_arm.get(arm) or []) if valid(x)][:REPLICATES]
         r = recent[0] if recent else None
         if r:
-            rows.append((arm, r, len(recent)))
+            rows.append((arm, r, recent))
             tasks |= set(r["score"]["by_task"])
         else:
             pending.append(arm)
@@ -420,9 +438,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # not an entrant", and that quietly softened the one thing the control was
     # built to show: it answers more cheaply than four of the five tools. A
     # baseline sitting second is uncomfortable reading, which is the finding.
-    rows.sort(
-        key=lambda x: per_correct(x[1]) if per_correct(x[1]) is not None else 10**9
-    )
+    rows.sort(key=lambda x: typical(x[2]) if typical(x[2]) is not None else 10**9)
     pending.sort()
 
     just = [r for _, r, _ in rows]
@@ -458,7 +474,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # Every arm gets a row and a panel; the radio in front of them decides which
     # panel is showing. Same data for everyone, one panel at a time — stacking
     # seven full panels made the page a scroll instead of a comparison.
-    entries = [(arm, r, n) for arm, r, n in rows] + [(arm, None, 0) for arm in pending]
+    entries = [(arm, r, n) for arm, r, n in rows] + [(arm, None, []) for arm in pending]
 
     out = [
         "# Results",
@@ -472,6 +488,12 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "divided by the share the tool gets right, times a hundred. Being cheap at",
         "being wrong does not help, and a hundred is a number worth having rather",
         "than four decimal places of cents.",
+        "",
+        "Each row lists every run in the arm's replicate set, and the figure is the",
+        "**middle** one. A single run cannot carry this: at three attempts per",
+        "question these arms move about three trials in 24 with nothing changed",
+        "between them. Ranking on the newest run put one arm's best and another's",
+        "worst against each other and called it an order.",
         "",
         "**Select a row** to see what that tool spent, how hard it worked, and the",
         "environment its agent was given.",
@@ -504,20 +526,24 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # The bar is the ranking metric, amber, so the shortest sits at the top and
     # they lengthen downward. Drawing pass rate here instead would put a bar that
     # grows the other way next to a rank it does not explain.
-    worst = max([x for x in (per_correct(r) for _, r, _ in rows) if x] or [0])
+    worst = max([x for x in (typical(rec) for _, _, rec in rows) if x] or [0])
     out.append('<ul class="cb-board">')
-    for i, (arm, r, n) in enumerate(entries, 1):
+    for i, (arm, r, recent) in enumerate(entries, 1):
         name, _ = ARMS.get(arm, (arm, ""))
         if r is None:
             sub = "baseline · not yet run" if arm == "bare" else "not yet run"
             bar, val, extra = '<span class="cb-track"></span>', "—", " pending"
         else:
-            pc = per_correct(r)
-            # Just the count. The row carried the rate, the per-question cost,
-            # the run cost and the run count, which wrapped onto a second line
-            # and repeated in different units what the figure on the right
-            # already says. The rest is a click away in the panel.
-            sub = f"{r['score']['passed']}/{r['score']['trials']} correct"
+            pc = typical(recent)
+            # Every run in the set, not just the one that ranks. A single score
+            # reads as the arm's number, and at k=3 it is not: these runs move
+            # about three trials in 24 with nothing changed. Printing all of
+            # them puts the spread where the claim is, so a reader can see that
+            # 22 · 24 · 22 and 13 · 18 · 15 are different kinds of result before
+            # comparing the figures beside them.
+            scores = " · ".join(str(x["score"]["passed"]) for x in recent)
+            trials = r["score"]["trials"]
+            sub = f"{scores} of {trials}" if len(recent) > 1 else f"{r['score']['passed']}/{trials} correct"
             # Still marked, just not moved. It ranks on its number like everyone
             # else, and a reader still needs to know it is an agent with the AWS
             # CLI and no infrastructure tooling rather than another product.
@@ -739,10 +765,12 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "    experiment: an agent with the AWS CLI and nothing else. A tool that does",
         "    not get there more cheaply is not earning its place.",
         "",
-        "    Figures are per question, averaged over that arm's latest valid run. Cost",
-        "    is the agent's own billed total, not tokens times a rate card. Bars are",
-        "    scaled against the highest value any arm recorded, so a short amber bar is",
-        "    the good one.",
+        "    Figures in these panels are per question, over that arm's **latest** valid",
+        "    run — one run, so they will not always agree with the ranking outside, which",
+        "    is the middle of the three. Where the two differ, the arm's runs disagree",
+        "    with each other, and the row above says by how much. Cost is the agent's own",
+        "    billed total, not tokens times a rate card. Bars are scaled against the",
+        "    highest value any arm recorded, so a short amber bar is the good one.",
         "",
         "!!! note \"Reading account reads\"",
         "    A tool that answers from state it already holds is worth more than one",

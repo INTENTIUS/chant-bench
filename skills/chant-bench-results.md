@@ -58,9 +58,11 @@ cd ../chant-bench && just build
 **Gate state is structural.** An invalid run renders dimmed and badged with the
 reason, never as a low score.
 
-**`n` is always shown.** Arms have run different numbers of times. The headline
-figure is the latest valid run — a stated rule — never a best-of, because a
-best-of flatters whoever ran most.
+**`n` is always shown.** Arms have run different numbers of times. An arm is
+judged on its three most recent valid runs, every one is printed on its row, and
+the middle one ranks. Never a best-of, because a best-of flatters whoever ran
+most, and never the latest alone, because one run at k=3 moves about three
+trials in 24 without anything changing.
 
 **Substrate is never pooled.** Emulator and live-cloud runs are separate
 experiments even for the same scenario.
