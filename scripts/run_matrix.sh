@@ -4,6 +4,7 @@
 #   ./scripts/run_matrix.sh                    # every arm, 3 runs, ../aws-bench
 #   ./scripts/run_matrix.sh 1                  # one run each — a quick sweep
 #   ./scripts/run_matrix.sh 3 ../aws-bench chant terraform
+#   MATRIX_NEGATIVES=1 ./scripts/run_matrix.sh 3   # board + the negative set
 #
 # Interleaved by replicate rather than by arm: every arm runs once, then every
 # arm again. A matrix interrupted halfway still compares across arms, instead of
@@ -36,6 +37,22 @@ fi
 #   MATRIX_LABEL=g ./scripts/run_matrix.sh 3
 LABEL="${MATRIX_LABEL:-m}"
 
+# Score the negative question set too, on the estate the board run just used.
+#
+#   MATRIX_NEGATIVES=1 ./scripts/run_matrix.sh 3
+#
+# It has to happen here and not as a pass of its own. `run-negatives.sh` scores
+# an estate that is already up and refuses one that belongs to another arm, and
+# the loop below wipes between arms — so the only moment an arm's estate exists
+# is the minutes after its own board run. A separate sweep would have to deploy
+# all seven again to ask two questions each.
+#
+# Every replicate, not just the first. Six trials move further than the board's
+# 24 do — one build of chant returned 3, 4 and 6 of 6 with nothing changed
+# between the runs — so a single negatives run is worth less than a single board
+# run, not more. Riding the replicate loop costs about three minutes per arm.
+NEGATIVES="${MATRIX_NEGATIVES:-}"
+
 [ -d "$BENCH/benchmarks/agent-env" ] || {
   echo "not an aws-bench checkout: $BENCH — run ./scripts/bootstrap.sh first" >&2
   exit 1
@@ -65,9 +82,11 @@ for r in $(seq 1 "$REPS"); do
     done
     rm -rf "$BENCH/jobs/${job}"
 
+    board_ok=yes
     if (cd "$BENCH" && ./benchmarks/agent-env/run-arm.sh "$arm" "$job" > "/tmp/${job}.log" 2>&1); then
       grep -oE "Pass_Rate: [0-9.]+" "/tmp/${job}.log" | tail -1 | sed 's/^/    /'
     else
+      board_ok=no
       # A gate stopping the run means it measured nothing; ingest refuses it.
       # Only note it; do not abandon the rest of the matrix.
       echo "    run-arm exited nonzero (see /tmp/${job}.log)"
@@ -90,6 +109,46 @@ for r in $(seq 1 "$REPS"); do
       done
       rm -rf "$stash"
       echo "    not published${restored:+ — the previous ${job} record was put back}"
+    fi
+
+    # The negative set, while this arm's estate is still standing. The loop
+    # wipes before the next arm, so this is the only window it exists in.
+    #
+    # A board run that failed its gates leaves an estate whose condition is
+    # unknown — that is what the gate was telling us — so nothing is scored
+    # against it. `run-negatives.sh` checks the estate itself as well, and this
+    # skip is so the second failure is never confused for the first.
+    if [ -n "$NEGATIVES" ] && [ "$board_ok" = yes ]; then
+      negjob="${arm}-neg-${LABEL}${r}"
+      say "$negjob  (negative set, same estate)"
+
+      negstash="$(mktemp -d)"
+      mkdir -p "$negstash/results" "$negstash/transcripts"
+      for d in results transcripts; do
+        [ -f "$SITE/$d/${negjob}.json" ] && mv "$SITE/$d/${negjob}.json" "$negstash/$d/" || true
+      done
+      rm -rf "$BENCH/jobs/${negjob}"
+
+      if (cd "$BENCH" && ./benchmarks/agent-env/run-negatives.sh "$arm" "$negjob" > "/tmp/${negjob}.log" 2>&1); then
+        grep -oE "Pass_Rate: [0-9.]+" "/tmp/${negjob}.log" | tail -1 | sed 's/^/    /'
+      else
+        echo "    run-negatives exited nonzero (see /tmp/${negjob}.log)"
+        failed+=("$negjob")
+      fi
+
+      if "$SITE/scripts/ingest.sh" "$BENCH" "$negjob" >/dev/null 2>&1; then
+        echo "    ingested"
+        rm -rf "$negstash"
+      else
+        restored=""
+        for d in results transcripts; do
+          if [ -f "$negstash/$d/${negjob}.json" ]; then
+            mv "$negstash/$d/${negjob}.json" "$SITE/$d/" && restored="yes"
+          fi
+        done
+        rm -rf "$negstash"
+        echo "    not published${restored:+ — the previous ${negjob} record was put back}"
+      fi
     fi
   done
   # A full matrix builds a trial image per task per arm and leaves a network

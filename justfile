@@ -14,6 +14,13 @@ run arm dir="../aws-bench":
     cd {{dir}} && ./benchmarks/agent-env/run-arm.sh {{arm}}
 
 # Run every arm N times, publishing each result as it lands.
+#
+# Add the negative question set with MATRIX_NEGATIVES=1. It rides each arm's
+# board run rather than sweeping separately, because those questions are scored
+# against an estate that is already up and the loop wipes between arms — so an
+# arm's estate exists only in the minutes after its own run.
+#
+#   MATRIX_NEGATIVES=1 just matrix 3
 matrix reps="3" dir="../aws-bench" *arms:
     ./scripts/run_matrix.sh {{reps}} {{dir}} {{arms}}
 
