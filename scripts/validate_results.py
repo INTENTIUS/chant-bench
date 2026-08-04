@@ -82,6 +82,24 @@ def check(path: Path) -> list[str]:
                 f"pass_rate {rate} is over the survivors, not over the run"
             )
 
+    # Which tool the run measured. Optional, because every record published
+    # before lex00/aws-bench#13 predates the stamp and the version they ran is
+    # not recoverable — a record that says nothing is honest, and one that
+    # guesses is not.
+    #
+    # Present, it has to be complete. A half-filled block is worse than an
+    # absent one: `chant` with no version reads as a claim about the tool while
+    # carrying no information, and the page would render it as though it did.
+    tool = r.get("tool")
+    if tool is not None:
+        if not isinstance(tool, dict):
+            problems.append(f"`tool` should be dict, got {type(tool).__name__}")
+        else:
+            for key in ("name", "version"):
+                value = tool.get(key)
+                if not isinstance(value, str) or not value.strip():
+                    problems.append(f"`tool.{key}` missing or not a non-empty string")
+
     # The axis the whole comparison turns on. Absent, a reader cannot tell an arm
     # that answered from its own state from one carried by the AWS CLI.
     indep = r.get("independence")

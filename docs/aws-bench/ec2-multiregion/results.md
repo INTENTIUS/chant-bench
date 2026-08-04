@@ -115,9 +115,10 @@ environment its agent was given.
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the briefing, which is the one thing the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
 <dt>run</dt><dd><code>chant-g3</code></dd>
+<dt>tool under test</dt><dd><span class='cb-env-unknown'>not recorded — this run predates the version stamp</span></dd>
 <dt>what the run cost</dt><dd><b>$0.7307</b> — 24 questions at $0.0304 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
@@ -300,9 +301,10 @@ attribute:
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the briefing, which is the one thing the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
 <dt>run</dt><dd><code>bare-g3</code></dd>
+<dt>tool under test</dt><dd><span class='cb-env-unknown'>not recorded — this run predates the version stamp</span></dd>
 <dt>what the run cost</dt><dd><b>$0.9068</b> — 24 questions at $0.0378 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
@@ -410,9 +412,10 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the briefing, which is the one thing the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
 <dt>run</dt><dd><code>pulumi-g3</code></dd>
+<dt>tool under test</dt><dd><span class='cb-env-unknown'>not recorded — this run predates the version stamp</span></dd>
 <dt>what the run cost</dt><dd><b>$1.5147</b> — 24 questions at $0.0631 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
@@ -529,9 +532,10 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the briefing, which is the one thing the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
 <dt>run</dt><dd><code>terraform-g3</code></dd>
+<dt>tool under test</dt><dd><span class='cb-env-unknown'>not recorded — this run predates the version stamp</span></dd>
 <dt>what the run cost</dt><dd><b>$1.6929</b> — 24 questions at $0.0705 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
@@ -648,9 +652,10 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the briefing, which is the one thing the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
 <dt>run</dt><dd><code>cdk-g3</code></dd>
+<dt>tool under test</dt><dd><span class='cb-env-unknown'>not recorded — this run predates the version stamp</span></dd>
 <dt>what the run cost</dt><dd><b>$2.0780</b> — 24 questions at $0.0866 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
@@ -775,9 +780,10 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the briefing, which is the one thing the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
 <dt>run</dt><dd><code>alchemy-effect-g2</code></dd>
+<dt>tool under test</dt><dd><span class='cb-env-unknown'>not recorded — this run predates the version stamp</span></dd>
 <dt>what the run cost</dt><dd><b>$2.0886</b> — 24 questions at $0.0870 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
@@ -906,9 +912,10 @@ Path to estate facts, in order:
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the briefing, which is the one thing the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
 <dt>run</dt><dd><code>alchemy-g3</code></dd>
+<dt>tool under test</dt><dd><span class='cb-env-unknown'>not recorded — this run predates the version stamp</span></dd>
 <dt>what the run cost</dt><dd><b>$2.6281</b> — 24 questions at $0.1095 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>

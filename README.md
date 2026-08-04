@@ -22,8 +22,8 @@ is what lets a new one slot in.
 
 One JSON per run under `results/`. It carries the score, the per-question
 breakdown, what the run cost in tokens and commands and time, whether the tool
-had to read the cloud, whether the gates passed, and the hashes of the harness
-and briefing that produced it.
+had to read the cloud, whether the gates passed, which version of which tool it
+measured, and the hashes of the harness and briefing that produced it.
 
 A run the gates rejected is not published. Neither is one whose provenance is
 incomplete. A number nobody can trace, or one that measured a broken harness

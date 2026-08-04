@@ -283,6 +283,24 @@ def cost_note(r: dict) -> str:
     return f"<b>{usd(total)}</b>"
 
 
+def tool_note(r: dict) -> str:
+    """The tool this run measured, named and versioned.
+
+    An arm is a row on a board; the thing behind it moves without the row's name
+    changing. chant's published figures crossed four releases under one name,
+    and the only trace of that was a workspace fingerprint nobody can look up.
+
+    Runs recorded before lex00/aws-bench#13 carry no version and are said to
+    carry none. The alternative is reading one off the arm as it stands today,
+    which is how a record ends up describing a build that postdates it.
+    """
+    tool = r.get("tool") or {}
+    name, version = tool.get("name"), tool.get("version")
+    if not name or not version:
+        return "<span class='cb-env-unknown'>not recorded — this run predates the version stamp</span>"
+    return f"<code>{name}</code> <b>{version}</b>"
+
+
 def per_correct(r: dict) -> float | None:
     """What one *correct* answer costs: spend divided by the share it gets right.
 
@@ -703,15 +721,16 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         out.append('<section class="cb-mpanel wide">')
         out.append('<h3 class="cb-mpanel-title">Agent environment</h3>')
         out.append(
-            '<p class="cb-mpanel-note">Identical for every arm except the briefing, '
-            "which is the one thing the comparison is about. A run only compares with "
-            "another that shares the harness commit and the briefing hash.</p>"
+            '<p class="cb-mpanel-note">Identical for every arm except the tool and '
+            "its briefing, which are what the comparison is about. A run only compares "
+            "with another that shares the harness commit and the briefing hash.</p>"
         )
         agent = r.get("agent") or {}
         b = r.get("briefing") or {}
         out.append('<dl class="cb-env">')
         for k, v in (
             ("run", f"<code>{r['run']['id']}</code>"),
+            ("tool under test", tool_note(r)),
             ("what the run cost", cost_note(r)),
             ("agent", f"{agent.get('name', '—')}"),
             ("model", f"<code>{agent.get('model', '—')}</code>"),
