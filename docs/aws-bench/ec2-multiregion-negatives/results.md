@@ -44,6 +44,9 @@ did not use its own tooling is not published, exactly as on the board.
 
 | run | arm | score | workspace | harness |
 |---|---|--:|---|---|
+| `chant-pneg-3` | chant | 6/6 | `09766f0396b7` | `09075af-dirty` |
+| `chant-pneg-2` | chant | 6/6 | `09766f0396b7` | `09075af-dirty` |
+| `chant-pneg-1` | chant | 6/6 | `09766f0396b7` | `09075af-dirty` |
 | `chant-neg-8` | chant | 6/6 | `30c405b9a8f5` | `4f3ab36-dirty` |
 | `chant-neg-7` | chant | 6/6 | `30c405b9a8f5` | `4f3ab36-dirty` |
 | `chant-neg-6` | chant | 6/6 | `30c405b9a8f5` | `4f3ab36-dirty` |

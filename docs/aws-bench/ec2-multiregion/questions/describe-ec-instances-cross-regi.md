@@ -7,11 +7,10 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-2 commands, from `chant-r5`.
+1 commands, from `chant-p3`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,VpcId,InstanceType
-cd /workspace/chant && chant search "kind:EC2::Instance attr:region=us-east-1" --at latest --env floci --explain --show VpcId,InstanceType,PrivateIpAddress
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show region,VpcId --explain
 ```
 
 ## No tool (AWS CLI) — answered

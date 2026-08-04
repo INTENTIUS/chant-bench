@@ -7,15 +7,15 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-6 commands, from `chant-r5`.
+6 commands, from `chant-p3`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --show region,GroupName,GroupId --explain
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface" --at latest --env floci --show region,GroupName,GroupId,providerDefault --explain
-cd /workspace/chant && chant search "kind:EC2::Instance ->kind:EC2::SecurityGroup" --at latest --env floci --show GroupName --explain
-cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq -r '.edges[] | select(.from | startswith("i-")) | select(.to | startswith("sg-")) | "\(.from) -> \(.to)"' | sort
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface !attr:providerDefault=true" --at latest --env floci --show region,GroupName,GroupId --explain
-cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance !<-kind:EC2::NetworkInterface" --at latest --env floci --show region,GroupName,GroupId,providerDefault
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --explain
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup" --at latest --env floci --show region,providerDefault
+cd /workspace/chant && chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance" --at latest --env floci --show region,providerDefault --explain
+cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.to | startswith("sg-") or contains("SecurityGroup")) | {from, to, viaAttr}'
+cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.viaAttr | test("SecurityGroup|Groups")) | {from, to, viaAttr}' | head -40
+cd /workspace/chant && { echo "=== UNUSED SECURITY GROUPS ANALYSIS ===" echo "" echo "All Security Groups in the estate:" chant search "kind:EC2::SecurityGroup" --at latest --env floci --show region,providerDefault echo "" echo "=== UNUSED SECURITY GROUPS (Not referenced by instances or other resources) ===" echo "" chant search "kind:EC2::SecurityGroup !<-kind:EC2::Instance" --at latest --env floci --show region,providerDefault } > /tmp/sg_analysis.txt 2>&1 cat /tmp/sg_analysis.txt
 ```
 
 ## No tool (AWS CLI) — answered

@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "run": "chant-p3",
+  "arm": "chant",
+  "by_task": {
+    "describe-ec-instances-cross-regi": {
+      "trial": "describe-ec-instances-cross-regi__Eh3Q5UF",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show region,VpcId --explain"
+      ],
+      "answer": "Y REGION:\n- us-east-1: 4 instances\n- us-west-1: 1 instance\n- us-west-2: 1 instance\n\nTOTAL: 6 instances\n\nNETWORK CONNECTIVITY IN US-EAST-1 (VPC Grouping):\n=================================================\n\nInstances in the SAME VPC (vpc-ea7d9368) - CONNECTED:\n  \u2022 launchTemplateServer (i-90650f85763b21c24)\n  \u2022 privateServer (i-9f009b5db9994ab92)\n  \u2022 webServer (i-eececfba0dcf6514d)\n\nInstances in SEPARATE VPC (vpc-default):\n  \u2022 defaultVpcServer (i-24f81e5c8a32fca29)\n\nSUMMARY:\n3 instances in us-east-1 share network connectivity through VPC vpc-ea7d9368.\n1 instance (defaultVpcServer) is isolated in the default VPC.\n\nDATA SOURCE:\nChant recorded estate snapshot cf21134 taken 2026-08-04T04:55:29.692Z"
+    },
+    "ec-instances-without-default-vpc": {
+      "trial": "ec-instances-without-default-vpc__mEkhXqJ",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --show providerDefault,region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region | grep -v \"vpc-default\""
+      ],
+      "answer": "==========================\n\nThe following 5 EC2 instances do not have a default VPC:\n\n1. launchTemplateServer (us-east-1)\n   - Instance ID: i-90650f85763b21c24\n   - VPC: vpc-ea7d9368\n\n2. privateServer (us-east-1)\n   - Instance ID: i-9f009b5db9994ab92\n   - VPC: vpc-ea7d9368\n\n3. webServer (us-east-1)\n   - Instance ID: i-eececfba0dcf6514d\n   - VPC: vpc-ea7d9368\n\n4. server (us-west-1)\n   - Instance ID: i-83c343d759b56865f\n   - VPC: vpc-0d4a673f\n\n5. server (us-west-2)\n   - Instance ID: i-d0fa9a5b876ec1ab1\n   - VPC: vpc-9d487477\n\nSource: chant snapshot cf21134 taken 2026-08-04T04:55:29.692Z (6/6 instances)\n\nNote: Only 1 instance (defaultVpcServer in us-east-1) is using a default VPC (vpc-default)."
+    },
+    "find-ec-instances-in-public-subn": {
+      "trial": "find-ec-instances-in-public-subn__Br292c9",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Instance attr:region=us-east-1 attr:internetFacing=true\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance attr:region=us-west-1 attr:internetFacing=true\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance attr:region=us-west-2 attr:internetFacing=true\" --at latest --env floci --explain"
+      ],
+      "answer": "EC2 Instances in Public Subnets across us-east-1, us-west-1, us-west-2\n=========================================================================\n\nus-east-1 (3 instances):\n  - defaultVpcServer         (i-24f81e5c8a32fca29)\n  - launchTemplateServer     (i-90650f85763b21c24)\n  - webServer                (i-eececfba0dcf6514d)\n\nus-west-1 (1 instance):\n  - server                   (i-83c343d759b56865f)\n\nus-west-2 (1 instance):\n  - server                   (i-d0fa9a5b876ec1ab1)\n\nTotal: 5 instances in public subnets\n\n\u2014 Data source: chant recorded state snapshot cf21134 taken 2026-08-04T04:55:29.692Z"
+    },
+    "list-ec-instances-all-regions-1": {
+      "trial": "list-ec-instances-all-regions-1__2bTJDw2",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant lifecycle show floci 2>&1 | head -50",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance attr:region=us-east-1 attr:region=us-west-1 attr:region=us-west-2 attr:internetFacing=true\" --at latest --env floci --show PrivateIpAddress,PublicIpAddress,effectiveIngress,region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show PrivateIpAddress,PublicIpAddress,effectiveIngress,region,internetFacing --explain 2>&1 | grep -A 200 \"LOGICAL ID\"",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show PrivateIpAddress,PublicIpAddress,effectiveIngress,region,internetFacing --explain"
+      ],
+      "answer": "=====\n\nThe following EC2 instances in your AWS account are reachable via SSH (port 22) from the internet:\n\n1. launchTemplateServer\n   - Instance ID: i-90650f85763b21c24\n   - Region: us-east-1\n   - Private IP: 10.0.0.11\n   - SSH Access: tcp:22 from 0.0.0.0/0\n\n2. webServer\n   - Instance ID: i-eececfba0dcf6514d\n   - Region: us-east-1\n   - Private IP: 10.0.0.10\n   - SSH Access: tcp:22 from 0.0.0.0/0\n\nNote: Both instances are in us-east-1. The instances in us-west-1 and us-west-2\n(server i-83c343d759b56865f and server i-d0fa9a5b876ec1ab1) are internet-facing\nbut do not have SSH ingress rules allowing access from the internet.\n\nSource: Recorded state snapshot cf21134 taken 2026-08-04T04:55:29.692Z"
+    },
+    "list-ec-instances-all-regions": {
+      "trial": "list-ec-instances-all-regions__5m6iyxf",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show InstanceId,region --explain"
+      ],
+      "answer": "EC2 Instance IDs by Region\n===========================\n\nUS-EAST-1 (4 instances):\n  - i-24f81e5c8a32fca29 (defaultVpcServer)\n  - i-90650f85763b21c24 (launchTemplateServer)\n  - i-9f009b5db9994ab92 (privateServer)\n  - i-eececfba0dcf6514d (webServer)\n\nUS-WEST-1 (1 instance):\n  - i-83c343d759b56865f (server)\n\nUS-WEST-2 (1 instance):\n  - i-d0fa9a5b876ec1ab1 (server)\n\nSummary\n-------\nTotal instances: 6\nRegions active: 3 (us-east-1, us-west-1, us-west-2)\n\nSource: Recorded estate snapshot cf21134 from 2026-08-04T04:55:29.692Z"
+    },
+    "list-ec-instances-by-vpc-across": {
+      "trial": "list-ec-instances-by-vpc-across__UiSX3yC",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,PrivateIpAddress --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region --explain"
+      ],
+      "answer": "EC2 INSTANCES BY VPC AND REGION\n================================\n\nRecorded state snapshot: cf21134 (taken 2026-08-04T04:55:29.692Z)\nQuery: 6 of 6 EC2 instances matched across the estate\n\nus-east-1\n---------\nVPC: vpc-default\n  \u2022 defaultVpcServer (i-24f81e5c8a32fca29)\n\nVPC: vpc-ea7d9368\n  \u2022 launchTemplateServer (i-90650f85763b21c24)\n  \u2022 privateServer (i-9f009b5db9994ab92)\n  \u2022 webServer (i-eececfba0dcf6514d)\n\nus-west-1\n---------\nVPC: vpc-0d4a673f\n  \u2022 server (i-83c343d759b56865f)\n\nus-west-2\n---------\nVPC: vpc-9d487477\n  \u2022 server (i-d0fa9a5b876ec1ab1)\n\nSUMMARY\n-------\nTotal instances: 6\n  - us-east-1: 4 instances across 2 VPCs\n  - us-west-1: 1 instance in 1 VPC\n  - us-west-2: 1 instance in 1 VPC"
+    },
+    "list-ec-private-ips-all-regions": {
+      "trial": "list-ec-private-ips-all-regions__DpkcbSy",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show PrivateIpAddress,region --explain"
+      ],
+      "answer": "--------------------|---------------|------------|\n| defaultVpcServer       | i-24f81e5c8a32fca29  | 172.31.32.10  | us-east-1  |\n| launchTemplateServer   | i-90650f85763b21c24  | 10.0.0.11     | us-east-1  |\n| privateServer          | i-9f009b5db9994ab92  | 10.0.1.10     | us-east-1  |\n| webServer              | i-eececfba0dcf6514d  | 10.0.0.10     | us-east-1  |\n| server                 | i-83c343d759b56865f  | 10.0.0.10     | us-west-1  |\n| server                 | i-d0fa9a5b876ec1ab1  | 10.0.0.10     | us-west-2  |\n\nSUMMARY\n=======\n- Total Instances: 6\n- us-east-1: 4 instances\n- us-west-1: 1 instance\n- us-west-2: 1 instance\n\nSource: chant state snapshot cf21134 (2026-08-04T04:55:29.692Z)"
+    },
+    "list-unused-security-groups-all": {
+      "trial": "list-unused-security-groups-all__DZqbxdg",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::SecurityGroup\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::SecurityGroup\" --at latest --env floci --show region,providerDefault",
+        "cd /workspace/chant && chant search \"kind:EC2::SecurityGroup !<-kind:EC2::Instance\" --at latest --env floci --show region,providerDefault --explain",
+        "cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.to | startswith(\"sg-\") or contains(\"SecurityGroup\")) | {from, to, viaAttr}'",
+        "cd /workspace/chant && chant graph --format ir --at latest --env floci 2>/dev/null | jq '.edges[] | select(.viaAttr | test(\"SecurityGroup|Groups\")) | {from, to, viaAttr}' | head -40",
+        "cd /workspace/chant && { echo \"=== UNUSED SECURITY GROUPS ANALYSIS ===\" echo \"\" echo \"All Security Groups in the estate:\" chant search \"kind:EC2::SecurityGroup\" --at latest --env floci --show region,providerDefault echo \"\" echo \"=== UNUSED SECURITY GROUPS (Not referenced by instances or other resources) ===\" echo \"\" chant search \"kind:EC2::SecurityGroup !<-kind:EC2::Instance\" --at latest --env floci --show region,providerDefault } > /tmp/sg_analysis.txt 2>&1 cat /tmp/sg_analysis.txt"
+      ],
+      "answer": "nused security groups are AWS-managed defaults that were created automatically by AWS\n   and are not being referenced. While safe to delete, they are typically left in place as AWS creates\n   them automatically for VPCs.\n\n3. All declared managed security groups (webSecurityGroup and those explicitly created) are in use.\n\nRECOMMENDATIONS\n===============\n\n- DELETE: sg-0302b8e812cfd5f5d (unusedSecurityGroup) in us-east-1\n  This is a managed security group that serves no purpose.\n\n- REVIEW: The 3 AWS-managed default security groups (sg-d51b40fd810b1eacc, sg-1ff4bbe9298b58deb, sg-f09d8871524b42e06)\n  These can be safely deleted if not needed, but are typically left alone as they are AWS defaults."
+    }
+  }
+}

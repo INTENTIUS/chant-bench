@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion-negatives",
+  "arm": "chant",
+  "run": {
+    "id": "chant-pneg-3",
+    "workspace": "09766f0396b7",
+    "finished_at": "2026-08-03T22:47:04.679481",
+    "harness_commit": "09075af-dirty"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 6,
+    "expected_trials": 6,
+    "completed": 6,
+    "errored": 0,
+    "passed": 6,
+    "pass_rate": 1.0,
+    "by_task": {
+      "subnets-with-no-network-interfac": [
+        1,
+        1,
+        1
+      ],
+      "vpcs-with-no-running-instances": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 17,
+    "invocations_failed": 0,
+    "failure_rate": 0.0
+  },
+  "independence": {
+    "account_reads": 0,
+    "answered_from_own_state": true
+  },
+  "effort": {
+    "tool_calls": 2.83,
+    "turns": 4.83,
+    "wall_seconds": 32.25,
+    "tokens_in": 121643.5,
+    "tokens_out": 2098,
+    "cost_usd": 0.0288,
+    "cost_usd_run": 0.1729
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/chant-pneg-3/job.log",
+    "trials": "jobs/chant-pneg-3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-chant-snapshot.md",
+    "sha256": "9ce3707f885e"
+  },
+  "reproduce": "benchmarks/arms/chant-ec2-multiregion-search-v2/REPRODUCE.md"
+}

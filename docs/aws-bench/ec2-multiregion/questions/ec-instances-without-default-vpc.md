@@ -7,11 +7,11 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-3 commands, from `chant-r5`.
+3 commands, from `chant-p3`.
 
 ```sh
-cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --explain --show VpcId,region
-cd /workspace/chant && chant search "kind:EC2::Vpc" --at latest --env floci --explain --show providerDefault,region
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show VpcId,region --explain
+cd /workspace/chant && chant search "kind:EC2::VPC" --at latest --env floci --show providerDefault,region --explain
 cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show VpcId,region | grep -v "vpc-default"
 ```
 

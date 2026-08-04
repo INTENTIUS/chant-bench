@@ -7,9 +7,10 @@ answered. This says how, and the how is where they differ most.
 
 ## chant — answered
 
-1 commands, from `chant-r5`.
+2 commands, from `chant-p3`.
 
 ```sh
+cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show VpcId,PrivateIpAddress --explain
 cd /workspace/chant && chant search "kind:EC2::Instance" --at latest --env floci --show VpcId,region --explain
 ```
 
