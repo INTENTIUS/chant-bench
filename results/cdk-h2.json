@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "cdk",
+  "tool": {
+    "name": "aws-cdk",
+    "version": "2.1131.0"
+  },
+  "run": {
+    "id": "cdk-h2",
+    "workspace": "937a149fb832",
+    "finished_at": "2026-08-04T21:26:54.638383",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 15,
+    "pass_rate": 0.625,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        0
+      ],
+      "find-ec-instances-in-public-subn": [
+        0,
+        1,
+        0
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        0,
+        0
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        0,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 115,
+    "invocations_failed": 0,
+    "failure_rate": 0.0
+  },
+  "independence": {
+    "account_reads": 78,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 9.12,
+    "turns": 11.42,
+    "wall_seconds": 118.23,
+    "tokens_in": 315044.62,
+    "tokens_out": 4633.75,
+    "cost_usd": 0.078,
+    "cost_usd_run": 1.871
+  },
+  "logs": {
+    "run": "jobs/cdk-h2/run-arm.log",
+    "job": "jobs/cdk-h2/job.log",
+    "trials": "jobs/cdk-h2/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-cdk.md",
+    "sha256": "f4b4c7082924"
+  },
+  "reproduce": "benchmarks/arms/cdk_app/REPRODUCE.md"
+}

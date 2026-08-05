@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion-negatives",
+  "arm": "chant",
+  "tool": {
+    "name": "@intentius/chant",
+    "version": "0.41.0"
+  },
+  "run": {
+    "id": "chant-neg-h1",
+    "workspace": "1d671b6372f1",
+    "finished_at": "2026-08-04T18:49:41.254295",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 6,
+    "expected_trials": 6,
+    "completed": 6,
+    "errored": 0,
+    "passed": 5,
+    "pass_rate": 0.8333,
+    "by_task": {
+      "subnets-with-no-network-interfac": [
+        1,
+        1,
+        1
+      ],
+      "vpcs-with-no-running-instances": [
+        1,
+        0,
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 14,
+    "invocations_failed": 0,
+    "failure_rate": 0.0
+  },
+  "independence": {
+    "account_reads": 0,
+    "answered_from_own_state": true
+  },
+  "effort": {
+    "tool_calls": 2.33,
+    "turns": 4.33,
+    "wall_seconds": 23.83,
+    "tokens_in": 109722.5,
+    "tokens_out": 1562.67,
+    "cost_usd": 0.0253,
+    "cost_usd_run": 0.1517
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/chant-neg-h1/job.log",
+    "trials": "jobs/chant-neg-h1/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-chant-snapshot.md",
+    "sha256": "9ce3707f885e"
+  },
+  "reproduce": "benchmarks/arms/chant-ec2-multiregion-search-v2/REPRODUCE.md"
+}

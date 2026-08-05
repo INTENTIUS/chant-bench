@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "run": "chant-pneg-2",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__5S3UySk",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --show region --explain"
+      ],
+      "answer": "Subnets with No Network Interfaces\n===================================\n\nQuery: kind:EC2::Subnet !<-kind:EC2::NetworkInterface\nSnapshot: ad24b27 (2026-08-04T04:32:38.924Z)\nResult: 8 of 13 subnets have no network interfaces\n\nEmpty Subnets by Region:\n\nUS-EAST-1 (2 empty subnets)\n  - subnet-default-a\n  - subnet-default-b\n\nUS-WEST-1 (3 empty subnets)\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nUS-WEST-2 (3 empty subnets)\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nSummary:\nAll 8 empty subnets are AWS-managed default subnets in the default VPC.\nThe 5 managed subnets (privateSubnet and publicSubnet instances) all have network interfaces."
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__DqgmBkv",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,PrivateIpAddress --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --show region"
+      ],
+      "answer": "EC2 instances running:\n\n1. vpc-default (us-west-1)\n   - Physical ID: vpc-default\n   - Region: us-west-1\n   - Type: Default VPC (AWS-managed)\n\n2. vpc-default (us-west-2)\n   - Physical ID: vpc-default\n   - Region: us-west-2\n   - Type: Default VPC (AWS-managed)\n\n---\n\nSUMMARY OF ALL VPCs:\n\n\u2713 vpc-e1e7dc40 (us-east-1) - 3 instances: launchTemplateServer, privateServer, webServer\n\u2713 vpc-8239f987 (us-west-1) - 1 instance: server\n\u2713 vpc-82e96f67 (us-west-2) - 1 instance: server\n\u2713 vpc-default (us-east-1) - 1 instance: defaultVpcServer\n\u2717 vpc-default (us-west-1) - 0 instances [EMPTY]\n\u2717 vpc-default (us-west-2) - 0 instances [EMPTY]\n\nData source: chant estate snapshot ad24b27 taken 2026-08-04T04:32:38.924Z"
+    }
+  }
+}

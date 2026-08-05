@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "run": "chant-pneg-1",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__BD5i3b6",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --show region --explain"
+      ],
+      "answer": "etwork Interfaces\n===================================\n\nThe following 8 subnets have no network interfaces attached:\n\nUS-EAST-1:\n  \u2022 subnet-default-a\n  \u2022 subnet-default-b\n\nUS-WEST-1:\n  \u2022 subnet-default-a\n  \u2022 subnet-default-b\n  \u2022 subnet-default-c\n\nUS-WEST-2:\n  \u2022 subnet-default-a\n  \u2022 subnet-default-b\n  \u2022 subnet-default-c\n\nSummary: 8 empty subnets found across 3 regions\nAll are default AWS-managed subnets (not user-created)\n\nQuery details:\n  Universe: 13 total subnets managed\n  Matched: 8 subnets with no network interfaces\n  Excluded: 5 subnets that have network interfaces (privateSubnet, publicSubnet variants, and one additional default)\n  Source: snapshot ad24b27 taken 2026-08-04T04:32:38.924Z"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__bCG9eqw",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant lifecycle show floci 2>&1 | head -50",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci 2>&1",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId 2>&1",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --show region 2>&1",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region 2>&1"
+      ],
+      "answer": "VPCs with No EC2 Instances\n============================\n\nThe following VPCs have no EC2 instances running in them:\n\n1. vpc-default in us-west-1\n2. vpc-default in us-west-2\n\nSummary of All VPCs:\n====================\n\nRegion: us-east-1\n- vpc-e1e7dc40: 3 instances (launchTemplateServer, privateServer, webServer)\n- vpc-default: 1 instance (defaultVpcServer)\n\nRegion: us-west-1\n- vpc-8239f987: 1 instance (server)\n- vpc-default: 0 instances [EMPTY]\n\nRegion: us-west-2\n- vpc-82e96f67: 1 instance (server)\n- vpc-default: 0 instances [EMPTY]\n\nData Source: chant state snapshot ad24b27 taken 2026-08-04T04:32:38.924Z"
+    }
+  }
+}

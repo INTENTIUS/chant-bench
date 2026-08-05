@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion-negatives",
+  "arm": "cdk",
+  "tool": {
+    "name": "aws-cdk",
+    "version": "2.1131.0"
+  },
+  "run": {
+    "id": "cdk-neg-h2",
+    "workspace": "937a149fb832",
+    "finished_at": "2026-08-04T21:31:50.459089",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 6,
+    "expected_trials": 6,
+    "completed": 6,
+    "errored": 0,
+    "passed": 5,
+    "pass_rate": 0.8333,
+    "by_task": {
+      "subnets-with-no-network-interfac": [
+        1,
+        0,
+        1
+      ],
+      "vpcs-with-no-running-instances": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 30,
+    "invocations_failed": 0,
+    "failure_rate": 0.0
+  },
+  "independence": {
+    "account_reads": 39,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 14.83,
+    "turns": 16.83,
+    "wall_seconds": 142.82,
+    "tokens_in": 379863.5,
+    "tokens_out": 5967,
+    "cost_usd": 0.089,
+    "cost_usd_run": 0.5339
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/cdk-neg-h2/job.log",
+    "trials": "jobs/cdk-neg-h2/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-cdk.md",
+    "sha256": "f4b4c7082924"
+  },
+  "reproduce": "benchmarks/arms/cdk_app/REPRODUCE.md"
+}

@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "alchemy",
+  "tool": {
+    "name": "alchemy",
+    "version": "0.93.12"
+  },
+  "run": {
+    "id": "alchemy-h2",
+    "workspace": "c0e3fe0b95ee",
+    "finished_at": "2026-08-04T21:43:13.406873",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 14,
+    "pass_rate": 0.5833,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        0,
+        1
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        0,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        0,
+        0,
+        0
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        1,
+        0
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        0
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 240,
+    "invocations_failed": 3,
+    "failure_rate": 0.0123
+  },
+  "independence": {
+    "account_reads": 29,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 14.75,
+    "turns": 17.33,
+    "wall_seconds": 93.38,
+    "tokens_in": 497700.62,
+    "tokens_out": 4943.88,
+    "cost_usd": 0.1001,
+    "cost_usd_run": 2.4035
+  },
+  "logs": {
+    "run": "jobs/alchemy-h2/run-arm.log",
+    "job": "jobs/alchemy-h2/job.log",
+    "trials": "jobs/alchemy-h2/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-alchemy.md",
+    "sha256": "596be04902b9"
+  },
+  "reproduce": "benchmarks/arms/alchemy-ec2-multiregion/REPRODUCE.md"
+}

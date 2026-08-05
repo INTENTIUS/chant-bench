@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "run": "chant-neg-h1",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__JQHNnpT",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --show region",
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet <-kind:EC2::NetworkInterface\" --at latest --env floci --show region"
+      ],
+      "answer": "Subnets with no network interfaces\n===================================\n\nThe following 8 subnets have no network interfaces attached to them:\n\nus-east-1:\n  - subnet-default-a (AWS::EC2::Subnet)\n  - subnet-default-b (AWS::EC2::Subnet)\n\nus-west-1:\n  - subnet-default-a (AWS::EC2::Subnet)\n  - subnet-default-b (AWS::EC2::Subnet)\n  - subnet-default-c (AWS::EC2::Subnet)\n\nus-west-2:\n  - subnet-default-a (AWS::EC2::Subnet)\n  - subnet-default-b (AWS::EC2::Subnet)\n  - subnet-default-c (AWS::EC2::Subnet)\n\nAll are AWS-managed default VPC subnets with no ENIs (network interfaces).\n\nSource: chant estate snapshot c36af19 taken 2026-08-05T00:40:28.359Z\nQuery: kind:EC2::Subnet !<-kind:EC2::NetworkInterface"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__FB4yWuT",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Vpc\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Vpc\" --at latest --env floci --show region"
+      ],
+      "answer": "VPCs with no EC2 instances running\n====================================\n\nThe following VPCs have no running EC2 instances:\n\n1. vpc-default (us-west-1)\n2. vpc-default (us-west-2)\n\nSummary by VPC:\n- vpc-11b3e548 (us-east-1): 3 instances\n- vpc-7eff326f (us-west-1): 1 instance\n- vpc-ffd7beba (us-west-2): 1 instance\n- vpc-default (us-east-1): 1 instance\n- vpc-default (us-west-1): NO INSTANCES \u2713\n- vpc-default (us-west-2): NO INSTANCES \u2713\n\nObserved from snapshot c36af19 taken 2026-08-05T00:40:28.359Z \u00b7 all 6 VPCs and 6 instances examined across 3 regions (us-east-1, us-west-1, us-west-2)"
+    }
+  }
+}

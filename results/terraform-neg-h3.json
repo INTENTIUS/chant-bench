@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion-negatives",
+  "arm": "terraform",
+  "tool": {
+    "name": "terraform",
+    "version": "1.15.8"
+  },
+  "run": {
+    "id": "terraform-neg-h3",
+    "workspace": "cc23cd9fede1",
+    "finished_at": "2026-08-04T22:59:07.066772",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 6,
+    "expected_trials": 6,
+    "completed": 6,
+    "errored": 0,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "by_task": {
+      "subnets-with-no-network-interfac": [
+        0,
+        0,
+        0
+      ],
+      "vpcs-with-no-running-instances": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 40,
+    "invocations_failed": 4,
+    "failure_rate": 0.0909
+  },
+  "independence": {
+    "account_reads": 2,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 16.5,
+    "turns": 18.83,
+    "wall_seconds": 100.86,
+    "tokens_in": 589738,
+    "tokens_out": 6843.5,
+    "cost_usd": 0.1319,
+    "cost_usd_run": 0.7912
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/terraform-neg-h3/job.log",
+    "trials": "jobs/terraform-neg-h3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-terraform.md",
+    "sha256": "7822d55ca7ca"
+  },
+  "reproduce": "benchmarks/arms/terraform-ec2-multiregion/REPRODUCE.md"
+}

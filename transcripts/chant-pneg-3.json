@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "run": "chant-pneg-3",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__TKizuFT",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --explain --show region"
+      ],
+      "answer": "Subnets with No Network Interfaces\n===================================\n\nThe following subnets have no network interfaces attached to them:\n\nus-east-1:\n  - subnet-default-a (subnet-default-a)\n  - subnet-default-b (subnet-default-b)\n\nus-west-1:\n  - subnet-default-a (subnet-default-a)\n  - subnet-default-b (subnet-default-b)\n  - subnet-default-c (subnet-default-c)\n\nus-west-2:\n  - subnet-default-a (subnet-default-a)\n  - subnet-default-b (subnet-default-b)\n  - subnet-default-c (subnet-default-c)\n\nSummary: 8 empty subnets across 3 regions\nQuery: chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\"\nObserved from snapshot ad24b27 taken 2026-08-04T04:32:38.924Z"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__7BdA47w",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Vpc\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Vpc\" --at latest --env floci --show region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region | awk '{print $3, $4}' | sort | uniq",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region --explain | grep -E \"^[a-zA-Z]|region=|^\u2014\""
+      ],
+      "answer": "1. vpc-default (us-west-1)\n2. vpc-default (us-west-2)\n\n---\n\nSummary of all VPCs and their instance counts:\n\nVPCs WITH instances:\n- vpc-e1e7dc40 (us-east-1): 3 instances [launchTemplateServer, privateServer, webServer]\n- vpc-8239f987 (us-west-1): 1 instance [server]\n- vpc-82e96f67 (us-west-2): 1 instance [server]\n- vpc-default (us-east-1): 1 instance [defaultVpcServer]\n\nVPCs WITHOUT instances:\n- vpc-default (us-west-1): 0 instances\n- vpc-default (us-west-2): 0 instances\n\nTotal: 6 VPCs across 3 regions (us-east-1, us-west-1, us-west-2)\n- 4 VPCs have running EC2 instances\n- 2 VPCs have no EC2 instances\n\nSource: Queried from recorded estate state snapshot ad24b27 taken 2026-08-04T04:32:38.924Z"
+    }
+  }
+}

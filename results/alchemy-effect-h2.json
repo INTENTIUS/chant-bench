@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "alchemy-effect",
+  "tool": {
+    "name": "alchemy",
+    "version": "2.0.0-beta.65"
+  },
+  "run": {
+    "id": "alchemy-effect-h2",
+    "workspace": "c81220364ac6",
+    "finished_at": "2026-08-04T22:11:12.463166",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 14,
+    "pass_rate": 0.5833,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        0,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        0,
+        1,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        0,
+        0
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        0
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        0,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        0,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 190,
+    "invocations_failed": 29,
+    "failure_rate": 0.1324
+  },
+  "independence": {
+    "account_reads": 6,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 13.79,
+    "turns": 17.5,
+    "wall_seconds": 238.46,
+    "tokens_in": 435897.5,
+    "tokens_out": 5052.96,
+    "cost_usd": 0.0923,
+    "cost_usd_run": 2.214
+  },
+  "logs": {
+    "run": "jobs/alchemy-effect-h2/run-arm.log",
+    "job": "jobs/alchemy-effect-h2/job.log",
+    "trials": "jobs/alchemy-effect-h2/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-alchemy-effect.md",
+    "sha256": "6e6e55fd2fc6"
+  },
+  "reproduce": "benchmarks/arms/alchemy-effect-ec2-multiregion/REPRODUCE.md"
+}

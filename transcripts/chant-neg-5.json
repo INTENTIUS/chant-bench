@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "run": "chant-neg-5",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__3YTTbtj",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --explain --show region",
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet\" --at latest --env floci --show region,VpcId",
+        "cd /workspace/chant && chant search \"kind:EC2::NetworkInterface\" --at latest --env floci --show region,SubnetId",
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --show region,VpcId,attr:PhysicalResourceId"
+      ],
+      "answer": "e\" --at latest --env floci\nSource: AWS estate state snapshot taken 2026-08-03T20:49:46.454Z\n\nSubnets with no network interfaces attached:\n\nUS-EAST-1 (2 subnets):\n  - subnet-default-a (vpc-default)\n  - subnet-default-b (vpc-default)\n\nUS-WEST-1 (3 subnets):\n  - subnet-default-a (vpc-default)\n  - subnet-default-b (vpc-default)\n  - subnet-default-c (vpc-default)\n\nUS-WEST-2 (3 subnets):\n  - subnet-default-a (vpc-default)\n  - subnet-default-b (vpc-default)\n  - subnet-default-c (vpc-default)\n\nTOTAL: 8 subnets with no network interfaces\n\nNOTE: All empty subnets are AWS-managed default subnets in the default VPCs.\nThe managed subnets (privateSubnet, publicSubnet) all have network interfaces attached."
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__8NpJrBw",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC !<-kind:EC2::Instance\" --at latest --env floci --show region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --show region,VpcId"
+      ],
+      "answer": "=========================\n\nBased on the chant snapshot taken 2026-08-03T20:49:46.454Z, the following VPCs have no EC2 instances running:\n\n1. vpc-default (us-west-1)\n2. vpc-default (us-west-2)\n\nSummary:\n--------\nTotal VPCs in estate: 6\n- 3 managed VPCs (vpc-dd52da55, vpc-78286e22, vpc-10aca321)\n- 3 default VPCs (one per region: us-east-1, us-west-1, us-west-2)\n\nVPCs with instances:\n- vpc-dd52da55 (us-east-1): 3 instances\n- vpc-78286e22 (us-west-1): 1 instance\n- vpc-10aca321 (us-west-2): 1 instance\n- vpc-default (us-east-1): 1 instance\n\nVPCs with NO instances (2):\n- vpc-default (us-west-1): 0 instances\n- vpc-default (us-west-2): 0 instances\n\nAll regions checked: us-east-1, us-west-1, us-west-2"
+    }
+  }
+}
