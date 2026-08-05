@@ -446,7 +446,27 @@ def metric_row(label: str, shown: str, value, largest, colour, note: str = "") -
     )
 
 
-def results_page(by_arm: dict[str, list[dict]]) -> str:
+def results_page(
+    by_arm: dict[str, list[dict]],
+    *,
+    header: list[str] | None = None,
+    questions=None,
+    question_pages: bool = True,
+    reproduce=None,
+    footer: list[str] | None = None,
+) -> str:
+    """One renderer, every scenario.
+
+    The negative set had a hand-written page of its own: a plain table, no bars,
+    no per-arm panels, nothing about the agent's environment. Two results pages
+    on one site that look nothing alike make the reader work out which
+    conventions apply where, and the second page silently dropped the
+    provenance — briefing hash, tool version, harness, reproduce line — that the
+    first one treats as the point.
+
+    Everything scenario-specific is a parameter and defaults to the board, so
+    the board's output is unchanged by construction.
+    """
     rows, tasks, pending = [], set(), []
     # Every declared arm, not only the ones with data. An arm that has not run
     # is a hole in the comparison, and a page that silently omits it reads as
@@ -509,7 +529,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     # seven full panels made the page a scroll instead of a comparison.
     entries = [(arm, r, n) for arm, r, n in rows] + [(arm, None, []) for arm in pending]
 
-    out = [
+    BOARD_HEADER = [
         "# ec2-multiregion — results",
         "",
         "Which infrastructure toolchain lets an agent answer questions about an AWS",
@@ -554,8 +574,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         "    [Full instructions](../../running.md) · each arm's exact command and",
         "    briefing are under **Agent environment** on its panel below.",
         "",
-        '<div class="cb-explorer" markdown="0">',
     ]
+
+    out = list(header if header is not None else BOARD_HEADER)
+    out.append('<div class="cb-explorer" markdown="0">')
 
     # The radios sit ahead of both lists so `:checked ~` can reach either.
     for i, (arm, _, _) in enumerate(entries):
@@ -655,7 +677,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
             got, of = sum(attempts), len(attempts)
             # The slug is a filename, not a question. Open the row to see what was
             # actually asked and what aws-bench grades the answer against.
-            prompt, truth = QUESTIONS.get(task, (task, "—"))
+            prompt, truth = (questions or (lambda t: QUESTIONS.get(t, (t, "—"))))(task)
             marks = " ".join("&#10003;" if a else "&#10007;" for a in attempts)
             out.append(
                 '<details class="cb-q">'
@@ -668,9 +690,13 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
                 f'<p class="cb-q-truth">Graded against <b>{truth}</b>'
                 f'<span class="cb-q-marks">{marks}</span></p>'
                 f'<p class="cb-q-field">{field_on(task, rows, arm)}</p>'
-                f'<p class="cb-q-link"><a href="../questions/{task}/">'
-                "What each tool ran</a></p></div>"
-                "</details>"
+                + (
+                    f'<p class="cb-q-link"><a href="../questions/{task}/">'
+                    "What each tool ran</a></p>"
+                    if question_pages
+                    else ""
+                )
+                + "</div></details>"
             )
         out.append("</div></section>")
 
@@ -769,7 +795,7 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
 
         out.append(
             '<p class="cb-env-repro">Repeat this run:'
-            f'<code>./benchmarks/agent-env/run-arm.sh {arm}</code></p>'
+            f'<code>{(reproduce or (lambda a: f"./benchmarks/agent-env/run-arm.sh {a}"))(arm)}</code></p>'
         )
 
         text = briefing_text(b.get("path"))
@@ -783,6 +809,10 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
         out.append("</div>")
     out.append("</div>")
     out += ["</div>", ""]
+
+    if footer is not None:
+        out += footer
+        return "\n".join(out)
 
     out += [
         "",
@@ -853,150 +883,113 @@ def negative_prompt(task: str) -> tuple[str, str]:
 
 
 def negatives_page(by_arm: dict[str, list[dict]]) -> str:
-    """The two questions we wrote, scored on their own.
+    """The two questions we wrote, rendered exactly like the board.
 
-    Deliberately not the board. The board ranks replicate sets by what a hundred
-    correct answers cost; this is one run per arm of a two-question set, and
-    dressing six trials in that machinery would give it a confidence it has not
-    earned. What it is for is one comparison — whether an arm reading only its
-    own state can find things that state does not contain — so that is what the
-    page shows.
+    It had a page of its own — a plain table, no bars, no panels, nothing about
+    the agent's environment. The reasoning was that six trials should not wear
+    the board's apparatus. That confused two things: ranking six trials as
+    though they were twenty-four would overclaim, but a bar chart and a
+    briefing hash are presentation and provenance, not confidence.
+
+    The cost of the split was worse than what it avoided. A reader had to learn
+    two page conventions on one site, and the second page quietly dropped the
+    provenance the first one treats as the whole point — which briefing, which
+    tool version, which harness, and the line that reproduces it.
+
+    So: same renderer, same layout, and the argument that these are 6 trials and
+    not 24 is carried where it belongs, in the words at the top of the page.
     """
-    # The middle of the arm's replicate set, the same rule the board uses. Six
-    # trials move further than 24 do: on one build these questions returned 3,
-    # 4 and 6 of 6 with nothing changed between the runs, so a single run here
-    # says even less than a single run there.
-    rows = []
-    for arm in ARMS:
-        runs = [r for r in (by_arm.get(arm) or []) if valid(r)][:REPLICATES]
-        if runs:
-            middle = sorted(runs, key=lambda r: r["score"].get("pass_rate") or 0)[len(runs) // 2]
-            rows.append((arm, middle, runs))
-    rows.sort(key=lambda x: -(x[1]["score"].get("pass_rate") or 0))
+    return results_page(
+        by_arm,
+        header=[
+            "# ec2-multiregion-negatives — results",
+            "",
+            "**A second scenario, scored separately from "
+            "[the board](../ec2-multiregion/results.md).** Same estate, two extra "
+            "questions, every arm.",
+            "",
+            "!!! warning \"Six trials, not twenty-four\"",
+            "",
+            "    These questions are **ours, not aws-bench's**, and they are scored",
+            "    over 2 questions at k=3 — six trials, against the board's 24. The",
+            "    figures are laid out the same way so they are readable the same way;",
+            "    they are **not** comparable with the board's, and nothing here belongs",
+            "    on it.",
+            "",
+            "    Six trials also move further than 24 do: one build of chant returned",
+            "    3, 4 and 6 of 6 with nothing changed between the runs. Read the",
+            "    replicate set beside the figure, not after it.",
+            "",
+            "## Why these two",
+            "",
+            "`list-unused-security-groups-all-regions` is the most interesting result",
+            "on the board and the least representative. Every arm that keeps a state",
+            "file is at zero on it, and an agent with no infrastructure tooling beats",
+            "all of them. The answer is a negative about things a state file does not",
+            "contain, and reading your own state cannot find what nothing points at.",
+            "",
+            "That is one question out of eight, which is an anecdote. These two share",
+            "the property that makes it hard: the account's default VPCs and their",
+            "subnets were created by no deployment, so an arm reading only its own",
+            "state sees a subset and cannot know what it is missing.",
+            "",
+            "**They are easier than the question they are modelled on.** The no-tool",
+            "baseline gets them with a sweep of two API calls, where the",
+            "security-group question needs every network interface cross-referenced",
+            "and even account-reading agents manage only 28%. What they test is the",
+            "same *structure*, not the same difficulty.",
+            "",
+            "Ground truth, computed live off the deployed estate at run time: **8",
+            "empty subnets of 13** across three regions, and **2 empty VPCs of 6**.",
+            "",
+            "**Select a row** to see what that tool spent, how hard it worked, and the",
+            "environment its agent was given.",
+            "",
+            '!!! tip "Reproduce any of this"',
+            "",
+            "    These score an estate that is already deployed, so they run in about",
+            "    three minutes on top of an arm's board run.",
+            "",
+            "    ```sh",
+            "    just run chant                                    # deploy + board",
+            "    ./benchmarks/agent-env/run-negatives.sh chant     # then these two",
+            "    ```",
+            "",
+            "    [Full instructions](../../running.md) · each arm's exact command and",
+            "    briefing are under **Agent environment** on its panel below.",
+            "",
+        ],
+        questions=negative_prompt,
+        # No per-question pages for this scenario — the transcript pages are
+        # generated for the board's eight only, and a link to a 404 is worse
+        # than no link.
+        question_pages=False,
+        reproduce=lambda arm: f"./benchmarks/agent-env/run-negatives.sh {arm}",
+        footer=[
+            "",
+            '??? info "What this is measuring"',
+            "",
+            "    Whether a tool can find what **nothing points at**. Both questions ask",
+            "    for resources that no deployment created and no state file records:",
+            "    subnets holding no network interface, VPCs holding no instance.",
+            "",
+            "    The arms split on one axis, and it is not whether they have tooling.",
+            "    **AWS CDK scores as well as anything here**, because it keeps no state",
+            "    of its own and has to read the account to answer at all — the same",
+            "    route the no-tool baseline takes. The arms that hold only a record of",
+            "    what they deployed cannot see the rest of the estate, and score zero.",
+            "",
+            "    So the question a row answers is not *does this tool help*, it is",
+            "    *what can this tool see*.",
+            "",
+            "!!! note \"Reading account reads\"",
+            "    Here the column cuts both ways. Reads are how the account-reading arms",
+            "    reach these answers at all, so a zero beside a high score is the",
+            "    interesting cell: it means the arm answered from state it already held.",
+            "",
+        ],
+    )
 
-    tasks: list[str] = []
-    for _, r, _runs in rows:
-        for task in r["score"]["by_task"]:
-            if task not in tasks:
-                tasks.append(task)
-
-    out = [
-        # Named for the scenario, and says it is results. The first version led
-        # with "Questions aws-bench does not ask", which reads as an essay: a
-        # reader could not tell there were numbers behind it, and the sidebar
-        # entry gave them nothing either.
-        "# ec2-multiregion-negatives — results",
-        "",
-        "**A second scenario, scored separately from [the board]"
-        "(../ec2-multiregion/results.md).** Same estate, two extra questions,"
-        " every arm.",
-        "",
-        "Two introspection questions of a shape the upstream set contains exactly",
-        "one of. **They are not aws-bench's. They are ours**, and the numbers here",
-        "are not comparable with the board's: that is eight questions at k=3, or",
-        "24 trials, and this is two questions at k=3, or 6.",
-        "",
-        "## Why these two",
-        "",
-        "`list-unused-security-groups-all-regions` is the most interesting result on",
-        "the board and the least representative. Every arm that keeps a state file",
-        "is at zero on it — Pulumi, Terraform and AWS CDK are 0 for 66 attempts",
-        "between them — and an agent with no infrastructure tooling beats all three.",
-        "The answer is a negative about things a state file does not contain, and",
-        "reading your own state cannot find what nothing points at.",
-        "",
-        "That is one question out of eight, which is an anecdote. These two share",
-        "the property that makes it hard: the account's default VPCs and their",
-        "subnets were created by no deployment, so an arm reading only its own state",
-        "sees a subset and cannot know what it is missing.",
-        "",
-        "**They are easier than the question they are modelled on.** The no-tool",
-        "baseline gets them with a sweep of two API calls, where the security-group",
-        "question needs every network interface cross-referenced and even",
-        "account-reading agents manage only 28%. What they test is the same",
-        "*structure*, not the same difficulty, and the page would be misleading",
-        "without that sentence.",
-        "",
-        "## Results",
-        "",
-    ]
-
-    if not rows:
-        out += ["No runs published yet.", ""]
-        return "\n".join(out)
-
-    header = ["arm", "score", "replicates", "account reads", "answered from own state"]
-    out += ["| " + " | ".join(header) + " |", "|---|--:|--:|--:|---|"]
-    for arm, r, runs in rows:
-        label = ARMS[arm][0]
-        score = r["score"]
-        passed, trials = score["passed"], score["trials"]
-        reads = r["independence"]["account_reads"]
-        own = "yes" if r["independence"].get("answered_from_own_state") else "no"
-        spread = "/".join(f"{x['score']['passed']}" for x in sorted(runs, key=lambda x: x["run"]["id"]))
-        out.append(f"| {label} | **{passed}/{trials}** | {spread} | {reads:g} | {own} |")
-    out += ["", "The **middle** of the arm's replicate set, k=3, on an estate holding 13",
-            "subnets (8 empty) and 6 VPCs (2 empty). Six trials move further than the",
-            "board's 24 do — one build of chant returned 3, 4 and 6 of 6 with nothing",
-            "changed between the runs — so the replicates column is there to be read",
-            "beside the figure, not after it. Every run passed the audit; an arm that",
-            "did not use its own tooling is not published, exactly as on the board.", ""]
-
-    # Every run, not just the one in the table. A second run of the same arm is
-    # usually a different build, and which build produced a number is the whole
-    # question this repo exists to keep answerable — a page that shows only the
-    # newest quietly drops the evidence that it moved.
-    history = [(arm, r) for arm in ARMS for r in (by_arm.get(arm) or []) if valid(r)]
-    if len(history) > len(rows):
-        out += ["### Every run", "",
-                "| run | arm | score | workspace | harness |", "|---|---|--:|---|---|"]
-        history.sort(key=lambda x: (x[1]["run"].get("finished_at") or ""), reverse=True)
-        for arm, r in history:
-            s = r["score"]
-            out.append(
-                f"| `{r['run']['id']}` | {ARMS[arm][0]} | {s['passed']}/{s['trials']} | "
-                f"`{r['run'].get('workspace') or '—'}` | `{r['run'].get('harness_commit') or '—'}` |"
-            )
-        out += ["", "A run is superseded rather than deleted. The workspace fingerprint is what",
-                "says two of these are not the same experiment.", ""]
-
-    out += ["## Per question", ""]
-    out += ["| question | answer | " + " | ".join(ARMS[a][0] for a, _, _ in rows) + " |"]
-    out += ["|---|---|" + "--:|" * len(rows)]
-    for task in tasks:
-        prompt, truth = negative_prompt(task)
-        cells = []
-        for _, r, _runs in rows:
-            got = (r["score"]["by_task"] or {}).get(task)
-            cells.append(f"{sum(got)}/{len(got)}" if got else "—")
-        out.append(f"| {prompt} | {truth} | " + " | ".join(cells) + " |")
-    out.append("")
-
-    out += [
-        "## The conditions these were written under",
-        "",
-        "**Written before any arm ran them.** The estate was queried to check the",
-        "answers are non-trivial — a question whose answer is \"none\" measures",
-        "nothing — and then the tasks were written. Nothing was tuned to a result,",
-        "because there were no results.",
-        "",
-        "**Five other candidates were discarded**, because the estate does not",
-        "support them: unattached network interfaces (0), route tables with no",
-        "association (0), security groups referenced only by other groups (0),",
-        "unattached volumes (0), and security groups with no ingress rules (7 of 8,",
-        "which discriminates nothing). Recorded because the ones that survived look",
-        "cherry-picked without the ones that did not.",
-        "",
-        "**Published either way.** A question set added by the author of one of the",
-        "tools is worth nothing unless the arm that author builds can lose on it.",
-        "",
-        "**Ground truth is computed live** by each task's `pre_invoke`, sweeping the",
-        "account at run time. The estate is redeployed before every run with fresh",
-        "resource ids, so a written-down count would track the scenario only until",
-        "someone edited it.",
-        "",
-    ]
-    return "\n".join(out)
 
 
 def main() -> int:
