@@ -510,10 +510,18 @@ def results_page(by_arm: dict[str, list[dict]]) -> str:
     entries = [(arm, r, n) for arm, r, n in rows] + [(arm, None, []) for arm in pending]
 
     out = [
-        "# Results",
+        "# ec2-multiregion — results",
         "",
         "Which infrastructure toolchain lets an agent answer questions about an AWS",
         "estate for the least money. Pick a tool to see what its answers cost.",
+        "",
+        # The second scenario had nothing pointing at it from here, so the only
+        # route in was a sidebar entry that did not say it was results.
+        "The eight questions below are aws-bench's. There is a second, smaller set"
+        " we wrote — [ec2-multiregion-negatives]"
+        "(../ec2-multiregion-negatives/results.md) — which asks what *nothing*"
+        " points at, and separates these arms far more sharply than this board"
+        " does.",
         "",
         "## Pass rate",
         "",
@@ -873,13 +881,20 @@ def negatives_page(by_arm: dict[str, list[dict]]) -> str:
                 tasks.append(task)
 
     out = [
-        "# Questions aws-bench does not ask",
+        # Named for the scenario, and says it is results. The first version led
+        # with "Questions aws-bench does not ask", which reads as an essay: a
+        # reader could not tell there were numbers behind it, and the sidebar
+        # entry gave them nothing either.
+        "# ec2-multiregion-negatives — results",
+        "",
+        "**A second scenario, scored separately from [the board]"
+        "(../ec2-multiregion/results.md).** Same estate, two extra questions,"
+        " every arm.",
         "",
         "Two introspection questions of a shape the upstream set contains exactly",
         "one of. **They are not aws-bench's. They are ours**, and the numbers here",
-        "are not comparable with the ones on [the board](../ec2-multiregion/results.md):",
-        "that is eight questions at k=3, or 24 trials, and this is two questions at",
-        "k=3, or 6.",
+        "are not comparable with the board's: that is eight questions at k=3, or",
+        "24 trials, and this is two questions at k=3, or 6.",
         "",
         "## Why these two",
         "",

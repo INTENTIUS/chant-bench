@@ -1,10 +1,11 @@
-# Questions aws-bench does not ask
+# ec2-multiregion-negatives — results
+
+**A second scenario, scored separately from [the board](../ec2-multiregion/results.md).** Same estate, two extra questions, every arm.
 
 Two introspection questions of a shape the upstream set contains exactly
 one of. **They are not aws-bench's. They are ours**, and the numbers here
-are not comparable with the ones on [the board](../ec2-multiregion/results.md):
-that is eight questions at k=3, or 24 trials, and this is two questions at
-k=3, or 6.
+are not comparable with the board's: that is eight questions at k=3, or
+24 trials, and this is two questions at k=3, or 6.
 
 ## Why these two
 

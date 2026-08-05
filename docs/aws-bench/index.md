@@ -52,7 +52,19 @@ With that unset it is upstream.
 
 - **[ec2-multiregion](ec2-multiregion/index.md)**. Six EC2 instances across
   three regions. Eight questions about reachability, placement, and what is
-  unused.
+  unused. → **[Results](ec2-multiregion/results.md)**
+
+## Questions we added
+
+One question on that board separates the arms far more than the other seven:
+*which security groups are unused*. Every arm that keeps a state file scores
+zero on it, and an agent holding nothing but the AWS CLI beats all of them. One
+question is an anecdote, so we wrote two more of the same shape.
+
+- **[Questions aws-bench does not ask](ec2-multiregion-negatives/results.md)**.
+  Two questions about things nothing points at, on the same estate. **Ours, not
+  aws-bench's**, and scored over 6 trials rather than 24 — the numbers do not
+  compare with the board's and are kept apart for that reason.
 
 ## What gets published
 

@@ -1,7 +1,9 @@
-# Results
+# ec2-multiregion — results
 
 Which infrastructure toolchain lets an agent answer questions about an AWS
 estate for the least money. Pick a tool to see what its answers cost.
+
+The eight questions below are aws-bench's. There is a second, smaller set we wrote — [ec2-multiregion-negatives](../ec2-multiregion-negatives/results.md) — which asks what *nothing* points at, and separates these arms far more sharply than this board does.
 
 ## Pass rate
 

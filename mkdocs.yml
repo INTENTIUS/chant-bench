@@ -71,4 +71,11 @@ nav:
       # Ours, not aws-bench's, and scored over 6 trials rather than 24. Its own
       # section for exactly that reason — the numbers must not read as part of
       # the board.
-      - Questions aws-bench does not ask: aws-bench/ec2-multiregion-negatives/results.md
+      #
+      # Named for the scenario and shaped like the one above it, because the
+      # first version was titled "Questions aws-bench does not ask" and nothing
+      # about that says second scenario, or results, or that there are numbers
+      # behind it. A reader scanning the sidebar could not tell it apart from an
+      # essay.
+      - ec2-multiregion-negatives:
+          - Results: aws-bench/ec2-multiregion-negatives/results.md
