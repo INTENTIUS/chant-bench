@@ -284,6 +284,10 @@
 }
 .md-typeset .cb-env dt { opacity: 0.65; margin: 0; }
 .md-typeset .cb-env dd { margin: 0; }
+/* A field the run did not record. Set back so it reads as absent rather than
+   as a value, which is what it is — the runs predating the version stamp
+   cannot have one reconstructed. */
+.cb-env-unknown { opacity: 0.55; font-style: italic; }
 
 .cb-briefing { margin-top: 0.9rem; }
 .cb-briefing > summary {

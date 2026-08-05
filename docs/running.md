@@ -1,7 +1,9 @@
 # Run it yourself
 
 Every result here came from one command against a local emulator. No AWS
-account, no spend, and the same command reproduces it.
+account and no AWS bill, and the same command reproduces it. The agent driving
+the tools is billed to a Claude account — see [the agent's
+credential](#the-agents-credential) for what that costs.
 
 ## Set up
 
@@ -16,6 +18,33 @@ dependencies, builds each arm's image, and checks the emulator starts.
 The benchmark is not vendored here. The estates, questions, reference answers and
 judge are aws-bench's. The fork adds six hook points, all behind
 `AWS_BENCH_EMULATOR=floci`, so with that unset it behaves as upstream.
+
+## The agent's credential
+
+The tools run against an emulator, but the agent driving them is Claude Code and
+it needs an account. One command, once:
+
+```sh
+claude setup-token
+```
+
+**That is the whole step, and it is a file rather than an environment variable.**
+`setup-token` writes `~/.anthropic`; in emulator mode aws-bench reads it and
+forwards it to the agent container itself. A shell with no
+`CLAUDE_CODE_OAUTH_TOKEN` exported is the normal case, not a broken one — which
+is worth saying because the opposite is the obvious assumption, and acting on it
+sends you looking for a problem you do not have.
+
+Point `AWS_BENCH_CLAUDE_TOKEN_FILE` at another file to move it, or export
+`CLAUDE_CODE_OAUTH_TOKEN` to override the file entirely.
+
+!!! note "The emulator is free. The agent is not."
+
+    No AWS account is touched and no AWS bill is generated. The agent's own
+    tokens are billed to whichever Claude account that credential belongs to.
+    From the published effort figures: **about $0.70 to $2.40 for one arm's
+    run** depending on the arm, and **about $40 for a full three-replicate
+    matrix** across all seven.
 
 !!! warning "Docker needs about 16GB"
     Below roughly 12GB the kernel kills CDK's synth mid-run, and the failure is
