@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "run": "alchemy-effect-neg-h3",
+  "arm": "alchemy-effect",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__ARbWeY6",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== Stack: $stack ===\"; alchemy state stages --stack \"$stack\" us-west-1.run.ts --local; done",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== Stack: $stack ===\"; alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local | sort; done",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== Stack: $stack ===\"; for subnet_name in PublicSubnet PrivateSubnet; do echo \"--- $subnet_name ---\"; alchemy state get --stack \"$stack\" --stage bench --fqn \"$subnet_name\" us-west-1.run.ts --local 2>/dev/null | head -50; done; done",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== Stack: $stack ===\"; alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local | grep -i \"server\\|instance\"; done",
+        "cd /workspace/alchemy && find .alchemy/state -name \"*.json\" -type f | xargs grep -l \"AWS.EC2.NetworkInterface\" | head -20",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== Stack: $stack ===\"; for instance in WebServer PrivateServer LaunchTemplateServer DefaultVpcServer; do echo \"--- $instance ---\"; alchemy state get --stack \"$stack\" --stage bench --fqn \"$instance\" us-west-1.run.ts --local 2>/dev/null | jq -r '.attr | select(.instanceId != null) | \"\\(.subnetId // \"NO_SUBNET\") - \\(.instanceId)\"' 2>/dev/null; done; done",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== Stack: $stack ===\"; alchemy state get --stack \"$stack\" --stage bench --fqn \"DefaultVpcServer\" us-west-1.run.ts --local 2>/dev/null | jq -r '.attr | select(.subnetId != null) | .subnetId'; done",
+        "cd /workspace/alchemy && find .alchemy/state -name \"*.json\" -type f | xargs grep -h '\"subnetId\"' | sort -u | grep -v '\"subnetId\": null'",
+        "cd /workspace/alchemy && find .alchemy/state -name \"*.json\" -type f | xargs grep -l '\"resourceType\": \"AWS.EC2.Subnet\"' | while read f; do echo \"=== $f ===\"; jq -r '.fqn + \": \" + .attr.subnetId' \"$f\"; done",
+        "cd /workspace/alchemy && aws ec2 describe-subnets --region us-east-1 2>&1 | head -30",
+        "cat > /tmp/query_subnets.sh << 'EOF' #!/bin/bash # Query all subnets and network interfaces for each region regions=(\"us-east-1\" \"us-west-1\" \"us-west-2\") for region in \"${regions[@]}\"; do echo \"=== Region: $region ===\" # Get all subnets subnets=$(aws ec2 describe-subnets --region \"$region\" --query 'Subnets[].SubnetId' --output text) for subnet in $subnets; do # Count network interfaces in this subnet eni_count=$(aws ec2 describe-network-interfaces --region \"$region\" --filters \"Name=subnet-id,Values=$subnet\" --query 'length(NetworkInterfaces)' --output text) if [ \"$eni_count\" -eq 0 ]; then # Get subnet details subnet_info=$(aws ec2 describe-subnets --region \"$region\" --subnet-ids \"$subnet\" --query 'Subnets[0].[SubnetId, VpcId, CidrBlock, Tags[?Key==`Name`].Value|[0]]' --output text) echo \" EMPTY: $subnet_info\" fi done done EOF chmod +x /tmp/query_subnets.sh /tmp/query_subnets.sh",
+        "cat > /tmp/verify_en\u0438\u0441.sh << 'EOF' #!/bin/bash regions=(\"us-east-1\" \"us-west-1\" \"us-west-2\") for region in \"${regions[@]}\"; do echo \"=== Region: $region ===\" # Get all subnets aws ec2 describe-subnets --region \"$region\" --query 'Subnets[].[SubnetId, VpcId, CidrBlock, Tags[?Key==`Name`].Value|[0]]' --output table echo \"\" echo \"--- Network Interfaces in $region ---\" aws ec2 describe-network-interfaces --region \"$region\" --query 'NetworkInterfaces[].[NetworkInterfaceId, SubnetId, InstanceId, Status]' --output table done EOF chmod +x /tmp/verify_enics.sh /tmp/verify_enics.sh",
+        "cat > /tmp/verify_enis.sh << 'EOF' #!/bin/bash regions=(\"us-east-1\" \"us-west-1\" \"us-west-2\") for region in \"${regions[@]}\"; do echo \"=== Region: $region ===\" echo \"--- Subnets in $region ---\" aws ec2 describe-subnets --region \"$region\" --query 'Subnets[].[SubnetId, VpcId, CidrBlock, Tags[?Key==`Name`].Value|[0]]' --output text echo \"\" echo \"--- Network Interfaces in $region ---\" aws ec2 describe-network-interfaces --region \"$region\" --query 'NetworkInterfaces[].[NetworkInterfaceId, SubnetId, InstanceId, Status]' --output text done EOF chmod +x /tmp/verify_enis.sh /tmp/verify_enis.sh"
+      ],
+      "answer": "SUBNETS WITH NETWORK INTERFACES:\n\nus-east-1:\n  - subnet-default-c | VPC: vpc-default | CIDR: 172.31.32.0/20 | ENIs: 1\n  - subnet-a0fcc42c  | VPC: vpc-9b420343 | CIDR: 10.0.0.0/24 (Public) | ENIs: 2\n  - subnet-86f0a6d4  | VPC: vpc-9b420343 | CIDR: 10.0.1.0/24 (Private) | ENIs: 1\n\nus-west-1:\n  - subnet-f2f83d91  | VPC: vpc-4d60a618 | CIDR: 10.0.0.0/24 (Public) | ENIs: 1\n\nus-west-2:\n  - subnet-de72f88a  | VPC: vpc-4e878be6 | CIDR: 10.0.0.0/24 (Public) | ENIs: 1\n\nSUMMARY:\nAll empty subnets are in the default VPC (vpc-default) and are AWS default VPC subnets. These are created automatically by AWS as part of the default VPC configuration but are not being actively used in this estate deployment."
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__pzbDFcZ",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | head -50",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== Stack: $stack ===\" alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local | grep -E \"(Vpc|Server)\" done",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn Vpc us-west-1.run.ts --local",
+        "cd /workspace/alchemy && for instance in DefaultVpcServer LaunchTemplateServer PrivateServer WebServer; do echo \"=== Instance: $instance ===\" alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn \"$instance\" us-west-1.run.ts --local | jq '.attr | {instanceId, vpcId, state}' done",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench --fqn Vpc us-west-1.run.ts --local | jq '.attr | {vpcId}'",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench --fqn WebServer us-west-1.run.ts --local | jq '.attr | {instanceId, vpcId, state}'",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench --fqn Vpc us-west-1.run.ts --local | jq '.attr | {vpcId}'",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench --fqn WebServer us-west-1.run.ts --local | jq '.attr | {instanceId, vpcId, state}'",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn LaunchTemplateServer us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | grep -i subnet",
+        "cd /workspace/alchemy && for subnet in PublicSubnet PrivateSubnet; do echo \"=== Subnet: $subnet ===\" alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn \"$subnet\" us-west-1.run.ts --local | jq '.attr | {subnetId, vpcId}' done",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | grep -i vpc",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn ExpDefaultVpcId us-west-1.run.ts --local | jq '.attr | {value}'",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn DefaultVpcServer us-west-1.run.ts --local | jq '.attr'",
+        "aws ec2 describe-vpcs --region us-east-1 --query 'Vpcs[*].[VpcId, State]' --output text",
+        "aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].[VpcId, InstanceId, State.Name]' --output text",
+        "aws ec2 describe-vpcs --region us-west-1 --query 'Vpcs[*].[VpcId, State]' --output text && echo \"---\" && aws ec2 describe-instances --region us-west-1 --query 'Reservations[*].Instances[*].[VpcId, InstanceId, State.Name]' --output text",
+        "aws ec2 describe-vpcs --region us-west-2 --query 'Vpcs[*].[VpcId, State]' --output text && echo \"---\" && aws ec2 describe-instances --region us-west-2 --query 'Reservations[*].Instances[*].[VpcId, InstanceId, State.Name]' --output text"
+      ],
+      "answer": "VPCs WITH NO EC2 INSTANCES\n===========================\n\nThe following VPCs have no running EC2 instances:\n\n1. us-west-1: vpc-default\n2. us-west-2: vpc-default\n\n\nSUMMARY BY REGION\n=================\n\nus-east-1:\n  - vpc-default: 1 running instance (i-1f54ece532258aae9)\n  - vpc-9b420343: 3 running instances (i-71c01f21eba744ca2, i-d2bff0756e5a53dcb, i-c0e945a91d328a480)\n\nus-west-1:\n  - vpc-default: 0 instances (EMPTY)\n  - vpc-4d60a618: 1 running instance (i-fb9a53c95c56267cc)\n\nus-west-2:\n  - vpc-default: 0 instances (EMPTY)\n  - vpc-4e878be6: 1 running instance (i-2c0749121677eade4)"
+    }
+  }
+}

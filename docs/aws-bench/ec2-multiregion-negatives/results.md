@@ -31,7 +31,13 @@ without that sentence.
 
 | arm | score | replicates | account reads | answered from own state |
 |---|--:|--:|--:|---|
-| chant | **6/6** | 6/6/6 | 0 | yes |
+| chant | **6/6** | 5/6/6 | 0 | yes |
+| No tool (AWS CLI) | **5/6** | 6/5/5 | 16 | no |
+| AWS CDK | **5/6** | 5/5/3 | 39 | no |
+| Alchemy | **4/6** | 3/4 | 22 | no |
+| Alchemy v2 (Effect) | **2/6** | 2 | 5 | no |
+| Terraform | **0/6** | 1/0/0 | 0 | yes |
+| Pulumi | **0/6** | 0/0/0 | 3 | no |
 
 The **middle** of the arm's replicate set, k=3, on an estate holding 13
 subnets (8 empty) and 6 VPCs (2 empty). Six trials move further than the
@@ -44,6 +50,24 @@ did not use its own tooling is not published, exactly as on the board.
 
 | run | arm | score | workspace | harness |
 |---|---|--:|---|---|
+| `alchemy-effect-neg-h3` | Alchemy v2 (Effect) | 2/6 | `f363c8f41804` | `a6b8acb` |
+| `alchemy-neg-h3` | Alchemy | 4/6 | `c0e3fe0b95ee` | `a6b8acb` |
+| `cdk-neg-h3` | AWS CDK | 3/6 | `937a149fb832` | `a6b8acb` |
+| `pulumi-neg-h3` | Pulumi | 0/6 | `fcba49fc5d54` | `a6b8acb` |
+| `terraform-neg-h3` | Terraform | 0/6 | `cc23cd9fede1` | `a6b8acb` |
+| `bare-neg-h3` | No tool (AWS CLI) | 5/6 | `d5cebdbbda08` | `a6b8acb` |
+| `chant-neg-h3` | chant | 6/6 | `1d671b6372f1` | `a6b8acb` |
+| `alchemy-neg-h2` | Alchemy | 3/6 | `c0e3fe0b95ee` | `a6b8acb` |
+| `cdk-neg-h2` | AWS CDK | 5/6 | `937a149fb832` | `a6b8acb` |
+| `pulumi-neg-h2` | Pulumi | 0/6 | `7d9a9653b453` | `a6b8acb` |
+| `terraform-neg-h2` | Terraform | 0/6 | `cc23cd9fede1` | `a6b8acb` |
+| `bare-neg-h2` | No tool (AWS CLI) | 5/6 | `d5cebdbbda08` | `a6b8acb` |
+| `chant-neg-h2` | chant | 6/6 | `1d671b6372f1` | `a6b8acb` |
+| `cdk-neg-h1` | AWS CDK | 5/6 | `937a149fb832` | `a6b8acb` |
+| `pulumi-neg-h1` | Pulumi | 0/6 | `53c7deddf839` | `a6b8acb` |
+| `terraform-neg-h1` | Terraform | 1/6 | `7e7bf421ddaa` | `a6b8acb` |
+| `bare-neg-h1` | No tool (AWS CLI) | 6/6 | `d5cebdbbda08` | `a6b8acb` |
+| `chant-neg-h1` | chant | 5/6 | `1d671b6372f1` | `a6b8acb` |
 | `chant-pneg-3` | chant | 6/6 | `09766f0396b7` | `09075af-dirty` |
 | `chant-pneg-2` | chant | 6/6 | `09766f0396b7` | `09075af-dirty` |
 | `chant-pneg-1` | chant | 6/6 | `09766f0396b7` | `09075af-dirty` |
@@ -61,10 +85,10 @@ says two of these are not the same experiment.
 
 ## Per question
 
-| question | answer | chant |
-|---|---|--:|
-| Which of my subnets have no network interfaces in them? | 8 of 13, across three regions | 3/3 |
-| Which of my VPCs have no running instances? | 2 of 6 | 3/3 |
+| question | answer | chant | No tool (AWS CLI) | AWS CDK | Alchemy | Alchemy v2 (Effect) | Terraform | Pulumi |
+|---|---|--:|--:|--:|--:|--:|--:|--:|
+| Which of my subnets have no network interfaces in them? | 8 of 13, across three regions | 3/3 | 3/3 | 2/3 | 2/3 | 1/3 | 0/3 | 0/3 |
+| Which of my VPCs have no running instances? | 2 of 6 | 3/3 | 2/3 | 3/3 | 2/3 | 1/3 | 0/3 | 0/3 |
 
 ## The conditions these were written under
 

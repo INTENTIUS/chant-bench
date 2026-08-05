@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "chant",
+  "tool": {
+    "name": "@intentius/chant",
+    "version": "0.41.0"
+  },
+  "run": {
+    "id": "chant-h1",
+    "workspace": "1d671b6372f1",
+    "finished_at": "2026-08-04T18:46:58.791575",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 21,
+    "pass_rate": 0.875,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        0
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-by-vpc-across": [
+        0,
+        1,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        1,
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 58,
+    "invocations_failed": 0,
+    "failure_rate": 0.0
+  },
+  "independence": {
+    "account_reads": 0,
+    "answered_from_own_state": true
+  },
+  "effort": {
+    "tool_calls": 2.46,
+    "turns": 4.42,
+    "wall_seconds": 31.07,
+    "tokens_in": 104762.17,
+    "tokens_out": 2049.54,
+    "cost_usd": 0.0293,
+    "cost_usd_run": 0.7036
+  },
+  "logs": {
+    "run": "jobs/chant-h1/run-arm.log",
+    "job": "jobs/chant-h1/job.log",
+    "trials": "jobs/chant-h1/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-chant-snapshot.md",
+    "sha256": "9ce3707f885e"
+  },
+  "reproduce": "benchmarks/arms/chant-ec2-multiregion-search-v2/REPRODUCE.md"
+}

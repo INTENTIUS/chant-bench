@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "run": "alchemy-effect-h3",
+  "arm": "alchemy-effect",
+  "by_task": {
+    "describe-ec-instances-cross-regi": {
+      "trial": "describe-ec-instances-cross-regi__XSJ6sNR",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local 2>&1 | grep -i instance",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 us-west-1.run.ts --local 2>&1 | grep -i instance",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 us-west-1.run.ts --local 2>&1 | grep -i instance",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-west-1 us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-west-2 us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && for res in \"DefaultVpcServer\" \"LaunchTemplateServer\" \"PrivateServer\" \"WebServer\"; do echo \"=== us-east-1: $res ===\" alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn \"$res\" us-west-1.run.ts --local 2>&1 | head -20 done"
+      ],
+      "answer": "Instance ID: i-2c0749121677eade4\n     - Subnet: subnet-de72f88a\n     - VPC: vpc-4e878be6\n     - Instance Type: t3.micro\n\n\nVPC CONNECTIVITY IN US-EAST-1\n-----------------------------\n\nInstances sharing network connectivity (same VPC: vpc-9b420343):\n  - LaunchTemplateServer (subnet-a0fcc42c)\n  - WebServer (subnet-a0fcc42c)\n  - PrivateServer (subnet-86f0a6d4)\n\n  These 3 instances can communicate within the vpc-9b420343 VPC.\n  LaunchTemplateServer and WebServer are in the same public subnet (subnet-a0fcc42c).\n  PrivateServer is in a separate private subnet (subnet-86f0a6d4).\n\nIsolated instance:\n  - DefaultVpcServer (vpc-default) - operates in the default VPC, separate from the other 3 instances"
+    },
+    "ec-instances-without-default-vpc": {
+      "trial": "ec-instances-without-default-vpc__mAioKLa",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | grep -i instance",
+        "find /workspace/alchemy/.alchemy/state -name \"*.json\" -type f | head -20",
+        "find /workspace/alchemy/.alchemy/state -name \"*[Ii]nstance*.json\" -type f",
+        "find /workspace/alchemy/.alchemy/state -type f -name \"*.json\" -exec grep -l '\"resourceType\": \"aws:ec2/instance:Instance\"' {} \\;",
+        "grep -h \"resourceType\" /workspace/alchemy/.alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/*.json | sort -u",
+        "find /workspace/alchemy/.alchemy/state -type f -name \"*.json\" -exec grep -l '\"resourceType\": \"AWS.EC2.Instance\"' {} \\;",
+        "find /workspace/alchemy/.alchemy/state -type f -name \"*.json\" -exec grep -l '\"resourceType\": \"AWS.EC2.LaunchTemplateInstance\"' {} \\;",
+        "find /workspace/alchemy/.alchemy/state -type f -name \"*.json\" -exec grep -l '\"resourceType\": \"AWS.EC2.VPC\"' {} \\;"
+      ],
+      "answer": "cesVpc\") - via subnet\n     - Private IP: 10.0.0.11\n     - Subnet: subnet-a0fcc42c\n\nUS-WEST-1 Region (1 instance):\n  1. WebServer\n     - Instance ID: i-fb9a53c95c56267cc\n     - VPC ID: vpc-4d60a618 (Custom VPC \"ResourcesVpc\")\n     - Private IP: 10.0.0.10\n     - Subnet: subnet-f2f83d91\n\nUS-WEST-2 Region (1 instance):\n  1. WebServer\n     - Instance ID: i-2c0749121677eade4\n     - VPC ID: vpc-4e878be6 (Custom VPC \"ResourcesVpc\")\n     - Private IP: 10.0.0.10\n     - Subnet: subnet-de72f88a\n\nTOTAL: 5 EC2 instances without a default VPC across all regions\n\n---\n\nFor reference, the following instance HAS a default VPC:\n  - US-EAST-1: DefaultVpcServer (Instance ID: i-1f54ece532258aae9, VPC: vpc-default)"
+    },
+    "find-ec-instances-in-public-subn": {
+      "trial": "find-ec-instances-in-public-subn__KhKR6M5",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== $stack ===\" alchemy state resources --stack \"$stack\" us-west-1.run.ts --local done",
+        "cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state tree us-west-1.run.ts --local | head -100",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== $stack ===\" alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local done"
+      ],
+      "answer": "-multiregion-us-west-2):\n------------------------------------------------------\n\n1. WebServer\n   - Instance ID: i-2c0749121677eade4\n   - Subnet ID: subnet-de72f88a (PUBLIC)\n   - Public IP: 54.144.208.253\n   - Private IP: 10.0.0.10\n   - State: running\n   - Availability Zone: us-west-2a\n\nSUMMARY:\n========\n\nTotal EC2 instances in public subnets across all three regions: 5\n\n- us-east-1: 3 instances (WebServer, LaunchTemplateServer, DefaultVpcServer)\n- us-west-1: 1 instance (WebServer)\n- us-west-2: 1 instance (WebServer)\n\nNOTE: The PrivateServer instance (i-71c01f21eba744ca2) in us-east-1 is in a private subnet\n(subnet-86f0a6d4) and does not have a public IP, so it is excluded from these results."
+    },
+    "list-ec-instances-all-regions-1": {
+      "trial": "list-ec-instances-all-regions-1__6L93Mg7",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== $stack ===\"; alchemy state stages us-west-1.run.ts --local --stack \"$stack\" 2>&1; done",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== $stack ===\"; alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local 2>&1 | grep -i instance; done",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== $stack ===\"; alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local 2>&1; done",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-east-1\" --stage bench --fqn \"WebServer\" us-west-1.run.ts --local 2>&1 | head -100",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-east-1\" --stage bench --fqn \"WebSecurityGroup\" us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && for instance in \"DefaultVpcServer\" \"LaunchTemplateServer\" \"PrivateServer\"; do echo \"=== $instance ===\"; alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-east-1\" --stage bench --fqn \"$instance\" us-west-1.run.ts --local 2>&1 | grep -E '\"(instanceId|state|publicIpAddress|securityGroupIds|launchTemplate)\"'; done",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-east-1\" --stage bench --fqn \"DefaultVpcServer\" us-west-1.run.ts --local 2>&1 | jq '{instanceId: .attr.instanceId, state: .attr.state, publicIpAddress: .attr.publicIpAddress, securityGroupIds: .attr.securityGroupIds, subnetId: .attr.subnetId}'",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-east-1\" --stage bench --fqn \"LaunchTemplateServer\" us-west-1.run.ts --local 2>&1 | jq '{instanceId: .attr.instanceId, state: .attr.state, publicIpAddress: .attr.publicIpAddress, securityGroupIds: .attr.securityGroupIds, launchTemplate: .props.launchTemplate}'",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-east-1\" --stage bench --fqn \"LaunchTemplateServer\" us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-east-1\" --stage bench --fqn \"WebLaunchTemplate\" us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-east-1\" --stage bench --fqn \"PrivateServer\" us-west-1.run.ts --local 2>&1 | jq '{instanceId: .attr.instanceId, state: .attr.state, publicIpAddress: .attr.publicIpAddress, securityGroupIds: .attr.securityGroupIds}'",
+        "cd /workspace/alchemy && aws ec2 describe-security-groups --group-ids sg-default --region us-east-1 2>&1 | jq '.SecurityGroups[0] | {GroupId, GroupName, IpPermissions}'",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-west-1\" --stage bench --fqn \"WebServer\" us-west-1.run.ts --local 2>&1 | jq '{instanceId: .attr.instanceId, state: .attr.state, publicIpAddress: .attr.publicIpAddress, securityGroupIds: .attr.securityGroupIds}'",
+        "cd /workspace/alchemy && alchemy state resources --stack \"alchemy-effect-ec2-multiregion-us-west-1\" --stage bench us-west-1.run.ts --local 2>&1",
+        "aws ec2 describe-security-groups --group-ids sg-default --region us-west-1 2>&1 | jq '.SecurityGroups[0] | {GroupId, GroupName, IpPermissions}'",
+        "cd /workspace/alchemy && alchemy state get --stack \"alchemy-effect-ec2-multiregion-us-west-2\" --stage bench --fqn \"WebServer\" us-west-1.run.ts --local 2>&1 | jq '{instanceId: .attr.instanceId, state: .attr.state, publicIpAddress: .attr.publicIpAddress, securityGroupIds: .attr.securityGroupIds}'",
+        "aws ec2 describe-security-groups --group-ids sg-default --region us-west-2 2>&1 | jq '.SecurityGroups[0] | {GroupId, GroupName, IpPermissions}'"
+      ],
+      "answer": "sg-default (no ingress rules)\n\nus-west-2:\n  - WebServer (i-2c0749121677eade4, IP 54.144.208.253)\n    Security Group: sg-default (no ingress rules)\n\nTOTAL EC2 INSTANCES INVENTORY:\n------------------------------\n- Total instances across all regions: 6\n- Instances with public IP: 5\n- Instances reachable via SSH from internet: 2\n\nANALYSIS METHODOLOGY:\n--------------------\n- Queried Alchemy state for all EC2 instances across us-east-1, us-west-1, us-west-2\n- Checked both direct security group attachments and security groups inherited from launch templates\n- Verified ingress rules allowing SSH (port 22) from 0.0.0.0/0 (internet)\n- Confirmed public IP address availability for internet reachability"
+    },
+    "list-ec-instances-all-regions": {
+      "trial": "list-ec-instances-all-regions__9xm9BiQ",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-west-1 us-west-1.run.ts --local && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-west-2 us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | grep -i instance",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn ExpInstanceId us-west-1.run.ts --local | jq -r '.attr.physicalResourceId' 2>/dev/null || echo \"Not found\"",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn ExpInstanceId us-west-1.run.ts --local",
+        "cd /workspace/alchemy && for stack in \"alchemy-effect-ec2-multiregion-us-east-1\" \"alchemy-effect-ec2-multiregion-us-west-1\" \"alchemy-effect-ec2-multiregion-us-west-2\"; do echo \"=== Region: ${stack##*-} ===\" alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local | grep -i \"^Exp.*InstanceId\" | while read resource; do result=$(alchemy state get --stack \"$stack\" --stage bench --fqn \"$resource\" us-west-1.run.ts --local) instance_id=$(echo \"$result\" | jq -r '.props.value // empty' 2>/dev/null) if [[ ! -z \"$instance_id\" && \"$instance_id\" =~ ^i- ]]; then echo \"$resource: $instance_id\" fi done done",
+        "find /workspace/alchemy/.alchemy/state -name \"*.json\" -type f | xargs grep -l \"ExpInstanceId\\|ExpDefaultVPCInstanceId\\|ExpLaunchTemplateInstanceId\\|ExpPrivateInstanceId\" | while read file; do region=$(basename $(dirname $(dirname \"$file\"))) jq -r '.props.value // empty' \"$file\" 2>/dev/null | grep -E \"^i-\" && echo \" (from: $region)\" done",
+        "cd /workspace/alchemy && { echo \"US-EAST-1:\" find .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1 -name \"*.json\" -type f -exec jq -r 'select(.props.value and .props.value | startswith(\"i-\")) | .props.value' {} \\; echo \"\" echo \"US-WEST-1:\" find .alchemy/state/alchemy-effect-ec2-multiregion-us-west-1 -name \"*.json\" -type f -exec jq -r 'select(.props.value and .props.value | startswith(\"i-\")) | .props.value' {} \\; echo \"\" echo \"US-WEST-2:\" find .alchemy/state/alchemy-effect-ec2-multiregion-us-west-2 -name \"*.json\" -type f -exec jq -r 'select(.props.value and .props.value | startswith(\"i-\")) | .props.value' {} \\; }",
+        "cd /workspace/alchemy && { echo \"US-EAST-1:\" find .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1 -name \"*.json\" -type f -exec jq -r 'select(.props.value | type == \"string\" and startswith(\"i-\")) | .props.value' {} \\; echo \"\" echo \"US-WEST-1:\" find .alchemy/state/alchemy-effect-ec2-multiregion-us-west-1 -name \"*.json\" -type f -exec jq -r 'select(.props.value | type == \"string\" and startswith(\"i-\")) | .props.value' {} \\; echo \"\" echo \"US-WEST-2:\" find .alchemy/state/alchemy-effect-ec2-multiregion-us-west-2 -name \"*.json\" -type f -exec jq -r 'select(.props.value | type == \"string\" and startswith(\"i-\")) | .props.value' {} \\; }"
+      ],
+      "answer": "EC2 Instance IDs by Region\n============================\n\nUS-EAST-1:\n- i-71c01f21eba744ca2\n- i-1f54ece532258aae9\n- i-d2bff0756e5a53dcb\n- i-c0e945a91d328a480\n\nUS-WEST-1:\n- i-fb9a53c95c56267cc\n\nUS-WEST-2:\n- i-2c0749121677eade4\n\nSummary:\n- us-east-1: 4 instances\n- us-west-1: 1 instance\n- us-west-2: 1 instance\n- Total: 6 instances across all regions"
+    },
+    "list-ec-instances-by-vpc-across": {
+      "trial": "list-ec-instances-by-vpc-across__FeGnrMp",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state tree us-west-1.run.ts --local 2>&1 | head -100",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-1.run.ts --local 2>&1",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebServer us-west-1.run.ts --local 2>&1 | jq .",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn LaunchTemplateServer us-west-1.run.ts --local 2>&1 | jq .",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn PrivateServer us-west-1.run.ts --local 2>&1 | jq .",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn DefaultVpcServer us-west-1.run.ts --local 2>&1 | jq .",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench --fqn WebServer us-west-1.run.ts --local 2>&1 | jq .",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench --fqn WebServer us-west-1.run.ts --local 2>&1 | jq .",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebLaunchTemplate us-west-1.run.ts --local 2>&1 | jq .",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn Vpc us-west-1.run.ts --local 2>&1 | jq '.attr | {vpcId}'",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench --fqn Vpc us-west-1.run.ts --local 2>&1 | jq '.attr | {vpcId}'",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench --fqn Vpc us-west-1.run.ts --local 2>&1 | jq '.attr | {vpcId}'",
+        "cd /workspace/alchemy && alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn PublicSubnet us-west-1.run.ts --local 2>&1 | jq '.attr | {subnetId, vpcId}'"
+      ],
+      "answer": "EC2 INSTANCES BY VPC AND REGION\n================================\n\nUS-EAST-1\n---------\nVPC: vpc-9b420343\n  - WebServer (i-c0e945a91d328a480)\n  - LaunchTemplateServer (i-d2bff0756e5a53dcb)\n  - PrivateServer (i-71c01f21eba744ca2)\n\nVPC: vpc-default\n  - DefaultVpcServer (i-1f54ece532258aae9)\n\n\nUS-WEST-1\n---------\nVPC: vpc-4d60a618\n  - WebServer (i-fb9a53c95c56267cc)\n\n\nUS-WEST-2\n---------\nVPC: vpc-4e878be6\n  - WebServer (i-2c0749121677eade4)\n\n\nSUMMARY\n-------\nTotal EC2 Instances: 6\nTotal VPCs: 4\n  - vpc-9b420343 (us-east-1): 3 instances\n  - vpc-default (us-east-1): 1 instance\n  - vpc-4d60a618 (us-west-1): 1 instance\n  - vpc-4e878be6 (us-west-2): 1 instance"
+    },
+    "list-ec-private-ips-all-regions": {
+      "trial": "list-ec-private-ips-all-regions__gwshBUr",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local",
+        "cd /workspace/alchemy && for region in us-east-1 us-west-1 us-west-2; do stack=\"alchemy-effect-ec2-multiregion-${region}\" echo \"=== Resources in $region ===\" alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local | grep -i instance || true done",
+        "cd /workspace/alchemy && for region in us-east-1 us-west-1 us-west-2; do stack=\"alchemy-effect-ec2-multiregion-${region}\" echo \"=== All resources in $region ===\" alchemy state resources --stack \"$stack\" --stage bench us-west-1.run.ts --local done",
+        "cd /workspace/alchemy && for region in us-east-1 us-west-1 us-west-2; do stack=\"alchemy-effect-ec2-multiregion-${region}\" echo \"=== EC2 Instances in $region ===\" for instance in DefaultVpcServer LaunchTemplateServer PrivateServer WebServer; do alchemy state get --stack \"$stack\" --stage bench --fqn \"$instance\" us-west-1.run.ts --local 2>/dev/null || true done done"
+      ],
+      "answer": "Private IP   |\n|------------|----------------------|--------------------------|--------------|\n| us-east-1  | DefaultVpcServer     | i-1f54ece532258aae9      | 172.31.32.10 |\n| us-east-1  | LaunchTemplateServer | i-d2bff0756e5a53dcb      | 10.0.0.11    |\n| us-east-1  | PrivateServer        | i-71c01f21eba744ca2      | 10.0.1.10    |\n| us-east-1  | WebServer            | i-c0e945a91d328a480      | 10.0.0.10    |\n| us-west-1  | WebServer            | i-fb9a53c95c56267cc      | 10.0.0.10    |\n| us-west-2  | WebServer            | i-2c0749121677eade4      | 10.0.0.10    |\n\nSUMMARY\n=======\nTotal EC2 Instances: 6\n\nBy Region:\n- us-east-1: 4 instances\n- us-west-1: 1 instance\n- us-west-2: 1 instance"
+    },
+    "list-unused-security-groups-all": {
+      "trial": "list-unused-security-groups-all__SSTz8F9",
+      "passed": false,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state stages --stack alchemy-effect-ec2-multiregion-us-east-1 us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local | grep -i \"securitygroup\" && \\ alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local | grep -i \"securitygroup\" && \\ alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-1.run.ts --local | grep -i \"securitygroup\"",
+        "cd /workspace/alchemy && \\ alchemy state resources --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ echo \"=== ExpSecurityGroupId ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn ExpSecurityGroupId us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ echo \"=== WebSecurityGroup in us-east-1 ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebSecurityGroup us-west-1.run.ts --local && \\ echo \"\" && \\ echo \"=== UnusedSecurityGroup in us-east-1 ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn UnusedSecurityGroup us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ alchemy state resources --stack alchemy-effect-ec2-multiregion-us-west-2 --stage bench us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ echo \"=== WebServer in us-west-1 ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-west-1 --stage bench --fqn WebServer us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ echo \"=== WebServer in us-east-1 ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebServer us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ echo \"=== WebLaunchTemplate in us-east-1 ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn WebLaunchTemplate us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ echo \"=== LaunchTemplateServer in us-east-1 ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn LaunchTemplateServer us-west-1.run.ts --local",
+        "cd /workspace/alchemy && \\ echo \"=== PrivateServer in us-east-1 ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn PrivateServer us-west-1.run.ts --local",
+        "find /workspace/alchemy/.alchemy/state -name \"*SecurityGroup*\" -o -name \"*securitygroup*\" 2>/dev/null | head -20",
+        "cd /workspace/alchemy && \\ echo \"=== Checking all resources in us-east-1 for security group references ===\" && \\ for file in .alchemy/state/alchemy-effect-ec2-multiregion-us-east-1/bench/*.json; do grep -l \"sg-\" \"$file\" 2>/dev/null && echo \"File: $file\" && jq -r '.fqn' \"$file\" done",
+        "cd /workspace/alchemy && \\ echo \"=== DefaultVpcServer in us-east-1 ===\" && \\ alchemy state get --stack alchemy-effect-ec2-multiregion-us-east-1 --stage bench --fqn DefaultVpcServer us-west-1.run.ts --local",
+        "cat > /logs/agent/agent-output.txt << 'EOF' # AWS Unused Security Groups Report Generated: 2026-08-05 ## Summary Scanned all AWS regions (us-east-1, us-west-1, us-west-2) using Alchemy state. Found **1 unused Security Group** across the AWS estate. ## Unused Security Groups ### Region: us-east-1 **Security Group Name:** UnusedSecurityGroup - **Security Group ID:** sg-bac3dcdb72f969cc2 - **Description:** Unused security group - **VPC ID:** vpc-9b420343 - **Region:** us-east-1 - **Status:** UNUSED - Not attached to any EC2 instances or launch templates **Reason for Being Unused:** This security group is only referenced by the Alchemy state export parameter (ExpUnusedSecurityGroupId), which is an SSM Parameter used for informational purposes. It is not actively used by any compute resources. --- ## Security Groups In Use ### Region: us-east-1 **Security Group Name:** WebSecurityGroup - **Security Group ID:** sg-ff2aa44f948a16411 - **Description:** Allow specific inbound traffic - **VPC ID:** vpc-9b420343 - **Status:** IN USE - Referenced by multiple resources - **Used By:** - EC2 Instance: WebServer (i-c0e945a91d328a480) - Launch Template: WebLaunchTemplate (lt-33ed74550a02ceac2) - Used by: LaunchTemplateServer instance (i-d2bff0756e5a53dcb) **Ingress Rules:** - TCP port 22 from 0.0.0.0/0 (SSH) - TCP port 80 from 0.0.0.0/0 (HTTP) - TCP port 443 from 0.0.0.0/0 (HTTPS) --- ### Default Security Groups (In Use) The AWS default security group \"sg-default\" is used by the following instances: - **us-east-1:** DefaultVpcServer, PrivateServer - **us-west-1:** WebServer - **us-west-2:** WebServer --- ## Recommendation **Delete UnusedSecurityGroup (sg-bac3dcdb72f969cc2) in us-east-1** to clean up unused resources and reduce complexity in your AWS estate. The security group has no dependencies on actual compute resources and can be safely removed. EOF cat /logs/agent/agent-output.txt"
+      ],
+      "answer": "4550a02ceac2)\n    - Used by: LaunchTemplateServer instance (i-d2bff0756e5a53dcb)\n\n**Ingress Rules:**\n  - TCP port 22 from 0.0.0.0/0 (SSH)\n  - TCP port 80 from 0.0.0.0/0 (HTTP)\n  - TCP port 443 from 0.0.0.0/0 (HTTPS)\n\n---\n\n### Default Security Groups (In Use)\n\nThe AWS default security group \"sg-default\" is used by the following instances:\n- **us-east-1:** DefaultVpcServer, PrivateServer\n- **us-west-1:** WebServer\n- **us-west-2:** WebServer\n\n---\n\n## Recommendation\n\n**Delete UnusedSecurityGroup (sg-bac3dcdb72f969cc2) in us-east-1** to clean up unused resources and reduce complexity in your AWS estate.\n\nThe security group has no dependencies on actual compute resources and can be safely removed."
+    }
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "schema": 1,
+  "run": "alchemy-h3",
+  "arm": "alchemy",
+  "by_task": {
+    "describe-ec-instances-cross-regi": {
+      "trial": "describe-ec-instances-cross-regi__AyRTfjZ",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state list | grep -i instance",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-DefaultVPCInstanceId",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-InstanceId",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-PrivateInstanceId",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-LaunchTemplateInstanceId",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/usw1-exp-InstanceId",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/usw2-exp-InstanceId",
+        "cd /workspace/alchemy && alchemy state list | grep \"aws::Instance\"",
+        "cd /workspace/alchemy && alchemy state tree",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/instance",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/private",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/webServer",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/ltServer",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/defaultVpcServer",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/privateServer",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/usw1-server",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/usw2-server"
+      ],
+      "answer": "-2a\n\nNETWORK CONNECTIVITY IN us-east-1:\n==================================\n\nVPC: vpc-f48dc6dc (ResourcesVpc - Custom VPC)\n  Connected instances (3):\n    - webServer (i-1a2520075910557b9)\n    - ltServer (i-8fc4ddd60bc65ec81)\n    - privateServer (i-a2033e67b5aa99996)\n\n  Note: These three instances share network connectivity within the same\n        VPC (vpc-f48dc6dc) and can communicate with each other through\n        the VPC's network routing rules.\n\nVPC: vpc-default (AWS Default VPC)\n  Connected instances (1):\n    - defaultVpcServer (i-fc4a3dcb05851f4f2)\n\n  Note: This instance is isolated in the default VPC and does not have\n        network connectivity to the other instances in vpc-f48dc6dc."
+    },
+    "ec-instances-without-default-vpc": {
+      "trial": "ec-instances-without-default-vpc__ELDCH7x",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state list | grep -i instance",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/instance | jq '.'",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-InstanceId | jq '.output'",
+        "cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && for f in *Server.json instance.json; do echo \"=== $f ===\"; jq '.kind, .id, (.output // .props | select(. != null) | keys)' \"$f\" 2>/dev/null || true; done",
+        "cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && for f in *Server.json usw1-server.json usw2-server.json; do echo \"=== $f ===\"; jq '{id: .id, region: .props.region // .output.region, InstanceId: .output.InstanceId, VpcId: .output.VpcId, SubnetId: .output.SubnetId}' \"$f\" 2>/dev/null || true; done",
+        "cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && for f in *Server.json usw1-server.json usw2-server.json; do if [ -f \"$f\" ]; then echo \"File: $f\"; jq '{id: .id, region: .output.region, InstanceId: .output.InstanceId, VpcId: .output.VpcId}' \"$f\" 2>/dev/null; echo; fi; done",
+        "cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && for f in *vpc.json; do echo \"File: $f\"; jq '{id: .id, region: .output.region, VpcId: .output.VpcId, IsDefault: .output.IsDefault}' \"$f\" 2>/dev/null; echo; done",
+        "cd /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench && for f in *vpc.json; do echo \"File: $f\"; jq '{id: .id, region: .output.region, vpcId: .output.vpcId, isDefault: .output.isDefault}' \"$f\" 2>/dev/null; echo; done",
+        "cd /workspace/alchemy && alchemy state list | grep -i vpc",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/exp-DefaultVpcId | jq '.'",
+        "cd /workspace/alchemy && find . -name \"*.ts\" -type f | head -5",
+        "cat > /logs/agent/agent-output.txt << 'EOF' EC2 INSTANCES WITHOUT DEFAULT VPC (ALL REGIONS) ================================================ The following EC2 instances do NOT have a default VPC: 1. us-east-1 Region: - Instance Name: webServer Instance ID: i-1a2520075910557b9 VPC ID: vpc-f48dc6dc VPC Type: Custom VPC (isDefault: false) Subnet: subnet-10.0.0.0/24 (public) - Instance Name: ltServer Instance ID: i-8fc4ddd60bc65ec81 VPC ID: vpc-f48dc6dc VPC Type: Custom VPC (isDefault: false) Subnet: subnet-10.0.0.0/24 (public) Note: Launched via Launch Template - Instance Name: privateServer Instance ID: i-a2033e67b5aa99996 VPC ID: vpc-f48dc6dc VPC Type: Custom VPC (isDefault: false) Subnet: subnet-10.0.1.0/24 (private) 2. us-west-1 Region: - Instance Name: usw1-server Instance ID: i-bfe6923537a487308 VPC ID: vpc-e1ee3364 VPC Type: Custom VPC (isDefault: false) Subnet: subnet-10.0.0.0/24 (public) 3. us-west-2 Region: - Instance Name: usw2-server Instance ID: i-5ba9c6e00e19b0616 VPC ID: vpc-93d7bff5 VPC Type: Custom VPC (isDefault: false) Subnet: subnet-10.0.0.0/24 (public) SUMMARY ======= Total instances without default VPC: 5 Instances WITH default VPC: 1 - Instance Name: defaultVpcServer Instance ID: i-fc4a3dcb05851f4f2 Region: us-east-1 VPC ID: vpc-default (Account's Default VPC) Note: All non-default instances use custom VPCs deployed as part of the Alchemy estate. EOF cat /logs/agent/agent-output.txt"
+      ],
+      "answer": "tance Name: usw1-server\n     Instance ID: i-bfe6923537a487308\n     VPC ID: vpc-e1ee3364\n     VPC Type: Custom VPC (isDefault: false)\n     Subnet: subnet-10.0.0.0/24 (public)\n\n3. us-west-2 Region:\n   - Instance Name: usw2-server\n     Instance ID: i-5ba9c6e00e19b0616\n     VPC ID: vpc-93d7bff5\n     VPC Type: Custom VPC (isDefault: false)\n     Subnet: subnet-10.0.0.0/24 (public)\n\nSUMMARY\n=======\nTotal instances without default VPC: 5\n\nInstances WITH default VPC: 1\n   - Instance Name: defaultVpcServer\n     Instance ID: i-fc4a3dcb05851f4f2\n     Region: us-east-1\n     VPC ID: vpc-default (Account's Default VPC)\n\nNote: All non-default instances use custom VPCs deployed as part of the Alchemy estate."
+    },
+    "find-ec-instances-in-public-subn": {
+      "trial": "find-ec-instances-in-public-subn__Yj9Gurb",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state list | grep -E \"aws::Instance|aws::Subnet\" | head -30",
+        "cd /workspace/alchemy && alchemy state list",
+        "cd /workspace/alchemy && for resource in instance defaultVpcServer ltServer privateServer usw1-server usw2-server webServer; do echo \"=== $resource ===\" alchemy state get \"alchemy-ec2-multiregion/bench/$resource\" 2>/dev/null | jq -r '.kind, .output | {region, subnet_id, vpc_id, private_ip_address}' 2>/dev/null | head -10 done",
+        "cd /workspace/alchemy && alchemy state get \"alchemy-ec2-multiregion/bench/instance\" | head -50",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/defaultVpcServer.json",
+        "find /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench -name \"*.json\" -exec grep -l '\"kind\": \"AWS::EC2::Instance\"' {} \\;",
+        "for file in /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/{webServer,privateServer,usw2-server,usw1-server,defaultVpcServer,ltServer}.json; do echo \"=== $(basename $file) ===\" jq -r '.output | {id: .InstanceId, region: .region, subnet: .SubnetId, vpc: .VpcId, private_ip: .PrivateIp}' \"$file\" done",
+        "find /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench -name \"*.json\" -exec grep -l '\"kind\": \"AWS::EC2::Subnet\"' {} \\; | sort",
+        "grep -r \"subnet-\" /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/*.json | grep -E \"(public|route)\" | head -20",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/public.json",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/usw1-public.json | jq '.output | {subnetId, vpcId, region, mapPublicIpOnLaunch}'",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/usw2-public.json | jq '.output | {subnetId, vpcId, region, mapPublicIpOnLaunch}'",
+        "grep -r \"subnet-default-c\" /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/*.json | jq -s 'group_by(.kind) | map({kind: .[0].kind, count: length})'",
+        "grep -r \"subnet-default\" /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/*.json"
+      ],
+      "answer": "- Default VPC)\n   VPC: vpc-default\n   Private IP: 172.31.32.10\n\n4. usw1-server\n   Instance ID: i-bfe6923537a487308\n   Region: us-west-1\n   Subnet: subnet-f1e89ba4 (Public)\n   VPC: vpc-e1ee3364\n   Private IP: 10.0.0.10\n\n5. usw2-server\n   Instance ID: i-5ba9c6e00e19b0616\n   Region: us-west-2\n   Subnet: subnet-7c256962 (Public)\n   VPC: vpc-93d7bff5\n   Private IP: 10.0.0.10\n\nSUMMARY:\n========\nTotal Instances in Public Subnets: 5\n- us-east-1: 3 instances (webServer, ltServer, defaultVpcServer)\n- us-west-1: 1 instance (usw1-server)\n- us-west-2: 1 instance (usw2-server)\n\nFor reference, the following instance is in a PRIVATE subnet:\n- privateServer (i-a2033e67b5aa99996) in us-east-1, subnet-e3a78ede"
+    },
+    "list-ec-instances-all-regions-1": {
+      "trial": "list-ec-instances-all-regions-1__kk4prg6",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state list | head -20",
+        "cd /workspace/alchemy && alchemy state list | grep -i instance",
+        "cd /workspace/alchemy && alchemy state list | grep -i security",
+        "cd /workspace/alchemy && alchemy state get \"alchemy-ec2-multiregion/bench/instance\" 2>/dev/null | jq '.'",
+        "cd /workspace/alchemy && alchemy state list | grep -E \"(exp-InstanceId|exp-LaunchTemplateInstanceId|exp-PrivateInstanceId|exp-DefaultVPCInstanceId|usw1-exp-InstanceId|usw2-exp-InstanceId)\" | head -20",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | head -20",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l '\"kind\".*Instance' | head -20",
+        "cd /workspace/alchemy && for file in webServer privateServer usw2-server usw1-server defaultVpcServer ltServer; do echo \"=== $file ===\"; cat .alchemy/alchemy-ec2-multiregion/bench/$file.json | jq '{kind, id, output: {instanceId: .output.instanceId, region: .output.region, publicIp: .output.publicIp, securityGroupIds: .output.securityGroupIds, launchTemplate: .output.launchTemplate}}'; done",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l '\"kind\".*SecurityGroup' | head -20",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l '\"kind\".*SecurityGroupIngress\\|SecurityGroupRule' | head -20",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l '\"kind\".*Address\\|ElasticIp' | head -20",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l '\"kind\".*Subnet' | head -20",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l 'sg-default' | head -20",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f -exec grep -l \"SecurityGroupRule\" {} \\; | xargs cat | jq -r '.output.securityGroup.groupId // .props.securityGroup.groupId' | sort | uniq",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l \"LaunchTemplate\\|lt-\"",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l 'ingress\\|SecurityGroupRule' | xargs grep -l '22\\|SSH'",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f -exec grep -l '\"fromPort\".*22\\|\"toPort\".*22' {} \\;",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -l \"RouteTable\\|Route\"",
+        "find /workspace/alchemy/.alchemy -name \"*.json\" -type f | xargs grep -E '\"groupId\".*\"sg-default\"' -A 20 | head -50"
+      ],
+      "answer": "e VPC\n   - Confirm this matches your security posture\n\n3. Audit all public subnets with mapPublicIpOnLaunch: true\n   - Instances in these subnets will auto-assign public IPs\n   - Ensure security groups are correctly configured for all such instances\n\nMETHODOLOGY\n===========\n- Analyzed Alchemy state for all EC2 instances in the specified regions\n- Checked subnet configuration (public vs. private, mapPublicIpOnLaunch)\n- Reviewed security group rules (including those inherited from launch templates)\n- Verified route table associations for internet gateway connectivity\n- SSH reachability requires: (1) public/assignable IP, (2) route to internet, (3) security group allowing port 22 from 0.0.0.0/0"
+    },
+    "list-ec-instances-all-regions": {
+      "trial": "list-ec-instances-all-regions__7zqQrvL",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state list | grep -i instance",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/instance | jq '.output'",
+        "cd /workspace/alchemy && alchemy state tree",
+        "cd /workspace/alchemy && for res in exp-DefaultVPCInstanceId exp-InstanceId exp-LaunchTemplateInstanceId exp-PrivateInstanceId usw1-exp-InstanceId usw2-exp-InstanceId; do echo \"=== $res ===\"; alchemy state get \"alchemy-ec2-multiregion/bench/$res\" 2>/dev/null | jq '.output' 2>/dev/null || echo \"Not found\"; done"
+      ],
+      "answer": "EC2 Instance IDs by Region\n===========================\n\nus-east-1 (4 instances):\n  - i-fc4a3dcb05851f4f2 (DefaultVPC Instance)\n  - i-1a2520075910557b9 (Standard Instance)\n  - i-8fc4ddd60bc65ec81 (Launch Template Instance)\n  - i-a2033e67b5aa99996 (Private Instance)\n\nus-west-1 (1 instance):\n  - i-bfe6923537a487308\n\nus-west-2 (1 instance):\n  - i-5ba9c6e00e19b0616\n\nTotal: 6 EC2 instances across 3 regions"
+    },
+    "list-ec-instances-by-vpc-across": {
+      "trial": "list-ec-instances-by-vpc-across__LzQ7reJ",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state list | grep -i instance",
+        "cd /workspace/alchemy && alchemy state list | head -50",
+        "cd /workspace/alchemy && alchemy state list | grep -E \"(instance|server)\" | sort",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/instance",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/usw1-server",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/usw2-server",
+        "cd /workspace/alchemy && alchemy state list | grep -E \"exp-(DefaultVPCInstanceId|InstanceId|LaunchTemplateInstanceId|PrivateInstanceId)\" | sort",
+        "cd /workspace/alchemy && for file in instance defaultVpcServer ltServer privateServer webServer; do echo \"=== $file ===\"; alchemy state get alchemy-ec2-multiregion/bench/$file 2>/dev/null | grep -A 2 '\"kind\"'; done",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/defaultVpcServer 2>/dev/null | jq '.output | {id, region, VpcId, InstanceId, SubnetId}'",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/ltServer 2>/dev/null | jq '.output | {id, region, VpcId, InstanceId, SubnetId}'",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/privateServer 2>/dev/null | jq '.output | {id, region, VpcId, InstanceId, SubnetId}'",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/webServer 2>/dev/null | jq '.output | {id, region, VpcId, InstanceId, SubnetId}'"
+      ],
+      "answer": "subnet-856a3fc7\n    - privateServer (i-a2033e67b5aa99996) in subnet subnet-e3a78ede\n    - webServer (i-1a2520075910557b9) in subnet subnet-856a3fc7\n\nUS-WEST-1 (1 instance):\n  VPC: vpc-e1ee3364\n    - usw1-server (i-bfe6923537a487308) in subnet subnet-f1e89ba4\n\nUS-WEST-2 (1 instance):\n  VPC: vpc-93d7bff5\n    - usw2-server (i-5ba9c6e00e19b0616) in subnet subnet-7c256962\n\nSUMMARY:\n--------\nTotal EC2 Instances: 6\n  - us-east-1: 4 instances across 2 VPCs\n  - us-west-1: 1 instance in 1 VPC\n  - us-west-2: 1 instance in 1 VPC\n\nVPC Summary:\n  - vpc-default (us-east-1): 1 instance\n  - vpc-f48dc6dc (us-east-1): 3 instances\n  - vpc-e1ee3364 (us-west-1): 1 instance\n  - vpc-93d7bff5 (us-west-2): 1 instance"
+    },
+    "list-ec-private-ips-all-regions": {
+      "trial": "list-ec-private-ips-all-regions__7SSCPjt",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state list | grep -E \"aws::Instance\" | head -20",
+        "find /workspace/alchemy/.alchemy/alchemy-ec2-multiregion -name \"*.json\" -type f",
+        "cat > /logs/agent/agent-output.txt << 'EOF' # EC2 Instances Across Regions ## Summary Table | Region | Instance Name | Instance ID | Private IP | |--------|---------------|-------------|------------| | us-east-1 | webServer | i-1a2520075910557b9 | 10.0.0.10 | | us-east-1 | privateServer | i-a2033e67b5aa99996 | 10.0.1.10 | | us-east-1 | defaultVpcServer | i-fc4a3dcb05851f4f2 | 172.31.32.10 | | us-east-1 | ltServer | i-8fc4ddd60bc65ec81 | 10.0.0.11 | | us-west-1 | usw1-server | i-bfe6923537a487308 | 10.0.0.10 | | us-west-2 | usw2-server | i-5ba9c6e00e19b0616 | 10.0.0.10 | ## Regional Breakdown ### us-east-1 (4 instances) - **webServer**: i-1a2520075910557b9 \u2192 10.0.0.10 - **privateServer**: i-a2033e67b5aa99996 \u2192 10.0.1.10 - **defaultVpcServer**: i-fc4a3dcb05851f4f2 \u2192 172.31.32.10 - **ltServer**: i-8fc4ddd60bc65ec81 \u2192 10.0.0.11 ### us-west-1 (1 instance) - **usw1-server**: i-bfe6923537a487308 \u2192 10.0.0.10 ### us-west-2 (1 instance) - **usw2-server**: i-5ba9c6e00e19b0616 \u2192 10.0.0.10 ## Total: 6 EC2 Instances EOF cat /logs/agent/agent-output.txt"
+      ],
+      "answer": "|\n| us-east-1 | defaultVpcServer | i-fc4a3dcb05851f4f2 | 172.31.32.10 |\n| us-east-1 | ltServer | i-8fc4ddd60bc65ec81 | 10.0.0.11 |\n| us-west-1 | usw1-server | i-bfe6923537a487308 | 10.0.0.10 |\n| us-west-2 | usw2-server | i-5ba9c6e00e19b0616 | 10.0.0.10 |\n\n## Regional Breakdown\n\n### us-east-1 (4 instances)\n- **webServer**: i-1a2520075910557b9 \u2192 10.0.0.10\n- **privateServer**: i-a2033e67b5aa99996 \u2192 10.0.1.10\n- **defaultVpcServer**: i-fc4a3dcb05851f4f2 \u2192 172.31.32.10\n- **ltServer**: i-8fc4ddd60bc65ec81 \u2192 10.0.0.11\n\n### us-west-1 (1 instance)\n- **usw1-server**: i-bfe6923537a487308 \u2192 10.0.0.10\n\n### us-west-2 (1 instance)\n- **usw2-server**: i-5ba9c6e00e19b0616 \u2192 10.0.0.10\n\n## Total: 6 EC2 Instances"
+    },
+    "list-unused-security-groups-all": {
+      "trial": "list-unused-security-groups-all__obhf5e3",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state list | head -50",
+        "cd /workspace/alchemy && alchemy state list | grep -i securitygroup | head -20",
+        "cd /workspace/alchemy && alchemy state list | grep -E \"(sg|SecurityGroup)\" | head -30",
+        "cd /workspace/alchemy && alchemy state tree",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/web | jq '.'",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/unused | jq '.'",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/instance | jq '.output | {region, securityGroupIds, subnetId}'",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/lt | jq '.output | {region, launchTemplateData}'",
+        "cd /workspace/alchemy && alchemy state get alchemy-ec2-multiregion/bench/ltServer | jq '.output | {region, securityGroupIds}'",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/instance.json | jq '.'",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/webServer.json | jq '.output | {region, securityGroupIds, launchTemplate}'",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/ltServer.json | jq '.output | {region, securityGroupIds, launchTemplate}'",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/privateServer.json | jq '.output | {region, securityGroupIds}'",
+        "cat /workspace/alchemy/.alchemy/alchemy-ec2-multiregion/bench/defaultVpcServer.json | jq '.output | {region, securityGroupIds}'",
+        "aws ec2 describe-security-groups --region us-east-1 --query 'SecurityGroups[*].[GroupId,GroupName,VpcId]' --output table",
+        "aws ec2 describe-security-groups --region us-west-1 --query 'SecurityGroups[*].[GroupId,GroupName,VpcId]' --output table",
+        "aws ec2 describe-security-groups --region us-west-2 --query 'SecurityGroups[*].[GroupId,GroupName,VpcId]' --output table",
+        "aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].[InstanceId,SecurityGroups[*].GroupId]' --output text",
+        "aws ec2 describe-instances --region us-west-1 --query 'Reservations[*].Instances[*].[InstanceId,SecurityGroups[*].GroupId]' --output text",
+        "aws ec2 describe-instances --region us-west-2 --query 'Reservations[*].Instances[*].[InstanceId,SecurityGroups[*].GroupId]' --output text",
+        "aws ec2 describe-launch-templates --region us-east-1 --query 'LaunchTemplates[*].[LaunchTemplateName,LaunchTemplateId]' --output table",
+        "aws ec2 describe-launch-template-versions --launch-template-name \"lt-000000000000-us-east-1\" --region us-east-1 --query 'LaunchTemplateVersions[*].LaunchTemplateData.SecurityGroupIds' --output text 2>/dev/null || echo \"Launch template not found\"",
+        "aws ec2 describe-network-interfaces --region us-east-1 --query 'NetworkInterfaces[*].[NetworkInterfaceId,Groups[*].GroupId]' --output text",
+        "aws ec2 describe-security-groups --region us-east-1 --filters \"Name=vpc-id,Values=vpc-f48dc6dc\" --query 'SecurityGroups[*].[GroupId,GroupName]' --output table",
+        "aws ec2 describe-security-groups --group-ids sg-9d5bef8d1f1fa4d17 --region us-east-1 --query 'SecurityGroups[*].[GroupId,GroupName,IpPermissions,IpPermissionsEgress]' --output json | jq '.'",
+        "# Check if any security group rules reference the unused security group echo \"Checking if any rules reference the unused security group (sg-9d5bef8d1f1fa4d17)...\" echo \"\" echo \"=== US-EAST-1 ===\" aws ec2 describe-security-groups --region us-east-1 --query 'SecurityGroups[*].[GroupId,GroupName,IpPermissions[?UserIdGroupPairs[?GroupId==`sg-9d5bef8d1f1fa4d17`]],IpPermissionsEgress[?UserIdGroupPairs[?GroupId==`sg-9d5bef8d1f1fa4d17`]]]' --output json | jq '.[] | select(.[2] != null or .[3] != null)' echo \"=== US-WEST-1 ===\" aws ec2 describe-security-groups --region us-west-1 --query 'SecurityGroups[*].[GroupId,GroupName,IpPermissions[?UserIdGroupPairs[?GroupId==`sg-9d5bef8d1f1fa4d17`]],IpPermissionsEgress[?UserIdGroupPairs[?GroupId==`sg-9d5bef8d1f1fa4d17`]]]' --output json | jq '.[] | select(.[2] != null or .[3] != null)' echo \"=== US-WEST-2 ===\" aws ec2 describe-security-groups --region us-west-2 --query 'SecurityGroups[*].[GroupId,GroupName,IpPermissions[?UserIdGroupPairs[?GroupId==`sg-9d5bef8d1f1fa4d17`]],IpPermissionsEgress[?UserIdGroupPairs[?GroupId==`sg-9d5bef8d1f1fa4d17`]]]' --output json | jq '.[] | select(.[2] != null or .[3] != null)'",
+        "# Comprehensive check for unused security groups across all regions cat > /tmp/check_unused_sgs.sh << 'EOF' #!/bin/bash echo \"====== UNUSED SECURITY GROUPS REPORT ======\" echo \"\" declare -a REGIONS=(\"us-east-1\" \"us-west-1\" \"us-west-2\") declare -a UNUSED_SGS for REGION in \"${REGIONS[@]}\"; do echo \"Checking $REGION...\" # Get all security groups ALL_SGs=$(aws ec2 describe-security-groups --region \"$REGION\" --query 'SecurityGroups[*].GroupId' --output text) for SG in $ALL_SGs; do # Check if security group is used by any instance INSTANCE_COUNT=$(aws ec2 describe-instances --region \"$REGION\" \\ --filters \"Name=instance.group-id,Values=$SG\" \\ --query 'length(Reservations[*].Instances[*][])' --output text 2>/dev/null || echo \"0\") if [ \"$INSTANCE_COUNT\" == \"0\" ] || [ -z \"$INSTANCE_COUNT\" ]; then # Check if security group is used by launch templates LT_COUNT=$(aws ec2 describe-launch-templates --region \"$REGION\" \\ --query \"LaunchTemplates[*].LaunchTemplateId\" --output text 2>/dev/null | wc -w || echo \"0\") LT_USES_SG=0 if [ \"$LT_COUNT\" -gt 0 ]; then LTS=$(aws ec2 describe-launch-templates --region \"$REGION\" --query 'LaunchTemplates[*].LaunchTemplateId' --output text) for LT in $LTS; do VERSION=$(aws ec2 describe-launch-template-versions --launch-template-id \"$LT\" --region \"$REGION\" \\ --query 'LaunchTemplateVersions[0].VersionNumber' --output text 2>/dev/null) if [ -n \"$VERSION\" ]; then SG_FOUND=$(aws ec2 describe-launch-template-versions --launch-template-id \"$LT\" --versions \"$VERSION\" \\ --region \"$REGION\" --query \"LaunchTemplateVersions[0].LaunchTemplateData.SecurityGroupIds\" --output text 2>/dev/null | grep \"$SG\" || echo \"\") if [ -n \"$SG_FOUND\" ]; then LT_USES_SG=1 break fi fi done fi if [ \"$LT_USES_SG\" == \"0\" ]; then # Check if used by network interfaces ENI_COUNT=$(aws ec2 describe-network-interfaces --region \"$REGION\" \\ --filters \"Name=group-id,Values=$SG\" \\ --query 'length(NetworkInterfaces[*])' --output text 2>/dev/null || echo \"0\") if [ \"$ENI_COUNT\" == \"0\" ] || [ -z \"$ENI_COUNT\" ]; then # This is an unused security group SG_INFO=$(aws ec2 describe-security-groups --group-ids \"$SG\" --region \"$REGION\" \\ --query 'SecurityGroups[0].[GroupId,GroupName,VpcId]' --output text) echo \" UNUSED: $SG_INFO\" UNUSED_SGS+=(\"$REGION:$SG_INFO\") fi fi fi done echo \"\" done echo \"====== SUMMARY ======\" if [ ${#UNUSED_SGS[@]} -eq 0 ]; then echo \"No unused security groups found.\" else echo \"Found ${#UNUSED_SGS[@]} unused security group(s):\" for SG_ENTRY in \"${UNUSED_SGS[@]}\"; do echo \" - $SG_ENTRY\" done fi EOF chmod +x /tmp/check_unused_sgs.sh /tmp/check_unused_sgs.sh",
+        "cat > /tmp/analyze_sgs.py << 'EOF' #!/usr/bin/env python3 import json import subprocess def get_security_groups_for_region(region): \"\"\"Get all security groups in a region\"\"\" try: result = subprocess.run( ['aws', 'ec2', 'describe-security-groups', '--region', region, '--query', 'SecurityGroups[*].[GroupId,GroupName,VpcId,GroupDescription]', '--output', 'json'], capture_output=True, text=True ) return json.loads(result.stdout) except: return [] def get_instances_in_region(region): \"\"\"Get all instances and their security groups\"\"\" try: result = subprocess.run( ['aws', 'ec2', 'describe-instances', '--region', region, '--query', 'Reservations[*].Instances[*].[InstanceId,SecurityGroups[*].GroupId]', '--output', 'json'], capture_output=True, text=True ) instances = json.loads(result.stdout) used_sgs = set() for reservation in instances: for instance in reservation: if len(instance) > 1 and instance[1]: used_sgs.update(instance[1]) return used_sgs except: return set() def get_launch_templates_in_region(region): \"\"\"Get all launch templates and their security groups\"\"\" used_sgs = set() try: result = subprocess.run( ['aws', 'ec2', 'describe-launch-templates', '--region', region, '--query', 'LaunchTemplates[*].LaunchTemplateId', '--output', 'json'], capture_output=True, text=True ) template_ids = json.loads(result.stdout) for template_id in template_ids: result = subprocess.run( ['aws', 'ec2', 'describe-launch-template-versions', '--launch-template-id', template_id, '--region', region, '--query', 'LaunchTemplateVersions[0].LaunchTemplateData.SecurityGroupIds', '--output', 'json'], capture_output=True, text=True ) if result.stdout and result.stdout.strip() != 'null': sgs = json.loads(result.stdout) if sgs: used_sgs.update(sgs) except: pass return used_sgs def get_network_interfaces_in_region(region): \"\"\"Get all network interfaces and their security groups\"\"\" try: result = subprocess.run( ['aws', 'ec2', 'describe-network-interfaces', '--region', region, '--query', 'NetworkInterfaces[*].Groups[*].GroupId', '--output', 'json'], capture_output=True, text=True ) interfaces = json.loads(result.stdout) used_sgs = set() for interface_sgs in interfaces: used_sgs.update(interface_sgs) return used_sgs except: return set() regions = ['us-east-1', 'us-west-1', 'us-west-2'] unused_by_region = {} for region in regions: all_sgs = get_security_groups_for_region(region) instance_sgs = get_instances_in_region(region) lt_sgs = get_launch_templates_in_region(region) eni_sgs = get_network_interfaces_in_region(region) used_sgs = instance_sgs | lt_sgs | eni_sgs unused_list = [] for sg_info in all_sgs: sg_id = sg_info[0] sg_name = sg_info[1] vpc_id = sg_info[2] description = sg_info[3] # Skip default security groups unless they're not used if sg_id not in used_sgs: unused_list.append({ 'GroupId': sg_id, 'GroupName': sg_name, 'VpcId': vpc_id, 'Description': description }) if unused_list: unused_by_region[region] = unused_list # Print results print(\"=\" * 100) print(\"UNUSED SECURITY GROUPS BY REGION\") print(\"=\" * 100) print() if not unused_by_region: print(\"No unused security groups found.\") else: for region in sorted(unused_by_region.keys()): print(f\"\\nREGION: {region}\") print(\"-\" * 100) for sg in unused_by_region[region]: print(f\" Group ID: {sg['GroupId']}\") print(f\" Group Name: {sg['GroupName']}\") print(f\" VPC ID: {sg['VpcId']}\") print(f\" Description: {sg['Description']}\") print() EOF python3 /tmp/analyze_sgs.py",
+        "# Check which security groups are actually used by network interfaces echo \"=== Network Interfaces in us-east-1 ===\" aws ec2 describe-network-interfaces --region us-east-1 --query 'NetworkInterfaces[*].[NetworkInterfaceId,Description,Groups[*].GroupId,Attachment.InstanceId]' --output table echo \"\" echo \"=== Network Interfaces in us-west-1 ===\" aws ec2 describe-network-interfaces --region us-west-1 --query 'NetworkInterfaces[*].[NetworkInterfaceId,Description,Groups[*].GroupId,Attachment.InstanceId]' --output table echo \"\" echo \"=== Network Interfaces in us-west-2 ===\" aws ec2 describe-network-interfaces --region us-west-2 --query 'NetworkInterfaces[*].[NetworkInterfaceId,Description,Groups[*].GroupId,Attachment.InstanceId]' --output table",
+        "cat > /tmp/final_analysis.sh << 'EOF' #!/bin/bash echo \"==============================================================================\" echo \"COMPREHENSIVE UNUSED SECURITY GROUPS ANALYSIS\" echo \"==============================================================================\" echo \"\" REGIONS=(\"us-east-1\" \"us-west-1\" \"us-west-2\") UNUSED_SG_TOTAL=0 for REGION in \"${REGIONS[@]}\"; do echo \">>> REGION: $REGION\" echo \"\" # Get all security groups with details SG_DATA=$(aws ec2 describe-security-groups --region \"$REGION\" \\ --query 'SecurityGroups[*].[GroupId,GroupName,VpcId,GroupDescription]' --output json) # Get all network interfaces with security groups ENI_DATA=$(aws ec2 describe-network-interfaces --region \"$REGION\" \\ --query 'NetworkInterfaces[*].Groups[*].GroupId' --output json | jq -r '.[] | .[]' | sort -u) # Get launch template security groups LT_SG_DATA=$(aws ec2 describe-launch-templates --region \"$REGION\" --query 'LaunchTemplates[*].LaunchTemplateId' --output json | jq -r '.[]' 2>/dev/null || true) USED_SGs=$(echo \"$ENI_DATA\" | grep -v '^$' | sort -u) # Add launch template SGs to used SGs for LT_ID in $LT_SG_DATA; do LT_SGs=$(aws ec2 describe-launch-template-versions --launch-template-id \"$LT_ID\" --region \"$REGION\" \\ --query 'LaunchTemplateVersions[0].LaunchTemplateData.SecurityGroupIds' --output json 2>/dev/null | jq -r '.[]?' 2>/dev/null || true) for SG in $LT_SGs; do USED_SGs=$(echo -e \"$USED_SGs\\n$SG\" | grep -v '^$' | sort -u) done done # Check each SG UNUSED_IN_REGION=0 echo \"$SG_DATA\" | jq -c '.[]' | while read -r SG_LINE; do SG_ID=$(echo \"$SG_LINE\" | jq -r '.[0]') SG_NAME=$(echo \"$SG_LINE\" | jq -r '.[1]') VPC_ID=$(echo \"$SG_LINE\" | jq -r '.[2]') SG_DESC=$(echo \"$SG_LINE\" | jq -r '.[3] // \"N/A\"') # Check if this SG is in the used list if ! echo \"$USED_SGs\" | grep -q \"^${SG_ID}$\"; then echo \" [UNUSED] $SG_ID\" echo \" Name: $SG_NAME\" echo \" VPC: $VPC_ID\" echo \" Description: $SG_DESC\" echo \"\" ((UNUSED_IN_REGION++)) ((UNUSED_SG_TOTAL++)) fi done if [ \"$UNUSED_IN_REGION\" -eq 0 ]; then echo \" No unused security groups in this region.\" fi echo \"\" done echo \"==============================================================================\" echo \"SUMMARY\" echo \"==============================================================================\" echo \"Total unused security groups across all regions: $UNUSED_SG_TOTAL\" EOF bash /tmp/final_analysis.sh"
+      ],
+      "answer": "364 is being decommissioned\n  \u2022 sg-82640235dcba144d9 (us-west-2) - if VPC vpc-93d7bff5 is being decommissioned\n\nNOTES:\n  \u2022 Default security groups in custom VPCs are required by AWS and should only\n    be deleted if the entire VPC is being removed\n  \u2022 Verify no external scripts, infrastructure-as-code, or other automation\n    depends on these security group IDs before deletion\n  \u2022 Consider checking CloudTrail or AWS Config history for any modifications\n    to these security groups to understand if they were ever used\n\n\n================================================================================\nEND OF REPORT\n================================================================================"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "run": "chant-neg-h3",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__752aAMb",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --explain --show region"
+      ],
+      "answer": "Subnets with No Network Interfaces\n===================================\n\nThe following 8 subnets have no network interfaces attached to them:\n\nRegion: us-east-1\n  - subnet-default-a\n  - subnet-default-b\n\nRegion: us-west-1\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nRegion: us-west-2\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nSummary\n-------\nTotal subnets checked: 13\nEmpty subnets (no network interfaces): 8\nIn-use subnets: 5\n\nSource: Chant snapshot 416b058 (2026-08-05T04:22:50.026Z)\nQuery: kind:EC2::Subnet !<-kind:EC2::NetworkInterface"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__8kLWfQY",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Vpc\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Vpc\" --at latest --env floci --show region,providerDefault"
+      ],
+      "answer": "========\n\n1. vpc-default (us-west-1)\n   - Physical ID: vpc-default\n   - Type: AWS-managed default VPC\n   - Region: us-west-1\n   - No instances\n\n2. vpc-default (us-west-2)\n   - Physical ID: vpc-default\n   - Type: AWS-managed default VPC\n   - Region: us-west-2\n   - No instances\n\nSummary:\n--------\nTotal VPCs checked: 6 (across 3 regions: us-east-1, us-west-1, us-west-2)\nVPCs with instances: 4\nVPCs with NO instances: 2\n\nVPCs with instances:\n- vpc-ead1a4ff (us-east-1): 3 instances\n- vpc-default (us-east-1): 1 instance\n- vpc-7d1550d1 (us-west-1): 1 instance\n- vpc-51784105 (us-west-2): 1 instance\n\nSource: Queried using chant CLI against recorded state snapshot 416b058 taken 2026-08-05T04:22:50.026Z"
+    }
+  }
+}

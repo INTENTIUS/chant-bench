@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion-negatives",
+  "arm": "pulumi",
+  "tool": {
+    "name": "pulumi",
+    "version": "3.255.0"
+  },
+  "run": {
+    "id": "pulumi-neg-h3",
+    "workspace": "fcba49fc5d54",
+    "finished_at": "2026-08-04T23:09:24.992595",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 6,
+    "expected_trials": 6,
+    "completed": 6,
+    "errored": 0,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "by_task": {
+      "subnets-with-no-network-interfac": [
+        0,
+        0,
+        0
+      ],
+      "vpcs-with-no-running-instances": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 28,
+    "invocations_failed": 2,
+    "failure_rate": 0.0667
+  },
+  "independence": {
+    "account_reads": 0,
+    "answered_from_own_state": true
+  },
+  "effort": {
+    "tool_calls": 7.83,
+    "turns": 9.83,
+    "wall_seconds": 49.24,
+    "tokens_in": 274592.17,
+    "tokens_out": 4158.83,
+    "cost_usd": 0.0686,
+    "cost_usd_run": 0.4113
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/pulumi-neg-h3/job.log",
+    "trials": "jobs/pulumi-neg-h3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-pulumi.md",
+    "sha256": "a06c6b73c0eb"
+  },
+  "reproduce": "benchmarks/arms/pulumi-ec2-multiregion/REPRODUCE.md"
+}

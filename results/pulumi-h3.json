@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "pulumi",
+  "tool": {
+    "name": "pulumi",
+    "version": "3.255.0"
+  },
+  "run": {
+    "id": "pulumi-h3",
+    "workspace": "fcba49fc5d54",
+    "finished_at": "2026-08-04T23:07:02.327288",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 19,
+    "pass_rate": 0.7917,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        1,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        0,
+        0
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-by-vpc-across": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 82,
+    "invocations_failed": 6,
+    "failure_rate": 0.0682
+  },
+  "independence": {
+    "account_reads": 0,
+    "answered_from_own_state": true
+  },
+  "effort": {
+    "tool_calls": 7.33,
+    "turns": 9.71,
+    "wall_seconds": 50.23,
+    "tokens_in": 279984.08,
+    "tokens_out": 4168.5,
+    "cost_usd": 0.0718,
+    "cost_usd_run": 1.7232
+  },
+  "logs": {
+    "run": "jobs/pulumi-h3/run-arm.log",
+    "job": "jobs/pulumi-h3/job.log",
+    "trials": "jobs/pulumi-h3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-pulumi.md",
+    "sha256": "a06c6b73c0eb"
+  },
+  "reproduce": "benchmarks/arms/pulumi-ec2-multiregion/REPRODUCE.md"
+}

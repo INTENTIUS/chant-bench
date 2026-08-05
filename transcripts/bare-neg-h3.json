@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "run": "bare-neg-h3",
+  "arm": "bare",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__4KbghFt",
+      "passed": true,
+      "commands": [
+        "aws ec2 describe-subnets --region us-east-1 --output json | jq -r '.Subnets[] | \"\\(.SubnetId) \\(.CidrBlock) \\(.AvailabilityZone)\"' | sort",
+        "aws ec2 describe-subnets --region us-west-1 --output json | jq -r '.Subnets[] | \"\\(.SubnetId) \\(.CidrBlock) \\(.AvailabilityZone)\"' | sort",
+        "aws ec2 describe-subnets --region us-west-2 --output json | jq -r '.Subnets[] | \"\\(.SubnetId) \\(.CidrBlock) \\(.AvailabilityZone)\"' | sort",
+        "aws ec2 describe-network-interfaces --region us-east-1 --output json | jq -r '.NetworkInterfaces[] | \"\\(.SubnetId)\"' | sort | uniq",
+        "aws ec2 describe-network-interfaces --region us-west-1 --output json | jq -r '.NetworkInterfaces[] | \"\\(.SubnetId)\"' | sort | uniq",
+        "aws ec2 describe-network-interfaces --region us-west-2 --output json | jq -r '.NetworkInterfaces[] | \"\\(.SubnetId)\"' | sort | uniq",
+        "cat > /tmp/check_empty_subnets.sh << 'EOF' #!/bin/bash declare -A all_subnets declare -A subnets_with_interfaces # Collect all subnets and those with interfaces from each region for region in us-east-1 us-west-1 us-west-2; do echo \"Region: $region\" >&2 # Get all subnets in this region aws ec2 describe-subnets --region \"$region\" --output json | \\ jq -r '.Subnets[] | \"\\(.SubnetId),\\(.CidrBlock),\\(.AvailabilityZone)\"' | \\ while IFS=',' read -r subnet_id cidr az; do all_subnets[\"$region:$subnet_id\"]=\"$cidr,$az\" done # Get subnets that have network interfaces aws ec2 describe-network-interfaces --region \"$region\" --output json | \\ jq -r '.NetworkInterfaces[] | \"\\(.SubnetId)\"' | sort | uniq | \\ while read -r subnet_id; do subnets_with_interfaces[\"$region:$subnet_id\"]=1 done done echo \"Empty subnets:\" >&2 echo \"\" # Now find empty subnets for region in us-east-1 us-west-1 us-west-2; do echo \"=== $region ===\" >&2 aws ec2 describe-subnets --region \"$region\" --output json | \\ jq -r '.Subnets[] | \"\\(.SubnetId),\\(.CidrBlock),\\(.AvailabilityZone)\"' | \\ while IFS=',' read -r subnet_id cidr az; do has_interfaces=$(aws ec2 describe-network-interfaces --region \"$region\" --filters \"Name=subnet-id,Values=$subnet_id\" --output json | jq '.NetworkInterfaces | length') if [ \"$has_interfaces\" -eq 0 ]; then echo \"$region | $subnet_id | $cidr | $az\" fi done done EOF chmod +x /tmp/check_empty_subnets.sh /tmp/check_empty_subnets.sh 2>&1 | grep \"^us-\""
+      ],
+      "answer": "SUBNETS WITH NO NETWORK INTERFACES\n===================================\n\nus-east-1\n---------\nsubnet-default-a | 172.31.0.0/20 | us-east-1a\nsubnet-default-b | 172.31.16.0/20 | us-east-1b\n\nus-west-1\n---------\nsubnet-default-a | 172.31.0.0/20 | us-west-1a\nsubnet-default-b | 172.31.16.0/20 | us-west-1b\nsubnet-default-c | 172.31.32.0/20 | us-west-1c\n\nus-west-2\n---------\nsubnet-default-a | 172.31.0.0/20 | us-west-2a\nsubnet-default-b | 172.31.16.0/20 | us-west-2b\nsubnet-default-c | 172.31.32.0/20 | us-west-2c\n\nSUMMARY\n-------\nTotal empty subnets: 8\n- us-east-1: 2 empty subnets\n- us-west-1: 3 empty subnets\n- us-west-2: 3 empty subnets\n\nAll empty subnets are in the default VPC (172.31.x.x CIDR range)."
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__WiP99vH",
+      "passed": true,
+      "commands": [
+        "# Get all VPCs and instances from each region, then identify empty VPCs for region in us-east-1 us-west-1 us-west-2; do echo \"=== Region: $region ===\" # Get all VPCs vpcs=$(aws ec2 describe-vpcs --region \"$region\" --output json) # Get all instances instances=$(aws ec2 describe-instances --region \"$region\" --output json) # Extract VPC IDs that have running instances vpcs_with_instances=$(echo \"$instances\" | jq -r '.Reservations[].Instances[].VpcId' | sort -u) # Extract all VPC IDs all_vpcs=$(echo \"$vpcs\" | jq -r '.Vpcs[].VpcId' | sort -u) # Find VPCs with no instances echo \"All VPCs: $all_vpcs\" echo \"VPCs with instances: $vpcs_with_instances\" # Store for final output echo \"Region=$region\" >> /tmp/vpc_analysis.txt echo \"All VPCs: $all_vpcs\" >> /tmp/vpc_analysis.txt echo \"VPCs with instances: $vpcs_with_instances\" >> /tmp/vpc_analysis.txt echo \"\" >> /tmp/vpc_analysis.txt done",
+        "# Find VPCs with NO EC2 instances across all regions empty_vpcs=() for region in us-east-1 us-west-1 us-west-2; do echo \"Checking region: $region\" # Get all VPCs all_vpcs=$(aws ec2 describe-vpcs --region \"$region\" --output json | jq -r '.Vpcs[].VpcId') # Get VPC IDs that have running instances vpcs_with_instances=$(aws ec2 describe-instances --region \"$region\" --output json | jq -r '.Reservations[].Instances[].VpcId' | sort -u) # Find empty VPCs while IFS= read -r vpc_id; do if ! echo \"$vpcs_with_instances\" | grep -q \"$vpc_id\"; then echo \" [EMPTY] $vpc_id\" empty_vpcs+=(\"$region:$vpc_id\") else echo \" [HAS INSTANCES] $vpc_id\" fi done <<< \"$all_vpcs\" done echo \"\" echo \"Summary of empty VPCs:\" if [ ${#empty_vpcs[@]} -eq 0 ]; then echo \"No empty VPCs found.\" else for vpc_info in \"${empty_vpcs[@]}\"; do echo \"$vpc_info\" done fi"
+      ],
+      "answer": "VPCs with no EC2 instances running\n===================================\n\nThe following VPCs have no EC2 instances running in them:\n\n1. us-west-1: vpc-default\n2. us-west-2: vpc-default\n\nSummary by region:\n- us-east-1: All VPCs have instances (vpc-default, vpc-6cf15223)\n- us-west-1: vpc-default is empty (vpc-36b646f4 has instances)\n- us-west-2: vpc-default is empty (vpc-2aad4a11 has instances)"
+    }
+  }
+}

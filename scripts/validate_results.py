@@ -114,11 +114,24 @@ def check(path: Path) -> list[str]:
     #
     # A run that did not measure the arm is a run that has to happen again, so
     # it is refused here rather than displayed with a caveat.
+    # A crashed trial is a trial the arm did not answer, which is a score rather
+    # than missing data — `pass_rate` is already computed over every trial
+    # including it, so a run carrying one publishes a rate over the run and not
+    # over its survivors. Refusing outright discarded alchemy-effect-h1 at 17/24,
+    # its best result ever, for one trial in twenty-four.
+    #
+    # The share is what matters, matching the audit's own limit. At 1 of 6 the
+    # denominator moves 17% and the rate stops describing the run; at 1 of 24 it
+    # does not. `complete` stays a factual field either way — it says whether
+    # every trial finished, and a record claiming otherwise would be a lie.
+    CRASH_LIMIT = 0.10
     g = r.get("gates")
     if isinstance(g, dict):
         why = []
-        if not g.get("complete"):
-            why.append("not every trial completed")
+        errored = (score or {}).get("errored") if isinstance(score, dict) else None
+        n = (score or {}).get("trials") if isinstance(score, dict) else None
+        if isinstance(errored, int) and isinstance(n, int) and n and errored / n > CRASH_LIMIT:
+            why.append(f"{errored} of {n} trials never completed")
         if not g.get("audit"):
             why.append("the postflight audit failed")
         if g.get("tool_missing"):

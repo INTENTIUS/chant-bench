@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion-negatives",
+  "arm": "alchemy",
+  "tool": {
+    "name": "alchemy",
+    "version": "0.93.12"
+  },
+  "run": {
+    "id": "alchemy-neg-h3",
+    "workspace": "c0e3fe0b95ee",
+    "finished_at": "2026-08-04T23:49:12.003744",
+    "harness_commit": "a6b8acb"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 6,
+    "expected_trials": 6,
+    "completed": 6,
+    "errored": 0,
+    "passed": 4,
+    "pass_rate": 0.6667,
+    "by_task": {
+      "subnets-with-no-network-interfac": [
+        1,
+        1,
+        0
+      ],
+      "vpcs-with-no-running-instances": [
+        0,
+        1,
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 96,
+    "invocations_failed": 1,
+    "failure_rate": 0.0103
+  },
+  "independence": {
+    "account_reads": 22,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 23.33,
+    "turns": 25.33,
+    "wall_seconds": 201.87,
+    "tokens_in": 620536.5,
+    "tokens_out": 6539,
+    "cost_usd": 0.1242,
+    "cost_usd_run": 0.7454
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/alchemy-neg-h3/job.log",
+    "trials": "jobs/alchemy-neg-h3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-alchemy.md",
+    "sha256": "596be04902b9"
+  },
+  "reproduce": "benchmarks/arms/alchemy-ec2-multiregion/REPRODUCE.md"
+}

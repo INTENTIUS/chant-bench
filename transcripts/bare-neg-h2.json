@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "run": "bare-neg-h2",
+  "arm": "bare",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__Dce6wht",
+      "passed": true,
+      "commands": [
+        "aws ec2 describe-subnets --region us-east-1 --output json | jq -r '.Subnets[] | \"\\(.SubnetId)\\t\\(.VpcId)\\t\\(.AvailabilityZone)\"' | sort",
+        "aws ec2 describe-subnets --region us-west-1 --output json | jq -r '.Subnets[] | \"\\(.SubnetId)\\t\\(.VpcId)\\t\\(.AvailabilityZone)\"' | sort",
+        "aws ec2 describe-subnets --region us-west-2 --output json | jq -r '.Subnets[] | \"\\(.SubnetId)\\t\\(.VpcId)\\t\\(.AvailabilityZone)\"' | sort",
+        "aws ec2 describe-network-interfaces --region us-east-1 --output json | jq -r '.NetworkInterfaces[] | .SubnetId' | sort -u",
+        "aws ec2 describe-network-interfaces --region us-west-1 --output json | jq -r '.NetworkInterfaces[] | .SubnetId' | sort -u",
+        "aws ec2 describe-network-interfaces --region us-west-2 --output json | jq -r '.NetworkInterfaces[] | .SubnetId' | sort -u"
+      ],
+      "answer": "Subnets with No Network Interfaces\n===================================\n\nUS-EAST-1 (2 empty subnets):\n  subnet-default-a (vpc-default, us-east-1a)\n  subnet-default-b (vpc-default, us-east-1b)\n\nUS-WEST-1 (3 empty subnets):\n  subnet-default-a (vpc-default, us-west-1a)\n  subnet-default-b (vpc-default, us-west-1b)\n  subnet-default-c (vpc-default, us-west-1c)\n\nUS-WEST-2 (3 empty subnets):\n  subnet-default-a (vpc-default, us-west-2a)\n  subnet-default-b (vpc-default, us-west-2b)\n  subnet-default-c (vpc-default, us-west-2c)\n\nTOTAL: 8 empty subnets across all regions"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__MTosYse",
+      "passed": true,
+      "commands": [
+        "aws ec2 describe-vpcs --region us-east-1 --output json | jq -r '.Vpcs[] | \"\\(.VpcId) \\(.CidrBlock)\"'",
+        "aws ec2 describe-vpcs --region us-west-1 --output json | jq -r '.Vpcs[] | \"\\(.VpcId) \\(.CidrBlock)\"'",
+        "aws ec2 describe-vpcs --region us-west-2 --output json | jq -r '.Vpcs[] | \"\\(.VpcId) \\(.CidrBlock)\"'",
+        "aws ec2 describe-instances --region us-east-1 --output json | jq -r '.Reservations[].Instances[] | .VpcId' | sort | uniq",
+        "aws ec2 describe-instances --region us-west-1 --output json | jq -r '.Reservations[].Instances[] | .VpcId' | sort | uniq",
+        "aws ec2 describe-instances --region us-west-2 --output json | jq -r '.Reservations[].Instances[] | .VpcId' | sort | uniq"
+      ],
+      "answer": "VPCs with NO EC2 instances running:\n\nus-west-1:\n  - vpc-default (172.31.0.0/16)\n\nus-west-2:\n  - vpc-default (172.31.0.0/16)\n\nSummary:\n--------\nRegion     VPC ID           CIDR Block       Instances\n--------   -------          ----------       ---------\nus-east-1  vpc-default      172.31.0.0/16    YES (has instances)\nus-east-1  vpc-5d558fdd     10.0.0.0/16      YES (has instances)\nus-west-1  vpc-default      172.31.0.0/16    NO\nus-west-1  vpc-0a49865d     10.0.0.0/16      YES (has instances)\nus-west-2  vpc-a5852859     10.0.0.0/16      YES (has instances)\nus-west-2  vpc-default      172.31.0.0/16    NO\n\nTotal VPCs scanned: 6\nVPCs with no instances: 2"
+    }
+  }
+}
