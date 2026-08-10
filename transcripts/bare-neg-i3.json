@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "run": "bare-neg-i3",
+  "arm": "bare",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__bkaFyP7",
+      "passed": true,
+      "commands": [
+        "aws ec2 describe-subnets --region us-east-1 --output json | jq -r '.Subnets[] | \"\\(.SubnetId) \\(.AvailabilityZone) \\(.VpcId)\"' | sort",
+        "aws ec2 describe-subnets --region us-west-1 --output json | jq -r '.Subnets[] | \"\\(.SubnetId) \\(.AvailabilityZone) \\(.VpcId)\"' | sort",
+        "aws ec2 describe-subnets --region us-west-2 --output json | jq -r '.Subnets[] | \"\\(.SubnetId) \\(.AvailabilityZone) \\(.VpcId)\"' | sort",
+        "aws ec2 describe-network-interfaces --region us-east-1 --output json | jq -r '.NetworkInterfaces[] | \"\\(.SubnetId)\"' | sort -u",
+        "aws ec2 describe-network-interfaces --region us-west-1 --output json | jq -r '.NetworkInterfaces[] | \"\\(.SubnetId)\"' | sort -u",
+        "aws ec2 describe-network-interfaces --region us-west-2 --output json | jq -r '.NetworkInterfaces[] | \"\\(.SubnetId)\"' | sort -u"
+      ],
+      "answer": "Subnets with No Network Interfaces\n===================================\n\nUS-EAST-1 (2 empty subnets):\n  - subnet-default-a (vpc-default, us-east-1a)\n  - subnet-default-b (vpc-default, us-east-1b)\n\nUS-WEST-1 (3 empty subnets):\n  - subnet-default-a (vpc-default, us-west-1a)\n  - subnet-default-b (vpc-default, us-west-1b)\n  - subnet-default-c (vpc-default, us-west-1c)\n\nUS-WEST-2 (3 empty subnets):\n  - subnet-default-a (vpc-default, us-west-2a)\n  - subnet-default-b (vpc-default, us-west-2b)\n  - subnet-default-c (vpc-default, us-west-2c)\n\nSummary: 8 subnets across all regions have no network interfaces"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__R8oG3bR",
+      "passed": true,
+      "commands": [
+        "# Get all VPCs and instances in each region for region in us-east-1 us-west-1 us-west-2; do echo \"=== Region: $region ===\" echo \"VPCs:\" aws ec2 describe-vpcs --region $region --output json | jq -r '.Vpcs[] | \"\\(.VpcId) \\(.CidrBlock)\"' echo \"\" echo \"Instances by VPC:\" aws ec2 describe-instances --region $region --output json --query 'Reservations[].Instances[].{InstanceId:InstanceId,VpcId:VpcId,State:State.Name}' | jq -r '.[] | \"\\(.InstanceId) (VPC: \\(.VpcId), State: \\(.State))\"' echo \"\" done"
+      ],
+      "answer": "VPCs with No EC2 Instances Running\n===================================\n\nus-west-1:\n  - vpc-default (172.31.0.0/16)\n\nus-west-2:\n  - vpc-default (172.31.0.0/16)\n\nSummary:\n--------\n- us-east-1: All VPCs have instances\n  * vpc-default (172.31.0.0/16): 1 instance\n  * vpc-9db1ce60 (10.0.0.0/16): 3 instances\n\n- us-west-1: 1 VPC with no instances\n  * vpc-f8f29d71 (10.0.0.0/16): 1 instance\n  * vpc-default (172.31.0.0/16): 0 instances [EMPTY]\n\n- us-west-2: 1 VPC with no instances\n  * vpc-081a956d (10.0.0.0/16): 1 instance\n  * vpc-default (172.31.0.0/16): 0 instances [EMPTY]"
+    }
+  }
+}

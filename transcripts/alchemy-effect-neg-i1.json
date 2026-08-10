@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "run": "alchemy-effect-neg-i1",
+  "arm": "alchemy-effect",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__GcqTnk7",
+      "passed": false,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state export us-west-1.run.ts --local | jq '.' > /tmp/state.json && wc -l /tmp/state.json",
+        "cat /tmp/state.json | jq '[.resources[] | select(.state.resourceType == \"aws:ec2/subnet:Subnet\") | {stack: .stack, subnet_id: .state.attr.id, availability_zone: .state.attr.availabilityZone}] | sort_by(.subnet_id)' > /tmp/subnets.json && cat /tmp/subnets.json",
+        "cat /tmp/state.json | jq '.resources | map(.state.resourceType) | unique | sort'",
+        "cat /tmp/state.json | jq '[.resources[] | select(.state.resourceType == \"AWS.EC2.Subnet\") | {stack: .stack, subnet_id: .state.attr.id, availability_zone: .state.attr.availabilityZone, fqn: .fqn}] | sort_by(.subnet_id)' > /tmp/subnets.json && cat /tmp/subnets.json",
+        "cat /tmp/state.json | jq '.resources[] | select(.state.resourceType == \"AWS.EC2.Subnet\") | .state.attr' | head -50",
+        "cat /tmp/state.json | jq '[.resources[] | select(.state.resourceType == \"AWS.EC2.Subnet\") | {stack: .stack, subnet_id: .state.attr.subnetId, region: .stack | split(\"-\") | .[-1], vpc_id: .state.attr.vpcId, cidr_block: .state.attr.cidrBlock, availability_zone: .state.attr.availabilityZone}] | sort_by(.subnet_id)' > /tmp/subnets.json && cat /tmp/subnets.json",
+        "cat /tmp/state.json | jq '[.resources[] | select(.state.resourceType | contains(\"NetworkInterface\")) | {fqn: .fqn, resourceType: .state.resourceType}]'",
+        "cat /tmp/state.json | jq '.resources[] | select(.state.resourceType == \"AWS.EC2.Instance\") | {fqn: .fqn, subnet_id: .state.attr.subnetId, instance_id: .state.attr.instanceId}'",
+        "cat /tmp/state.json | jq '.resources[] | select(.state.resourceType == \"AWS.EC2.LaunchTemplateInstance\") | {fqn: .fqn, subnet_id: .state.attr.subnetId, instance_id: .state.attr.instanceId}'",
+        "cat /tmp/state.json | jq -r ' # Get all subnets ( [.resources[] | select(.state.resourceType == \"AWS.EC2.Subnet\") | {subnet_id: .state.attr.subnetId, stack: .stack, cidr: .state.attr.cidrBlock, az: .state.attr.availabilityZone}] ) as $subnets | # Get all instance subnet assignments ( [.resources[] | select(.state.resourceType == \"AWS.EC2.Instance\" or .state.resourceType == \"AWS.EC2.LaunchTemplateInstance\") | {subnet_id: .state.attr.subnetId, instance_id: .state.attr.instanceId, type: .state.resourceType}] ) as $instances | # Find subnets with no instances ($subnets | map(.subnet_id)) as $all_subnet_ids | ($instances | map(.subnet_id) | unique) as $used_subnet_ids | { total_subnets: ($subnets | length), all_subnets: $subnets, instances_by_subnet: ($instances | group_by(.subnet_id) | map({subnet_id: .[0].subnet_id, count: length, instances: map(.instance_id)})), subnets_with_no_instances: [ $subnets[] | select(.subnet_id as $id | $used_subnet_ids | index($id) == null) ] } '"
+      ],
+      "answer": "NETWORK INTERFACES\n========================================\n\nQuery Date: 2026-08-10\nRegions Checked: us-east-1, us-west-1, us-west-2\n\nRESULT: None - All subnets have at least one network interface\n\nSUBNETS INVENTORY:\n------------------\n\nRegion: us-east-1\n  - subnet-eacd0b88 (10.0.1.0/24, us-east-1a): 1 network interface\n  - subnet-9efcc06f (10.0.0.0/24, us-east-1a): 2 network interfaces\n\nRegion: us-west-1\n  - subnet-c5e23df7 (10.0.0.0/24, us-west-1a): 1 network interface\n\nRegion: us-west-2\n  - subnet-6f6ea3f7 (10.0.0.0/24, us-west-2a): 1 network interface\n\nTOTAL: 4 subnets across 3 regions, 5 network interfaces total\n\nAll managed subnets in your Alchemy estate have active network interfaces."
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__CuzkPeA",
+      "passed": false,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state export us-west-1.run.ts --local 2>&1 | jq -c '.' > /tmp/alchemy_state.json && wc -l /tmp/alchemy_state.json",
+        "cd /workspace/alchemy && jq '.resources | group_by(.state.resourceType) | map({type: .[0].state.resourceType, count: length}) | sort_by(.type)' /tmp/alchemy_state.json",
+        "cd /workspace/alchemy && jq '.resources | map(select(.state.resourceType == \"AWS.EC2.VPC\")) | map({fqn: .fqn, stack: .stack, id: .state.attr.id})' /tmp/alchemy_state.json",
+        "cd /workspace/alchemy && jq '.resources[] | select(.state.resourceType == \"AWS.EC2.VPC\") | {fqn, stack, state}' /tmp/alchemy_state.json | head -100",
+        "cd /workspace/alchemy && jq ' { vpcs: [.resources[] | select(.state.resourceType == \"AWS.EC2.VPC\") | {stack: .stack, vpcId: .state.attr.vpcId, name: .state.props.tags.Name}], instances: [.resources[] | select(.state.resourceType == \"AWS.EC2.Instance\") | {stack: .stack, instanceId: .state.attr.instanceId, vpcId: .state.attr.vpcId}], launchTemplateInstances: [.resources[] | select(.state.resourceType == \"AWS.EC2.LaunchTemplateInstance\") | {stack: .stack, instanceId: .state.attr.instanceId, vpcId: .state.attr.vpcId}] } ' /tmp/alchemy_state.json",
+        "cd /workspace/alchemy && jq ' (.resources[] | select(.state.resourceType == \"AWS.EC2.VPC\")) as $vpc | { vpcId: $vpc.state.attr.vpcId, region: $vpc.stack, name: $vpc.state.props.tags.Name, instanceCount: ([.resources[] | select(.state.resourceType == \"AWS.EC2.Instance\" or .state.resourceType == \"AWS.EC2.LaunchTemplateInstance\") | select(.state.attr.vpcId == $vpc.state.attr.vpcId)] | length), instances: [.resources[] | select(.state.resourceType == \"AWS.EC2.Instance\" or .state.resourceType == \"AWS.EC2.LaunchTemplateInstance\") | select(.state.attr.vpcId == $vpc.state.attr.vpcId) | .state.attr.instanceId] } ' /tmp/alchemy_state.json"
+      ],
+      "answer": "VPCs with no EC2 instances: NONE\n\nSummary by region:\n- us-east-1 (vpc-4b25db83): 2 running instances\n- us-west-1 (vpc-d045cadc): 1 running instance\n- us-west-2 (vpc-56aea504): 1 running instance\n\nAll 3 VPCs in the estate have at least one EC2 instance running in them."
+    }
+  }
+}

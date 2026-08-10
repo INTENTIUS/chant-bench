@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "run": "pulumi-neg-i2",
+  "arm": "pulumi",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__TzC4dEz",
+      "passed": true,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/subnet:Subnet\") | {urn, outputs}' | head -100",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/subnet:Subnet\") | {name: .urn, subnet_id: .outputs.id, region: .outputs.arn | split(\":\")[3], az: .outputs.availabilityZone}' > /tmp/subnets.json && cat /tmp/subnets.json",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/networkInterface:NetworkInterface\") | {eni_id: .outputs.id, subnet_id: .outputs.subnetId, region: .outputs.arn | split(\":\")[3]}'",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {instance_id: .outputs.id, subnet_id: .outputs.subnetId, region: .outputs.arn | split(\":\")[3]}'",
+        "aws ec2 describe-regions --region-names us-east-1 us-west-1 us-west-2 --query 'Regions[].RegionName' 2>&1 | head -20",
+        "aws ec2 describe-subnets --region us-east-1 2>&1 | head -20",
+        "for region in us-east-1 us-west-1 us-west-2; do echo \"=== Region: $region ===\" aws ec2 describe-subnets --region $region --query 'Subnets[*].[SubnetId,VpcId,State]' --output text done",
+        "# Get all subnets and check for network interfaces in each for region in us-east-1 us-west-1 us-west-2; do echo \"=== Region: $region ===\" subnets=$(aws ec2 describe-subnets --region $region --query 'Subnets[*].SubnetId' --output text) for subnet in $subnets; do eni_count=$(aws ec2 describe-network-interfaces --region $region --filters \"Name=subnet-id,Values=$subnet\" --query 'length(NetworkInterfaces)' --output text) echo \"$subnet: $eni_count network interfaces\" done done",
+        "# Create a comprehensive report of empty subnets cat > /tmp/empty_subnets.txt << 'EOF' SUBNETS WITH NO NETWORK INTERFACES =================================== EOF for region in us-east-1 us-west-1 us-west-2; do echo \"Region: $region\" >> /tmp/empty_subnets.txt echo \"==================\" >> /tmp/empty_subnets.txt subnets=$(aws ec2 describe-subnets --region $region --query 'Subnets[*].[SubnetId,VpcId,CidrBlock,State]' --output text) while IFS=$'\\t' read -r subnet_id vpc_id cidr state; do eni_count=$(aws ec2 describe-network-interfaces --region $region --filters \"Name=subnet-id,Values=$subnet_id\" --query 'length(NetworkInterfaces)' --output text) if [ \"$eni_count\" -eq 0 ]; then echo \" - $subnet_id (VPC: $vpc_id, CIDR: $cidr, State: $state)\" >> /tmp/empty_subnets.txt fi done <<< \"$subnets\" echo \"\" >> /tmp/empty_subnets.txt done cat /tmp/empty_subnets.txt"
+      ],
+      "answer": "t-default-b (VPC: vpc-default, CIDR: 172.31.16.0/20, State: available)\n\nRegion: us-west-2\n==================\n  - subnet-default-a (VPC: vpc-default, CIDR: 172.31.0.0/20, State: available)\n  - subnet-default-b (VPC: vpc-default, CIDR: 172.31.16.0/20, State: available)\n  - subnet-default-c (VPC: vpc-default, CIDR: 172.31.32.0/20, State: available)\n\nSUMMARY\n=======\nTotal subnets with no network interfaces: 8\n\nAll empty subnets belong to the vpc-default VPC (AWS default VPC in each region).\nAll Pulumi-managed subnets have network interfaces:\n  - subnet-4bd0e3e6 (us-east-1): 1 ENI\n  - subnet-c7156e1a (us-east-1): 2 ENIs\n  - subnet-08094c1d (us-west-1): 1 ENI\n  - subnet-652c6bc7 (us-west-2): 1 ENI"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__55sRooN",
+      "passed": false,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/vpc:Vpc\" or .type == \"aws:ec2/instance:Instance\") | {type, urn, outputs, inputs}' > /tmp/resources.json && cat /tmp/resources.json",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/subnet:Subnet\") | {id: .outputs.id, vpcId: .outputs.vpcId, arn: .outputs.arn, tags: .outputs.tags}'",
+        "cd /workspace/pulumi && ./pulumi-export | jq ' { vpcs: [.deployment.resources[] | select(.type == \"aws:ec2/vpc:Vpc\") | {name: .urn | split(\"::\")[3], id: .outputs.id, region: .outputs.arn | split(\":\")[3]}], subnets: [.deployment.resources[] | select(.type == \"aws:ec2/subnet:Subnet\") | {id: .outputs.id, vpcId: .outputs.vpcId}], instances: [.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {name: .urn | split(\"::\")[3], subnetId: .outputs.subnetId}] } '"
+      ],
+      "answer": "HAS INSTANCES: usw2-server\n\n2. vpc-b059c9af (usw1-vpc, us-west-1)\n   \u2713 HAS INSTANCES: usw1-server\n\n3. vpc-a894bedf (vpc, us-east-1)\n   \u2713 HAS INSTANCES: privateServer, webServer, ltServer\n\nMETHODOLOGY\n-----------\n- Queried Pulumi exported state for all aws:ec2/vpc:Vpc resources (3 found)\n- Queried Pulumi exported state for all aws:ec2/subnet:Subnet resources (4 found)\n- Queried Pulumi exported state for all aws:ec2/instance:Instance resources (6 found)\n- Mapped instances to VPCs via subnet relationships\n- Verified each VPC contains at least one instance\n\nNote: One EC2 instance (defaultVpcServer) uses the AWS default VPC (subnet-default-c),\nwhich is not a managed resource in the Pulumi state."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "run": "chant-neg-i3",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__33rimBf",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --explain --show region"
+      ],
+      "answer": "INTERFACES\n===================================\n\nThe following 8 subnets have no network interfaces attached to them:\n\nus-east-1:\n  - subnet-default-a\n  - subnet-default-b\n\nus-west-1:\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nus-west-2:\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nAll of these subnets are AWS-managed default VPC subnets. The query checked all 13 subnets\nacross the managed estate in all available regions (us-east-1, us-west-1, us-west-2).\n\nThe other 5 subnets in the estate (privateSubnet and 4 publicSubnet instances) all have\nat least one network interface attached.\n\nData source: AWS estate state snapshot taken 2026-08-10T08:01:06.932Z"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__7cpQsjS",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Vpc\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --show VpcId,InstanceState.Name,region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Vpc\" --at latest --env floci --show region"
+      ],
+      "answer": "VPCs with no EC2 instances running\n====================================\n\nBased on the recorded estate state (snapshot 434f30c from 2026-08-10T08:01:06.932Z), the following VPCs have no running EC2 instances:\n\n1. vpc-default (physical ID: vpc-default) in us-west-1\n2. vpc-default (physical ID: vpc-default) in us-west-2\n\nSummary:\n--------\nTotal VPCs: 6\n- vpc-1ff33015 (us-east-1): 3 instances\n- vpc-50185bd0 (us-west-1): 1 instance\n- vpc-32abd0ef (us-west-2): 1 instance\n- vpc-default (us-east-1): 1 instance\n- vpc-default (us-west-1): 0 instances \u2190 EMPTY\n- vpc-default (us-west-2): 0 instances \u2190 EMPTY\n\nRegions checked: us-east-1, us-west-1, us-west-2"
+    }
+  }
+}

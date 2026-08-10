@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion-negatives",
+  "arm": "alchemy-effect",
+  "tool": {
+    "name": "alchemy",
+    "version": "2.0.0-beta.70"
+  },
+  "run": {
+    "id": "alchemy-effect-neg-i3",
+    "workspace": "af3115c80ba1",
+    "finished_at": "2026-08-10T03:59:20.898346",
+    "harness_commit": "e8c259c",
+    "emulator": "ghcr.io/lex00/floci@sha256:b265bf7ccf7c6dd58360acf588451be3929a6902c2611fbab53776f65e5e299d"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 6,
+    "expected_trials": 6,
+    "completed": 6,
+    "errored": 0,
+    "passed": 1,
+    "pass_rate": 0.1667,
+    "by_task": {
+      "subnets-with-no-network-interfac": [
+        0,
+        0,
+        0
+      ],
+      "vpcs-with-no-running-instances": [
+        0,
+        1,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 12,
+    "invocations_failed": 2,
+    "failure_rate": 0.1429
+  },
+  "independence": {
+    "account_reads": 2,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 11.67,
+    "turns": 14.17,
+    "wall_seconds": 76.41,
+    "tokens_in": 404892.5,
+    "tokens_out": 4564.33,
+    "cost_usd": 0.0837,
+    "cost_usd_run": 0.5022
+  },
+  "logs": {
+    "run": null,
+    "job": "jobs/alchemy-effect-neg-i3/job.log",
+    "trials": "jobs/alchemy-effect-neg-i3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-alchemy-effect.md",
+    "sha256": "fddba9c087d1"
+  },
+  "reproduce": "benchmarks/arms/alchemy-effect-ec2-multiregion/REPRODUCE.md"
+}

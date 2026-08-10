@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "cdk",
+  "tool": {
+    "name": "aws-cdk",
+    "version": "2.1131.0"
+  },
+  "run": {
+    "id": "cdk-i1",
+    "workspace": "937a149fb832",
+    "finished_at": "2026-08-10T04:12:35.914493",
+    "harness_commit": "e8c259c",
+    "emulator": "ghcr.io/lex00/floci@sha256:b265bf7ccf7c6dd58360acf588451be3929a6902c2611fbab53776f65e5e299d"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 16,
+    "pass_rate": 0.6667,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        1,
+        1,
+        1
+      ],
+      "ec-instances-without-default-vpc": [
+        1,
+        0,
+        1
+      ],
+      "find-ec-instances-in-public-subn": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-ec-instances-all-regions-1": [
+        0,
+        0,
+        0
+      ],
+      "list-ec-instances-by-vpc-across": [
+        0,
+        1,
+        1
+      ],
+      "list-ec-private-ips-all-regions": [
+        1,
+        1,
+        1
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 139,
+    "invocations_failed": 2,
+    "failure_rate": 0.0142
+  },
+  "independence": {
+    "account_reads": 75,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 11.21,
+    "turns": 13.12,
+    "wall_seconds": 145.62,
+    "tokens_in": 343395.67,
+    "tokens_out": 5754.83,
+    "cost_usd": 0.0853,
+    "cost_usd_run": 2.047
+  },
+  "logs": {
+    "run": "jobs/cdk-i1/run-arm.log",
+    "job": "jobs/cdk-i1/job.log",
+    "trials": "jobs/cdk-i1/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-cdk.md",
+    "sha256": "f4b4c7082924"
+  },
+  "reproduce": "benchmarks/arms/cdk_app/REPRODUCE.md"
+}

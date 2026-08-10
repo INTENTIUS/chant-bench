@@ -57,17 +57,17 @@ environment its agent was given.
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-bare">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-cdk">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-alchemy">
+<input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-pulumi">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-alchemy-effect">
 <input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-terraform">
-<input class="cb-pick" type="radio" name="cb-arm" id="cb-arm-pulumi">
 <ul class="cb-board">
-<li><label class="cb-board-row" for="cb-arm-chant"><span class="cb-rank">1</span><span class="cb-who"><span class="cb-who-name">chant</span><span class="cb-who-sub">6 · 6 · 5 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:3.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$2.55</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-bare"><span class="cb-rank">2</span><span class="cb-who"><span class="cb-who-name">No tool (AWS CLI)</span><span class="cb-who-sub">5 · 5 · 6 of 6 <span class="cb-tag">baseline · no tooling</span></span></span><span class="cb-track"><span class="cb-fill" style="width:5.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$3.89</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-cdk"><span class="cb-rank">3</span><span class="cb-who"><span class="cb-who-name">AWS CDK</span><span class="cb-who-sub">3 · 5 · 5 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:16.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$11.92</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-alchemy"><span class="cb-rank">4</span><span class="cb-who"><span class="cb-who-name">Alchemy</span><span class="cb-who-sub">4 · 3 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:28.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$21.22</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-alchemy-effect"><span class="cb-rank">5</span><span class="cb-who"><span class="cb-who-name">Alchemy v2 (Effect)</span><span class="cb-who-sub">2/6 correct</span></span><span class="cb-track"><span class="cb-fill" style="width:52.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$38.58</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-terraform"><span class="cb-rank">6</span><span class="cb-who"><span class="cb-who-name">Terraform</span><span class="cb-who-sub">0 · 0 · 1 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$73.61</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
-<li><label class="cb-board-row" for="cb-arm-pulumi"><span class="cb-rank">7</span><span class="cb-who"><span class="cb-who-name">Pulumi</span><span class="cb-who-sub">0 · 0 · 0 of 6</span></span><span class="cb-track"></span><span class="cb-board-value">—</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-chant"><span class="cb-rank">1</span><span class="cb-who"><span class="cb-who-name">chant</span><span class="cb-who-sub">6 · 6 · 6 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:3.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$2.49</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-bare"><span class="cb-rank">2</span><span class="cb-who"><span class="cb-who-name">No tool (AWS CLI)</span><span class="cb-who-sub">4 · 5 · 6 of 6 <span class="cb-tag">baseline · no tooling</span></span></span><span class="cb-track"><span class="cb-fill" style="width:4.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$3.51</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-cdk"><span class="cb-rank">3</span><span class="cb-who"><span class="cb-who-name">AWS CDK</span><span class="cb-who-sub">5 · 2 · 5 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:16.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$12.61</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-alchemy"><span class="cb-rank">4</span><span class="cb-who"><span class="cb-who-name">Alchemy</span><span class="cb-who-sub">4 · 3 · 4 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:25.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$18.63</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-pulumi"><span class="cb-rank">5</span><span class="cb-who"><span class="cb-who-name">Pulumi</span><span class="cb-who-sub">0 · 0 · 1 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:58.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$43.73</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-alchemy-effect"><span class="cb-rank">6</span><span class="cb-who"><span class="cb-who-name">Alchemy v2 (Effect)</span><span class="cb-who-sub">1 · 0 · 0 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:67.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$50.21</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
+<li><label class="cb-board-row" for="cb-arm-terraform"><span class="cb-rank">7</span><span class="cb-who"><span class="cb-who-name">Terraform</span><span class="cb-who-sub">0 · 0 · 1 of 6</span></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-board-value">$74.51</span><span class="cb-chev" aria-hidden="true">&rsaquo;</span></label></li>
 </ul>
 <div class="cb-panelsets">
 <div class="cb-panelset">
@@ -75,46 +75,46 @@ environment its agent was given.
 <h3 class="cb-mpanel-title">Pass rate by question</h3>
 <p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
 <div class="cb-mrows">
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10003; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: No tool (AWS CLI) 2/3, AWS CDK 0/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10003; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: No tool (AWS CLI) 3/3, AWS CDK 3/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10003; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: No tool (AWS CLI) 2/3, AWS CDK 2/3, Alchemy 2/3, Pulumi 0/3, Alchemy v2 (Effect) 0/3, Terraform 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10003; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: No tool (AWS CLI) 2/3, AWS CDK 3/3, Alchemy 2/3, Pulumi 0/3, Alchemy v2 (Effect) 1/3, Terraform 0/3.</p></div></details>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
 <p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:6.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:10.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0389</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:41.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1600</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:5.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:7.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0351</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:33.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1700</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:18.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:24.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0324</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:18.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0234</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:15.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">96,862</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:18.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">114,158</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:59.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">370,831</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:14.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">97,228</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:12.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">85,040</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:53.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">360,870</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">1,547</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2,359</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,943</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:23.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">1,707</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:24.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,780</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:64.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,585</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Work per answer</h3>
 <p class="cb-mpanel-note">What the agent had to do to get there.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:8.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">2</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:17.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4.17</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:50.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.79</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:8.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">2</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:15.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">3.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:52.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.93</span></div>
 <div class="cb-mpanel-sub">turns</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:15.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:23.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">6</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:55.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.02</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:16.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:20.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">5.17</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:56.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.1</span></div>
 <div class="cb-mpanel-sub">clock time</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:7.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">24s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), runner up</span><span class="cb-track"><span class="cb-fill" style="width:9.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">31s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:39.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">125s</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"><span class="cb-fill" style="width:18.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">26s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:16.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">23s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:57.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">81s</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Independence</h3>
@@ -123,21 +123,21 @@ environment its agent was given.
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">chant</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:44.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">9.86</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:23.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">15</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
 <p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
-<dt>run</dt><dd><code>chant-neg-h3</code></dd>
+<dt>run</dt><dd><code>chant-neg-i3</code></dd>
 <dt>tool under test</dt><dd><code>@intentius/chant</code> <b>0.41.0</b></dd>
-<dt>what the run cost</dt><dd><b>$0.1424</b> — 6 questions at $0.0237 each</dd>
+<dt>what the run cost</dt><dd><b>$0.1495</b> — 6 questions at $0.0249 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/chant</code></dd>
-<dt>harness</dt><dd><code>a6b8acb</code></dd>
+<dt>harness</dt><dd><code>e8c259c</code></dd>
 <dt>briefing</dt><dd><code>briefing-chant-snapshot.md</code> · <code>9ce3707f885e</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh chant</code></p>
@@ -255,69 +255,69 @@ attribute:
 <h3 class="cb-mpanel-title">Pass rate by question</h3>
 <p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
 <div class="cb-mrows">
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10003; &#10003; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, AWS CDK 0/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10003; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, AWS CDK 3/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10007; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, AWS CDK 2/3, Alchemy 2/3, Pulumi 0/3, Alchemy v2 (Effect) 0/3, Terraform 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10003; &#10007; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, AWS CDK 3/3, Alchemy 2/3, Pulumi 0/3, Alchemy v2 (Effect) 1/3, Terraform 0/3.</p></div></details>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
 <p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:10.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0389</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:6.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:41.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1600</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:7.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0351</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:5.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:33.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1700</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:24.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0324</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:18.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:18.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0234</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, runner up</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:18.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">114,158</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">96,862</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:59.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">370,831</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:12.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">85,040</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, runner up</span><span class="cb-track"><span class="cb-fill" style="width:14.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">97,228</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:53.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">360,870</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:29.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">2,359</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,547</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,943</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:24.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">1,780</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:23.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,707</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:64.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,585</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Work per answer</h3>
 <p class="cb-mpanel-note">What the agent had to do to get there.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:17.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4.17</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:50.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.79</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:15.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">3.5</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:52.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.93</span></div>
 <div class="cb-mpanel-sub">turns</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:23.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">6</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:55.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.02</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:20.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5.17</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:16.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:56.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.1</span></div>
 <div class="cb-mpanel-sub">clock time</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:9.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">31s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:7.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">24s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:39.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">125s</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:16.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">23s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, runner up</span><span class="cb-track"><span class="cb-fill" style="width:18.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">26s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:57.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">81s</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Independence</h3>
 <p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads <em>by design</em></div>
-<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:90.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">20</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">No tool (AWS CLI)</span><span class="cb-track"><span class="cb-fill" style="width:26.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">17</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:44.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">9.86</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:23.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">15</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
 <p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
-<dt>run</dt><dd><code>bare-neg-h3</code></dd>
+<dt>run</dt><dd><code>bare-neg-i3</code></dd>
 <dt>tool under test</dt><dd><code>aws-cli</code> <b>2.36.14</b></dd>
-<dt>what the run cost</dt><dd><b>$0.1941</b> — 6 questions at $0.0324 each</dd>
+<dt>what the run cost</dt><dd><b>$0.1405</b> — 6 questions at $0.0234 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/bare</code></dd>
-<dt>harness</dt><dd><code>a6b8acb</code></dd>
+<dt>harness</dt><dd><code>e8c259c</code></dd>
 <dt>briefing</dt><dd><code>briefing-bare.md</code> · <code>166c7534c252</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh bare</code></p>
@@ -360,69 +360,69 @@ Path to estate facts, in order:
 <h3 class="cb-mpanel-title">Pass rate by question</h3>
 <p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
 <div class="cb-mrows">
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10003; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 3/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10007; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, Alchemy 2/3, Pulumi 0/3, Alchemy v2 (Effect) 0/3, Terraform 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">3/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10003; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, Alchemy 2/3, Pulumi 0/3, Alchemy v2 (Effect) 1/3, Terraform 0/3.</p></div></details>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
 <p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:37.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1438</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:6.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:41.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1600</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:21.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1092</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:5.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:33.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1700</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:54.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0719</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:18.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:70.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0910</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:18.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0234</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:47.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">293,382</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">96,862</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:59.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">370,831</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:62.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">418,551</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:12.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">85,040</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:53.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">360,870</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:64.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5,137</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,547</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,943</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:84.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">6,015</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:23.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,707</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:64.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,585</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Work per answer</h3>
 <p class="cb-mpanel-note">What the agent had to do to get there.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:50.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">11.67</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:50.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.79</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:77.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">17.67</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:52.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.93</span></div>
 <div class="cb-mpanel-sub">turns</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:54.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">13.83</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:55.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.02</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:77.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">19.33</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:16.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:56.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.1</span></div>
 <div class="cb-mpanel-sub">clock time</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:48.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">151s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:7.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">24s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:39.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">125s</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:98.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">140s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:16.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">23s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:57.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">81s</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Independence</h3>
 <p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads <em>by design</em></div>
-<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:90.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">20</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">AWS CDK</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">64</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:44.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">9.86</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:23.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">15</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
 <p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
-<dt>run</dt><dd><code>cdk-neg-h3</code></dd>
+<dt>run</dt><dd><code>cdk-neg-i1</code></dd>
 <dt>tool under test</dt><dd><code>aws-cdk</code> <b>2.1131.0</b></dd>
-<dt>what the run cost</dt><dd><b>$0.4314</b> — 6 questions at $0.0719 each</dd>
+<dt>what the run cost</dt><dd><b>$0.5458</b> — 6 questions at $0.0910 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/cdk</code></dd>
-<dt>harness</dt><dd><code>a6b8acb</code></dd>
+<dt>harness</dt><dd><code>e8c259c</code></dd>
 <dt>briefing</dt><dd><code>briefing-cdk.md</code> · <code>f4b4c7082924</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh cdk</code></p>
@@ -482,69 +482,69 @@ Path to estate facts, in order:
 <h3 class="cb-mpanel-title">Pass rate by question</h3>
 <p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
 <div class="cb-mrows">
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10003; &#10003; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 0/3, Alchemy v2 (Effect) 1/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10007; &#10003; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 3/3, AWS CDK 3/3, Alchemy v2 (Effect) 1/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10003; &#10007; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 2/3, Pulumi 0/3, Alchemy v2 (Effect) 0/3, Terraform 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:66.7%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">2/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10003; &#10007; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 3/3, Pulumi 0/3, Alchemy v2 (Effect) 1/3, Terraform 0/3.</p></div></details>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
 <p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:48.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1863</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:6.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:41.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1600</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:38.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1939</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:5.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:33.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1700</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:94.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1242</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:18.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1293</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:18.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0234</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">620,536</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">96,862</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:59.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">370,831</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">671,242</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:12.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">85,040</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:53.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">360,870</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:81.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">6,539</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,547</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,943</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:93.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">6,690</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:23.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,707</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:64.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,585</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Work per answer</h3>
 <p class="cb-mpanel-note">What the agent had to do to get there.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">23.33</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:50.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.79</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">22.67</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:52.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.93</span></div>
 <div class="cb-mpanel-sub">turns</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">25.33</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:55.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.02</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">24.83</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:16.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:56.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.1</span></div>
 <div class="cb-mpanel-sub">clock time</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:64.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">202s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:7.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">24s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:39.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">125s</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">141s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:16.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">23s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:57.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">81s</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Independence</h3>
 <p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">22</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy</span><span class="cb-track"><span class="cb-fill" style="width:34.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">22</span></div>
 <div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:44.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">9.86</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:23.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">15</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
 <p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
-<dt>run</dt><dd><code>alchemy-neg-h3</code></dd>
+<dt>run</dt><dd><code>alchemy-neg-i3</code></dd>
 <dt>tool under test</dt><dd><code>alchemy</code> <b>0.93.12</b></dd>
-<dt>what the run cost</dt><dd><b>$0.7454</b> — 6 questions at $0.1242 each</dd>
+<dt>what the run cost</dt><dd><b>$0.7761</b> — 6 questions at $0.1293 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/alchemy</code></dd>
-<dt>harness</dt><dd><code>a6b8acb</code></dd>
+<dt>harness</dt><dd><code>e8c259c</code></dd>
 <dt>briefing</dt><dd><code>briefing-alchemy.md</code> · <code>596be04902b9</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh alchemy</code></p>
@@ -602,248 +602,8 @@ Path to estate facts, in order:
 <h3 class="cb-mpanel-title">Pass rate by question</h3>
 <p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
 <div class="cb-mrows">
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"><span class="cb-fill" style="width:33.3%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">1/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10003; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 0/3, Alchemy 2/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:33.3%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">1/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10007; &#10007; &#10003;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 3/3, AWS CDK 3/3, Alchemy 2/3, Terraform 0/3, Pulumi 0/3.</p></div></details>
-</div></section>
-<section class="cb-mpanel">
-<h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
-<div class="cb-mrows">
-<div class="cb-mpanel-sub">per correct answer</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.3858</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:6.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:41.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1600</span></div>
-<div class="cb-mpanel-sub">per question asked</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:97.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1286</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:18.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
-<div class="cb-mpanel-sub">tokens in</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:97.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">606,551</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">96,862</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:59.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">370,831</span></div>
-<div class="cb-mpanel-sub">tokens out</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">8,017</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,547</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,943</span></div>
-</div></section>
-<section class="cb-mpanel">
-<h3 class="cb-mpanel-title">Work per answer</h3>
-<p class="cb-mpanel-note">What the agent had to do to get there.</p>
-<div class="cb-mrows">
-<div class="cb-mpanel-sub">commands</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:72.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">17</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:50.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.79</span></div>
-<div class="cb-mpanel-sub">turns</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:80.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">20.33</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:55.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.02</span></div>
-<div class="cb-mpanel-sub">clock time</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">314s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:7.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">24s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:39.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">125s</span></div>
-</div></section>
-<section class="cb-mpanel">
-<h3 class="cb-mpanel-title">Independence</h3>
-<p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
-<div class="cb-mrows">
-<div class="cb-mpanel-sub">account reads</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:22.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">5</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:44.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">9.86</span></div>
-</div></section>
-<section class="cb-mpanel wide">
-<h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
-<dl class="cb-env">
-<dt>run</dt><dd><code>alchemy-effect-neg-h3</code></dd>
-<dt>tool under test</dt><dd><code>alchemy</code> <b>2.0.0-beta.65</b></dd>
-<dt>what the run cost</dt><dd><b>$0.7718</b> — 6 questions at $0.1286 each</dd>
-<dt>agent</dt><dd>claude-code</dd>
-<dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
-<dt>attempts per question</dt><dd>k=3</dd>
-<dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
-<dt>workdir</dt><dd><code>/workspace/alchemy</code></dd>
-<dt>harness</dt><dd><code>a6b8acb</code></dd>
-<dt>briefing</dt><dd><code>briefing-alchemy-effect.md</code> · <code>6e6e55fd2fc6</code></dd>
-</dl>
-<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh alchemy-effect</code></p>
-<details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the Alchemy state — it is the source of truth
-
-This AWS estate was deployed from the Alchemy program mounted read-only at
-`/workspace/alchemy`, already applied, and the Alchemy CLI is installed in it.
-The applied state records every resource with its resolved live ids and
-attributes. This estate is deployed as one stack per region, with an entrypoint
-each: `us-east-1.run.ts`, `us-west-1.run.ts`, `us-west-2.run.ts`.
-
-**Query the state rather than enumerating the account resource by resource.** A
-raw `aws ec2` sweep returns per-resource facts with no relationships; the state
-already holds each resource's resolved attributes and the ids it references, and
-`state resources` is the complete set per stack, so you know the denominator.
-
-A security group can reach an instance indirectly: a launch template can carry
-security-group ids that the instance's own record never lists. Anything you
-conclude about what reaches an instance has to account for both the groups
-attached to it directly and any it picks up from a template it was launched
-from.
-
-Run from the project root with `--local`, which reads the on-disk store under
-`.alchemy/state`. That store holds all three regions, and one entrypoint reaches
-every stack in it — `--stack` is what selects the region, not the entrypoint. Use
-`us-west-1.run.ts` as the handle throughout:
-
-- `alchemy state tree us-west-1.run.ts --local` — every stack and stage with the
-  resources under it.
-- `alchemy state stacks us-west-1.run.ts --local` and
-  `alchemy state stages us-west-1.run.ts --local` — the stacks and stages present.
-- `alchemy state resources --stack &lt;stack&gt; --stage &lt;stage&gt; us-west-1.run.ts --local`
-  — the fully-qualified name of every resource there. This is the full
-  inventory for that stack.
-- `alchemy state get --stack &lt;stack&gt; --stage &lt;stage&gt; --fqn &lt;fqn&gt; us-west-1.run.ts --local`
-  — one resource with its resolved attributes, including physical ids and the
-  subnet and security-group ids it references.
-
-`alchemy state stacks` lists all three region stacks whichever entrypoint you
-name, so one command per question covers the estate. The same records are on disk
-under `/workspace/alchemy/.alchemy/state/*/bench/*.json` — one stack directory
-per region, one JSON file per resource, each with a `resourceType`, a `props`
-object holding the declared configuration and an `attr` object holding the
-resolved attributes — if you would rather `jq` or grep the files directly.
-
-Path to estate facts, in order:
-
-1. `alchemy state resources` / `alchemy state get` per entrypoint — the default,
-   for every question. Follow referenced ids between records when the answer
-   spans resources.
-2. The `*.run.ts` stacks and `src/` under `/workspace/alchemy` — for intent the
-   state doesn't surface directly.
-3. `aws ec2 …` — Alchemy treats cloud state as authoritative, so use it for
-   runtime values the state does not carry (instance states, allocated
-   addresses).
-</code></pre></details>
-</section>
-</div>
-<div class="cb-panelset">
-<section class="cb-mpanel wide">
-<h3 class="cb-mpanel-title">Pass rate by question</h3>
-<p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
-<div class="cb-mrows">
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 0/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Pulumi 0/3.</p></div></details>
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 3/3, AWS CDK 3/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Pulumi 0/3.</p></div></details>
-</div></section>
-<section class="cb-mpanel">
-<h3 class="cb-mpanel-title">What one answer cost</h3>
-<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
-<div class="cb-mrows">
-<div class="cb-mpanel-sub">per correct answer</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:6.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:41.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1600</span></div>
-<div class="cb-mpanel-sub">per question asked</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1319</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:18.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
-<div class="cb-mpanel-sub">tokens in</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:95.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">589,738</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">96,862</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:59.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">370,831</span></div>
-<div class="cb-mpanel-sub">tokens out</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:85.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">6,844</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,547</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,943</span></div>
-</div></section>
-<section class="cb-mpanel">
-<h3 class="cb-mpanel-title">Work per answer</h3>
-<p class="cb-mpanel-note">What the agent had to do to get there.</p>
-<div class="cb-mrows">
-<div class="cb-mpanel-sub">commands</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:70.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">16.5</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:50.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.79</span></div>
-<div class="cb-mpanel-sub">turns</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:74.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">18.83</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:55.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.02</span></div>
-<div class="cb-mpanel-sub">clock time</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:32.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">101s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:7.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">24s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:39.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">125s</span></div>
-</div></section>
-<section class="cb-mpanel">
-<h3 class="cb-mpanel-title">Independence</h3>
-<p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
-<div class="cb-mrows">
-<div class="cb-mpanel-sub">account reads</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:9.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">2</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:44.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">9.86</span></div>
-</div></section>
-<section class="cb-mpanel wide">
-<h3 class="cb-mpanel-title">Agent environment</h3>
-<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
-<dl class="cb-env">
-<dt>run</dt><dd><code>terraform-neg-h3</code></dd>
-<dt>tool under test</dt><dd><code>terraform</code> <b>1.15.8</b></dd>
-<dt>what the run cost</dt><dd><b>$0.7912</b> — 6 questions at $0.1319 each</dd>
-<dt>agent</dt><dd>claude-code</dd>
-<dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
-<dt>attempts per question</dt><dd>k=3</dd>
-<dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
-<dt>workdir</dt><dd><code>/workspace/terraform</code></dd>
-<dt>harness</dt><dd><code>a6b8acb</code></dd>
-<dt>briefing</dt><dd><code>briefing-terraform.md</code> · <code>7822d55ca7ca</code></dd>
-</dl>
-<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh terraform</code></p>
-<details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from Terraform state — it is the source of truth
-
-This AWS estate was deployed from the Terraform configuration mounted read-only
-at `/workspace/terraform`, already applied, and the Terraform CLI is vendored in
-the workspace. The applied state records every managed resource with its
-resolved live ids, its attributes, and the references between resources.
-
-**Query the state rather than enumerating the account resource by resource.** A
-raw `aws ec2` sweep returns per-resource facts with no relationships; the state
-already holds how resources reference one another, and `state list` gives you
-the complete set under management, so you know the denominator.
-
-A security group can reach an instance indirectly: a launch template can carry
-security-group ids that the instance's own record never lists. Anything you
-conclude about what reaches an instance has to account for both the groups
-attached to it directly and any it picks up from a template it was launched
-from.
-
-Run from the project root (use the vendored binary, `./terraform`):
-
-- `cd /workspace/terraform &amp;&amp; ./terraform state list` — every resource address
-  under management, one per line. This is the full inventory.
-- `cd /workspace/terraform &amp;&amp; ./terraform state show &lt;address&gt;` — one resource
-  with all of its resolved attributes.
-- `cd /workspace/terraform &amp;&amp; ./terraform show -json` — the whole applied state
-  as JSON. Resources live under `.values.root_module` (recurse
-  `child_modules`); each has `type`, `address`, and a `values` object with the
-  resolved attributes. `jq` over this answers relationship questions without
-  hand-joining CLI output.
-- `cd /workspace/terraform &amp;&amp; ./terraform output -json` — the declared outputs.
-
-Path to estate facts, in order:
-
-1. `./terraform show -json` or `state show` — the default, for every question.
-   Follow attribute references (subnet ids, security-group ids, launch-template
-   ids) between resources to answer questions that span them.
-2. The `.tf` source under `/workspace/terraform` — for intent and configuration
-   the state doesn't surface directly.
-3. `aws ec2 …` — for runtime values the state does not carry (instance states,
-   allocated addresses).
-</code></pre></details>
-</section>
-</div>
-<div class="cb-panelset">
-<section class="cb-mpanel wide">
-<h3 class="cb-mpanel-title">Pass rate by question</h3>
-<p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
-<div class="cb-mrows">
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 0/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3.</p></div></details>
-<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 3/3, AWS CDK 3/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 2/3, Alchemy 2/3, Alchemy v2 (Effect) 0/3, Terraform 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 3/3, Alchemy 2/3, Alchemy v2 (Effect) 1/3, Terraform 0/3.</p></div></details>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">What one answer cost</h3>
@@ -851,37 +611,37 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">per correct answer</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:6.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:41.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1600</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:5.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:33.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1700</span></div>
 <div class="cb-mpanel-sub">per question asked</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:52.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0686</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:18.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0237</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:60.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:51.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0671</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:18.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0234</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
 <div class="cb-mpanel-sub">tokens in</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:44.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">274,592</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">96,862</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:59.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">370,831</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:44.4%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">298,344</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:12.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">85,040</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:53.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">360,870</span></div>
 <div class="cb-mpanel-sub">tokens out</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:51.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,159</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:19.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,547</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,943</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:58.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,184</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:23.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,707</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:64.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,585</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Work per answer</h3>
 <p class="cb-mpanel-note">What the agent had to do to get there.</p>
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">commands</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:33.6%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">7.83</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:50.5%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.79</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:39.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">8.83</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:52.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.93</span></div>
 <div class="cb-mpanel-sub">turns</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:38.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">9.83</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:15.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:55.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.02</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:44.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">11</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:16.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:56.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.1</span></div>
 <div class="cb-mpanel-sub">clock time</div>
-<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:15.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">49s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:7.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">24s</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:39.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">125s</span></div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"><span class="cb-fill" style="width:35.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">51s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:16.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">23s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:57.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">81s</span></div>
 </div></section>
 <section class="cb-mpanel">
 <h3 class="cb-mpanel-title">Independence</h3>
@@ -889,22 +649,22 @@ Path to estate facts, in order:
 <div class="cb-mrows">
 <div class="cb-mpanel-sub">account reads</div>
 <div class="cb-mrow self"><span class="cb-mrow-name">Pulumi</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">chant, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
-<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:44.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">9.86</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Terraform, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:23.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">15</span></div>
 </div></section>
 <section class="cb-mpanel wide">
 <h3 class="cb-mpanel-title">Agent environment</h3>
 <p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
 <dl class="cb-env">
-<dt>run</dt><dd><code>pulumi-neg-h3</code></dd>
+<dt>run</dt><dd><code>pulumi-neg-i3</code></dd>
 <dt>tool under test</dt><dd><code>pulumi</code> <b>3.255.0</b></dd>
-<dt>what the run cost</dt><dd><b>$0.4113</b> — 6 questions at $0.0686 each</dd>
+<dt>what the run cost</dt><dd><b>$0.4025</b> — 6 questions at $0.0671 each</dd>
 <dt>agent</dt><dd>claude-code</dd>
 <dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
 <dt>attempts per question</dt><dd>k=3</dd>
 <dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
 <dt>workdir</dt><dd><code>/workspace/pulumi</code></dd>
-<dt>harness</dt><dd><code>a6b8acb</code></dd>
+<dt>harness</dt><dd><code>e8c259c</code></dd>
 <dt>briefing</dt><dd><code>briefing-pulumi.md</code> · <code>a06c6b73c0eb</code></dd>
 </dl>
 <p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh pulumi</code></p>
@@ -946,6 +706,250 @@ Path to estate facts, in order:
    `dependencies`/`parent` and output ids when the answer spans resources.
 2. The `index.ts` source under `/workspace/pulumi` — for intent and
    configuration the export doesn't surface directly.
+3. `aws ec2 …` — for runtime values the state does not carry (instance states,
+   allocated addresses).
+</code></pre></details>
+</section>
+</div>
+<div class="cb-panelset">
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Pass rate by question</h3>
+<p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
+<div class="cb-mrows">
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 2/3, Alchemy 2/3, Pulumi 0/3, Terraform 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"><span class="cb-fill" style="width:33.3%;background:#0b6e76;--cb-dark:#3fafb6"></span></span><span class="cb-mrow-value">1/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10007; &#10003; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 3/3, Alchemy 2/3, Pulumi 0/3, Terraform 0/3.</p></div></details>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">What one answer cost</h3>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">per correct answer</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.5021</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:5.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:33.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1700</span></div>
+<div class="cb-mpanel-sub">per question asked</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:64.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.0837</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:18.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0234</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mpanel-sub">tokens in</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:60.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">404,892</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:12.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">85,040</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:53.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">360,870</span></div>
+<div class="cb-mpanel-sub">tokens out</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:63.8%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">4,564</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:23.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,707</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:64.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,585</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Work per answer</h3>
+<p class="cb-mpanel-note">What the agent had to do to get there.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">commands</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:51.5%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">11.67</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:52.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.93</span></div>
+<div class="cb-mpanel-sub">turns</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:57.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">14.17</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:16.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:56.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.1</span></div>
+<div class="cb-mpanel-sub">clock time</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:54.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">76s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:16.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">23s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:57.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">81s</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Independence</h3>
+<p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">account reads</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Alchemy v2 (Effect)</span><span class="cb-track"><span class="cb-fill" style="width:3.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">2</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, best</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:23.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">15</span></div>
+</div></section>
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Agent environment</h3>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<dl class="cb-env">
+<dt>run</dt><dd><code>alchemy-effect-neg-i3</code></dd>
+<dt>tool under test</dt><dd><code>alchemy</code> <b>2.0.0-beta.70</b></dd>
+<dt>what the run cost</dt><dd><b>$0.5022</b> — 6 questions at $0.0837 each</dd>
+<dt>agent</dt><dd>claude-code</dd>
+<dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
+<dt>attempts per question</dt><dd>k=3</dd>
+<dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
+<dt>workdir</dt><dd><code>/workspace/alchemy</code></dd>
+<dt>harness</dt><dd><code>e8c259c</code></dd>
+<dt>briefing</dt><dd><code>briefing-alchemy-effect.md</code> · <code>fddba9c087d1</code></dd>
+</dl>
+<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh alchemy-effect</code></p>
+<details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from the Alchemy state — it is the source of truth
+
+This AWS estate was deployed from the Alchemy program mounted read-only at
+`/workspace/alchemy`, already applied, and the Alchemy CLI is installed in it.
+The applied state records every resource with its resolved live ids and
+attributes. This estate is deployed as one stack per region, with an entrypoint
+each: `us-east-1.run.ts`, `us-west-1.run.ts`, `us-west-2.run.ts`.
+
+**Query the state rather than enumerating the account resource by resource.** A
+raw `aws ec2` sweep returns per-resource facts with no relationships; the state
+already holds each resource's resolved attributes and the ids it references, and
+`state export` returns every record in the store as one JSON document, so you
+know the denominator from a single call.
+
+A security group can reach an instance indirectly: a launch template can carry
+security-group ids that the instance's own record never lists. Anything you
+conclude about what reaches an instance has to account for both the groups
+attached to it directly and any it picks up from a template it was launched
+from.
+
+Run from the project root with `--local`, which reads the on-disk store under
+`.alchemy/state`. That store holds all three regions, and one entrypoint reaches
+every stack in it — `--stack` is what selects the region, not the entrypoint. Use
+`us-west-1.run.ts` as the handle throughout:
+
+- `alchemy state export us-west-1.run.ts --local` — **every resource in every
+  stack as one JSON document**: a flat `resources` array of
+  `{stack, stage, fqn, state}`, where `state` is the same record `state get`
+  prints. One call covers all three regions; filter it with `jq`. This answers
+  most questions by itself.
+- `alchemy state export --stack &lt;stack&gt; us-west-1.run.ts --local` — the same,
+  narrowed to one region's stack.
+- `alchemy state tree us-west-1.run.ts --local` — every stack and stage with the
+  resources under it, when you want the census without the records.
+- `alchemy state stacks us-west-1.run.ts --local` and
+  `alchemy state stages us-west-1.run.ts --local` — the stacks and stages present.
+- `alchemy state get --stack &lt;stack&gt; --stage &lt;stage&gt; --fqn &lt;fqn&gt; us-west-1.run.ts --local`
+  — one resource with its resolved attributes, when you already know its name.
+
+`alchemy state stacks` lists all three region stacks whichever entrypoint you
+name, so one command per question covers the estate. The same records are on disk
+under `/workspace/alchemy/.alchemy/state/*/bench/*.json` — one stack directory
+per region, one JSON file per resource, each with a `resourceType`, a `props`
+object holding the declared configuration and an `attr` object holding the
+resolved attributes — if you would rather `jq` or grep the files directly.
+
+Path to estate facts, in order:
+
+1. `alchemy state export … --local` piped through `jq` — the default, for every
+   question. The whole estate is in one document, so relationship questions are
+   a join over the array rather than a walk between commands.
+2. The `*.run.ts` stacks and `src/` under `/workspace/alchemy` — for intent the
+   state doesn't surface directly.
+3. `aws ec2 …` — Alchemy treats cloud state as authoritative, so use it for
+   runtime values the state does not carry (instance states, allocated
+   addresses).
+</code></pre></details>
+</section>
+</div>
+<div class="cb-panelset">
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Pass rate by question</h3>
+<p class="cb-mpanel-note">Of 6 trials: 2 questions, 3 attempts each.</p>
+<div class="cb-mrows">
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>subnets-with-no-network-interfac</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my subnets have no network interfaces in them?</p><p class="cb-q-truth">Graded against <b>8 of 13, across three regions</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 2/3, Alchemy 2/3, Pulumi 0/3, Alchemy v2 (Effect) 0/3.</p></div></details>
+<details class="cb-q"><summary class="cb-mrow"><span class="cb-mrow-name"><code>vpcs-with-no-running-instances</code></span><span class="cb-track"></span><span class="cb-mrow-value">0/3</span></summary><div class="cb-q-body"><p class="cb-q-prompt">Which of my VPCs have no running instances?</p><p class="cb-q-truth">Graded against <b>2 of 6</b><span class="cb-q-marks">&#10007; &#10007; &#10007;</span></p><p class="cb-q-field">Everyone else: chant 3/3, No tool (AWS CLI) 2/3, AWS CDK 3/3, Alchemy 2/3, Pulumi 0/3, Alchemy v2 (Effect) 1/3.</p></div></details>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">What one answer cost</h3>
+<p class="cb-mpanel-note">The agent's own billed total, not tokens times a rate card. Per correct answer is that divided by the share the tool gets right — the expected spend before an answer arrives that holds up.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">per correct answer</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"></span><span class="cb-mrow-value">—</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:5.0%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0249</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:33.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.1700</span></div>
+<div class="cb-mpanel-sub">per question asked</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:95.9%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">$0.1240</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:18.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0234</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:61.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">$0.0800</span></div>
+<div class="cb-mpanel-sub">tokens in</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:82.1%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">550,789</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:12.7%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">85,040</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:53.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">360,870</span></div>
+<div class="cb-mpanel-sub">tokens out</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:100.0%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">7,153</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:23.9%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">1,707</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:64.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4,585</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Work per answer</h3>
+<p class="cb-mpanel-note">What the agent had to do to get there.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">commands</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:75.7%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">17.17</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:8.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">2</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:52.6%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">11.93</span></div>
+<div class="cb-mpanel-sub">turns</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:81.2%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">20.17</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">chant, best</span><span class="cb-track"><span class="cb-fill" style="width:16.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">4</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:56.8%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">14.1</span></div>
+<div class="cb-mpanel-sub">clock time</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"><span class="cb-fill" style="width:76.3%;background:#9a5b12;--cb-dark:#c9913f"></span></span><span class="cb-mrow-value">108s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">No tool (AWS CLI), best</span><span class="cb-track"><span class="cb-fill" style="width:16.3%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">23s</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:57.1%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">81s</span></div>
+</div></section>
+<section class="cb-mpanel">
+<h3 class="cb-mpanel-title">Independence</h3>
+<p class="cb-mpanel-note">Reads of the live account while answering. CDK and the baseline keep no state, so theirs are the sanctioned path.</p>
+<div class="cb-mrows">
+<div class="cb-mpanel-sub">account reads</div>
+<div class="cb-mrow self"><span class="cb-mrow-name">Terraform</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">Pulumi, runner up</span><span class="cb-track"></span><span class="cb-mrow-value">0</span></div>
+<div class="cb-mrow ref"><span class="cb-mrow-name">field average</span><span class="cb-track"><span class="cb-fill" style="width:23.4%;background:#8a8f98;--cb-dark:#6c727c"></span></span><span class="cb-mrow-value">15</span></div>
+</div></section>
+<section class="cb-mpanel wide">
+<h3 class="cb-mpanel-title">Agent environment</h3>
+<p class="cb-mpanel-note">Identical for every arm except the tool and its briefing, which are what the comparison is about. A run only compares with another that shares the harness commit and the briefing hash.</p>
+<dl class="cb-env">
+<dt>run</dt><dd><code>terraform-neg-i3</code></dd>
+<dt>tool under test</dt><dd><code>terraform</code> <b>1.15.8</b></dd>
+<dt>what the run cost</dt><dd><b>$0.7439</b> — 6 questions at $0.1240 each</dd>
+<dt>agent</dt><dd>claude-code</dd>
+<dt>model</dt><dd><code>claude-haiku-4-5-20251001</code></dd>
+<dt>attempts per question</dt><dd>k=3</dd>
+<dt>substrate</dt><dd>floci emulator, no AWS account and no spend</dd>
+<dt>workdir</dt><dd><code>/workspace/terraform</code></dd>
+<dt>harness</dt><dd><code>e8c259c</code></dd>
+<dt>briefing</dt><dd><code>briefing-terraform.md</code> · <code>7822d55ca7ca</code></dd>
+</dl>
+<p class="cb-env-repro">Repeat this run:<code>./benchmarks/agent-env/run-negatives.sh terraform</code></p>
+<details class="cb-briefing"><summary>The briefing this agent received, in full</summary><pre><code># Answer estate questions from Terraform state — it is the source of truth
+
+This AWS estate was deployed from the Terraform configuration mounted read-only
+at `/workspace/terraform`, already applied, and the Terraform CLI is vendored in
+the workspace. The applied state records every managed resource with its
+resolved live ids, its attributes, and the references between resources.
+
+**Query the state rather than enumerating the account resource by resource.** A
+raw `aws ec2` sweep returns per-resource facts with no relationships; the state
+already holds how resources reference one another, and `state list` gives you
+the complete set under management, so you know the denominator.
+
+A security group can reach an instance indirectly: a launch template can carry
+security-group ids that the instance's own record never lists. Anything you
+conclude about what reaches an instance has to account for both the groups
+attached to it directly and any it picks up from a template it was launched
+from.
+
+Run from the project root (use the vendored binary, `./terraform`):
+
+- `cd /workspace/terraform &amp;&amp; ./terraform state list` — every resource address
+  under management, one per line. This is the full inventory.
+- `cd /workspace/terraform &amp;&amp; ./terraform state show &lt;address&gt;` — one resource
+  with all of its resolved attributes.
+- `cd /workspace/terraform &amp;&amp; ./terraform show -json` — the whole applied state
+  as JSON. Resources live under `.values.root_module` (recurse
+  `child_modules`); each has `type`, `address`, and a `values` object with the
+  resolved attributes. `jq` over this answers relationship questions without
+  hand-joining CLI output.
+- `cd /workspace/terraform &amp;&amp; ./terraform output -json` — the declared outputs.
+
+Path to estate facts, in order:
+
+1. `./terraform show -json` or `state show` — the default, for every question.
+   Follow attribute references (subnet ids, security-group ids, launch-template
+   ids) between resources to answer questions that span them.
+2. The `.tf` source under `/workspace/terraform` — for intent and configuration
+   the state doesn't surface directly.
 3. `aws ec2 …` — for runtime values the state does not carry (instance states,
    allocated addresses).
 </code></pre></details>

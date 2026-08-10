@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "run": "chant-neg-i2",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__LzFnTsJ",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --show region"
+      ],
+      "answer": "have no network interfaces (ENIs) attached to them:\n\nUS-EAST-1:\n  - subnet-default-a\n  - subnet-default-b\n\nUS-WEST-1:\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nUS-WEST-2:\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nAll of these are AWS-managed default subnets in their respective VPCs. They are not being used by any network interfaces.\n\nQuery Details:\n- Search: kind:EC2::Subnet !<-kind:EC2::NetworkInterface\n- Snapshot: 9aeddee taken 2026-08-10T06:12:49.442Z\n- Coverage: 8 of 8 subnets with no ENIs matched across all reachable regions (us-east-1, us-west-1, us-west-2)\n- Total subnets in estate: 13 (5 managed subnets with ENIs + 8 empty default subnets)"
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__6gaV8K6",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::VPC !<-kind:EC2::Instance\" --at latest --env floci --show region --explain",
+        "cd /workspace/chant && chant search \"kind:EC2::VPC <-kind:EC2::Instance\" --at latest --env floci --show region --explain"
+      ],
+      "answer": "VPCs WITH NO EC2 INSTANCES\n===========================\n\nThe following 2 VPCs have no EC2 instances running in them:\n\n1. vpc-default (us-west-1)\n2. vpc-default (us-west-2)\n\nBoth are AWS-managed default VPCs.\n\n---\n\nSUMMARY\n=======\nChecked: 6 total VPCs across 3 regions (us-east-1, us-west-1, us-west-2)\n- Empty: 2 VPCs (both default VPCs in us-west-1 and us-west-2)\n- With instances: 4 VPCs\n  - vpc-411e7943 (us-east-1) \u2014 1 instance\n  - vpc-8fbf7976 (us-west-1) \u2014 1 instance\n  - vpc-55c59656 (us-west-2) \u2014 1 instance\n  - vpc-default (us-east-1) \u2014 1 instance\n\nSource: chant estate snapshot 9aeddee taken 2026-08-10T06:12:49.442Z"
+    }
+  }
+}

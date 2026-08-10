@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "run": "pulumi-i3",
+  "arm": "pulumi",
+  "by_task": {
+    "describe-ec-instances-cross-regi": {
+      "trial": "describe-ec-instances-cross-regi__JmET654",
+      "passed": true,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export 2>&1 | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn, region: .outputs.availabilityZone | .[:-1], vpcId: .outputs.vpcId, instanceId: .outputs.id}' | head -100",
+        "cd /workspace/pulumi && ./pulumi-export 2>&1 | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn, outputs: .outputs | keys}' | head -50",
+        "cd /workspace/pulumi && ./pulumi-export 2>&1 | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {name: .urn | split(\"::\")[3], region: (.outputs.availabilityZone | .[:-1]), instanceId: .outputs.id, subnetId: (.outputs.networkInterfaces[0].subnetId // .inputs.subnetId // \"default\"), launchTemplate: .inputs.launchTemplate}'",
+        "cd /workspace/pulumi && ./pulumi-export 2>&1 | jq '.deployment.resources[] | select(.type == \"aws:ec2/subnet:Subnet\") | {subnetId: .outputs.id, vpcId: .outputs.vpcId}'",
+        "cd /workspace/pulumi && ./pulumi-export 2>&1 | jq '.deployment.resources[] | select(.type | contains(\"vpc\") or contains(\"subnet\") or contains(\"default\"))'",
+        "cd /workspace/pulumi && ./pulumi-export 2>&1 | jq '.deployment.resources[] | select(.urn | contains(\"defaultVpcServer\")) | {name: .urn | split(\"::\")[3], instanceId: .outputs.id, inputs}'"
+      ],
+      "answer": "ubnet-4f749e1b\n     - VPC: vpc-ceddf5d6\n\nus-west-2 (1 instance):\n  1. usw2-server (i-ba29702266a73bcbf)\n     - Subnet: subnet-d55b3b99\n     - VPC: vpc-47cc0099\n\nVPC CONNECTIVITY IN us-east-1:\n==============================\n\nThree instances in us-east-1 share network connectivity through the same VPC (vpc-a9f1b2c7):\n  - privateServer (subnet-40e45d05)\n  - webServer (subnet-fca38bdf)\n  - ltServer (subnet-fca38bdf)\n\nThese three instances can communicate directly within VPC 'vpc-a9f1b2c7' (10.0.0.0/16 CIDR).\nNote: webServer and ltServer are in the same subnet (subnet-fca38bdf).\n\nIsolated instance:\n  - defaultVpcServer runs in the AWS Default VPC (subnet-default-c), separate from the managed VPC."
+    },
+    "ec-instances-without-default-vpc": {
+      "trial": "ec-instances-without-default-vpc__FTyXRMv",
+      "passed": true,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn: .urn, vpc_id: .outputs.vpc_id, subnet_id: .outputs.subnet_id, private_ip: .outputs.private_ip}'",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn: .urn, inputs: .inputs | {vpc_id, subnet_id}}'",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn: .urn, outputs: .outputs}'",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/vpc:Vpc\") | {urn: .urn, isDefault: .outputs.isDefault, cidrBlock: .outputs.cidrBlock}'",
+        "cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | \"\\(.outputs.tags.Name // \"unnamed\")\\t\\(.outputs.id)\\t\\(.outputs.privateIp)\\t\\(.outputs.availabilityZone)\"' | sort"
+      ],
+      "answer": "mplateInstance (i-d4b8506e470354537)\n   - IP: 10.0.0.11\n   - Region: us-east-1\n   - Subnet: subnet-fca38bdf (custom VPC)\n\n3. WebServerInstance (i-91550117ccbfa6f4e)\n   - IP: 10.0.0.10\n   - Region: us-east-1\n   - Subnet: subnet-fca38bdf (custom VPC)\n\n4. WebServerInstance (i-925c5eeef78636b73)\n   - IP: 10.0.0.10\n   - Region: us-west-1\n   - Subnet: subnet-4f749e1b (custom VPC)\n\n5. WebServerInstance (i-ba29702266a73bcbf)\n   - IP: 10.0.0.10\n   - Region: us-west-2\n   - Subnet: subnet-d55b3b99 (custom VPC)\n\nFor comparison, 1 instance IS in the default VPC:\n- MyEC2Instance (i-4d0d96b9ec8a03bab) with IP 172.31.32.10 in us-east-1\n\nNote: Default VPCs use CIDR 172.31.0.0/16. Custom VPCs use 10.0.0.0/16."
+    },
+    "find-ec-instances-in-public-subn": {
+      "trial": "find-ec-instances-in-public-subn__Nz63ud2",
+      "passed": true,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export | head -100",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn, region: .outputs.availabilityZone, subnet_id: .outputs.subnetId, id: .outputs.id}' 2>/dev/null",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/subnet:Subnet\") | {id: .outputs.id, urn, vpc_id: .outputs.vpcId, availability_zone: .outputs.availabilityZone}' 2>/dev/null",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/routeTable:RouteTable\" or .type == \"aws:ec2/routeTableAssociation:RouteTableAssociation\") | {type, urn, subnet_id: .inputs.subnetId, route_table_id: (.outputs.id // .inputs.routeTableId), routes: .inputs.routes}' 2>/dev/null",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/routeTable:RouteTable\") | {urn, id: .outputs.id, routes: .outputs.routes}' 2>/dev/null",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/route:Route\") | {urn, destination_cidr_block: .inputs.destinationCidrBlock, gateway_id: .inputs.gatewayId, route_table_id: .inputs.routeTableId}' 2>/dev/null",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/routeTableAssociation:RouteTableAssociation\") | {urn, subnet_id: .inputs.subnetId, route_table_id: .inputs.routeTableId, dependencies}' 2>/dev/null",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.outputs.id == \"subnet-default-c\") | {type, urn, id: .outputs.id}' 2>/dev/null"
+      ],
+      "answer": ": subnet-4f749e1b\n   Availability Zone: us-west-1a\n   Public: Yes (Route table rtb-fae3f87b has 0.0.0.0/0 route to IGW igw-7e4b9ecc)\n\nUS-WEST-2 (1 instance):\n----------\n1. Instance ID: i-ba29702266a73bcbf\n   Name: WebServerInstance\n   Instance Type: usw2-server\n   Subnet ID: subnet-d55b3b99\n   Availability Zone: us-west-2a\n   Public: Yes (Route table rtb-6e560864 has 0.0.0.0/0 route to IGW igw-bf2a30e3)\n\nSUMMARY\n=======\nTotal EC2 instances in public subnets: 5\n- us-east-1: 3 instances\n- us-west-1: 1 instance\n- us-west-2: 1 instance\n\nNote: The \"privateServer\" instance (i-585074b9a781ff409) in us-east-1 is in a private subnet (subnet-40e45d05)\nwith no IGW route and was excluded from this list."
+    },
+    "list-ec-instances-all-regions-1": {
+      "trial": "list-ec-instances-all-regions-1__her4k5W",
+      "passed": true,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export > /tmp/pulumi-state.json 2>&1 && echo \"Export completed successfully\" || echo \"Export failed\"",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn, outputs: {instance_id: .outputs.id, availability_zone: .outputs.availabilityZone, subnet_id: .outputs.subnetId, security_groups: .outputs.securityGroups, vpc_security_group_ids: .outputs.vpcSecurityGroupIds}, inputs: {security_groups: .inputs.securityGroups, vpc_security_group_ids: .inputs.vpcSecurityGroupIds, subnet_id: .inputs.subnetId}}' | head -200",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.type == \"aws:ec2/securityGroup:SecurityGroup\") | {urn, sg_id: .outputs.id, sg_name: .outputs.name, ingress_rules: .outputs.ingress}'",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.type == \"aws:ec2/launchTemplate:LaunchTemplate\") | {urn, template_name: .outputs.name, security_groups: .outputs.securityGroupNames, vpc_security_group_ids: .outputs.vpcSecurityGroupIds}'",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {name: .urn, launch_template: .outputs.launchTemplate}'",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {name: .urn, launch_template_id: .inputs.launchTemplate}'",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.sg_id or .id | select(. == \"sg-default\" or startswith(\"sg-\"))) | select(.type | contains(\"SecurityGroup\")) | {urn, sg_id: .outputs.id, sg_name: .outputs.name, ingress_rules: .outputs.ingress}'",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.type == \"aws:ec2/securityGroup:SecurityGroup\" or .type == \"aws:ec2/defaultSecurityGroup:DefaultSecurityGroup\") | {urn, outputs: {sg_id: .outputs.id, sg_name: .outputs.name, ingress_rules: .outputs.ingress}}'",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {instance_name: (.urn | split(\"::\")[3]), instance_id: .outputs.id, region: (.outputs.availabilityZone | .[:-1]), subnet_id: .outputs.subnetId, vpc_security_group_ids: .outputs.vpcSecurityGroupIds, launch_template: .inputs.launchTemplate}'",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.type == \"aws:ec2/subnet:Subnet\") | {subnet_id: .outputs.id, cidr_block: .outputs.cidrBlock, vpc_id: .outputs.vpcId, map_public_ip_on_launch: .outputs.mapPublicIpOnLaunch}' | head -50",
+        "cd /workspace/pulumi && cat /tmp/pulumi-state.json | jq '.deployment.resources[] | select(.outputs.id == \"sg-default\") | {urn, type, ingress: .outputs.ingress}'"
+      ],
+      "answer": "icIpOnLaunch=true)\n   SSH Access: NOT ALLOWED from 0.0.0.0/0\n   Reason: Default security group does not allow external SSH\n   Status: NOT REACHABLE\n\nSUMMARY\n=======\n\nTotal EC2 Instances: 6\nReachable via SSH from Internet: 2\n  - webServer (i-91550117ccbfa6f4e)\n  - ltServer (i-d4b8506e470354537)\n\nBoth reachable instances are in us-east-1 and use the \"web\" security group (sg-a95e6125fd9e9fc82) which explicitly allows SSH access from 0.0.0.0/0.\n\nNote: ltServer's SSH access is available through the security group inherited from its launch template, which is a potential gap a simple CLI sweep would miss (the instance definition itself has no explicit security group, only the launch template does)."
+    },
+    "list-ec-instances-all-regions": {
+      "trial": "list-ec-instances-all-regions__3fWcd7Z",
+      "passed": true,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn: .urn, id: .outputs.id, region: .outputs.availabilityZone} | {instance_id: .id, arn: .urn, availability_zone: .region}'",
+        "cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | [.outputs.id, .outputs.availabilityZone] | @tsv' | sort -k2 > /tmp/instances.txt && cat /tmp/instances.txt"
+      ],
+      "answer": "EC2 Instance IDs by Region\n============================\n\nus-east-1:\n  i-585074b9a781ff409 (us-east-1a)\n  i-91550117ccbfa6f4e (us-east-1a)\n  i-d4b8506e470354537 (us-east-1a)\n  i-4d0d96b9ec8a03bab (us-east-1c)\n\nus-west-1:\n  i-925c5eeef78636b73 (us-west-1a)\n\nus-west-2:\n  i-ba29702266a73bcbf (us-west-2a)\n\nTotal: 6 instances across 3 regions"
+    },
+    "list-ec-instances-by-vpc-across": {
+      "trial": "list-ec-instances-by-vpc-across__7jNvbT2",
+      "passed": true,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn, region: (.outputs.arn // .inputs.region // .outputs.availabilityZone | capture(\"^(?<r>[^-]+-[^-]+-\\\\d+)\").r), vpc_id: .outputs.vpcId, subnet_id: .outputs.subnetId, instance_id: .outputs.id}' -c",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\")' -c | head -1 | jq .",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/subnet:Subnet\") | {subnet_id: .outputs.id, vpc_id: .outputs.vpcId}' -c",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {name: (.urn | split(\"::\")[-1]), instance_id: .outputs.id, subnet_id: .outputs.subnetId, az: .outputs.availabilityZone, instance_name: (.outputs.tags.Name // \"N/A\")}' | jq -s '.'",
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/vpc:Vpc\") | {vpc_id: .outputs.id, is_default: .outputs.isDefault}' -c"
+      ],
+      "answer": "subnet-4f749e1b (Public, 10.0.0.0/24)\n      - AZ: us-west-1a\n\n\nRegion: us-west-2\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\nVPC: vpc-47cc0099 (Custom VPC \"ResourcesVpc\")\n  Instances:\n    \u2022 i-ba29702266a73bcbf (usw2-server)\n      - Name: WebServerInstance\n      - Subnet: subnet-d55b3b99 (Public, 10.0.0.0/24)\n      - AZ: us-west-2a\n\n\nSUMMARY\n\u2550\u2550\u2550\u2550\u2550\u2550\u2550\nTotal EC2 Instances: 6\n\u2022 us-east-1: 4 instances (3 in custom VPC + 1 in default VPC)\n\u2022 us-west-1: 1 instance (in custom VPC)\n\u2022 us-west-2: 1 instance (in custom VPC)\n\nTotal VPCs with Instances: 4\n\u2022 vpc-a9f1b2c7: 3 instances (us-east-1, custom)\n\u2022 Default VPC: 1 instance (us-east-1)\n\u2022 vpc-ceddf5d6: 1 instance (us-west-1, custom)\n\u2022 vpc-47cc0099: 1 instance (us-west-2, custom)"
+    },
+    "list-ec-private-ips-all-regions": {
+      "trial": "list-ec-private-ips-all-regions__SWgngYp",
+      "passed": true,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export | jq '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {urn: .urn, privateIp: .outputs.privateIp, availabilityZone: .outputs.availabilityZone}' | head -100",
+        "cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {name: (.urn | split(\"::\")[-1]), region: (.outputs.availabilityZone | .[:-1]), privateIp: .outputs.privateIp} | [.name, .region, .privateIp] | @csv' | sort",
+        "cat > /tmp/ec2_table.txt << 'EOF' EC2 Instances and Private IPs by Region ======================================== EOF # Add the table header cat >> /tmp/ec2_table.txt << 'EOF' Instance Name Region Private IP ===================================================== EOF # Add the data rows sorted by region then instance name cd /workspace/pulumi && ./pulumi-export | jq -r '.deployment.resources[] | select(.type == \"aws:ec2/instance:Instance\") | {name: (.urn | split(\"::\")[-1]), region: (.outputs.availabilityZone | .[:-1]), privateIp: .outputs.privateIp} | \"\\(.name | @json) \\(.region | @json) \\(.privateIp | @json)\"' | sort | while read line; do name=$(echo \"$line\" | cut -d' ' -f1 | tr -d '\"') region=$(echo \"$line\" | cut -d' ' -f2 | tr -d '\"') ip=$(echo \"$line\" | cut -d' ' -f3 | tr -d '\"') printf \"%-21s %-13s %s\\n\" \"$name\" \"$region\" \"$ip\" done >> /tmp/ec2_table.txt cat /tmp/ec2_table.txt"
+      ],
+      "answer": "EC2 Instances and Private IPs by Region\n========================================\n\nInstance Name         Region        Private IP\n=====================================================\ndefaultVpcServer      us-east-1     172.31.32.10\nltServer              us-east-1     10.0.0.11\nprivateServer         us-east-1     10.0.1.10\nusw1-server           us-west-1     10.0.0.10\nusw2-server           us-west-2     10.0.0.10\nwebServer             us-east-1     10.0.0.10"
+    },
+    "list-unused-security-groups-all": {
+      "trial": "list-unused-security-groups-all__3p5Rpxq",
+      "passed": false,
+      "commands": [
+        "cd /workspace/pulumi && ./pulumi-export | jq '.' > /tmp/pulumi_export.json && echo \"Export successful\"",
+        "cd /workspace/pulumi && cat /tmp/pulumi_export.json | jq '.deployment.resources | map(select(.type == \"aws:ec2/securityGroup:SecurityGroup\")) | length'",
+        "cat /tmp/pulumi_export.json | jq '.deployment.resources | map(select(.type == \"aws:ec2/securityGroup:SecurityGroup\")) | .[] | {name: .inputs.name, groupId: .outputs.id, region: .outputs.vpcId, urn: .urn}'",
+        "cat /tmp/pulumi_export.json | jq '.deployment.resources[] | select(.inputs.vpcSecurityGroupIds != null or .inputs.securityGroupIds != null) | {type: .type, name: .inputs.name, vpcSecurityGroupIds: .inputs.vpcSecurityGroupIds, securityGroupIds: .inputs.securityGroupIds}'",
+        "cat /tmp/pulumi_export.json | jq '.deployment.resources | map(select(.type == \"aws:ec2/securityGroup:SecurityGroup\")) | .[] | {name: .inputs.name, id: .outputs.id, region: .outputs.region, urn: .urn, dependencies: .dependencies}'",
+        "cat /tmp/pulumi_export.json | jq '.deployment.resources | map(select(.type == \"aws:ec2/securityGroup:SecurityGroup\")) | .[] | {name: .inputs.name, id: .outputs.id, tags: .outputs.tags, urn: .urn, outputs: .outputs | keys}'",
+        "cat > /tmp/analyze_sg.jq << 'EOF' # Get all security groups def get_sgs: .deployment.resources | map(select(.type == \"aws:ec2/securityGroup:SecurityGroup\")); # Get all resource types and their SG references def get_sg_references: .deployment.resources | map( if (.inputs.vpcSecurityGroupIds != null or .inputs.securityGroupIds != null) then { type: .type, name: .inputs.name, urn: .urn, vpcSecurityGroupIds: .inputs.vpcSecurityGroupIds, securityGroupIds: .inputs.securityGroupIds } else empty end ); # Build the analysis { all_sgs: (get_sgs | map({ name: .inputs.name, id: .outputs.id, urn: .urn })), sg_references: (get_sg_references), all_resource_types: (.deployment.resources | map(.type) | unique) } EOF cat /tmp/pulumi_export.json | jq -f /tmp/analyze_sg.jq",
+        "cat > /tmp/final_analysis.jq << 'EOF' # Extract region from name (format: name-region) def extract_region: if test(\"-[a-z]+-[a-z]+-[0-9]+$\") then capture(\"(?<region>-[a-z]+-[a-z]+-[0-9]+)$\").region | ltrimstr(\"-\") else \"unknown\" end; # Get all security groups def get_sgs: .deployment.resources | map(select(.type == \"aws:ec2/securityGroup:SecurityGroup\")); # Get all security group IDs that are referenced def get_referenced_sg_ids: [ .deployment.resources[] | ( (.inputs.vpcSecurityGroupIds // []), (.inputs.securityGroupIds // []) ) | .[] ] | unique; # Main analysis (get_sgs as $sgs | get_referenced_sg_ids as $referenced | { total_sgs: ($sgs | length), unused_sgs: [ $sgs[] | select(.outputs.id | IN($referenced[]) | not) | { name: .inputs.name, id: .outputs.id, region: (.inputs.name | extract_region), arn: .outputs.arn, urn: .urn, vpc_id: .outputs.vpcId, description: .outputs.description } ], used_sgs: [ $sgs[] | select(.outputs.id | IN($referenced[]) | not | not) | { name: .inputs.name, id: .outputs.id, region: (.inputs.name | extract_region) } ] } ) EOF cat /tmp/pulumi_export.json | jq -f /tmp/final_analysis.jq",
+        "cat > /logs/agent/agent-output.txt << 'EOF' # UNUSED SECURITY GROUPS REPORT Generated: 2026-08-10 ## Summary - Total Security Groups: 2 - Unused Security Groups: 1 - Used Security Groups: 1 ## Unused Security Groups by Region ### US-EAST-1 (1 unused) **1. unused-ec2-multiregion-EC2-ks84v1fh12-us-east-1** - Security Group ID: sg-fcc4ae21561bbef62 - Region: us-east-1 - VPC ID: vpc-a9f1b2c7 - Description: Unused security group - ARN: arn:aws:ec2:us-east-1:000000000000:security-group/sg-fcc4ae21561bbef62 - Pulumi URN: urn:pulumi:dev::ec2-multiregion::aws:ec2/securityGroup:SecurityGroup::unused - Usage: NOT REFERENCED by any resource (no instances, launch templates, or other resources using this SG) ## Analysis Details ### Resource References Found The following resources reference Security Groups: - EC2 Instance (webServer): Uses sg-a95e6125fd9e9fc82 (web) - Launch Template (lt-000000000000-us-east-1): Uses sg-a95e6125fd9e9fc82 (web) ### Used Security Groups The following Security Groups are actively in use: **web-ec2-multiregion-EC2-ks84v1fh12-us-east-1** - Security Group ID: sg-a95e6125fd9e9fc82 - Region: us-east-1 - Referenced by: * EC2 Instance (webServer) * Launch Template (lt-000000000000-us-east-1) ## Recommendations 1. Delete or archive the unused Security Group: sg-fcc4ae21561bbef62 2. Verify no external references exist before deletion (check AWS Console to be absolutely sure) 3. Update the Pulumi code to remove this resource if it's no longer needed ## Notes - Analysis is based on Pulumi state (source of truth for managed resources) - The state accounts for both direct SG references and indirect references through launch templates - No multi-region unused SGs detected (all infrastructure is in us-east-1) EOF cat /logs/agent/agent-output.txt"
+      ],
+      "answer": "ast-1**\n   - Security Group ID: sg-a95e6125fd9e9fc82\n   - Region: us-east-1\n   - Referenced by:\n     * EC2 Instance (webServer)\n     * Launch Template (lt-000000000000-us-east-1)\n\n## Recommendations\n1. Delete or archive the unused Security Group: sg-fcc4ae21561bbef62\n2. Verify no external references exist before deletion (check AWS Console to be absolutely sure)\n3. Update the Pulumi code to remove this resource if it's no longer needed\n\n## Notes\n- Analysis is based on Pulumi state (source of truth for managed resources)\n- The state accounts for both direct SG references and indirect references through launch templates\n- No multi-region unused SGs detected (all infrastructure is in us-east-1)"
+    }
+  }
+}

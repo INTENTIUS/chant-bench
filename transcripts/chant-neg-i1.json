@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "run": "chant-neg-i1",
+  "arm": "chant",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__3mjYVrH",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::Subnet !<-kind:EC2::NetworkInterface\" --at latest --env floci --show region"
+      ],
+      "answer": "Subnets with No Network Interfaces\n===================================\n\nThe following 8 subnets have no network interfaces attached to them:\n\nUS-EAST-1 (2 subnets):\n  - subnet-default-a\n  - subnet-default-b\n\nUS-WEST-1 (3 subnets):\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nUS-WEST-2 (3 subnets):\n  - subnet-default-a\n  - subnet-default-b\n  - subnet-default-c\n\nSource: Recorded AWS estate snapshot 9bf5440 taken 2026-08-10T04:29:13.166Z\nAll subnets in the recorded state have been checked across all available regions."
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__Fm8pcYD",
+      "passed": true,
+      "commands": [
+        "cd /workspace/chant && chant search \"kind:EC2::VPC\" --at latest --env floci --explain --show VpcId,region",
+        "cd /workspace/chant && chant search \"kind:EC2::Instance\" --at latest --env floci --explain --show VpcId,InstanceId,region"
+      ],
+      "answer": "VPCs with No EC2 Instances Running\n====================================\n\nThe following VPCs have no EC2 instances running in them:\n\n1. vpc-default in us-west-1\n2. vpc-default in us-west-2\n\nSummary by VPC:\n- vpc-f8b99008 (us-east-1): 3 instances running\n- vpc-default (us-east-1): 1 instance running\n- vpc-10f346b9 (us-west-1): 1 instance running\n- vpc-default (us-west-1): NO INSTANCES \u2190 Empty\n- vpc-954daa90 (us-west-2): 1 instance running\n- vpc-default (us-west-2): NO INSTANCES \u2190 Empty\n\nData source: chant state snapshot 9bf5440 taken 2026-08-10T04:29:13.166Z"
+    }
+  }
+}

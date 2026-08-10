@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "bench": "aws-bench",
+  "scenario": "ec2-multiregion",
+  "arm": "alchemy-effect",
+  "tool": {
+    "name": "alchemy",
+    "version": "2.0.0-beta.70"
+  },
+  "run": {
+    "id": "alchemy-effect-i3",
+    "workspace": "af3115c80ba1",
+    "finished_at": "2026-08-10T03:56:16.577976",
+    "harness_commit": "e8c259c",
+    "emulator": "ghcr.io/lex00/floci@sha256:b265bf7ccf7c6dd58360acf588451be3929a6902c2611fbab53776f65e5e299d"
+  },
+  "agent": {
+    "name": "claude-code",
+    "model": "claude-haiku-4-5-20251001",
+    "k": 3
+  },
+  "score": {
+    "trials": 24,
+    "expected_trials": 24,
+    "completed": 24,
+    "errored": 0,
+    "passed": 2,
+    "pass_rate": 0.0833,
+    "by_task": {
+      "describe-ec-instances-cross-regi": [
+        0,
+        0,
+        0
+      ],
+      "ec-instances-without-default-vpc": [
+        0,
+        0,
+        0
+      ],
+      "find-ec-instances-in-public-subn": [
+        0,
+        0,
+        1
+      ],
+      "list-ec-instances-all-regions": [
+        0,
+        0,
+        0
+      ],
+      "list-ec-instances-all-regions-1": [
+        0,
+        1,
+        0
+      ],
+      "list-ec-instances-by-vpc-across": [
+        0,
+        0,
+        0
+      ],
+      "list-ec-private-ips-all-regions": [
+        0,
+        0,
+        0
+      ],
+      "list-unused-security-groups-all": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "tooling": {
+    "invocations_ok": 102,
+    "invocations_failed": 3,
+    "failure_rate": 0.0286
+  },
+  "independence": {
+    "account_reads": 2,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "tool_calls": 9.71,
+    "turns": 11.79,
+    "wall_seconds": 95.26,
+    "tokens_in": 340915.83,
+    "tokens_out": 4142.58,
+    "cost_usd": 0.0734,
+    "cost_usd_run": 1.7622
+  },
+  "logs": {
+    "run": "jobs/alchemy-effect-i3/run-arm.log",
+    "job": "jobs/alchemy-effect-i3/job.log",
+    "trials": "jobs/alchemy-effect-i3/<task>__<id>/agent/"
+  },
+  "briefing": {
+    "path": "benchmarks/arms/briefing-alchemy-effect.md",
+    "sha256": "fddba9c087d1"
+  },
+  "reproduce": "benchmarks/arms/alchemy-effect-ec2-multiregion/REPRODUCE.md"
+}

@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "run": "alchemy-effect-neg-i3",
+  "arm": "alchemy-effect",
+  "by_task": {
+    "subnets-with-no-network-interfac": {
+      "trial": "subnets-with-no-network-interfac__R8Lxfub",
+      "passed": false,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "cd /workspace/alchemy && alchemy state export us-west-1.run.ts --local | jq -r '.resources[] | select(.resourceType == \"aws:ec2/subnet:Subnet\" or .resourceType == \"aws:ec2/networkInterface:NetworkInterface\") | \"\\(.resourceType) | Stack: \\(.stack) | ID: \\(.state.id) | \\(if .resourceType == \"aws:ec2/networkInterface:NetworkInterface\" then \"SubnetId: \\(.state.subnetId)\" else \"SubnetId: \\(.state.id)\" end)\"' | sort",
+        "cd /workspace/alchemy && alchemy state export us-west-1.run.ts --local > /tmp/state.json 2>&1 && jq '.resources | length' /tmp/state.json",
+        "jq '.resources | group_by(.resourceType) | map({type: .[0].resourceType, count: length}) | sort_by(.type)' /tmp/state.json",
+        "jq '.resources[0] | keys' /tmp/state.json",
+        "jq '.resources[0]' /tmp/state.json",
+        "jq '.resources[] | select(.state.resourceType == \"AWS.EC2.Subnet\" or .state.resourceType == \"AWS.EC2.NetworkInterface\") | {fqn, stack, type: .state.resourceType, id: .state.id, subnetId: .state.subnetId, vpcId: .state.vpcId}' /tmp/state.json | head -50",
+        "jq '.resources[] | select(.state.resourceType == \"AWS.EC2.Subnet\") | {fqn, stack, attr: .state.attr}' /tmp/state.json",
+        "jq '.resources[] | select(.state.resourceType == \"AWS.EC2.NetworkInterface\") | {fqn, stack, attr: .state.attr}' /tmp/state.json",
+        "jq '.resources | group_by(.state.resourceType) | map({type: .[0].state.resourceType, count: length})' /tmp/state.json",
+        "cat > /tmp/analyze_subnets.jq << 'EOF' # Extract all subnets def subnets: [.resources[] | select(.state.resourceType == \"AWS.EC2.Subnet\") | {fqn: .fqn, stack: .stack, subnetId: .state.attr.subnetId, region: (.stack | split(\"-\") | last)}]; # Extract all instances and their subnets def instances: [.resources[] | select(.state.resourceType == \"AWS.EC2.Instance\") | {fqn: .fqn, stack: .stack, subnetId: .state.attr.subnetId, instanceId: .state.attr.instanceId}]; # Extract launch template instances def launch_template_instances: [.resources[] | select(.state.resourceType == \"AWS.EC2.LaunchTemplateInstance\") | {fqn: .fqn, stack: .stack, subnetId: .state.attr.subnetId, instanceId: .state.attr.instanceId}]; # Main logic { subnets: subnets, instances: (instances + launch_template_instances) } EOF jq -f /tmp/analyze_subnets.jq /tmp/state.json",
+        "cat > /tmp/find_empty_subnets.jq << 'EOF' # Extract all subnets (.resources[] | select(.state.resourceType == \"AWS.EC2.Subnet\") | {fqn: .fqn, stack: .stack, subnetId: .state.attr.subnetId, region: .stack}) as $subnet | # Get all instances/launch template instances [(.resources[] | select(.state.resourceType == \"AWS.EC2.Instance\" or .state.resourceType == \"AWS.EC2.LaunchTemplateInstance\") | .state.attr.subnetId)] as $instances_subnets | # Find subnets not in $instances_subnets if ($instances_subnets | index($subnet.subnetId) | not) then $subnet else empty end EOF jq -f /tmp/find_empty_subnets.jq /tmp/state.json",
+        "cat > /tmp/subnet_analysis.py << 'EOF' import json with open('/tmp/state.json') as f: state = json.load(f) # Get all subnets subnets = {} for resource in state['resources']: if resource['state']['resourceType'] == 'AWS.EC2.Subnet': subnet_id = resource['state']['attr']['subnetId'] region = resource['stack'].split('-')[-1] fqn = resource['fqn'] stack = resource['stack'] subnets[subnet_id] = { 'fqn': fqn, 'stack': stack, 'region': region, 'instances': [] } # Get all instances and their subnets for resource in state['resources']: if resource['state']['resourceType'] in ['AWS.EC2.Instance', 'AWS.EC2.LaunchTemplateInstance']: subnet_id = resource['state']['attr'].get('subnetId') if subnet_id in subnets: subnets[subnet_id]['instances'].append({ 'fqn': resource['fqn'], 'instanceId': resource['state']['attr']['instanceId'] }) # Print results print(\"=== Subnet Analysis ===\\n\") empty_subnets = [] for subnet_id, subnet_data in sorted(subnets.items()): num_instances = len(subnet_data['instances']) status = \"\u2713 has instances\" if num_instances > 0 else \"\u2717 EMPTY\" print(f\"{subnet_id} ({subnet_data['region']}) - {status}\") print(f\" FQN: {subnet_data['fqn']}, Stack: {subnet_data['stack']}\") if subnet_data['instances']: for instance in subnet_data['instances']: print(f\" - {instance['fqn']} ({instance['instanceId']})\") else: empty_subnets.append(subnet_id) print() if empty_subnets: print(f\"\\n=== EMPTY SUBNETS (No Network Interfaces) ===\") for subnet_id in empty_subnets: print(subnet_id) else: print(\"\\n=== RESULT ===\") print(\"No empty subnets found. All subnets have network interfaces.\") EOF python3 /tmp/subnet_analysis.py"
+      ],
+      "answer": "interfaces\n\nDetailed Results:\n-----------------\n\nus-east-1:\n  \u2022 subnet-37c21af6 (PublicSubnet): 2 network interfaces\n    - LaunchTemplateServer (i-d23304a8c14237368)\n    - WebServer (i-a99e3ced39782a9b7)\n\n  \u2022 subnet-81b6b3f9 (PrivateSubnet): 1 network interface\n    - PrivateServer (i-382f0ba0f1fe8b0d1)\n\nus-west-1:\n  \u2022 subnet-875b7b13 (PublicSubnet): 1 network interface\n    - WebServer (i-c19938fde4d3088ab)\n\nus-west-2:\n  \u2022 subnet-cac36200 (PublicSubnet): 1 network interface\n    - WebServer (i-3e4d5fe856efabc43)\n\nSummary:\n--------\nTotal subnets: 4\nEmpty subnets: 0\nSubnets with interfaces: 4\n\nAll subnets have at least one EC2 instance running, and therefore all have network interfaces attached."
+    },
+    "vpcs-with-no-running-instances": {
+      "trial": "vpcs-with-no-running-instances__e9JYnv8",
+      "passed": true,
+      "commands": [
+        "cd /workspace/alchemy && alchemy state export us-west-1.run.ts --local | jq '.' | head -100",
+        "cd /workspace/alchemy && alchemy state export us-west-1.run.ts --local > /tmp/alchemy_state.json && jq '.resources | length' /tmp/alchemy_state.json",
+        "jq '.resources | map(select(.state.resourceType == \"AWS.EC2.Vpc\" or .state.resourceType == \"AWS.EC2.Instance\")) | group_by(.stack) | map({stack: .[0].stack, vpcs: (map(select(.state.resourceType == \"AWS.EC2.Vpc\")) | map(.state.attr.vpcId)), instances: (map(select(.state.resourceType == \"AWS.EC2.Instance\")) | map(.state.attr.vpcId))})' /tmp/alchemy_state.json",
+        "jq '.resources[] | select(.state.resourceType == \"AWS.EC2.Vpc\")' /tmp/alchemy_state.json",
+        "jq '.resources | map(select(.state.resourceType == \"AWS.EC2.Instance\")) | sort_by(.stack) | .[] | {stack: .stack, instance: .state.attr.instanceId, vpcId: .state.attr.vpcId}' /tmp/alchemy_state.json",
+        "find /workspace/alchemy/src -name \"*.ts\" -type f | head -20",
+        "cd /workspace/alchemy && jq '.resources[] | select(.state.resourceType == \"AWS.EC2.Vpc\") | {stack: .stack, vpcId: .state.attr.vpcId, cidrBlock: .state.attr.cidrBlock}' /tmp/alchemy_state.json",
+        "cd /workspace/alchemy && alchemy state stacks us-west-1.run.ts --local",
+        "jq '.resources | map(select(.state.resourceType == \"AWS.EC2.Vpc\")) | group_by(.stack) | map({stack: .[0].stack, vpcCount: length, vpcs: map(.state.attr.vpcId)})' /tmp/alchemy_state.json",
+        "jq '.resources | map(.state.resourceType) | unique | sort' /tmp/alchemy_state.json",
+        "jq '.resources[] | select(.state.resourceType == \"AWS.EC2.VPC\")' /tmp/alchemy_state.json",
+        "cd /workspace/alchemy && for region in us-east-1 us-west-1 us-west-2; do echo \"=== $region ===\"; aws ec2 describe-vpcs --region $region --query 'Vpcs[*].[VpcId,CidrBlock,Tags[?Key==`Name`].Value|[0],IsDefault]' --output table; done",
+        "cd /workspace/alchemy && for region in us-east-1 us-west-1 us-west-2; do echo \"=== $region ===\"; aws ec2 describe-instances --region $region --query 'Reservations[*].Instances[*].[VpcId,InstanceId,State.Name]' --output table; done",
+        "cat > /tmp/vpc_summary.txt << 'EOF' VPC Analysis Summary ==================== All VPCs across all regions: US-EAST-1: - vpc-default (172.31.0.0/16, Default VPC): 1 instance (RUNNING) - vpc-200c613e (10.0.0.0/16, ResourcesVpc): 3 instances (RUNNING) US-WEST-1: - vpc-5cd97856 (10.0.0.0/16, ResourcesVpc): 1 instance (RUNNING) - vpc-default (172.31.0.0/16, Default VPC): 0 instances \u2190 EMPTY US-WEST-2: - vpc-0158d8c2 (10.0.0.0/16, ResourcesVpc): 1 instance (RUNNING) - vpc-default (172.31.0.0/16, Default VPC): 0 instances \u2190 EMPTY VPCs with NO EC2 instances: ============================= 1. vpc-default in us-west-1 (172.31.0.0/16) - Default VPC 2. vpc-default in us-west-2 (172.31.0.0/16) - Default VPC Total: 2 VPCs with no running instances out of 6 total VPCs. EOF cat /tmp/vpc_summary.txt"
+      ],
+      "answer": "l VPCs across all regions:\n\nUS-EAST-1:\n  - vpc-default (172.31.0.0/16, Default VPC): 1 instance (RUNNING)\n  - vpc-200c613e (10.0.0.0/16, ResourcesVpc): 3 instances (RUNNING)\n\nUS-WEST-1:\n  - vpc-5cd97856 (10.0.0.0/16, ResourcesVpc): 1 instance (RUNNING)\n  - vpc-default (172.31.0.0/16, Default VPC): 0 instances \u2190 EMPTY\n\nUS-WEST-2:\n  - vpc-0158d8c2 (10.0.0.0/16, ResourcesVpc): 1 instance (RUNNING)\n  - vpc-default (172.31.0.0/16, Default VPC): 0 instances \u2190 EMPTY\n\nVPCs with NO EC2 instances:\n=============================\n1. vpc-default in us-west-1 (172.31.0.0/16) - Default VPC\n2. vpc-default in us-west-2 (172.31.0.0/16) - Default VPC\n\nTotal: 2 VPCs with no running instances out of 6 total VPCs."
+    }
+  }
+}
