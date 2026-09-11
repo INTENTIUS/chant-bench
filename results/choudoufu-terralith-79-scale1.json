@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "bench": "terralith",
+  "scenario": "terralith-79",
+  "arm": "choudoufu",
+  "run": {
+    "id": "choudoufu-terralith-79-scale1",
+    "finished_at": "2026-09-10T07:49:05Z",
+    "harness_commit": "3bca740259d4373a831de32cb44c838ec38c1e51",
+    "substrate": "floci",
+    "emulator": "ghcr.io/lex00/floci@sha256:9ec3fa649177f64c17c299e3fd799cc774cc1e1b67db2bc20e27d1bc98d7c264",
+    "oracle": {
+      "terraform": "1.15.8",
+      "tofu": "1.12.5"
+    }
+  },
+  "agent": {
+    "name": "none",
+    "model": null,
+    "k": 1
+  },
+  "score": {
+    "trials": 4,
+    "expected_trials": 4,
+    "completed": 4,
+    "errored": 0,
+    "passed": 4,
+    "pass_rate": 1.0,
+    "by_task": {
+      "cold_deploy": [
+        1
+      ],
+      "migrate": [
+        1
+      ],
+      "test_plan": [
+        1
+      ],
+      "test_apply": [
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": null,
+    "account_reads_status": "not_measured",
+    "account_reads_reason": "choudoufu's certification record carries resource counts, not API call counts \u2014 the sweep and read-pass split behind this number is not captured anywhere in live/gauntlet.json today. INTENTIUS/choudoufu#960 (the live emulator tee) and #958 (the event schema it would write to) are what would produce it; both are scoped under #961.",
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "wall_seconds": 327.7,
+    "wall_seconds_by_stage": {
+      "cold_deploy": 121,
+      "migrate": 40,
+      "test_plan": 3,
+      "test_apply": 5
+    }
+  },
+  "measurement": {
+    "resources": 79,
+    "taggable_resources": 38,
+    "verified_resources": 38,
+    "untaggable_resources": 41,
+    "throttles": 0,
+    "retries": 0
+  },
+  "reproduce": "live/e2e/terralith-scale/run.sh"
+}

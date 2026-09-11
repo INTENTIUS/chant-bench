@@ -14,6 +14,7 @@ with what produced it.
 | benchmark | scenarios | who defines it |
 |---|---|---|
 | [aws-bench](https://github.com/aws-bench/aws-bench) | ec2-multiregion | aws-bench |
+| terralith | terralith-79, terralith-745, terralith-3705, terralith-10069 | this repo, against [choudoufu](https://github.com/INTENTIUS/choudoufu) and [chant](https://github.com/INTENTIUS/chant) |
 
 More get added as they are published. The result contract does not change, which
 is what lets a new one slot in.
@@ -45,5 +46,6 @@ rather than a tool, is worse than no number.
     just run chant        # one arm, about ten minutes, costs nothing
     just matrix           # every arm, three runs each
     just ingest ../aws-bench
+    just ingest-terralith ../choudoufu estate   # a #33 scale point, no agent involved
 
 See [Run it yourself](https://intentius.github.io/chant-bench/running/).

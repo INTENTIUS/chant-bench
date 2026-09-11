@@ -33,11 +33,22 @@ This site collects benchmarks that measure that, and publishes every run.
 
     [Results](aws-bench/ec2-multiregion-negatives/results.md)
 
+-   ### [terralith](terralith/index.md)
+
+    No agent, no model, no questions. How much a plan costs as a stock-Terraform
+    estate grows, for choudoufu and for chant, against stock OpenTofu as the
+    oracle — one certification run per arm per size.
+
+    **Scenarios:** terralith-79, terralith-745, terralith-3705, terralith-10069.
+    A table, not a leaderboard: sizes down the side, arms across.
+
+    [Results](terralith/results.md)
+
 </div>
 
-aws-bench is the only published benchmark here so far. Others get added as they
-appear, and the shape of the results does not change, which is what lets a new
-one slot in.
+aws-bench and terralith are the published benchmarks here so far. Others get
+added as they appear, and the shape of the results does not change, which is
+what lets a new one slot in.
 
 ## Whose work this is
 
