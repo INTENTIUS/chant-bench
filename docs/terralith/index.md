@@ -45,15 +45,12 @@ number it isn't: plausible, comparable-looking, and wrong. That count still
 exists, honestly named, as `measurement.verified_resources` on each row — it
 is just not the axis.
 
-Producing the real number needs choudoufu to attribute API calls to a run in
-the first place, which it does not do today.
-[INTENTIUS/choudoufu#960](https://github.com/INTENTIUS/choudoufu/issues/960)
-(a live tee on the emulator that attributes each call to a resource and a
-family) and
-[#958](https://github.com/INTENTIUS/choudoufu/issues/958) (the event schema it
-would write to) are what that requires, both scoped under the research spike at
-[#961](https://github.com/INTENTIUS/choudoufu/issues/961). Until one of those
-lands, this bench publishes a missing headline number rather than a wrong one.
+Producing the real number needs choudoufu's own scale record
+(`live/gauntlet-scale.json`) to carry a `plan_calls` field, which no record
+does today.
+[INTENTIUS/choudoufu#1053](https://github.com/INTENTIUS/choudoufu/issues/1053)
+is the issue scoped to produce it. Until it lands, this bench publishes a
+missing headline number rather than a wrong one.
 
 ## What it deliberately does not measure
 
@@ -93,7 +90,10 @@ produced it — `live/e2e/terralith-scale/run.sh` for an emulator run,
 `live/live-cert/terralith-scale.sh` for a real-AWS one — both in
 [INTENTIUS/choudoufu](https://github.com/INTENTIUS/choudoufu). Those scripts
 are not agent-driven; they emit `GAUNTLET stage=... verdict=...` lines and a
-row in choudoufu's own `live/gauntlet.json`, which
+typed record — one row per (estate, target, scale) ever measured — in
+choudoufu's own `live/gauntlet-scale.json`, which
 [`scripts/ingest_terralith.py`](https://github.com/INTENTIUS/chant-bench/blob/main/scripts/ingest_terralith.py)
-reads to produce the result set published here. Nothing in that path runs an
-agent, asks a question, or reads a transcript.
+reads to produce the result set published here (it also reads
+`live/gauntlet.json`, for the one field — a run's total wall-clock time — the
+scale record does not carry). Nothing in that path runs an agent, asks a
+question, or reads a transcript.

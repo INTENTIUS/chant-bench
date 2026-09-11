@@ -51,7 +51,7 @@
   "independence": {
     "account_reads": null,
     "account_reads_status": "not_measured",
-    "account_reads_reason": "choudoufu's certification record carries resource counts, not API call counts \u2014 the sweep and read-pass split behind this number is not captured anywhere in live/gauntlet.json today. INTENTIUS/choudoufu#960 (the live emulator tee) and #958 (the event schema it would write to) are what would produce it; both are scoped under #961.",
+    "account_reads_reason": "choudoufu's scale record carries resource counts, not API call counts \u2014 `plan_calls` (the sweep/read-pass split behind this number) is absent from this record. INTENTIUS/choudoufu#1053 is the issue scoped to produce it.",
     "answered_from_own_state": false
   },
   "effort": {
