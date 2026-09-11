@@ -15,12 +15,18 @@ no other tests and so no established convention; `tests/fixtures/<script
 name>/` was chosen so a second script gaining a test does not have to
 invent a new layout or collide with this one's file names. It holds:
 
-  gauntlet-scale.json   a two-record ScaleArtifact: one floci record with no
-                        `plan_calls` (exercises the null/reason branch of
-                        `independence_block()`) and one aws record WITH
-                        `plan_calls` and a failing `test_apply` stage
-                        (exercises the populated branch, the throttle/retry
-                        summing, and a mixed pass/fail score)
+  gauntlet-scale.json   a two-record ScaleArtifact, laid out the way
+                        choudoufu#1053 actually shipped it: one floci record
+                        WITH `plan_calls` — a sweep/read_pass split for
+                        choudoufu plus the stock oracle's own count on the
+                        read_pass leg — exercising the populated branch of
+                        `independence_block()` and `measurement_block()`'s
+                        `stock_read_pass_calls`, and one aws record with NO
+                        `plan_calls` and a failing `test_apply` stage,
+                        exercising the null/reason branch, the throttle/retry
+                        summing, and a mixed pass/fail score. That pairing
+                        (floci measured, aws not yet) matches every real
+                        record in `live/gauntlet-scale.json` today.
   gauntlet.json         a minimal companion carrying `duration_s` for only
                         the floci record's commit — so one expected result
                         gets `effort.wall_seconds` and the other proves the

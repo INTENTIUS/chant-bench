@@ -40,7 +40,20 @@
           "detail": "no-op apply (fixture)"
         }
       },
-      "source": "fixture: floci scale=1, no plan_calls, commit matched in gauntlet.json"
+      "plan_calls": {
+        "sweep": {
+          "choudoufu": 3
+        },
+        "read_pass": {
+          "choudoufu": 2,
+          "stock": 6
+        },
+        "total": {
+          "choudoufu": 5,
+          "stock": 6
+        }
+      },
+      "source": "fixture: floci scale=1, plan_calls present (choudoufu#1053 shape: sweep+read_pass with stock's oracle count on the read_pass leg), commit matched in gauntlet.json"
     },
     {
       "schema": 1,
@@ -82,18 +95,7 @@
           "detail": "the no-op apply was not a no-op (fixture)"
         }
       },
-      "plan_calls": {
-        "sweep": {
-          "choudoufu": 5
-        },
-        "read_pass": {
-          "choudoufu": 7
-        },
-        "total": {
-          "choudoufu": 12
-        }
-      },
-      "source": "fixture: aws scale=4, plan_calls present, commit NOT in gauntlet.json"
+      "source": "fixture: aws scale=4, no plan_calls (matches every real-AWS record today), commit NOT in gauntlet.json"
     }
   ]
 }

@@ -59,6 +59,23 @@ does carry `plan_calls` (choudoufu#1053 is the issue that will produce it),
 dropped — a `null` with an explanation and a real number with a leftover
 excuse both being things a reader would rightly distrust. See
 `independence_block()` below.
+
+choudoufu#1053 landed `plan_calls` on exactly one record so far — the
+`floci`/`scale=1` emulator row — and the four real-AWS records still carry
+none, so this ingest publishes a mix: one row with a real
+`independence.account_reads`, four still `null`-with-a-reason. That mix is the
+honest state of the certification today, not a bug in this script.
+
+`plan_calls` also carries a `stock` count beside choudoufu's own, on whichever
+leg the same run measured both sides of — today that is only `read_pass`,
+because stock has no sweep phase to instrument (it never runs choudoufu's
+tagging sweep, so there is no "stock sweep count" to report — see
+choudoufu's `ScaleCallPair` doc comment). That number is not a second arm's
+score: it is the oracle that keeps choudoufu's own read-pass figure from being
+self-reported, so it rides as `measurement.stock_read_pass_calls`, beside
+`sweep_calls`/`read_pass_calls`, never as `independence.account_reads` for
+some competing row. See `measurement_block()` below and PLAN.md's terralith
+section for why it lives there and not as a second arm.
 """
 
 from __future__ import annotations
@@ -307,6 +324,18 @@ def measurement_block(rec: dict) -> dict:
         if read_pass is not None:
             measurement["read_pass_calls"] = read_pass
 
+        # The oracle for choudoufu's own read-pass figure, not a competing
+        # arm's score — see the module docstring and PLAN.md. Read off
+        # `read_pass.stock` first, since that is the leg stock actually runs;
+        # `total.stock` is only ever a fallback for a record instrumented with
+        # a total but no leg split, and today it is the same number anyway
+        # (`sweep.stock` never exists — stock has no sweep phase to run).
+        stock_read_pass = (plan_calls.get("read_pass") or {}).get("stock")
+        if stock_read_pass is None:
+            stock_read_pass = (plan_calls.get("total") or {}).get("stock")
+        if stock_read_pass is not None:
+            measurement["stock_read_pass_calls"] = stock_read_pass
+
     return measurement
 
 
@@ -395,7 +424,11 @@ def main() -> int:
         out_path.write_text(json.dumps(result, indent=2) + "\n")
 
         print(f"wrote {out_path}")
-        missing = [k for k in ("sweep_calls", "read_pass_calls", "index_lag_seconds") if k not in result["measurement"]]
+        missing = [
+            k
+            for k in ("sweep_calls", "read_pass_calls", "stock_read_pass_calls", "index_lag_seconds")
+            if k not in result["measurement"]
+        ]
         if missing:
             print(f"  measurement is missing (not in the source record): {', '.join(missing)}")
         if "wall_seconds" not in result["effort"]:
