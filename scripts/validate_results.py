@@ -115,9 +115,37 @@ def check(path: Path) -> list[str]:
 
     # The axis the whole comparison turns on. Absent, a reader cannot tell an arm
     # that answered from its own state from one carried by the AWS CLI.
+    #
+    # `null` is allowed, but only accompanied by a reason: `account_reads_status`
+    # and `account_reads_reason` naming what a real read count would take. The
+    # alternative to null-with-a-reason is not "no number", it is a wrong one —
+    # terralith's ingest once published a resource count under this field
+    # because a resource count was the closest thing available, and a reader
+    # would have read 1655 as "1655 account reads" with nothing on the page to
+    # say otherwise. A missing axis with a reason is an honest first
+    # publication; a plausible, comparable-looking wrong one is exactly what
+    # this file exists to refuse. Silence is not a reason: a null with no
+    # explanation is refused the same as a missing field always was.
     indep = r.get("independence")
-    if isinstance(indep, dict) and not isinstance(indep.get("account_reads"), int):
-        problems.append("`independence.account_reads` missing or not an integer")
+    if isinstance(indep, dict):
+        ar = indep.get("account_reads")
+        if ar is None:
+            status = indep.get("account_reads_status")
+            reason = indep.get("account_reads_reason")
+            explained = (
+                isinstance(status, str) and status.strip()
+                and isinstance(reason, str) and reason.strip()
+            )
+            if not explained:
+                problems.append(
+                    "`independence.account_reads` missing or not an integer, and not explained by "
+                    "`account_reads_status`/`account_reads_reason` — the axis this comparison turns "
+                    "on cannot be silently absent"
+                )
+        elif not isinstance(ar, int):
+            problems.append(
+                f"`independence.account_reads` should be an int or null, got {type(ar).__name__}"
+            )
 
     # A run the gates rejected does not belong here at all. It used to be
     # published and rendered as invalid, on the reasoning that "the tool never

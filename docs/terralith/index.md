@@ -21,9 +21,39 @@ stock Terraform, then walked through the certification's own stages —
 Each stage either passes or it does not. There are no repeated trials to
 average, so `k=1`: this is a certification attempt, not a sampled measurement
 of variance. What is reported alongside a pass or fail is what the attempt
-cost — wall time per stage, and the plan's own read count, `independence`'s
-axis carried over from aws-bench and here promoted to the thing this bench
-exists to report rather than a side field.
+cost in wall time per stage, and — once it can be — the plan's own read count,
+`independence.account_reads`, `aws-bench`'s axis carried over and promoted here
+to the thing this bench exists to report rather than a side field. See the
+next section for why that number is not on the page yet.
+
+## The axis this bench exists to measure is not sourced yet
+
+**`independence.account_reads` is `null` on every published row.** It is not
+zero and it is not a dash standing in for zero — the [results page](results.md)
+renders the cell as *not measured*, on purpose, because a blank or a zero both
+read as a real answer and neither one is true.
+
+The reason is specific: choudoufu's certification record
+(`live/gauntlet.json`) logs how many resources a run touched, not how many API
+calls it took to touch them. An earlier version of this ingest used the
+migrate stage's resource-verification count — 38 of 79, 1,655 of 3,705 — as a
+stand-in for `account_reads`, because it was the nearest number available and
+it is genuinely true that those resources needed a live read to verify. But it
+is a count of *resources*, not of *reads*, and publishing it under the one
+field this whole site is built around would have looked exactly like the
+number it isn't: plausible, comparable-looking, and wrong. That count still
+exists, honestly named, as `measurement.verified_resources` on each row — it
+is just not the axis.
+
+Producing the real number needs choudoufu to attribute API calls to a run in
+the first place, which it does not do today.
+[INTENTIUS/choudoufu#960](https://github.com/INTENTIUS/choudoufu/issues/960)
+(a live tee on the emulator that attributes each call to a resource and a
+family) and
+[#958](https://github.com/INTENTIUS/choudoufu/issues/958) (the event schema it
+would write to) are what that requires, both scoped under the research spike at
+[#961](https://github.com/INTENTIUS/choudoufu/issues/961). Until one of those
+lands, this bench publishes a missing headline number rather than a wrong one.
 
 ## What it deliberately does not measure
 

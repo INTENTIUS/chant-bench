@@ -314,7 +314,7 @@ aws-bench's 3.
 | `arm` | `"choudoufu"`, `"chant"`, `"opentofu"` | opentofu is the oracle, not a baseline bolted on afterward |
 | `score.by_task` | the certification's own stages: `cold_deploy`, `migrate`, `test_plan`, `test_apply`, each a length-1 list (`k=1`) | reuses the existing per-task shape instead of inventing one; `score.trials` is the count of stages actually asserted, `expected_trials` the count a complete run of that arm at that size was scheduled for — the two differ honestly when a run stops after a failing stage, the way `score.expected_trials` already documents for a crashed aws-bench trial |
 | `gates.audit` | the run's own verify-empty listing and stage assertions actually ran and produced a verdict | this is **not** whether the estate passed. A stage that ran cleanly and found a non-empty plan is a measured failure, which belongs in `score`; `gates.audit` only says the measurement apparatus itself worked. Collapsing those two is exactly the mistake `validate_results.py` already refuses for aws-bench — "the tool never ran" and "the tool did badly" have to stay different findings here too |
-| `independence.account_reads` | the plan's own read count | not a side field for this bench, the measurement. Where the source record gives a literal read-verified count (see ingest, below) it is used and cited; where it does not, the field is left for the validator to refuse rather than guessed |
+| `independence.account_reads` | the plan's own read count, or `null` with `account_reads_status`/`account_reads_reason` | not a side field for this bench, the measurement — which is exactly why a wrong number here is worse than a missing one. choudoufu's certification record carries a resource count, not a call count, and the two are not the same thing even where they coincide (see below); every published terralith result is `null` here until a real count exists |
 | `effort` | wall seconds, overall and per stage | the certification's own `duration_s` and `stage_seconds` |
 | `measurement` | `resources`, `taggable_resources`, `throttles`, `retries`, and — only when the source record actually carries them — `sweep_calls`, `read_pass_calls`, `index_lag_seconds` | the numbers with no home in the agent-shaped fields above. New top-level block, required (as a dict, contents unchecked) whenever `bench == "terralith"`, the same latitude `agent` already gets |
 | `run.substrate` | `"floci"` or `"aws"` | the field this document already defined for aws-bench live-cloud runs, reused rather than re-invented |
@@ -327,20 +327,42 @@ itself the proof the run measured something. Setting `gates.audit: false`
 here would be the CDK mistake in reverse: a tool that ran and told the truth
 about a bad plan is not a tool that never ran.
 
+**A resource count is not a read count, even where the numbers agree.** The
+first cut of this ingest set `account_reads` to the migrate stage's
+verification count — 38 of 79, 1,655 of 3,705 — because that count is real,
+sourced, and genuinely about resources a live read touched. It shipped anyway
+as wrong: `account_reads` is defined as reads, that number is resources, and a
+reader scanning the one column this whole site is built around has no way to
+tell "1,655 reads" from "1,655 resources that needed one or more reads apiece"
+from the page. A wrong number in the axis field is worse than an absent one —
+it is plausible, it compares cleanly against other rows, and nothing on the
+page contradicts it. So every terralith result carries `account_reads: null`
+today, with `account_reads_status: "not_measured"` and an
+`account_reads_reason` naming what would fix it (choudoufu's certification
+record has no sweep/read-pass call count at all — see
+`ingest_terralith.py`'s `independence_block()`). The resource count did not
+get deleted, it got its own honest name: `measurement.verified_resources`.
+
 ## Extending `validate_results.py` for a bench with no agent
 
-One addition, in the same one-problem-per-line style as everything else in
-that file: when `r.get("bench") == "terralith"`, `measurement` must be present
+Two additions, in the same one-problem-per-line style as everything else in
+that file.
+
+First: when `r.get("bench") == "terralith"`, `measurement` must be present
 and a dict, exactly the way the top-level `REQUIRED` table already treats
 `agent`, `score`, `gates`, `independence` and `effort` — presence and type,
 nothing checked inside. Every other bench keeps requiring what it already
 requires; this is additive, not a relaxation.
 
-`independence.account_reads` already has to be an integer for every bench,
-terralith included, because that check runs unconditionally today. That is
-deliberate rather than an oversight carried over from aws-bench: a terralith
-result with no read count would look like every other row on the page while
-carrying none of the number the whole bench exists to report.
+Second: `independence.account_reads` already had to be an integer for every
+bench, unconditionally — deliberately, not an oversight, because a result with
+no read count would look like every other row on the page while carrying none
+of the number the whole site is built around. That check now also accepts
+`null`, but only when `account_reads_status` and `account_reads_reason` are
+both non-empty strings explaining why. A `null` with no explanation is refused
+exactly as a missing field always was; the bar moved from "must be an int" to
+"must be an int, or a stated reason it is not one", not down to "may be
+absent".
 
 ## Metric rendering
 

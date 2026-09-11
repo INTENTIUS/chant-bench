@@ -79,15 +79,21 @@ def stage_verdicts(r: dict) -> str:
 
 
 def account_reads(r: dict) -> str:
-    v = r.get("independence", {}).get("account_reads")
-    m = r.get("measurement", {})
-    taggable = m.get("taggable_resources")
-    resources = m.get("resources")
-    if not isinstance(v, (int, float)):
-        return "—"
-    if isinstance(taggable, (int, float)) and isinstance(resources, (int, float)) and resources:
-        return f"{num(v)} of {num(resources)}"
-    return num(v)
+    """The axis this bench exists to measure — rendered as "not measured"
+    rather than a dash or a zero when it is absent, and never filled in with
+    `measurement.verified_resources` as a stand-in. That number counts
+    resources needing a live read to verify identity, not the reads it took,
+    and a reader scanning this column has no way to tell the two apart if the
+    cell just shows a plausible-looking integer. See PLAN.md and
+    `ingest_terralith.py`'s `independence_block()` for why.
+    """
+    indep = r.get("independence", {})
+    v = indep.get("account_reads")
+    if isinstance(v, (int, float)):
+        return num(v)
+    if indep.get("account_reads_status"):
+        return "*not measured*"
+    return "—"
 
 
 def wall_time(r: dict) -> str:
@@ -174,6 +180,15 @@ def results_page(rows: list[dict]) -> str:
         "    different from a run whose tooling never worked at all, which this",
         "    site does not publish. See [what this bench measures](index.md#a-failed-stage-is-not-a-hidden-run)",
         "    for the distinction.",
+        "",
+        "!!! warning \"Account reads: not measured yet\"",
+        "",
+        "    **`independence.account_reads` — the axis this whole site turns",
+        "    on — is not measured for any row below.** choudoufu's",
+        "    certification record does not carry a plan's sweep-call or",
+        "    read-pass count, only resource counts, so the column reads *not",
+        "    measured* rather than a number that looks like one but isn't. See",
+        "    [what this bench deliberately does not measure yet](index.md#the-axis-this-bench-exists-to-measure-is-not-sourced-yet).",
         "",
     ]
     if not rows:

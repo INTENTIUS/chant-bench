@@ -49,7 +49,9 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 38,
+    "account_reads": null,
+    "account_reads_status": "not_measured",
+    "account_reads_reason": "choudoufu's certification record carries resource counts, not API call counts \u2014 the sweep and read-pass split behind this number is not captured anywhere in live/gauntlet.json today. INTENTIUS/choudoufu#960 (the live emulator tee) and #958 (the event schema it would write to) are what would produce it; both are scoped under #961.",
     "answered_from_own_state": false
   },
   "effort": {
@@ -64,6 +66,7 @@
   "measurement": {
     "resources": 79,
     "taggable_resources": 38,
+    "verified_resources": 38,
     "untaggable_resources": 41,
     "throttles": 0,
     "retries": 0

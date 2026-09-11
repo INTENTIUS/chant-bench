@@ -21,9 +21,15 @@ sweep-call count, the ownership read-pass count split out from the resources
 it walked, index lag — is not present in the record, this script leaves the
 key out entirely. `validate_results.py` is what refuses an incomplete result;
 guessing here would just move the lie one file earlier. See PLAN.md, "A second
-bench, with no agent: terralith", for the field-by-field reasoning, and the
-report this script's issue was implemented under for which fields that gap
-covers today.
+bench, with no agent: terralith", for the field-by-field reasoning.
+
+`independence.account_reads` — the axis this whole bench turns on — is `null`
+on every result this script writes, with `account_reads_status` and
+`account_reads_reason` saying why: the record gives a resource count that
+happens to need a live read to verify (`measurement.verified_resources`), not
+a count of reads. Publishing the resource count under the axis field would be
+a wrong number in the one field a reader trusts without opening this script,
+which is worse than an honest absence. See `independence_block()` below.
 """
 
 from __future__ import annotations
@@ -127,7 +133,39 @@ def gates_block() -> dict:
     }
 
 
-def measurement_and_reads_from_estate(last_run: dict) -> tuple[dict, int | None]:
+#: Why `independence.account_reads` is null on every terralith result today,
+#: and what would fix it. Named issues so the claim can be checked rather than
+#: taken on trust: #960 is the live emulator tee that would attribute a call to
+#: a resource and a family, #958 the event schema it would write to, #961 the
+#: spike both are scoped under.
+ACCOUNT_READS_REASON = (
+    "choudoufu's certification record carries resource counts, not API call "
+    "counts — the sweep and read-pass split behind this number is not captured "
+    "anywhere in live/gauntlet.json today. INTENTIUS/choudoufu#960 (the live "
+    "emulator tee) and #958 (the event schema it would write to) are what "
+    "would produce it; both are scoped under #961."
+)
+
+
+def independence_block() -> dict:
+    """`independence.account_reads` is the axis this whole bench turns on, and
+    choudoufu's certification record does not carry it — only a resource count
+    that happens to need a live read to verify, which is a different number
+    (see `measurement.verified_resources`). Publishing that count as
+    `account_reads` would be a wrong number in the one field a reader is going
+    to trust without opening this script. A missing number with a reason is an
+    honest first publication; a plausible, comparable-looking wrong one is
+    exactly what this repository exists to refuse.
+    """
+    return {
+        "account_reads": None,
+        "account_reads_status": "not_measured",
+        "account_reads_reason": ACCOUNT_READS_REASON,
+        "answered_from_own_state": False,
+    }
+
+
+def measurement_from_estate(last_run: dict) -> dict:
     detail = last_run.get("detail", {})
     cold = detail.get("cold_deploy", "")
     migrate = detail.get("migrate", "")
@@ -140,7 +178,15 @@ def measurement_and_reads_from_estate(last_run: dict) -> tuple[dict, int | None]
     if resources is not None:
         measurement["resources"] = resources
     if verified is not None:
+        # Taggable and verified coincide in this migrate algorithm — every
+        # taggable resource is one that needed a live read to verify, and a
+        # skipped one derives its identity from an already-stamped parent
+        # without reading anything. They are still two different concepts,
+        # so they get two field names even though today they carry one
+        # number: `taggable_resources` is about what the resource is,
+        # `verified_resources` is about what the run had to do to it.
         measurement["taggable_resources"] = verified
+        measurement["verified_resources"] = verified
     if skipped is not None:
         measurement["untaggable_resources"] = skipped
     # floci does not throttle (live/FLOCI.md); no throttle text in an emulator
@@ -148,10 +194,10 @@ def measurement_and_reads_from_estate(last_run: dict) -> tuple[dict, int | None]
     measurement["throttles"] = FLOCI_THROTTLES
     measurement["retries"] = FLOCI_RETRIES
 
-    return measurement, verified
+    return measurement
 
 
-def measurement_and_reads_from_live_cert(row: dict) -> tuple[dict, int | None]:
+def measurement_from_live_cert(row: dict) -> dict:
     detail = row.get("detail", {})
     cold = detail.get("cold_deploy", "")
     migrate = detail.get("migrate", "")
@@ -174,6 +220,7 @@ def measurement_and_reads_from_live_cert(row: dict) -> tuple[dict, int | None]:
         measurement["resources"] = resources
     if verified is not None:
         measurement["taggable_resources"] = verified
+        measurement["verified_resources"] = verified
     if skipped is not None:
         measurement["untaggable_resources"] = skipped
     if found_throttle:
@@ -185,10 +232,9 @@ def measurement_and_reads_from_live_cert(row: dict) -> tuple[dict, int | None]:
     # sweep_calls, read_pass_calls, index_lag_seconds: the raw API call count
     # behind "resources" and "verified" is not recorded anywhere in
     # live/gauntlet.json, on the emulator or against real AWS. Left absent on
-    # both ingest paths. This is the gap the report calls out as the subject
-    # of the sibling choudoufu work.
+    # both ingest paths — the same gap `independence_block()` documents.
 
-    return measurement, verified
+    return measurement
 
 
 def effort_block_estate(last_run: dict) -> dict:
@@ -222,9 +268,9 @@ def build_from_estate(gauntlet: dict, arm: str) -> dict:
         sys.exit("could not find a resource count in the estate's cold_deploy detail")
     scenario = f"terralith-{resources}"
 
-    measurement, account_reads = measurement_and_reads_from_estate(last_run)
+    measurement = measurement_from_estate(last_run)
 
-    result = {
+    return {
         "schema": 1,
         "bench": "terralith",
         "scenario": scenario,
@@ -240,17 +286,11 @@ def build_from_estate(gauntlet: dict, arm: str) -> dict:
         "agent": {"name": "none", "model": None, "k": 1},
         "score": score_block(est.get("stages", {}), detail),
         "gates": gates_block(),
-        "independence": {
-            "account_reads": account_reads,
-            "answered_from_own_state": False,
-        },
+        "independence": independence_block(),
         "effort": effort_block_estate(last_run),
         "measurement": measurement,
         "reproduce": est.get("script"),
     }
-    if account_reads is None:
-        del result["independence"]["account_reads"]
-    return result
 
 
 def build_from_live_cert(gauntlet: dict, arm: str) -> dict:
@@ -261,9 +301,9 @@ def build_from_live_cert(gauntlet: dict, arm: str) -> dict:
         sys.exit("could not find a resource count in the live_cert cold_deploy detail")
     scenario = f"terralith-{resources}"
 
-    measurement, account_reads = measurement_and_reads_from_live_cert(row)
+    measurement = measurement_from_live_cert(row)
 
-    result = {
+    return {
         "schema": 1,
         "bench": "terralith",
         "scenario": scenario,
@@ -278,17 +318,11 @@ def build_from_live_cert(gauntlet: dict, arm: str) -> dict:
         "agent": {"name": "none", "model": None, "k": 1},
         "score": score_block(row.get("stages", {}), detail),
         "gates": gates_block(),
-        "independence": {
-            "account_reads": account_reads,
-            "answered_from_own_state": False,
-        },
+        "independence": independence_block(),
         "effort": effort_block_live_cert(row),
         "measurement": measurement,
         "reproduce": "live/live-cert/terralith-scale.sh",
     }
-    if account_reads is None:
-        del result["independence"]["account_reads"]
-    return result
 
 
 def main() -> int:
@@ -316,8 +350,9 @@ def main() -> int:
     print(f"wrote {out_path}")
     if missing:
         print(f"  measurement is missing (not in the source record): {', '.join(missing)}")
-    if "account_reads" not in result["independence"]:
-        print("  independence.account_reads is missing — validate_results.py will refuse this result")
+    if result["independence"].get("account_reads") is None:
+        print(f"  independence.account_reads: {result['independence']['account_reads_status']} "
+              f"— {result['independence']['account_reads_reason']}")
     return 0
 
 
