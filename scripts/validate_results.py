@@ -82,6 +82,19 @@ def check(path: Path) -> list[str]:
                 f"pass_rate {rate} is over the survivors, not over the run"
             )
 
+    # terralith (#33) has no agent and no briefing, so its numbers — resources,
+    # throttles, retries, the sweep/read-pass split — have no home in any field
+    # above. `measurement` is that home, and it is required the same way `agent`
+    # is: presence and type, nothing inside it checked. A terralith result
+    # without one is not missing an optional extra, it is missing the only
+    # record of what the run actually measured.
+    if r.get("bench") == "terralith":
+        m = r.get("measurement")
+        if m is None:
+            problems.append("missing `measurement` (required when bench == \"terralith\")")
+        elif not isinstance(m, dict):
+            problems.append(f"`measurement` should be dict, got {type(m).__name__}")
+
     # Which tool the run measured. Optional, because every record published
     # before lex00/aws-bench#13 predates the stamp and the version they ran is
     # not recoverable — a record that says nothing is honest, and one that

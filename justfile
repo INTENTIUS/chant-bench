@@ -28,6 +28,14 @@ matrix reps="3" dir="../aws-bench" *arms:
 ingest dir="../aws-bench" *runs:
     ./scripts/ingest.sh {{dir}} {{runs}}
 
+# Ingest one terralith (#33) certification record from choudoufu's own
+# live/gauntlet.json — no agent, no benchmark run, just a read of that file.
+#
+#   just ingest-terralith ../choudoufu estate
+#   just ingest-terralith ../choudoufu live-cert
+ingest-terralith choudoufu_dir="../choudoufu" source="estate":
+    python3 scripts/ingest_terralith.py --gauntlet {{choudoufu_dir}}/live/gauntlet.json --source {{source}} --out results/
+
 # Classify the job directories that never became results, and optionally delete
 # them. Published runs are never touched — their logs are what a published
 # number links to.
@@ -41,6 +49,7 @@ prune *args:
 build:
     python3 scripts/validate_results.py
     python3 scripts/build_pages.py
+    python3 scripts/build_terralith_pages.py
     mkdocs build --strict
 
 # Preview locally, regenerating the pages first.
@@ -57,10 +66,12 @@ build:
 # open; a deep link typed without the prefix will 404.
 serve port="8000":
     python3 scripts/build_pages.py
+    python3 scripts/build_terralith_pages.py
     @echo "  -> http://127.0.0.1:{{port}}/chant-bench/"
     mkdocs serve -a 127.0.0.1:{{port}}
 
 # What CI runs.
 check:
     python3 scripts/validate_results.py
+    python3 scripts/build_terralith_pages.py
     mkdocs build --strict

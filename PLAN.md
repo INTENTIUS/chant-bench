@@ -283,6 +283,65 @@ differences worth knowing about.
 **Invalid runs are published, not hidden.** They render dimmed with the reason.
 A number whose conditions failed must never look like a merely low number.
 
+## A second bench, with no agent: terralith
+
+aws-bench measures an agent holding a tool. terralith (#33) measures something
+narrower: what a plan costs as an estate grows, for choudoufu and for chant
+against stock OpenTofu as the oracle. No agent asks a question, no model reads
+an answer, nothing is judged. One certification run per arm per estate size,
+scored on the stages the run itself asserts — cold deploy, migrate, replan
+empty, no-op apply.
+
+It fits the same contract without bending it, which is the point of holding
+the contract stable in the first place.
+
+**`agent` for a run with no agent.** The field stays a required dict — the
+schema does not grow a second run kind for this — and carries
+`{"name": "none", "model": null, "k": 1}`. `validate_results.py` requires
+`agent` to be a dict and checks nothing inside it, the same latitude it already
+gives aws-bench's `run.workspace` and `tool` blocks, so this costs nothing to
+add. `k: 1` is literal, not a placeholder: a terralith run is one certification
+attempt, not a sampled trial repeated for variance, so `score`'s per-stage
+lists are length 1 and `k` says so honestly rather than defaulting to
+aws-bench's 3.
+
+**The result shape.**
+
+| field | value | why |
+|---|---|---|
+| `bench` | `"terralith"` | new bench, same contract |
+| `scenario` | `"terralith-79"`, `"terralith-745"`, `"terralith-3705"`, `"terralith-10069"` | one per estate size — `validate_results.py`'s "same experiment" check already groups by `(bench, scenario)` and compares `expected_trials`, so a size that grew between two runs must not sit in one scenario |
+| `arm` | `"choudoufu"`, `"chant"`, `"opentofu"` | opentofu is the oracle, not a baseline bolted on afterward |
+| `score.by_task` | the certification's own stages: `cold_deploy`, `migrate`, `test_plan`, `test_apply`, each a length-1 list (`k=1`) | reuses the existing per-task shape instead of inventing one; `score.trials` is the count of stages actually asserted, `expected_trials` the count a complete run of that arm at that size was scheduled for — the two differ honestly when a run stops after a failing stage, the way `score.expected_trials` already documents for a crashed aws-bench trial |
+| `gates.audit` | the run's own verify-empty listing and stage assertions actually ran and produced a verdict | this is **not** whether the estate passed. A stage that ran cleanly and found a non-empty plan is a measured failure, which belongs in `score`; `gates.audit` only says the measurement apparatus itself worked. Collapsing those two is exactly the mistake `validate_results.py` already refuses for aws-bench — "the tool never ran" and "the tool did badly" have to stay different findings here too |
+| `independence.account_reads` | the plan's own read count | not a side field for this bench, the measurement. Where the source record gives a literal read-verified count (see ingest, below) it is used and cited; where it does not, the field is left for the validator to refuse rather than guessed |
+| `effort` | wall seconds, overall and per stage | the certification's own `duration_s` and `stage_seconds` |
+| `measurement` | `resources`, `taggable_resources`, `throttles`, `retries`, and — only when the source record actually carries them — `sweep_calls`, `read_pass_calls`, `index_lag_seconds` | the numbers with no home in the agent-shaped fields above. New top-level block, required (as a dict, contents unchecked) whenever `bench == "terralith"`, the same latitude `agent` already gets |
+| `run.substrate` | `"floci"` or `"aws"` | the field this document already defined for aws-bench live-cloud runs, reused rather than re-invented |
+
+**A run that fails a stage is not a run the gates reject.** `terralith-3705`
+below is exactly this: `test_plan` found a non-empty plan, so the arm's own
+score is 2 of 3 stages passed — a real, low, published number — while
+`gates.audit` is `true` because the assertion that found the failure is
+itself the proof the run measured something. Setting `gates.audit: false`
+here would be the CDK mistake in reverse: a tool that ran and told the truth
+about a bad plan is not a tool that never ran.
+
+## Extending `validate_results.py` for a bench with no agent
+
+One addition, in the same one-problem-per-line style as everything else in
+that file: when `r.get("bench") == "terralith"`, `measurement` must be present
+and a dict, exactly the way the top-level `REQUIRED` table already treats
+`agent`, `score`, `gates`, `independence` and `effort` — presence and type,
+nothing checked inside. Every other bench keeps requiring what it already
+requires; this is additive, not a relaxation.
+
+`independence.account_reads` already has to be an integer for every bench,
+terralith included, because that check runs unconditionally today. That is
+deliberate rather than an oversight carried over from aws-bench: a terralith
+result with no read count would look like every other row on the page while
+carrying none of the number the whole bench exists to report.
+
 ## Metric rendering
 
 Prototype: `layout-study.html` in this directory. Also published at

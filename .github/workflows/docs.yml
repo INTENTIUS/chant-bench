@@ -52,6 +52,7 @@ jobs:
       - name: Results pages are up to date
         run: |
           python3 scripts/build_pages.py
+          python3 scripts/build_terralith_pages.py
           if ! git diff --quiet -- docs/; then
             echo "::error::generated pages are stale — run 'just build' and commit"
             git diff --stat -- docs/
