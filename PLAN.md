@@ -316,7 +316,7 @@ aws-bench's 3.
 | `gates.audit` | the run's own verify-empty listing and stage assertions actually ran and produced a verdict | this is **not** whether the estate passed. A stage that ran cleanly and found a non-empty plan is a measured failure, which belongs in `score`; `gates.audit` only says the measurement apparatus itself worked. Collapsing those two is exactly the mistake `validate_results.py` already refuses for aws-bench — "the tool never ran" and "the tool did badly" have to stay different findings here too |
 | `independence.account_reads` | the plan's own read count, or `null` with `account_reads_status`/`account_reads_reason` | not a side field for this bench, the measurement — which is exactly why a wrong number here is worse than a missing one. choudoufu's certification record carries a resource count, not a call count, and the two are not the same thing even where they coincide (see below); every published terralith result is `null` here until a real count exists |
 | `effort` | wall seconds, overall and per stage | the certification's own `duration_s` and `stage_seconds` |
-| `measurement` | `resources`, `taggable_resources`, `throttles`, `retries`, and — only when the source record actually carries them — `sweep_calls`, `read_pass_calls`, `index_lag_seconds` | the numbers with no home in the agent-shaped fields above. New top-level block, required (as a dict, contents unchecked) whenever `bench == "terralith"`, the same latitude `agent` already gets |
+| `measurement` | `resources`, `taggable_resources`, `throttles`, `retries`, and — only when the source record actually carries them — `sweep_calls`, `read_pass_calls`, `stock_read_pass_calls`, `index_lag_seconds` | the numbers with no home in the agent-shaped fields above. `stock_read_pass_calls` is stock OpenTofu's own call count for the read-pass leg — the oracle for `read_pass_calls`/`account_reads`, not a second arm's score, see below. New top-level block, required (as a dict, contents unchecked) whenever `bench == "terralith"`, the same latitude `agent` already gets |
 | `run.substrate` | `"floci"` or `"aws"` | the field this document already defined for aws-bench live-cloud runs, reused rather than re-invented |
 
 **A run that fails a stage is not a run the gates reject.** `terralith-3705`
@@ -336,12 +336,73 @@ reader scanning the one column this whole site is built around has no way to
 tell "1,655 reads" from "1,655 resources that needed one or more reads apiece"
 from the page. A wrong number in the axis field is worse than an absent one —
 it is plausible, it compares cleanly against other rows, and nothing on the
-page contradicts it. So every terralith result carries `account_reads: null`
-today, with `account_reads_status: "not_measured"` and an
-`account_reads_reason` naming what would fix it (choudoufu's certification
-record has no sweep/read-pass call count at all — see
+page contradicts it. So every terralith result carried `account_reads: null`
+until choudoufu#1053 landed, with `account_reads_status: "not_measured"` and
+an `account_reads_reason` naming what would fix it (choudoufu's certification
+record had no sweep/read-pass call count at all — see
 `ingest_terralith.py`'s `independence_block()`). The resource count did not
 get deleted, it got its own honest name: `measurement.verified_resources`.
+
+## The axis lands, one row at a time, and its own oracle beside it
+
+choudoufu#1053 gave exactly one record — `terralith-scale`'s `floci`/`scale=1`
+row — a `plan_calls` field: `sweep.choudoufu`, `read_pass.choudoufu`,
+`total.choudoufu`. The four real-AWS records (`scale=1,4,10,50`, resources
+79/301/745/3705) still carry none. `independence_block()` reads
+`total.choudoufu` directly when present (706 = 588 sweep + 118 read pass for
+the emulator row today) rather than summing the two legs itself — the record
+already totals them, and re-deriving a number the source already computed is
+exactly the kind of guess this ingest refuses to make elsewhere; summing is
+kept only as a fallback for a record whose `total` was never filled in. So the
+published state is a genuine mix: one row with a real `account_reads`, four
+still `null`-with-a-reason, and that mix is the honest state of the
+certification, not a bug in the ingest.
+
+**The `stock` figure is an oracle for choudoufu's own number, not a second
+arm.** `ScaleCallPair.Stock` (choudoufu's own type) carries stock OpenTofu's
+call count for the *same leg*, when the same run measured both sides — and it
+only ever exists on `read_pass`, never on `sweep`, because stock has no sweep
+phase to instrument: it never runs choudoufu's tagging discovery, so there is
+no "stock sweep count" to report, structurally, not as a gap in this one run.
+Publishing it as `arm: "opentofu"` would misstate what it is — a second row
+implies a second, comparably-scored certification attempt, and stock never
+ran cold_deploy/migrate/test_plan/test_apply as this bench's own stages. What
+it actually is is a check on the read-pass leg of choudoufu's own run:
+choudoufu counted 118 calls to do its ownership read pass, stock counted 150
+to do the equivalent read pass over the same estate, and a reader can tell the
+two match orders of magnitude without taking choudoufu's own count on faith.
+So it rides as `measurement.stock_read_pass_calls`, beside `sweep_calls` and
+`read_pass_calls`, and the results page renders it in its own column — `Stock
+oracle (read pass)` — labelled so plainly that no reader mistakes it for
+`chant`'s row or for a second `independence.account_reads`.
+
+## The page groups by track; it does not rank
+
+The maintainer's own framing, verbatim: "this isn't supposed to be comparing
+them they are separate results proving they can both handle it", and "they
+can be presented together but one will be slower than the others." A
+choudoufu row and a future chant row (INTENTIUS/chant#2403 — not built yet,
+and this repository invents no rows for it ahead of time) at the same estate
+size are two separate proofs that the estate can be handled, not two entries
+in a race.
+
+`build_terralith_pages.py` renders this by grouping, not by omission: every
+row still publishes its full number, but rows are grouped by track (arm) into
+their own subsection — `## choudoufu` today, `## chant` the day that track
+exists — and a group is sorted only by estate size, never by
+`account_reads`, `wall_seconds`, or any other measured number. Two tracks
+never sit interleaved in one list where a reader's eye reads down a column
+and calls the shorter bar a winner. Size is the one number sorted on, and it
+is not a score — it is which estate the row is about, the experiment's own
+independent variable, unrelated to how the run turned out.
+
+Wall time follows the same rule at the prose level: it reads as a description
+of what a run cost (`327.7s (cold_deploy=121s, migrate=40s, ...)`), never as
+a ranked figure, and `docs/terralith/index.md` says plainly that a future
+chant row's wall time will not even be comparable to choudoufu's — the
+substrates differ (real AWS throttles, floci does not; a future chant
+substrate is its own unknown), so a shorter number would not mean "faster" in
+any sense worth acting on.
 
 ## Extending `validate_results.py` for a bench with no agent
 

@@ -11,11 +11,25 @@ redefining it, because formatting a missing metric as an em dash is the one
 piece of logic both benches need identically.
 
     python3 scripts/build_terralith_pages.py
+
+**This page must not rank.** The maintainer's own framing: "this isn't
+supposed to be comparing them they are separate results proving they can both
+handle it", and "they can be presented together but one will be slower than
+the others". A future chant row and a choudoufu row at the same size are two
+separate proofs that the estate can be handled, not two entries in a race — so
+this renderer groups rows by track (arm) into their own subsections and never
+sorts by a measured number. Size is the one exception: within a track, rows
+sort by estate size because that is the experiment's own independent
+variable, not a result being ranked. See PLAN.md's terralith section and
+docs/terralith/index.md for why a future chant row's wall time is not
+comparable to choudoufu's at all — different substrates, not just different
+tools.
 """
 
 from __future__ import annotations
 
 import json
+from collections import defaultdict
 from pathlib import Path
 
 from build_pages import num  # the one helper shared with aws-bench's renderer
@@ -38,23 +52,55 @@ STAGES = ["cold_deploy", "migrate", "test_plan", "test_apply"]
 
 
 def load() -> list[dict]:
-    """Every published terralith result, sorted by estate size then arm."""
+    """Every published terralith result, in no particular order — grouping and
+    ordering for display is `group_by_track()`'s job, not this function's.
+    """
     rows = []
     for path in sorted(RESULTS.glob("*.json")):
         r = json.loads(path.read_text())
         if r.get("bench") == BENCH:
             rows.append(r)
-
-    def size_of(r: dict) -> int:
-        # scenario is "terralith-<resources>"; fall back to measurement if a
-        # scenario is ever named some other way.
-        try:
-            return int(r["scenario"].rsplit("-", 1)[-1])
-        except (KeyError, ValueError):
-            return r.get("measurement", {}).get("resources", 0)
-
-    rows.sort(key=lambda r: (size_of(r), r.get("arm", "")))
     return rows
+
+
+def size_of(r: dict) -> int:
+    # scenario is "terralith-<resources>"; fall back to measurement if a
+    # scenario is ever named some other way.
+    try:
+        return int(r["scenario"].rsplit("-", 1)[-1])
+    except (KeyError, ValueError):
+        return r.get("measurement", {}).get("resources", 0)
+
+
+def group_by_track(rows: list[dict]) -> list[tuple[str, list[dict]]]:
+    """Rows grouped by arm ("track"), each group sorted by estate size only.
+
+    This is the one place row order is decided, and it is deliberately not a
+    ranking. A choudoufu row and a future chant row at the same size are two
+    separate proofs that the estate can be handled, not two entries in a
+    race — the maintainer's own words are "this isn't supposed to be
+    comparing them they are separate results proving they can both handle
+    it" — so they never sit interleaved in one sorted list where a reader's
+    eye reads down a column and calls the shorter bar a winner. Size is
+    sorted on because it is the experiment's own independent variable (which
+    estate this row is about), not a measured outcome; `wall_seconds`,
+    `account_reads` and every other measured number is never a sort key
+    here, in either direction.
+
+    Groups themselves are ordered by `ARMS`'s own declaration order, not by
+    any metric — `choudoufu` first because it is the arm this bench was
+    built to measure, `chant` next once it exists, `opentofu` last because it
+    is named an oracle rather than a competitor. An arm with no rows yet is
+    simply absent, not rendered as an empty section.
+    """
+    by_arm: dict[str, list[dict]] = defaultdict(list)
+    for r in rows:
+        by_arm[r.get("arm")].append(r)
+    groups = []
+    for arm in ARMS:
+        if arm in by_arm:
+            groups.append((arm, sorted(by_arm[arm], key=size_of)))
+    return groups
 
 
 def stage_verdicts(r: dict) -> str:
@@ -94,6 +140,20 @@ def account_reads(r: dict) -> str:
     if indep.get("account_reads_status"):
         return "*not measured*"
     return "—"
+
+
+def stock_oracle(r: dict) -> str:
+    """Stock OpenTofu's own read-pass call count, when the same run measured
+    it — the oracle that keeps `account_reads` (the cell just left of this
+    one) from being self-reported, never a second product's score. It has no
+    row of its own and nothing to rank it against: stock never runs
+    choudoufu's tagging sweep, so there is no sweep-leg figure for it, and
+    this column is the read-pass leg specifically, not a whole-plan total.
+    See PLAN.md's terralith section and `ingest_terralith.py`'s
+    `measurement_block()`.
+    """
+    v = r.get("measurement", {}).get("stock_read_pass_calls")
+    return num(v) if isinstance(v, (int, float)) else "—"
 
 
 def wall_time(r: dict) -> str:
@@ -141,15 +201,20 @@ def reproduce_line(r: dict) -> str:
 
 
 def results_table(rows: list[dict]) -> str:
+    """One track's own table — no `Arm` column, because the section heading
+    above it already says which track this is, and repeating it per row would
+    invite reading the column as something to compare across rows the way
+    `Size` is meant to be. `rows` must already be one arm, sorted by size —
+    `group_by_track()`'s job, not this function's.
+    """
     out = [
-        "| Size | Arm | Stages | Account reads | Wall time | Provenance | Reproduce |",
+        "| Size | Stages | Account reads | Stock oracle (read pass) | Wall time | Provenance | Reproduce |",
         "|---|---|---|---|---|---|---|",
     ]
     for r in rows:
         size = r.get("measurement", {}).get("resources", "—")
-        arm = ARMS.get(r.get("arm"), r.get("arm", "?"))
         out.append(
-            f"| {size} | {arm} | {stage_verdicts(r)} | {account_reads(r)} "
+            f"| {size} | {stage_verdicts(r)} | {account_reads(r)} | {stock_oracle(r)} "
             f"| {wall_time(r)} | {provenance(r)} | {reproduce_line(r)} |"
         )
     return "\n".join(out)
@@ -172,6 +237,18 @@ def results_page(rows: list[dict]) -> str:
         "and oracle tool versions that produced it, and the exact command that",
         "reproduces it.",
         "",
+        "!!! note \"Grouped by track, not ranked\"",
+        "",
+        "    Each section below is one track — one arm, at every size it has",
+        "    been run at. They are not rows in a leaderboard: choudoufu and a",
+        "    future chant track are separate proofs that an estate this size",
+        "    can be handled, not two entries in a race, so nothing on this page",
+        "    sorts by a measured number. Wall time in particular describes what",
+        "    a run cost, not how it ranks — a future chant track's durations",
+        "    will not even be comparable to choudoufu's, because the",
+        "    substrates differ. See [what this bench does and does not",
+        "    measure](index.md) for why.",
+        "",
         "!!! note \"A failed stage is a published result, not a hidden one\"",
         "",
         "    A row whose stage column names a failure — `test_plan` on the",
@@ -181,21 +258,41 @@ def results_page(rows: list[dict]) -> str:
         "    site does not publish. See [what this bench measures](index.md#a-failed-stage-is-not-a-hidden-run)",
         "    for the distinction.",
         "",
-        "!!! warning \"Account reads: not measured yet\"",
+        "!!! warning \"Account reads: measured for the emulator, not yet for real AWS\"",
         "",
         "    **`independence.account_reads` — the axis this whole site turns",
-        "    on — is not measured for any row below.** choudoufu's",
-        "    certification record does not carry a plan's sweep-call or",
-        "    read-pass count, only resource counts, so the column reads *not",
-        "    measured* rather than a number that looks like one but isn't. See",
-        "    [what this bench deliberately does not measure yet](index.md#the-axis-this-bench-exists-to-measure-is-not-sourced-yet).",
+        "    on — is a real number for the emulator (floci) row and *not",
+        "    measured* for every real-AWS row below.** choudoufu#1053 gave the",
+        "    emulator run a plan's sweep-call and read-pass count; the real-AWS",
+        "    certification runs have not carried that instrumentation yet, so",
+        "    those rows still read *not measured* rather than a number that",
+        "    looks like one but isn't. Each cell says its own status — this",
+        "    note describes today, the table is the source of truth going",
+        "    forward. See [what this bench deliberately does not measure",
+        "    yet](index.md#the-axis-this-bench-exists-to-measure-one-row-at-a-time).",
+        "",
+        "!!! note \"Stock oracle (read pass): not a second product's score\"",
+        "",
+        "    **`Stock oracle (read pass)` is stock OpenTofu's own call count for",
+        "    the read-pass leg of the same run, not a competing arm.** It is",
+        "    what keeps the `Account reads` figure next to it from being",
+        "    self-reported — the run measured both sides making the identical",
+        "    read pass, and stock's count is the check. Stock has no sweep",
+        "    phase to instrument (it never runs choudoufu's tagging sweep), so",
+        "    this column only ever reports the read-pass leg, never a",
+        "    whole-plan total.",
         "",
     ]
     if not rows:
         header += ["*No terralith results published yet.*", ""]
         return "\n".join(header)
-    header += [results_table(rows), ""]
-    return "\n".join(header)
+    body: list[str] = []
+    for arm, arm_rows in group_by_track(rows):
+        body.append(f"## {ARMS.get(arm, arm)}")
+        body.append("")
+        body.append(results_table(arm_rows))
+        body.append("")
+    return "\n".join(header + body)
 
 
 def main() -> int:

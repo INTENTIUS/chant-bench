@@ -21,36 +21,53 @@ stock Terraform, then walked through the certification's own stages —
 Each stage either passes or it does not. There are no repeated trials to
 average, so `k=1`: this is a certification attempt, not a sampled measurement
 of variance. What is reported alongside a pass or fail is what the attempt
-cost in wall time per stage, and — once it can be — the plan's own read count,
+cost in wall time per stage, and the plan's own read count,
 `independence.account_reads`, `aws-bench`'s axis carried over and promoted here
 to the thing this bench exists to report rather than a side field. See the
-next section for why that number is not on the page yet.
+next section for how far that number reaches today.
 
-## The axis this bench exists to measure is not sourced yet
+## The axis this bench exists to measure, one row at a time
 
-**`independence.account_reads` is `null` on every published row.** It is not
-zero and it is not a dash standing in for zero — the [results page](results.md)
-renders the cell as *not measured*, on purpose, because a blank or a zero both
-read as a real answer and neither one is true.
+**`independence.account_reads` is `null` on every real-AWS row, and a real
+number on the emulator row.** The [results page](results.md) renders a `null`
+as *not measured*, on purpose, because a blank or a zero both read as a real
+answer and neither one is true for the rows that don't have it yet.
 
-The reason is specific: choudoufu's certification record
-(`live/gauntlet.json`) logs how many resources a run touched, not how many API
-calls it took to touch them. An earlier version of this ingest used the
-migrate stage's resource-verification count — 38 of 79, 1,655 of 3,705 — as a
-stand-in for `account_reads`, because it was the nearest number available and
-it is genuinely true that those resources needed a live read to verify. But it
-is a count of *resources*, not of *reads*, and publishing it under the one
-field this whole site is built around would have looked exactly like the
-number it isn't: plausible, comparable-looking, and wrong. That count still
-exists, honestly named, as `measurement.verified_resources` on each row — it
-is just not the axis.
+The reason a row can lack it at all is specific: choudoufu's certification
+record (`live/gauntlet.json`) logs how many resources a run touched, not how
+many API calls it took to touch them. An earlier version of this ingest used
+the migrate stage's resource-verification count — 38 of 79, 1,655 of 3,705 —
+as a stand-in for `account_reads`, because it was the nearest number
+available and it is genuinely true that those resources needed a live read to
+verify. But it is a count of *resources*, not of *reads*, and publishing it
+under the one field this whole site is built around would have looked exactly
+like the number it isn't: plausible, comparable-looking, and wrong. That count
+still exists, honestly named, as `measurement.verified_resources` on each row
+— it is just not the axis.
 
-Producing the real number needs choudoufu's own scale record
-(`live/gauntlet-scale.json`) to carry a `plan_calls` field, which no record
-does today.
+The real number needs choudoufu's own scale record
+(`live/gauntlet-scale.json`) to carry a `plan_calls` field.
 [INTENTIUS/choudoufu#1053](https://github.com/INTENTIUS/choudoufu/issues/1053)
-is the issue scoped to produce it. Until it lands, this bench publishes a
-missing headline number rather than a wrong one.
+is the issue that produces it, and it has landed for exactly one record so
+far: the `floci`/`scale=1` (79-resource) emulator row, whose plan made 706
+calls in total — 588 to sweep, 118 to do the ownership read pass. The four
+real-AWS records (79, 301, 745 and 3,705 resources) have not been re-run with
+the instrumentation yet, so they still publish `null` with a reason rather
+than a wrong number. The next certification run on each of those is what
+fills them in — this bench does not estimate the gap.
+
+**Stock OpenTofu's own call count rides beside the read-pass leg, as an
+oracle — not as a second product's row.** The same run that measured
+choudoufu's 118-call read pass also measured stock's: 150 calls, over the
+identical estate, doing the equivalent read. That number is what keeps
+choudoufu's 118 from being self-reported — a reader can see the two are the
+same order of magnitude without taking choudoufu's own count on faith. It
+publishes as `measurement.stock_read_pass_calls` and renders in its own
+column on the [results page](results.md), `Stock oracle (read pass)`,
+labelled so it is never mistaken for `chant`'s row or for a second
+`account_reads`. It only ever covers the read-pass leg: stock has no sweep
+phase to instrument (it never runs choudoufu's tagging sweep), so there is no
+"stock sweep count", structurally, not as a gap in this one run.
 
 ## What it deliberately does not measure
 
@@ -63,10 +80,26 @@ does not grow a second shape for this — and it reads
 briefing could bias, so none of the aws-bench machinery for publishing one
 applies.
 
-**No leaderboard.** [Results](results.md) is a table, not a ranking: sizes
-down the side, arms across, because "which is cheapest at 79 resources" and
-"which is cheapest at 10,069" are different questions and a single ranked
-number would blur them.
+**No leaderboard, and no ranking across tracks.** [Results](results.md) groups
+rows by track (arm) into their own section — one for choudoufu, one for a
+future chant, once INTENTIUS/chant#2403 exists — rather than sorting the
+whole table by a measured number. A choudoufu row and a chant row at the same
+size are separate proofs that the estate can be handled, not two entries in a
+race; within a track, rows sort by estate size, because "which is cheapest at
+79 resources" and "which is cheapest at 10,069" are different questions and a
+size is the experiment's own variable, not a result to rank. **This bench
+invents no chant rows ahead of that track existing** — nothing on this page
+today or in `results/` is a placeholder for chant.
+
+**A future chant track's wall time will not be comparable to choudoufu's.**
+Not because one tool is faster — because the substrates differ. choudoufu's
+real-AWS rows measure actual account throttling and a floci row measures
+none by construction; whatever chant is benchmarked against will have its own
+substrate characteristics, unknown today. A shorter or longer wall-clock
+number between the two tracks would not mean "faster" or "slower" in any
+sense worth acting on, which is exactly why the results page never sorts the
+two tracks against each other and presents wall time as a description of what
+a run cost, not a score.
 
 **No pooling across substrate.** A floci run and a real-AWS run of the same
 size are never averaged together, for the same reason aws-bench's emulator and

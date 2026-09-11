@@ -49,9 +49,7 @@
     "complete": true
   },
   "independence": {
-    "account_reads": null,
-    "account_reads_status": "not_measured",
-    "account_reads_reason": "choudoufu's scale record carries resource counts, not API call counts \u2014 `plan_calls` (the sweep/read-pass split behind this number) is absent from this record. INTENTIUS/choudoufu#1053 is the issue scoped to produce it.",
+    "account_reads": 706,
     "answered_from_own_state": false
   },
   "effort": {
@@ -69,7 +67,10 @@
     "verified_resources": 38,
     "untaggable_resources": 41,
     "throttles": 0,
-    "retries": 0
+    "retries": 0,
+    "sweep_calls": 588,
+    "read_pass_calls": 118,
+    "stock_read_pass_calls": 150
   },
   "reproduce": "live/e2e/terralith-scale/run.sh"
 }
