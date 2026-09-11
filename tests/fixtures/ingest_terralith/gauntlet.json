@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "estates": [
+    {
+      "name": "terralith-scale",
+      "last_run": {
+        "commit": "cffixture0001",
+        "date": "2026-01-01T00:00:00Z",
+        "duration_s": 42,
+        "detail": {
+          "cold_deploy": "stock terraform applied 10 resources at scale=1 (fixture)"
+        }
+      }
+    }
+  ],
+  "live_cert": []
+}

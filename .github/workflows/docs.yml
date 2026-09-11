@@ -7,6 +7,7 @@ on:
       - "mkdocs.yml"
       - "results/**"
       - "scripts/**"
+      - "tests/**"
       - ".github/workflows/docs.yml"
   push:
     branches: [main]
@@ -15,6 +16,7 @@ on:
       - "mkdocs.yml"
       - "results/**"
       - "scripts/**"
+      - "tests/**"
       - ".github/workflows/docs.yml"
 
 permissions:
@@ -37,6 +39,14 @@ jobs:
           python-version: "3.12"
 
       - run: pip install mkdocs-material
+
+      # A schema drift between this repo's ingest and choudoufu's own
+      # ScaleRecord (tools/gauntlet/scalerecord.go there) would otherwise only
+      # be caught the day a published number went wrong — nothing else here
+      # ever runs the ingest. This runs it against a small, committed fixture
+      # and diffs the result against a committed expectation.
+      - name: Test the terralith ingest
+        run: python3 tests/test_ingest_terralith.py
 
       # Every published result set must satisfy the schema before it can be
       # rendered. A result whose gates failed is publishable — it renders as

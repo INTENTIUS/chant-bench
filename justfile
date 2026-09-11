@@ -28,13 +28,18 @@ matrix reps="3" dir="../aws-bench" *arms:
 ingest dir="../aws-bench" *runs:
     ./scripts/ingest.sh {{dir}} {{runs}}
 
-# Ingest one terralith (#33) certification record from choudoufu's own
-# live/gauntlet.json — no agent, no benchmark run, just a read of that file.
+# Ingest every terralith (#33) scale record from choudoufu's own
+# live/gauntlet-scale.json — no agent, no benchmark run, just a read of that
+# file (plus live/gauntlet.json, for the one field a scale record does not
+# carry — see ingest_terralith.py).
 #
-#   just ingest-terralith ../choudoufu estate
-#   just ingest-terralith ../choudoufu live-cert
-ingest-terralith choudoufu_dir="../choudoufu" source="estate":
-    python3 scripts/ingest_terralith.py --gauntlet {{choudoufu_dir}}/live/gauntlet.json --source {{source}} --out results/
+#   just ingest-terralith ../choudoufu                    # every record
+#   just ingest-terralith ../choudoufu --target aws --scale 50   # one record
+ingest-terralith choudoufu_dir="../choudoufu" *args:
+    python3 scripts/ingest_terralith.py \
+        --scale-records {{choudoufu_dir}}/live/gauntlet-scale.json \
+        --gauntlet {{choudoufu_dir}}/live/gauntlet.json \
+        --out results/ {{args}}
 
 # Classify the job directories that never became results, and optionally delete
 # them. Published runs are never touched — their logs are what a published
@@ -72,6 +77,7 @@ serve port="8000":
 
 # What CI runs.
 check:
+    python3 tests/test_ingest_terralith.py
     python3 scripts/validate_results.py
     python3 scripts/build_terralith_pages.py
     mkdocs build --strict

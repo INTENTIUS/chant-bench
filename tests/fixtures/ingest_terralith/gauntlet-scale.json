@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "emulator": "ghcr.io/lex00/floci@sha256:fixture0000000000000000000000000000000000000000000000000000000",
+  "records": [
+    {
+      "schema": 1,
+      "estate": "terralith-scale",
+      "target": "floci",
+      "scale": 1,
+      "commit": "cffixture0001",
+      "date": "2026-01-01T00:00:00Z",
+      "emulator": "ghcr.io/lex00/floci@sha256:fixture0000000000000000000000000000000000000000000000000000000",
+      "oracle": {
+        "terraform": "1.0.0",
+        "tofu": "1.0.0"
+      },
+      "resources": {
+        "total": 10,
+        "taggable": 4,
+        "skipped": 6
+      },
+      "stages": {
+        "cold_deploy": {
+          "verdict": "pass",
+          "seconds": 5,
+          "detail": "stock terraform applied 10 resources at scale=1 (fixture)"
+        },
+        "migrate": {
+          "verdict": "pass",
+          "seconds": 2,
+          "detail": "live-import ratified 4 of 10 instances as eligible (fixture)"
+        },
+        "test_plan": {
+          "verdict": "pass",
+          "seconds": 1,
+          "detail": "post-migrate plan is empty (fixture)"
+        },
+        "test_apply": {
+          "verdict": "pass",
+          "detail": "no-op apply (fixture)"
+        }
+      },
+      "source": "fixture: floci scale=1, no plan_calls, commit matched in gauntlet.json"
+    },
+    {
+      "schema": 1,
+      "estate": "terralith-scale",
+      "target": "aws",
+      "scale": 4,
+      "commit": "cffixture0002",
+      "date": "2026-01-02T00:00:00Z",
+      "region": "us-test-1",
+      "resources": {
+        "total": 40,
+        "taggable": 20,
+        "skipped": 20
+      },
+      "stages": {
+        "cold_deploy": {
+          "verdict": "pass",
+          "seconds": 8,
+          "throttle": 1,
+          "retry": 1,
+          "detail": "40 resources from stock terraform against aws at scale=4 in 8s (fixture)"
+        },
+        "migrate": {
+          "verdict": "pass",
+          "seconds": 4,
+          "throttle": 2,
+          "retry": 2,
+          "detail": "20 of 40 verified, 20 stamped, 20 skipped, in 4s (fixture)"
+        },
+        "test_plan": {
+          "verdict": "pass",
+          "seconds": 3,
+          "throttle": 0,
+          "retry": 0,
+          "detail": "post-migrate plan is empty in 3s (fixture)"
+        },
+        "test_apply": {
+          "verdict": "fail",
+          "detail": "the no-op apply was not a no-op (fixture)"
+        }
+      },
+      "plan_calls": {
+        "sweep": {
+          "choudoufu": 5
+        },
+        "read_pass": {
+          "choudoufu": 7
+        },
+        "total": {
+          "choudoufu": 12
+        }
+      },
+      "source": "fixture: aws scale=4, plan_calls present, commit NOT in gauntlet.json"
+    }
+  ]
+}

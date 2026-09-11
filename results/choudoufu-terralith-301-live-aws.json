@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "bench": "terralith",
-  "scenario": "terralith-3705",
+  "scenario": "terralith-301",
   "arm": "choudoufu",
   "run": {
-    "id": "choudoufu-terralith-3705-live-aws",
-    "finished_at": "2026-09-11T12:31:25Z",
-    "harness_commit": "8bbef274d671b61342db452436abeb84820578a0",
+    "id": "choudoufu-terralith-301-live-aws",
+    "finished_at": "2026-08-30T20:00:52Z",
+    "harness_commit": "420d460c047132624e7a565fd8dc8803fd372ee2",
     "substrate": "aws",
     "region": "us-east-2"
   },
@@ -16,12 +16,12 @@
     "k": 1
   },
   "score": {
-    "trials": 3,
-    "expected_trials": 3,
-    "completed": 3,
+    "trials": 4,
+    "expected_trials": 4,
+    "completed": 4,
     "errored": 0,
-    "passed": 2,
-    "pass_rate": 0.6667,
+    "passed": 4,
+    "pass_rate": 1.0,
     "by_task": {
       "cold_deploy": [
         1
@@ -30,7 +30,10 @@
         1
       ],
       "test_plan": [
-        0
+        1
+      ],
+      "test_apply": [
+        1
       ]
     }
   },
@@ -48,19 +51,19 @@
     "answered_from_own_state": false
   },
   "effort": {
-    "wall_seconds": 11180.5,
     "wall_seconds_by_stage": {
-      "cold_deploy": 2023,
-      "migrate": 1214
+      "cold_deploy": 174,
+      "migrate": 77,
+      "test_plan": 267
     }
   },
   "measurement": {
-    "resources": 3705,
-    "taggable_resources": 1655,
-    "verified_resources": 1655,
-    "untaggable_resources": 2050,
-    "throttles": 947,
-    "retries": 947
+    "resources": 301,
+    "taggable_resources": 137,
+    "verified_resources": 137,
+    "untaggable_resources": 164,
+    "throttles": 68,
+    "retries": 68
   },
   "reproduce": "live/live-cert/terralith-scale.sh"
 }
