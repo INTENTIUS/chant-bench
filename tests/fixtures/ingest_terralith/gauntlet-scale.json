@@ -41,19 +41,28 @@
         }
       },
       "plan_calls": {
+        "cold": {
+          "choudoufu": 5,
+          "stock": 6
+        },
+        "warm": {
+          "choudoufu": 5
+        }
+      },
+      "audit_calls": {
         "sweep": {
-          "choudoufu": 3
+          "choudoufu": 8
         },
         "read_pass": {
-          "choudoufu": 2,
+          "choudoufu": 3,
           "stock": 6
         },
         "total": {
-          "choudoufu": 5,
+          "choudoufu": 11,
           "stock": 6
         }
       },
-      "source": "fixture: floci scale=1, plan_calls present (choudoufu#1053 shape: sweep+read_pass with stock's oracle count on the read_pass leg), commit matched in gauntlet.json"
+      "source": "fixture: floci scale=1, plan_calls AND audit_calls present (choudoufu#1053's corrected shape: an ordinary cold/warm plan, separate from the account-inventory audit's sweep/read-pass split), commit matched in gauntlet.json"
     },
     {
       "schema": 1,

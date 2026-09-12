@@ -67,8 +67,12 @@
     "untaggable_resources": 6,
     "throttles": 0,
     "retries": 0,
-    "adoption_sweep_calls": 3,
-    "adoption_read_pass_calls": 2,
+    "plan_calls_cold": 5,
+    "plan_calls_warm": 5,
+    "plan_calls_note": "cold and warm plans both cost 5 calls: choudoufu's record store is seeded by live-import itself, not by a first plan, so there is no cold-plan penalty to pay here.",
+    "stock_read_pass_calls": 6,
+    "adoption_sweep_calls": 8,
+    "adoption_read_pass_calls": 3,
     "adoption_stock_read_pass_calls": 6
   },
   "reproduce": "live/e2e/terralith-scale/run.sh"

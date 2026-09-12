@@ -166,21 +166,16 @@ def account_reads(r: dict) -> str:
 
 
 def stock_oracle(r: dict) -> str:
-    """Stock OpenTofu's own read-pass call count, when the same run measured
-    it — the oracle that keeps `account_reads` (the cell just left of this
-    one) from being self-reported, never a second product's score. It has no
-    row of its own and nothing to rank it against: stock never runs
-    choudoufu's tagging sweep, so there is no sweep-leg figure for it, and
-    this column is the read-pass leg specifically, not a whole-plan total.
-    See PLAN.md's terralith section and `ingest_terralith.py`'s
-    `measurement_block()`.
+    """Stock OpenTofu's own plan call count, when the same run measured it —
+    the oracle that keeps `account_reads` (the cell just left of this one)
+    from being self-reported, never a second product's score. It has no row
+    of its own and nothing to rank it against: it is stock's plan of the
+    identical, unmigrated estate, taken once (choudoufu's own bench never
+    repeats stock's plan the way it repeats its own warm plan), so this
+    column always reports that one figure and never a sweep-leg or
+    whole-audit total. See PLAN.md's terralith section and
+    `ingest_terralith.py`'s `measurement_block()`.
     """
-    # 2026-09-11: the only row that had one carried it from the adoption
-    # audit, alongside a choudoufu figure that was withdrawn for the same
-    # reason (see that row's account_reads_reason). The audit's stock leg is
-    # kept under measurement.adoption_stock_read_pass_calls rather than shown
-    # here, because a column headed "oracle" beside a withdrawn number would
-    # be vouching for nothing. It comes back when the plan figure does.
     v = r.get("measurement", {}).get("stock_read_pass_calls")
     return num(v) if isinstance(v, (int, float)) else "—"
 
@@ -384,24 +379,41 @@ def results_page(rows: list[dict]) -> str:
         "    **`independence.account_reads` — the axis this whole site turns",
         "    on — is a real number for the emulator (floci) row and *not",
         "    measured* for every real-AWS row below.** choudoufu#1053 gave the",
-        "    emulator run a plan's sweep-call and read-pass count; the real-AWS",
-        "    certification runs have not carried that instrumentation yet, so",
-        "    those rows still read *not measured* rather than a number that",
-        "    looks like one but isn't. Each cell says its own status — this",
-        "    note describes today, the table is the source of truth going",
-        "    forward. See [what this bench deliberately does not measure",
+        "    emulator row an ordinary plan's own cold/warm call count — 186",
+        "    both times, because choudoufu's record store is seeded by",
+        "    live-import itself, so there is no cold-plan penalty to pay here;",
+        "    the real-AWS certification runs have not carried that",
+        "    instrumentation yet, so those rows still read *not measured*",
+        "    rather than a number that looks like one but isn't. Each cell",
+        "    says its own status — this note describes today, the table is",
+        "    the source of truth going forward. See [what this bench",
+        "    deliberately does not measure",
         "    yet](index.md#the-axis-this-bench-exists-to-measure-one-row-at-a-time).",
+        "",
+        "!!! note \"The adoption audit's calls are not the plan's\"",
+        "",
+        "    **This row also carries `adoption_sweep_calls` (588) and",
+        "    `adoption_read_pass_calls` (118) in its own JSON — a forced",
+        "    account-inventory sweep of the provider's whole admission table,",
+        "    not a plan.** That 706-call total was published as `Account",
+        "    reads` for a few hours on 2026-09-11 and withdrawn once the",
+        "    mistake was caught: an ordinary plan and a forced full-account",
+        "    sweep are different operations on the same estate, not two",
+        "    measurements of the same thing. The audit's numbers are real and",
+        "    are kept, under their own `adoption_*` names, but never populate",
+        "    `Account reads` again — that column and `Stock oracle (read",
+        "    pass)` below it are both about the plan, never the audit.",
         "",
         "!!! note \"Stock oracle (read pass): not a second product's score\"",
         "",
         "    **`Stock oracle (read pass)` is stock OpenTofu's own call count for",
-        "    the read-pass leg of the same run, not a competing arm.** It is",
-        "    what keeps the `Account reads` figure next to it from being",
-        "    self-reported — the run measured both sides making the identical",
-        "    read pass, and stock's count is the check. Stock has no sweep",
-        "    phase to instrument (it never runs choudoufu's tagging sweep), so",
-        "    this column only ever reports the read-pass leg, never a",
-        "    whole-plan total.",
+        "    its plan of the identical, unmigrated estate, not a competing",
+        "    arm.** It is what keeps the `Account reads` figure next to it",
+        "    from being self-reported — the run measured both sides planning",
+        "    the same estate, and stock's count is the check. Stock has no",
+        "    sweep phase to instrument (it never runs choudoufu's tagging",
+        "    sweep), so this column only ever reports its one plan, never a",
+        "    sweep or an audit total.",
         "",
     ]
     if not rows:
