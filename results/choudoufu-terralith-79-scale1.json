@@ -5,10 +5,10 @@
   "arm": "choudoufu",
   "run": {
     "id": "choudoufu-terralith-79-scale1",
-    "finished_at": "2026-09-10T07:49:05Z",
-    "harness_commit": "3bca740259d4373a831de32cb44c838ec38c1e51",
+    "finished_at": "2026-09-12T13:33:13Z",
+    "harness_commit": "fce6b53e202878c2b21f0539af5026095a5fddcb",
     "substrate": "floci",
-    "emulator": "ghcr.io/lex00/floci@sha256:9ec3fa649177f64c17c299e3fd799cc774cc1e1b67db2bc20e27d1bc98d7c264",
+    "emulator": "ghcr.io/lex00/floci@sha256:0bbeb43075c9df9c7e06311cd4eec99a354594d304faa4fe5899b494a009d23d",
     "oracle": {
       "terraform": "1.15.8",
       "tofu": "1.12.5"
@@ -53,10 +53,10 @@
     "answered_from_own_state": false
   },
   "effort": {
-    "wall_seconds": 327.7,
+    "wall_seconds": 310.3,
     "wall_seconds_by_stage": {
-      "cold_deploy": 121,
-      "migrate": 40,
+      "cold_deploy": 134,
+      "migrate": 42,
       "test_plan": 3,
       "test_apply": 5
     }
@@ -72,8 +72,8 @@
     "plan_calls_warm": 186,
     "plan_calls_note": "cold and warm plans both cost 186 calls: choudoufu's record store is seeded by live-import itself, not by a first plan, so there is no cold-plan penalty to pay here.",
     "stock_read_pass_calls": 150,
-    "adoption_sweep_calls": 588,
-    "adoption_read_pass_calls": 118,
+    "adoption_sweep_calls": 628,
+    "adoption_read_pass_calls": 148,
     "adoption_stock_read_pass_calls": 150
   },
   "reproduce": "live/e2e/terralith-scale/run.sh"
