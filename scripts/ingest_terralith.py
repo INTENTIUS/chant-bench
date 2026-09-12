@@ -301,9 +301,9 @@ def score_block(stages: dict[str, dict]) -> dict:
 
 def score_block_from_tasks(by_task: dict[str, list[int]]) -> dict:
     """The score arithmetic, shared by every arm whose tasks are already
-    decided. Split out so the oracle's own row (`build_stock_result`, one
-    task rather than four) counts trials the same way choudoufu's does
-    instead of growing a second copy of this that could drift.
+    decided, so an arm whose task set is not the four scale stages counts
+    trials the same way rather than growing a second copy of this that could
+    drift.
     """
     trials = sum(len(v) for v in by_task.values())
     passed = sum(sum(v) for v in by_task.values())
@@ -516,95 +516,21 @@ def measurement_block(rec: dict) -> dict:
 
 
 
-#: The oracle's own arm key. It is stock TERRAFORM, not stock OpenTofu:
-#: `live/e2e/terralith-scale/run.sh` applies the estate with the `terraform`
-#: binary and `internal/live/discovery/slicing_bench_test.go` plans it with
-#: the same one (`slicingTerraformBin = "terraform"`). choudoufu is the
-#: OpenTofu fork on the other side of the comparison, built from
-#: `./cmd/choudoufu`, so calling the oracle OpenTofu names the wrong tool.
-ORACLE_ARM = "terraform"
-
-
-def build_stock_result(rec: dict, duration_lookup: dict[str, float]) -> dict | None:
-    """The oracle's own row, from the same record, for the same estate.
-
-    Stock's numbers were always on these records; they were only ever
-    rendered as a column beside choudoufu's. A column cannot say which sizes
-    stock has actually been stood up at, and it disappears entirely on a row
-    where choudoufu has no plan to put beside it. A track can say both.
-
-    What this row does NOT do is give stock a certification it never ran.
-    choudoufu's four scored stages are adoption stages - `migrate`,
-    `test_plan` and `test_apply` exist because something has to claim
-    ownership of live objects, and stock claims nothing. Stock's own work in
-    these runs is exactly one stage: `cold_deploy`, where it applies the
-    unmodified generator output and stands the estate up. That is the stage
-    whose detail begins "stock terraform applied N resources", so it is read
-    straight off the record rather than invented, and it is the only task on
-    this row.
-
-    `independence.account_reads` is stock's own plan over the same estate -
-    `plan_calls.cold.stock`, the identical field choudoufu's row publishes as
-    `measurement.stock_read_pass_calls`. A record without it produces no
-    stock row at all, rather than a row with an empty axis.
-
-    No `stock_read_pass_calls` in `measurement`, because this row IS the
-    stock figure and repeating it as its own oracle would be circular. No
-    `effort.wall_seconds` either: the run's total is choudoufu's whole
-    certification, and stock's share of it is not separable beyond the one
-    stage it ran, which rides in `wall_seconds_by_stage`.
-    """
-    plan_calls = rec.get("plan_calls") or {}
-    stock_reads = (plan_calls.get("cold") or {}).get("stock")
-    if stock_reads is None:
-        return None
-
-    resources = rec.get("resources") or {}
-    if "total" not in resources:
-        return None
-    scenario = f"terralith-{resources['total']}"
-
-    cold = (rec.get("stages") or {}).get("cold_deploy") or {}
-    if not cold.get("verdict"):
-        return None
-    by_task = {"cold_deploy": [1 if cold.get("verdict") == "pass" else 0]}
-
-    effort: dict = {}
-    if cold.get("seconds") is not None:
-        effort["wall_seconds_by_stage"] = {"cold_deploy": cold["seconds"]}
-
-    measurement: dict = {"resources": resources["total"]}
-    if "taggable" in resources:
-        measurement["taggable_resources"] = resources["taggable"]
-    if "skipped" in resources:
-        measurement["untaggable_resources"] = resources["skipped"]
-
-    return {
-        "schema": 1,
-        "bench": "terralith",
-        "scenario": scenario,
-        "arm": ORACLE_ARM,
-        "run": {
-            "id": run_id(ORACLE_ARM, scenario, rec),
-            "finished_at": rec.get("date"),
-            "harness_commit": rec.get("commit"),
-            "substrate": rec.get("target"),
-            **({"emulator": rec["emulator"]} if rec.get("emulator") else {}),
-            **({"region": rec["region"]} if rec.get("region") else {}),
-            **({"oracle": rec["oracle"]} if rec.get("oracle") else {}),
-        },
-        "agent": {"name": "none", "model": None, "k": 1},
-        "score": score_block_from_tasks(by_task),
-        "gates": gates_block(),
-        "independence": {
-            "account_reads": stock_reads,
-            "answered_from_own_state": True,
-        },
-        "effort": effort,
-        "measurement": measurement,
-        "reproduce": REPRODUCE.get(rec.get("target"), ""),
-    }
-
+#: The oracle has no row of its own, and the reason is the scenario rather
+#: than the schema. What this bench runs is an ADOPTION: an estate is stood
+#: up with stock Terraform and then taken over. Stock has no adoption - it
+#: holds a state file and always has - so there is nothing of stock's to
+#: measure on this axis, and a stock "track" beside choudoufu's was comparing
+#: a tool that adopts against a tool that has nothing to adopt.
+#:
+#: Stock's plan of the same estate is still recorded, as
+#: `measurement.stock_read_pass_calls`, because it is measured and throwing
+#: measured data away is worse. It is not rendered as a comparison. The
+#: comparison it would support - a settled estate planned day to day - is a
+#: different measurement this bench has not made; choudoufu's own
+#: `internal/live/statefulcost` makes it, and at 79 resources it reports
+#: choudoufu holding a state file at 150 calls against stock's 150, and
+#: choudoufu in live mode at 186.
 
 def effort_block(rec: dict, duration_lookup: dict[str, float]) -> dict:
     """`effort.wall_seconds` from the record itself, falling back to
@@ -901,21 +827,6 @@ def main() -> int:
         result = build_result(rec, duration_lookup, args.arm)
         out_path = args.out / f"{result['run']['id']}.json"
         out_path.write_text(json.dumps(result, indent=2) + "\n")
-
-        # The oracle's own row, from the same record. Written beside
-        # choudoufu's rather than instead of it - see build_stock_result for
-        # why stock gets one task and not four, and why a record with no
-        # stock plan count produces no row at all instead of an empty one.
-        stock = build_stock_result(rec, duration_lookup)
-        if stock is not None:
-            stock_path = args.out / f"{stock['run']['id']}.json"
-            stock_path.write_text(json.dumps(stock, indent=2) + "\n")
-            print(f"wrote {stock_path}")
-        else:
-            print(
-                "  no oracle row: this record carries no plan_calls.cold.stock, "
-                "so there is no stock plan of this estate to publish"
-            )
 
         print(f"wrote {out_path}")
         missing = [

@@ -50,42 +50,18 @@ DOCS = ROOT / "docs" / "terralith"
 
 BENCH = "terralith"
 
-#: The oracle's own arm key, mirroring ingest_terralith.ORACLE_ARM.
-ORACLE_ARM = "terraform"
-
-#: Display name per arm. `terraform` is the oracle, not a baseline bolted on
-#: afterward — see PLAN.md, "A second bench, with no agent: terralith".
-#:
-#: It is stock TERRAFORM and not stock OpenTofu, which this table said for a
-#: while. `live/e2e/terralith-scale/run.sh` stands the estate up with the
-#: `terraform` binary and `internal/live/discovery/slicing_bench_test.go`
-#: plans it with the same one; choudoufu is the OpenTofu fork on the other
-#: side of the comparison. Every row records the exact versions it was
-#: measured against, and they say so.
+#: Display name per arm. There is no stock-Terraform arm, and the reason is
+#: the scenario rather than the schema: this bench runs an ADOPTION, and
+#: stock has nothing to adopt. See `results_page()`'s own opening.
 ARMS = {
     "choudoufu": "choudoufu",
     "chant": "chant",
-    "terraform": "stock Terraform (oracle)",
 }
 
-#: Each arm's own expected task set, keyed by arm rather than shared, because
-#: chant's four tasks are not choudoufu's four — chant has no
-#: `migrate`/`test_plan`/`test_apply`, choudoufu has no `read_cold_plan`/
-#: `read_snapshot`/`read_warm_diff`. A shared list would mislabel every
-#: chant row's untouched choudoufu-only stages as "not reached" when they
-#: were never part of chant's own certification to begin with. See
-#: PLAN.md's "chant's shape" section.
-#:
-#: The oracle's list is one stage long, and that is the honest length rather
-#: than a gap. choudoufu's other three are adoption stages - something has to
-#: claim ownership of live objects before it can migrate, replan or reapply
-#: them - and stock claims nothing. What stock does in these runs is stand
-#: the estate up, which is `cold_deploy`, the stage whose own detail begins
-#: "stock terraform applied N resources".
+
 STAGES = {
     "choudoufu": ["cold_deploy", "migrate", "test_plan", "test_apply"],
     "chant": ["cold_deploy", "read_cold_plan", "read_snapshot", "read_warm_diff"],
-    "terraform": ["cold_deploy"],
 }
 
 
@@ -218,14 +194,6 @@ def stock_oracle(r: dict) -> str:
 
 def wall_time(r: dict) -> str:
     e = r.get("effort", {})
-    # The oracle has no run total of its own to report. `wall_seconds` on
-    # every other row is the whole certification, which is choudoufu's, so
-    # stock's cell shows the one stage stock itself ran rather than an em
-    # dash followed by that stage in brackets - which read as a missing
-    # number sitting beside a present one.
-    if r.get("arm") == ORACLE_ARM:
-        secs = (e.get("wall_seconds_by_stage") or {}).get("cold_deploy")
-        return f"{num(secs)}s" if isinstance(secs, (int, float)) else "—"
     total = e.get("wall_seconds")
     by_stage = e.get("wall_seconds_by_stage") or {}
     total_s = f"{num(total)}s" if isinstance(total, (int, float)) else "—"
@@ -308,6 +276,27 @@ def substrate(r: dict) -> str:
     return sub or "—"
 
 
+def over_a_stock_plan(r: dict) -> str:
+    """How much more than planning the same estate from a state file.
+
+    A delta, not a ratio, and the difference in framing is the point. "1.23x"
+    reads as a scoreboard between two products; stock is not competing here,
+    it is the reference for what this estate costs to plan at all. What the
+    number says is the price of holding no state file: the extra calls a plan
+    makes when it has to find its resources in the account instead of reading
+    them out of a file it was handed at creation.
+
+    Absent either side it says so rather than computing with one of them.
+    chant has no stock figure at all - it deploys CloudFormation stacks, so
+    there is no stock run of the same thing to take a difference against.
+    """
+    mine = r.get("independence", {}).get("account_reads")
+    stock = r.get("measurement", {}).get("stock_read_pass_calls")
+    if not isinstance(mine, (int, float)) or not isinstance(stock, (int, float)) or not stock:
+        return "—"
+    return f"+{num(mine - stock)} (+{round((mine / stock - 1) * 100)}%)"
+
+
 def results_table(rows: list[dict], arm: str) -> str:
     """One track's own results — the numbers, and nothing else.
 
@@ -350,31 +339,15 @@ def results_table(rows: list[dict], arm: str) -> str:
             )
         return "\n".join(out)
 
-    if arm == ORACLE_ARM:
-        # No "Stock oracle" column on the oracle's own table: the cell would
-        # hold this row's own number, and a figure compared against itself
-        # reads as a measurement when it is a tautology.
-        out = [
-            "| Size | Substrate | Stages | Account reads (API calls) |",
-            "|---|---|---|---|",
-        ]
-        for r in rows:
-            size = r.get("measurement", {}).get("resources", "—")
-            out.append(f"| {num(size)} | {substrate(r)} | {stage_verdicts(r)} | {account_reads(r)} |")
-        for note in stage_notes(rows):
-            out.append("")
-            out.append(note)
-        return "\n".join(out)
-
     out = [
-        "| Size | Substrate | Stages | Account reads (API calls) | Stock oracle |",
+        "| Size | Substrate | Stages | Account reads (API calls) | More than a stock plan |",
         "|---|---|---|---|---|",
     ]
     for r in rows:
         size = r.get("measurement", {}).get("resources", "—")
         out.append(
             f"| {num(size)} | {substrate(r)} | {stage_verdicts(r)} | {account_reads(r)} "
-            f"| {stock_oracle(r)} |"
+            f"| {over_a_stock_plan(r)} |"
         )
     for note in stage_notes(rows):
         out.append("")
@@ -390,7 +363,6 @@ def results_table(rows: list[dict], arm: str) -> str:
 STANDUP = {
     "choudoufu": "Stand-up (stock Terraform's apply)",
     "chant": "Deploy (chant's own stacks)",
-    ORACLE_ARM: "Stand-up (its own apply)",
 }
 
 
@@ -534,14 +506,16 @@ def summary_table(groups: list[tuple[str, list[dict]]]) -> list[str]:
     out = [
         "## What this page found",
         "",
-        "One ordinary plan, over the same generated estate, as it grows. Every",
-        "number below is a count of API calls the plan makes against the cloud",
-        "account — not wall time, which an emulator cannot answer, and not a",
-        "score against the other tracks. chant's three columns are counts of the",
-        "same thing, one per read it makes.",
+        "The largest estate each arm has adopted, what one plan costs it",
+        "afterwards, and how much more that is than planning the same estate",
+        "from a state file. Counts of API calls against the cloud account, not",
+        "wall time. The two tracks are separate proofs that an estate this size",
+        "can be adopted, not entries in a race — they do not share a substrate,",
+        "and chant has no stock run of the same thing to take a difference",
+        "against.",
         "",
-        "| Track | Largest estate run | Stages | Account reads (API calls) | Stock oracle | Ratio |",
-        "|---|---|---|---|---|---|",
+        "| Track | Largest estate run | Stages | Account reads (API calls) | More than a stock plan |",
+        "|---|---|---|---|---|",
     ]
 
     for arm in ARMS:
@@ -556,40 +530,22 @@ def summary_table(groups: list[tuple[str, list[dict]]]) -> list[str]:
                 f"{chant_read_calls(r, 'snapshot')} snapshot, "
                 f"{chant_read_calls(r, 'warm_diff')} warm diff"
             )
-            oracle, ratio = "—", "—"
-        elif arm == ORACLE_ARM:
-            reads, oracle, ratio = account_reads(r), "—", "—"
         else:
             reads = account_reads(r)
-            oracle, ratio = oracle_comparison(r)
         out.append(
-            f"| {ARMS[arm]} | {num(size)} resources | {stages} | {reads} | {oracle} | {ratio} |"
+            f"| {ARMS[arm]} | {num(size)} resources | {stages} | {reads} "
+            f"| {over_a_stock_plan(r)} |"
         )
 
     out.append("")
     out.append(
-        "chant has no oracle on its substrate — it deploys CloudFormation stacks "
-        "rather than a stock-Terraform estate, so there is no stock run of the same "
-        "thing to sit beside it, and its three reads are reported in its own terms. "
-        "Stock Terraform is the oracle, so it has no ratio against itself."
+        "chant deploys CloudFormation stacks rather than a stock-Terraform estate, "
+        "so there is no stock run of the same thing to take a difference against, "
+        "and its three reads are reported in its own terms rather than collapsed "
+        "into one."
     )
     out.append("")
     return out
-
-
-def oracle_comparison(r: dict) -> tuple[str, str]:
-    """The oracle's figure and the ratio to it, as two cells rather than one.
-
-    The ratio is spelled out rather than left for the reader to divide,
-    because it is the finding: it is the same to two significant figures at
-    79 resources and at ten thousand. Absent either number, this says so
-    instead of computing with one of them.
-    """
-    mine = r.get("independence", {}).get("account_reads")
-    stock = r.get("measurement", {}).get("stock_read_pass_calls")
-    if not isinstance(mine, (int, float)) or not isinstance(stock, (int, float)) or not stock:
-        return "*not measured*", "—"
-    return num(stock), f"{mine / stock:.2f}x"
 
 
 def results_page(rows: list[dict]) -> str:
@@ -601,12 +557,27 @@ def results_page(rows: list[dict]) -> str:
     # cold-plan footnote, "not measured" in a cell) so the caveat is reachable
     # from the number rather than only the other way round.
     intro = [
-        "# terralith — results",
+        "# terralith — adoption at scale",
         "",
-        "How much a plan costs as a stock-Terraform estate grows, for choudoufu",
-        "and for chant, against stock Terraform itself as the oracle. No agent,",
-        "no model, no questions — one certification run per arm per estate size.",
-        "See [what this bench does and does not measure](index.md).",
+        "**What it costs to take over an estate you already have.** An estate is",
+        "stood up with stock Terraform, and then adopted: choudoufu claims it",
+        "from the live objects, chant from its own stacks. The number is how",
+        "many API calls the plan makes against the cloud account afterwards. No",
+        "agent, no model, no questions — one run per arm per estate size. See",
+        "[what this bench does and does not measure](index.md).",
+        "",
+        "**The finding is that this costs a little more than an ordinary plan,",
+        "and the proportion does not grow.** Planning an adopted estate without",
+        "a state file costs about a quarter more than planning the same estate",
+        "with one: +24% at 79 resources, +23% at 9,477 and +23% at 10,069. A",
+        "hundred and twenty fold growth in estate size moves it by one point.",
+        "",
+        "**Stock Terraform is the reference for that delta, not a track.** It has",
+        "nothing to adopt — it holds a state file and always did — so it is not",
+        "competing here and there is no ratio presented as a score. What the",
+        "extra calls buy is the absence of that file: a plan that finds its",
+        "resources in the account rather than reading them out of something it",
+        "was handed at creation.",
         "",
         "Every row cites the commit, substrate (emulator pin or real AWS region)",
         "and oracle tool versions that produced it, and the exact command that",
@@ -653,30 +624,40 @@ def results_page(rows: list[dict]) -> str:
         "    picking one, for the same reason: a cold plan and a warm diff are",
         "    both true of the same estate and cost visibly different amounts.",
         "",
-        "!!! warning \"What the 1.23x is, and what choudoufu's own docs say\"",
+        "!!! note \"Adoption is not day-to-day, and the stages are not extra work\"",
         "",
-        "    **This is a plan taken straight after adoption, and the excess over",
-        "    stock grows with the number of marked resources rather than staying",
-        "    the constant choudoufu's own cost model describes.** That model",
-        "    ([what you pay](https://intentius.io/choudoufu/docs/what-you-pay/))",
-        "    records the same 79-resource estate at 157 calls against stock's",
-        "    150 — a seven-call residual itemised call by call, of which the only",
-        "    growing term is one `GetResources` per hundred marked objects. At",
-        "    10,069 resources that model predicts 18,561 and a ratio of 1.003x.",
+        "    **Once an estate is adopted, choudoufu is plan and apply, the same",
+        "    two commands as Terraform.** The stage column is the adoption",
+        "    journey and the day-two checks that follow it — stand the estate up,",
+        "    claim it, prove the next plan is empty, prove the next apply changes",
+        "    nothing. It is not a list of phases a plan pays every time. Reading",
+        "    it as one is a fair mistake to make from an earlier version of this",
+        "    page, which also summed those stages into a single wall time.",
         "",
-        "    Measured here: 22,760, and an excess of 0.95 calls per marked",
-        "    resource at every size from 79 up. Two legs added under",
-        "    [choudoufu#692](https://github.com/INTENTIUS/choudoufu/issues/692)",
-        "    each cost one call per marked instance on the IAM path, which a",
-        "    terralith is 84% made of. Both are correctness fixes that found real",
-        "    gaps; neither was measured at size until this bench ran. Filed as",
-        "    [choudoufu#1082](https://github.com/INTENTIUS/choudoufu/issues/1082),",
-        "    with the two commits bisected.",
+        "    **The day-to-day comparison against stock is a different measurement",
+        "    and this bench has not made it at size.** choudoufu's own",
+        "    `internal/live/statefulcost` makes it at 79 resources, three runs per",
+        "    column, every plan empty:",
         "",
-        "    One thing this row does not cover: the estate here was adopted with",
-        "    `live-import`, which stamps markers and records nothing, so the plan",
-        "    has no record store to read from. An estate choudoufu applied itself",
-        "    has one. That comparison has not been measured.",
+        "    | column | API calls |",
+        "    |---|---|",
+        "    | stock `terraform` with a state file | 150, 150, 150 |",
+        "    | stock `tofu` with a state file | 150, 150, 150 |",
+        "    | choudoufu with a state file | 150, 150, 150 |",
+        "    | choudoufu in live mode, after adoption | 186, 186, 186 |",
+        "",
+        "    choudoufu holding a state file costs exactly what stock costs. The",
+        "    186 is the price of holding none, and it recurs on every plan rather",
+        "    than being a one-time adoption fee. What is not yet measured is that",
+        "    same comparison on a settled estate at ten thousand resources, with",
+        "    the record store and cache an operator would actually have. The rows",
+        "    on this page are taken straight after `live-import`, which stamps",
+        "    markers and records nothing.",
+        "",
+        "    Two legs added under [choudoufu#692](https://github.com/INTENTIUS/choudoufu/issues/692)",
+        "    each cost one call per marked instance on the identity path, which is",
+        "    why 186 is not the 157 choudoufu's own docs record. Bisected and",
+        "    filed as [choudoufu#1082](https://github.com/INTENTIUS/choudoufu/issues/1082).",
         "",
         "!!! note \"chant measures three reads, not one\"",
         "",
@@ -737,6 +718,20 @@ def results_page(rows: list[dict]) -> str:
         "    the source of truth going forward. See [what this bench",
         "    deliberately does not measure",
         "    yet](index.md#the-axis-this-bench-exists-to-measure-one-row-at-a-time).",
+        "",
+        "!!! note \"The adoption audit's calls are not the plan's\"",
+        "",
+        "    **This row also carries `adoption_sweep_calls` (588) and",
+        "    `adoption_read_pass_calls` (118) in its own JSON — a forced",
+        "    account-inventory sweep of the provider's whole admission table,",
+        "    not a plan.** That 706-call total was published as `Account",
+        "    reads` for a few hours on 2026-09-11 and withdrawn once the",
+        "    mistake was caught: an ordinary plan and a forced full-account",
+        "    sweep are different operations on the same estate, not two",
+        "    measurements of the same thing. The audit's numbers are real and",
+        "    are kept, under their own `adoption_*` names, but never populate",
+        "    `Account reads` again — that column and `Stock oracle (read",
+        "    pass)` below it are both about the plan, never the audit.",
         "",
         "!!! note \"The adoption audit's calls are not the plan's\"",
         "",
