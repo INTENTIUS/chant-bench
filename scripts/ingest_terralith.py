@@ -326,7 +326,7 @@ def gates_block() -> dict:
     }
 
 
-def independence_block(plan_calls: dict | None) -> dict:
+def independence_block(plan_calls: dict | None, stages: dict | None = None) -> dict:
     """`independence.account_reads` is the axis this whole bench turns on.
 
     Absent `plan_calls`, the record carries no read count at all — only a
@@ -357,7 +357,7 @@ def independence_block(plan_calls: dict | None) -> dict:
         return {
             "account_reads": None,
             "account_reads_status": "not_measured",
-            "account_reads_reason": ACCOUNT_READS_REASON,
+            "account_reads_reason": account_reads_reason(stages),
             "answered_from_own_state": False,
         }
 
@@ -374,6 +374,41 @@ def independence_block(plan_calls: dict | None) -> dict:
         "answered_from_own_state": False,
     }
 
+
+
+def account_reads_reason(stages: dict | None) -> str:
+    """Why this row has no `account_reads`, in its own terms rather than the
+    general ones.
+
+    There are two quite different ways the field can be empty, and saying the
+    wrong one is worse than saying nothing. The usual reason is that the run
+    was never instrumented for call counts, which is `ACCOUNT_READS_REASON`.
+    The other is that the plan this field would have counted DID NOT COMPLETE:
+    `test_plan` is the stage that runs it, and a failed `test_plan` means
+    there is no plan cost to report at all. A refused plan's call count is how
+    far it got before giving up, not what a plan costs, so it is neither
+    published nor described as missing instrumentation.
+
+    The first row to need this was choudoufu's 10,069-resource emulator run,
+    whose plan was refused by choudoufu's own `count-index` rule. Its
+    `adoption_*` numbers in `measurement` are real and were measured on the
+    same run; only the plan is absent.
+    """
+    stage = (stages or {}).get("test_plan") or {}
+    if stage.get("verdict") != "fail":
+        return ACCOUNT_READS_REASON
+    detail = (stage.get("detail") or "").strip()
+    reason = (
+        "This run's plan did not complete: the `test_plan` stage failed, so "
+        "there is no plan cost to report. A refused plan's call count is how "
+        "far it got before giving up, not what a plan costs, so nothing is "
+        "published here. This is not missing instrumentation \u2014 the "
+        "account-inventory numbers under `measurement` were measured on the "
+        "same estate at the same size."
+    )
+    if detail:
+        reason += f" The stage's own verdict line: {detail}"
+    return reason
 
 def measurement_block(rec: dict) -> dict:
     """The numbers with no home in the agent-shaped fields above — all of
@@ -525,7 +560,7 @@ def build_result(rec: dict, duration_lookup: dict[str, float], arm: str) -> dict
         "agent": {"name": "none", "model": None, "k": 1},
         "score": score_block(rec.get("stages", {})),
         "gates": gates_block(),
-        "independence": independence_block(rec.get("plan_calls")),
+        "independence": independence_block(rec.get("plan_calls"), rec.get("stages")),
         "effort": effort_block(rec, duration_lookup),
         "measurement": measurement_block(rec),
         "reproduce": REPRODUCE.get(target),

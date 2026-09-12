@@ -18,6 +18,8 @@ reproduces it.
 | 301 | 4/4 | *not measured* | — | — (cold_deploy=174s, migrate=77s, test_plan=267s) | `420d460` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
 | 745 | 4/4 | *not measured* | — | — (cold_deploy=413s, migrate=222s, test_plan=129s) | `1d06e1d` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
 | 3705 | 2/3 (test_plan failed) | *not measured* | — | 11180.5s (cold_deploy=2023s, migrate=1214s) | `8bbef27` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
+| 9477 | 4/4 | 21423 | 17422 | 13919.9s (cold_deploy=8126s, migrate=1287s, test_plan=48s, test_apply=86s) | `9bd278a` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| 10069 | 2/3 (test_plan failed) | *not measured* | — | 10136.2s (cold_deploy=8735s, migrate=1398s, test_plan=3s) | `9525811` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 
 ## chant
 
@@ -73,11 +75,27 @@ reproduces it.
 
 !!! note "A failed stage is a published result, not a hidden one"
 
-    A row whose stage column names a failure — `test_plan` on the
-    3,705-resource row below — is a real, low, published number: the
-    run's own assertions ran and found a non-empty plan. That is
-    different from a run whose tooling never worked at all, which this
-    site does not publish. See [what this bench measures](index.md#a-failed-stage-is-not-a-hidden-run)
+    A row whose stage column names a failure is a real, low, published
+    number, not a run that was quietly dropped. Two rows below say so,
+    and they fail for different reasons worth telling apart.
+
+    **`test_plan` at 3,705 resources** ran its assertions and found a
+    non-empty plan — the post-migrate plan was expected to be empty and
+    was not.
+
+    **`test_plan` at 10,069 resources** never produced a plan at all.
+    choudoufu refused it in three seconds under its own `count-index`
+    rule, which admits an expression built from `count.index` only
+    while it can render every index and check them pairwise distinct,
+    and stops at a count of 256. The terralith declares `count = 2 ×
+    scale`, so the estate crosses that bound at scale 129 — 9,551
+    resources — and everything larger is refused. The stage is a
+    genuine failure at this size and is published as one; what it is
+    not is a measurement of a plan, which is why that row's account
+    reads are blank rather than zero.
+
+    Both are different from a run whose tooling never worked at all,
+    which this site does not publish. See [what this bench measures](index.md#a-failed-stage-is-not-a-hidden-run)
     for the distinction.
 
 !!! warning "Account reads: measured for the emulator, not yet for real AWS"
