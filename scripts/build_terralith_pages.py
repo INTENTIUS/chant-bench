@@ -302,7 +302,14 @@ def unknown_arms(rows: list[dict]) -> list[str]:
 
 
 def results_page(rows: list[dict]) -> str:
-    header = [
+    # The caveats sit BELOW the tables, not above them: a reader opening this
+    # page came for the numbers, and six admonitions between the title and the
+    # first row buries them. Everything a number needs in order not to be
+    # misread is still on the page, under a heading that says so, and every
+    # figure that needs one carries its own marker in the table itself (the
+    # cold-plan footnote, "not measured" in a cell) so the caveat is reachable
+    # from the number rather than only the other way round.
+    intro = [
         "# terralith — results",
         "",
         "How much a plan costs as a stock-Terraform estate grows, for choudoufu",
@@ -313,6 +320,11 @@ def results_page(rows: list[dict]) -> str:
         "Every row cites the commit, substrate (emulator pin or real AWS region)",
         "and oracle tool versions that produced it, and the exact command that",
         "reproduces it.",
+        "",
+    ]
+
+    notes = [
+        "## Reading these numbers",
         "",
         "!!! note \"Grouped by track, not ranked\"",
         "",
@@ -387,15 +399,14 @@ def results_page(rows: list[dict]) -> str:
         "",
     ]
     if not rows:
-        header += ["*No terralith results published yet.*", ""]
-        return "\n".join(header)
+        return "\n".join(intro + ["*No terralith results published yet.*", ""] + notes)
     body: list[str] = []
     for arm, arm_rows in group_by_track(rows):
         body.append(f"## {ARMS.get(arm, arm)}")
         body.append("")
         body.append(results_table(arm_rows, arm))
         body.append("")
-    return "\n".join(header + body)
+    return "\n".join(intro + body + notes)
 
 
 def main() -> int:

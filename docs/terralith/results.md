@@ -9,6 +9,30 @@ Every row cites the commit, substrate (emulator pin or real AWS region)
 and oracle tool versions that produced it, and the exact command that
 reproduces it.
 
+## choudoufu
+
+| Size | Stages | Account reads | Stock oracle (read pass) | Wall time | Provenance | Reproduce |
+|---|---|---|---|---|---|---|
+| 79 | 4/4 | *not measured* | — | — (cold_deploy=68s, migrate=25s, test_plan=17s) | `da61fc0` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
+| 79 | 4/4 | 706 | 150 | 327.7s (cold_deploy=121s, migrate=40s, test_plan=3s, test_apply=5s) | `3bca740` · floci `sha256:9ec3fa649177` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| 301 | 4/4 | *not measured* | — | — (cold_deploy=174s, migrate=77s, test_plan=267s) | `420d460` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
+| 745 | 4/4 | *not measured* | — | — (cold_deploy=413s, migrate=222s, test_plan=129s) | `1d06e1d` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
+| 3705 | 2/3 (test_plan failed) | *not measured* | — | 11180.5s (cold_deploy=2023s, migrate=1214s) | `8bbef27` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
+
+## chant
+
+| Size | Stacks | Stages | Cold plan (calls) | Snapshot (calls) | Warm diff (calls) | Wall time | Provenance | Reproduce |
+|---|---|---|---|---|---|---|---|---|
+| 264 | 4 | 4/4 | 260* | 8 | 0 | — | `1c52fd5` · floci | `test/scale-estate.sh` |
+| 528 | 8 | 4/4 | 520* | 16 | 0 | — | `1c52fd5` · floci | `test/scale-estate.sh` |
+| 1158 | 3 | 4/4 | 6 | 6 | 0 | — (cold_deploy=30s, read_cold_plan=3s, read_snapshot=3s, read_warm_diff=3s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
+| 3088 | 8 | 4/4 | 16 | 16 | 0 | — (cold_deploy=79s, read_cold_plan=3s, read_snapshot=4s, read_warm_diff=3s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
+| 10036 | 26 | 4/4 | 52 | 52 | 0 | — (cold_deploy=258s, read_cold_plan=4s, read_snapshot=6s, read_warm_diff=4s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
+
+\* measured before [chant#2407](https://github.com/INTENTIUS/chant/pull/2407) moved the held-properties pass behind an explicit `--deep` this harness does not pass — not comparable to an unstarred `Cold plan` figure in the same column. See the row's own `measurement.reads.cold_plan.note` and [chant measures three reads, not one](index.md#chant-measures-three-reads-not-one).
+
+## Reading these numbers
+
 !!! note "Grouped by track, not ranked"
 
     Each section below is one track — one arm, at every size it has
@@ -79,25 +103,3 @@ reproduces it.
     phase to instrument (it never runs choudoufu's tagging sweep), so
     this column only ever reports the read-pass leg, never a
     whole-plan total.
-
-## choudoufu
-
-| Size | Stages | Account reads | Stock oracle (read pass) | Wall time | Provenance | Reproduce |
-|---|---|---|---|---|---|---|
-| 79 | 4/4 | *not measured* | — | — (cold_deploy=68s, migrate=25s, test_plan=17s) | `da61fc0` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-| 79 | 4/4 | 706 | 150 | 327.7s (cold_deploy=121s, migrate=40s, test_plan=3s, test_apply=5s) | `3bca740` · floci `sha256:9ec3fa649177` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
-| 301 | 4/4 | *not measured* | — | — (cold_deploy=174s, migrate=77s, test_plan=267s) | `420d460` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-| 745 | 4/4 | *not measured* | — | — (cold_deploy=413s, migrate=222s, test_plan=129s) | `1d06e1d` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-| 3705 | 2/3 (test_plan failed) | *not measured* | — | 11180.5s (cold_deploy=2023s, migrate=1214s) | `8bbef27` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-
-## chant
-
-| Size | Stacks | Stages | Cold plan (calls) | Snapshot (calls) | Warm diff (calls) | Wall time | Provenance | Reproduce |
-|---|---|---|---|---|---|---|---|---|
-| 264 | 4 | 4/4 | 260* | 8 | 0 | — | `1c52fd5` · floci | `test/scale-estate.sh` |
-| 528 | 8 | 4/4 | 520* | 16 | 0 | — | `1c52fd5` · floci | `test/scale-estate.sh` |
-| 1158 | 3 | 4/4 | 6 | 6 | 0 | — (cold_deploy=30s, read_cold_plan=3s, read_snapshot=3s, read_warm_diff=3s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
-| 3088 | 8 | 4/4 | 16 | 16 | 0 | — (cold_deploy=79s, read_cold_plan=3s, read_snapshot=4s, read_warm_diff=3s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
-| 10036 | 26 | 4/4 | 52 | 52 | 0 | — (cold_deploy=258s, read_cold_plan=4s, read_snapshot=6s, read_warm_diff=4s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
-
-\* measured before [chant#2407](https://github.com/INTENTIUS/chant/pull/2407) moved the held-properties pass behind an explicit `--deep` this harness does not pass — not comparable to an unstarred `Cold plan` figure in the same column. See the row's own `measurement.reads.cold_plan.note` and [chant measures three reads, not one](index.md#chant-measures-three-reads-not-one).
