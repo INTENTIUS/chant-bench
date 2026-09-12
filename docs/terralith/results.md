@@ -1,13 +1,26 @@
 # terralith — results
 
 How much a plan costs as a stock-Terraform estate grows, for choudoufu
-and for chant, against stock OpenTofu as the oracle. No agent, no model,
-no questions — one certification run per arm per estate size. See
-[what this bench does and does not measure](index.md).
+and for chant, against stock Terraform itself as the oracle. No agent,
+no model, no questions — one certification run per arm per estate size.
+See [what this bench does and does not measure](index.md).
 
 Every row cites the commit, substrate (emulator pin or real AWS region)
 and oracle tool versions that produced it, and the exact command that
 reproduces it.
+
+## What this page found
+
+One ordinary plan, over the same generated estate, as it grows. The
+number each track is measured on is how many account reads that plan
+costs — not wall time, which an emulator cannot answer, and not a
+score against the other tracks.
+
+| Track | Largest estate run | Stages there | What one plan reads | Measured against |
+|---|---|---|---|---|
+| choudoufu | 10069 resources | 4/4 | 22760 calls | stock Terraform's 18510 — 1.23x |
+| chant | 10036 resources | 4/4 | 52 cold, 52 snapshot, 0 warm diff | its own three reads — no oracle on this substrate |
+| stock Terraform (oracle) | 10069 resources | 1/1 | 18510 calls | it is the oracle |
 
 ## choudoufu
 
@@ -32,6 +45,14 @@ reproduces it.
 | 10036 | 26 | 4/4 | 52 | 52 | 0 | — (cold_deploy=258s, read_cold_plan=4s, read_snapshot=6s, read_warm_diff=4s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
 
 \* measured before [chant#2407](https://github.com/INTENTIUS/chant/pull/2407) moved the held-properties pass behind an explicit `--deep` this harness does not pass — not comparable to an unstarred `Cold plan` figure in the same column. See the row's own `measurement.reads.cold_plan.note` and [chant measures three reads, not one](index.md#chant-measures-three-reads-not-one).
+
+## stock Terraform (oracle)
+
+| Size | Stages | What one plan reads | Wall time (stand-up) | Provenance | Reproduce |
+|---|---|---|---|---|---|
+| 79 | 1/1 | 150 | 134s | `fce6b53` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| 9477 | 1/1 | 17422 | 8126s | `9bd278a` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| 10069 | 1/1 | 18510 | 8772s | `fb13ead` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 
 ## Reading these numbers
 
@@ -122,7 +143,7 @@ reproduces it.
 
 !!! note "Stock oracle (read pass): not a second product's score"
 
-    **`Stock oracle (read pass)` is stock OpenTofu's own call count for
+    **`Stock oracle (read pass)` is stock Terraform's own call count for
     its plan of the identical, unmigrated estate, not a competing
     arm.** It is what keeps the `Account reads` figure next to it
     from being self-reported — the run measured both sides planning

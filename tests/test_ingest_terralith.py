@@ -17,6 +17,19 @@ no other tests and so no established convention; `tests/fixtures/<script
 name>/` was chosen so a second script gaining a test does not have to
 invent a new layout or collide with this one's file names. It holds:
 
+  expected/terraform-terralith-10-scale1.json
+                        the ORACLE's own row, emitted from the same floci
+                        record as the choudoufu row beside it. It exists to
+                        pin two things the ingest must keep doing: one task
+                        rather than four (stock runs no adoption stages, so
+                        `migrate`/`test_plan`/`test_apply` are absent by
+                        construction and not "not reached"), and
+                        `account_reads` read from `plan_calls.cold.stock`,
+                        the same field the choudoufu row publishes as its
+                        `stock_read_pass_calls`. The aws record in the same
+                        fixture carries no stock plan count and so produces
+                        no oracle row at all - the absence is the assertion.
+
   gauntlet-scale.json   a two-record ScaleArtifact, laid out the way
                         choudoufu#1053 actually shipped it (after its own
                         correction): one floci record WITH both `plan_calls`

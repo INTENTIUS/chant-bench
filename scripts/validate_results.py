@@ -198,6 +198,24 @@ def main() -> int:
     # and the trial count is the cheapest way that stops being true. chant-toolcheck
     # was a one-trial smoke test that satisfied every check above — 1 of 1 expected
     # reads as complete — and landed on the board as an arm scoring 0.
+    #
+    # terralith is the one bench where that comparison has to be made WITHIN
+    # an arm rather than across them, for two reasons that are both about
+    # the bench and not about the rule. Its arms do not share a task set:
+    # choudoufu is scored on four adoption stages, chant on its own four
+    # reads, and stock Terraform on the single stage it actually runs, which
+    # is standing the estate up - stock claims no ownership, so `migrate`,
+    # `test_plan` and `test_apply` have no meaning for it. And a terralith
+    # run legitimately stops early, so even one arm's own rows differ: the
+    # 3,705-resource row ran three stages because the third failed. Comparing
+    # those across arms would demand that stock invent three certifications
+    # it never ran in order to sit beside choudoufu.
+    #
+    # Nothing is lost by scoping it. The shape this rule was written for -
+    # an arm nobody declared turning up with a smaller experiment - is
+    # refused for terralith at page-build time instead, where
+    # `build_terralith_pages.py` exits non-zero on any arm missing from its
+    # own ARMS table rather than rendering it.
     by_scenario: dict[tuple, list[tuple[str, int]]] = {}
     for path in files:
         try:
@@ -206,15 +224,20 @@ def main() -> int:
             continue
         n = (r.get("score") or {}).get("expected_trials")
         if isinstance(n, int):
-            by_scenario.setdefault((r.get("bench"), r.get("scenario")), []).append((path.name, n))
+            bench = r.get("bench")
+            key = (bench, r.get("scenario"), r.get("arm")) if bench == "terralith" else (bench, r.get("scenario"))
+            by_scenario.setdefault(key, []).append((path.name, n))
     odd: dict[str, str] = {}
-    for (bench, scenario), entries in by_scenario.items():
+    for key, entries in by_scenario.items():
+        bench, scenario = key[0], key[1]
+        arm = key[2] if len(key) > 2 else None
         counts = [n for _, n in entries]
         usual = max(set(counts), key=counts.count)
+        where = f"{bench}/{scenario}" + (f" {arm}" if arm else "")
         for name, n in entries:
             if n != usual:
                 odd[name] = (
-                    f"ran {n} trial(s) where every other {bench}/{scenario} run ran "
+                    f"ran {n} trial(s) where every other {where} run ran "
                     f"{usual} — not the same experiment, so it cannot sit beside them"
                 )
 

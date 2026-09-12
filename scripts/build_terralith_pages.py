@@ -50,12 +50,22 @@ DOCS = ROOT / "docs" / "terralith"
 
 BENCH = "terralith"
 
-#: Display name per arm. `opentofu` is the oracle, not a baseline bolted on
+#: The oracle's own arm key, mirroring ingest_terralith.ORACLE_ARM.
+ORACLE_ARM = "terraform"
+
+#: Display name per arm. `terraform` is the oracle, not a baseline bolted on
 #: afterward — see PLAN.md, "A second bench, with no agent: terralith".
+#:
+#: It is stock TERRAFORM and not stock OpenTofu, which this table said for a
+#: while. `live/e2e/terralith-scale/run.sh` stands the estate up with the
+#: `terraform` binary and `internal/live/discovery/slicing_bench_test.go`
+#: plans it with the same one; choudoufu is the OpenTofu fork on the other
+#: side of the comparison. Every row records the exact versions it was
+#: measured against, and they say so.
 ARMS = {
     "choudoufu": "choudoufu",
     "chant": "chant",
-    "opentofu": "OpenTofu (oracle)",
+    "terraform": "stock Terraform (oracle)",
 }
 
 #: Each arm's own expected task set, keyed by arm rather than shared, because
@@ -65,10 +75,17 @@ ARMS = {
 #: chant row's untouched choudoufu-only stages as "not reached" when they
 #: were never part of chant's own certification to begin with. See
 #: PLAN.md's "chant's shape" section.
+#:
+#: The oracle's list is one stage long, and that is the honest length rather
+#: than a gap. choudoufu's other three are adoption stages - something has to
+#: claim ownership of live objects before it can migrate, replan or reapply
+#: them - and stock claims nothing. What stock does in these runs is stand
+#: the estate up, which is `cold_deploy`, the stage whose own detail begins
+#: "stock terraform applied N resources".
 STAGES = {
     "choudoufu": ["cold_deploy", "migrate", "test_plan", "test_apply"],
-    "opentofu": ["cold_deploy", "migrate", "test_plan", "test_apply"],
     "chant": ["cold_deploy", "read_cold_plan", "read_snapshot", "read_warm_diff"],
+    "terraform": ["cold_deploy"],
 }
 
 
@@ -110,7 +127,7 @@ def group_by_track(rows: list[dict]) -> list[tuple[str, list[dict]]]:
 
     Groups themselves are ordered by `ARMS`'s own declaration order, not by
     any metric — `choudoufu` first because it is the arm this bench was
-    built to measure, `chant` next, `opentofu` last because it is named an
+    built to measure, `chant` next, `terraform` last because it is named an
     oracle rather than a competitor. An arm with no rows yet is simply
     absent, not rendered as an empty section.
     """
@@ -166,7 +183,7 @@ def account_reads(r: dict) -> str:
 
 
 def stock_oracle(r: dict) -> str:
-    """Stock OpenTofu's own plan call count, when the same run measured it —
+    """Stock Terraform's own plan call count, when the same run measured it —
     the oracle that keeps `account_reads` (the cell just left of this one)
     from being self-reported, never a second product's score. It has no row
     of its own and nothing to rank it against: it is stock's plan of the
@@ -182,6 +199,14 @@ def stock_oracle(r: dict) -> str:
 
 def wall_time(r: dict) -> str:
     e = r.get("effort", {})
+    # The oracle has no run total of its own to report. `wall_seconds` on
+    # every other row is the whole certification, which is choudoufu's, so
+    # stock's cell shows the one stage stock itself ran rather than an em
+    # dash followed by that stage in brackets - which read as a missing
+    # number sitting beside a present one.
+    if r.get("arm") == ORACLE_ARM:
+        secs = (e.get("wall_seconds_by_stage") or {}).get("cold_deploy")
+        return f"{num(secs)}s" if isinstance(secs, (int, float)) else "—"
     total = e.get("wall_seconds")
     by_stage = e.get("wall_seconds_by_stage") or {}
     total_s = f"{num(total)}s" if isinstance(total, (int, float)) else "—"
@@ -285,6 +310,24 @@ def results_table(rows: list[dict], arm: str) -> str:
             )
         return "\n".join(out)
 
+    if arm == ORACLE_ARM:
+        # No "Stock oracle" column on the oracle's own table: the cell would
+        # hold this row's own number, and a figure compared against itself
+        # reads as a measurement when it is a tautology. The wall time is
+        # the one stage stock runs rather than the run's total, which is
+        # choudoufu's whole certification and not stock's to claim.
+        out = [
+            "| Size | Stages | What one plan reads | Wall time (stand-up) | Provenance | Reproduce |",
+            "|---|---|---|---|---|---|",
+        ]
+        for r in rows:
+            size = r.get("measurement", {}).get("resources", "—")
+            out.append(
+                f"| {size} | {stage_verdicts(r)} | {account_reads(r)} "
+                f"| {wall_time(r)} | {provenance(r)} | {reproduce_line(r)} |"
+            )
+        return "\n".join(out)
+
     out = [
         "| Size | Stages | Account reads | Stock oracle (read pass) | Wall time | Provenance | Reproduce |",
         "|---|---|---|---|---|---|---|",
@@ -302,6 +345,90 @@ def unknown_arms(rows: list[dict]) -> list[str]:
     return sorted({r["arm"] for r in rows if r.get("arm") not in ARMS})
 
 
+
+def largest_per_track(groups: list[tuple[str, list[dict]]]) -> dict[str, dict]:
+    """Each track's biggest estate, which is the only row the summary shows.
+
+    Biggest rather than best: size is the experiment's own independent
+    variable, so "the largest estate this track has been run at" is a fact
+    about coverage, not a score. Picking, say, the cheapest row would be
+    ranking by a measured number, which this page does not do anywhere.
+    """
+    return {arm: rows[-1] for arm, rows in groups if rows}
+
+
+def summary_table(groups: list[tuple[str, list[dict]]]) -> list[str]:
+    """The one table a reader who reads nothing else should come away with.
+
+    It is deliberately NOT a leaderboard, and the column that would make it
+    one is missing: there is no cell where chant's number sits next to
+    choudoufu's. Each track is summarised against its OWN reference. For
+    choudoufu that is stock Terraform, which planned the identical estate on
+    the identical substrate in the same run, so the ratio between them is the
+    thing this bench was built to measure. chant has no such oracle and three
+    reads rather than one, so it reports all three in its own terms. Stock is
+    the reference and says so.
+
+    Every figure is read from the same result sets the tables below render,
+    so this cannot drift from them - the failure mode of a hand-written
+    summary, and the reason this is generated.
+    """
+    biggest = largest_per_track(groups)
+    if not biggest:
+        return []
+
+    out = [
+        "## What this page found",
+        "",
+        "One ordinary plan, over the same generated estate, as it grows. The",
+        "number each track is measured on is how many account reads that plan",
+        "costs — not wall time, which an emulator cannot answer, and not a",
+        "score against the other tracks.",
+        "",
+        "| Track | Largest estate run | Stages there | What one plan reads | Measured against |",
+        "|---|---|---|---|---|",
+    ]
+
+    for arm in ARMS:
+        r = biggest.get(arm)
+        if r is None:
+            continue
+        size = r.get("measurement", {}).get("resources", "—")
+        stages = stage_verdicts(r)
+        if arm == "chant":
+            reads = (
+                f"{chant_read_calls(r, 'cold_plan')} cold, "
+                f"{chant_read_calls(r, 'snapshot')} snapshot, "
+                f"{chant_read_calls(r, 'warm_diff')} warm diff"
+            )
+            against = "its own three reads — no oracle on this substrate"
+        elif arm == ORACLE_ARM:
+            reads = f"{account_reads(r)} calls"
+            against = "it is the oracle"
+        else:
+            reads = f"{account_reads(r)} calls"
+            against = oracle_comparison(r)
+        out.append(f"| {ARMS[arm]} | {num(size)} resources | {stages} | {reads} | {against} |")
+
+    out.append("")
+    return out
+
+
+def oracle_comparison(r: dict) -> str:
+    """One arm's read cost beside the oracle's, on the same row's own run.
+
+    The ratio is spelled out rather than left for the reader to divide,
+    because it is the finding: it is the same to two significant figures at
+    79 resources and at ten thousand. Absent either number, this says so
+    instead of computing with one of them.
+    """
+    mine = r.get("independence", {}).get("account_reads")
+    stock = r.get("measurement", {}).get("stock_read_pass_calls")
+    if not isinstance(mine, (int, float)) or not isinstance(stock, (int, float)) or not stock:
+        return "stock Terraform — not measured on this row"
+    return f"stock Terraform's {num(stock)} — {mine / stock:.2f}x"
+
+
 def results_page(rows: list[dict]) -> str:
     # The caveats sit BELOW the tables, not above them: a reader opening this
     # page came for the numbers, and six admonitions between the title and the
@@ -314,9 +441,9 @@ def results_page(rows: list[dict]) -> str:
         "# terralith — results",
         "",
         "How much a plan costs as a stock-Terraform estate grows, for choudoufu",
-        "and for chant, against stock OpenTofu as the oracle. No agent, no model,",
-        "no questions — one certification run per arm per estate size. See",
-        "[what this bench does and does not measure](index.md).",
+        "and for chant, against stock Terraform itself as the oracle. No agent,",
+        "no model, no questions — one certification run per arm per estate size.",
+        "See [what this bench does and does not measure](index.md).",
         "",
         "Every row cites the commit, substrate (emulator pin or real AWS region)",
         "and oracle tool versions that produced it, and the exact command that",
@@ -414,7 +541,7 @@ def results_page(rows: list[dict]) -> str:
         "",
         "!!! note \"Stock oracle (read pass): not a second product's score\"",
         "",
-        "    **`Stock oracle (read pass)` is stock OpenTofu's own call count for",
+        "    **`Stock oracle (read pass)` is stock Terraform's own call count for",
         "    its plan of the identical, unmigrated estate, not a competing",
         "    arm.** It is what keeps the `Account reads` figure next to it",
         "    from being self-reported — the run measured both sides planning",
@@ -426,13 +553,14 @@ def results_page(rows: list[dict]) -> str:
     ]
     if not rows:
         return "\n".join(intro + ["*No terralith results published yet.*", ""] + notes)
+    groups = group_by_track(rows)
     body: list[str] = []
-    for arm, arm_rows in group_by_track(rows):
+    for arm, arm_rows in groups:
         body.append(f"## {ARMS.get(arm, arm)}")
         body.append("")
         body.append(results_table(arm_rows, arm))
         body.append("")
-    return "\n".join(intro + body + notes)
+    return "\n".join(intro + summary_table(groups) + body + notes)
 
 
 def main() -> int:

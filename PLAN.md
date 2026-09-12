@@ -287,7 +287,7 @@ A number whose conditions failed must never look like a merely low number.
 
 aws-bench measures an agent holding a tool. terralith (#33) measures something
 narrower: what a plan costs as an estate grows, for choudoufu and for chant
-against stock OpenTofu as the oracle. No agent asks a question, no model reads
+against stock Terraform as the oracle. No agent asks a question, no model reads
 an answer, nothing is judged. One certification run per arm per estate size,
 scored on the stages the run itself asserts — cold deploy, migrate, replan
 empty, no-op apply.
@@ -316,7 +316,7 @@ aws-bench's 3.
 | `gates.audit` | the run's own verify-empty listing and stage assertions actually ran and produced a verdict | this is **not** whether the estate passed. A stage that ran cleanly and found a non-empty plan is a measured failure, which belongs in `score`; `gates.audit` only says the measurement apparatus itself worked. Collapsing those two is exactly the mistake `validate_results.py` already refuses for aws-bench — "the tool never ran" and "the tool did badly" have to stay different findings here too |
 | `independence.account_reads` | the plan's own read count, or `null` with `account_reads_status`/`account_reads_reason` | not a side field for this bench, the measurement — which is exactly why a wrong number here is worse than a missing one. choudoufu's certification record carries a resource count, not a call count, and the two are not the same thing even where they coincide (see below); every published terralith result is `null` here until a real count exists |
 | `effort` | wall seconds, overall and per stage | the certification's own `duration_s` and `stage_seconds` |
-| `measurement` | `resources`, `taggable_resources`, `throttles`, `retries`, and — only when the source record actually carries them — `sweep_calls`, `read_pass_calls`, `stock_read_pass_calls`, `index_lag_seconds` | the numbers with no home in the agent-shaped fields above. `stock_read_pass_calls` is stock OpenTofu's own call count for the read-pass leg — the oracle for `read_pass_calls`/`account_reads`, not a second arm's score, see below. New top-level block, required (as a dict, contents unchecked) whenever `bench == "terralith"`, the same latitude `agent` already gets |
+| `measurement` | `resources`, `taggable_resources`, `throttles`, `retries`, and — only when the source record actually carries them — `sweep_calls`, `read_pass_calls`, `stock_read_pass_calls`, `index_lag_seconds` | the numbers with no home in the agent-shaped fields above. `stock_read_pass_calls` is stock Terraform's own call count for the read-pass leg — the oracle for `read_pass_calls`/`account_reads`, not a second arm's score, see below. New top-level block, required (as a dict, contents unchecked) whenever `bench == "terralith"`, the same latitude `agent` already gets |
 | `run.substrate` | `"floci"` or `"aws"` | the field this document already defined for aws-bench live-cloud runs, reused rather than re-invented |
 
 **A run that fails a stage is not a run the gates reject.** `terralith-3705`
@@ -370,7 +370,7 @@ its own `adoption_*` names in `measurement_block()` and never `account_reads`
 again).
 
 **The `stock` figure is an oracle for choudoufu's own number, not a second
-arm.** `ScaleCallPair.Stock` (choudoufu's own type) carries stock OpenTofu's
+arm.** `ScaleCallPair.Stock` (choudoufu's own type) carries stock Terraform's
 call count for the *same leg*, when the same run measured both sides — and it
 only ever exists on `read_pass`, never on `sweep`, because stock has no sweep
 phase to instrument: it never runs choudoufu's tagging discovery, so there is

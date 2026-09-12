@@ -36,7 +36,7 @@ This site collects benchmarks that measure that, and publishes every run.
 -   ### [terralith](terralith/index.md)
 
     No agent, no model, no questions. How much a plan costs as a stock-Terraform
-    estate grows, for choudoufu and for chant, against stock OpenTofu as the
+    estate grows, for choudoufu and for chant, against stock Terraform as the
     oracle — one certification run per arm per size.
 
     **Scenarios:** terralith-79, terralith-745, terralith-3705, terralith-10069.
