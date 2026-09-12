@@ -1,9 +1,24 @@
-# terralith — results
+# terralith — adoption at scale
 
-How much a plan costs as a stock-Terraform estate grows, for choudoufu
-and for chant, against stock Terraform itself as the oracle. No agent,
-no model, no questions — one certification run per arm per estate size.
-See [what this bench does and does not measure](index.md).
+**What it costs to take over an estate you already have.** An estate is
+stood up with stock Terraform, and then adopted: choudoufu claims it
+from the live objects, chant from its own stacks. The number is how
+many API calls the plan makes against the cloud account afterwards. No
+agent, no model, no questions — one run per arm per estate size. See
+[what this bench does and does not measure](index.md).
+
+**The finding is that this costs a little more than an ordinary plan,
+and the proportion does not grow.** Planning an adopted estate without
+a state file costs about a quarter more than planning the same estate
+with one: +24% at 79 resources, +23% at 9,477 and +23% at 10,069. A
+hundred and twenty fold growth in estate size moves it by one point.
+
+**Stock Terraform is the reference for that delta, not a track.** It has
+nothing to adopt — it holds a state file and always did — so it is not
+competing here and there is no ratio presented as a score. What the
+extra calls buy is the absence of that file: a plan that finds its
+resources in the account rather than reading them out of something it
+was handed at creation.
 
 Every row cites the commit, substrate (emulator pin or real AWS region)
 and oracle tool versions that produced it, and the exact command that
@@ -11,31 +26,32 @@ reproduces it.
 
 ## What this page found
 
-One ordinary plan, over the same generated estate, as it grows. Every
-number below is a count of API calls the plan makes against the cloud
-account — not wall time, which an emulator cannot answer, and not a
-score against the other tracks. chant's three columns are counts of the
-same thing, one per read it makes.
+The largest estate each arm has adopted, what one plan costs it
+afterwards, and how much more that is than planning the same estate
+from a state file. Counts of API calls against the cloud account, not
+wall time. The two tracks are separate proofs that an estate this size
+can be adopted, not entries in a race — they do not share a substrate,
+and chant has no stock run of the same thing to take a difference
+against.
 
-| Track | Largest estate run | Stages | Account reads (API calls) | Stock oracle | Ratio |
-|---|---|---|---|---|---|
-| choudoufu | 10069 resources | 4/4 | 22760 | 18510 | 1.23x |
-| chant | 10036 resources | 4/4 | 52 cold, 52 snapshot, 0 warm diff | — | — |
-| stock Terraform (oracle) | 10069 resources | 1/1 | 18510 | — | — |
+| Track | Largest estate run | Stages | Account reads (API calls) | More than a stock plan |
+|---|---|---|---|---|
+| choudoufu | 10069 resources | 4/4 | 22760 | +4250 (+23%) |
+| chant | 10036 resources | 4/4 | 52 cold, 52 snapshot, 0 warm diff | — |
 
-chant has no oracle on its substrate — it deploys CloudFormation stacks rather than a stock-Terraform estate, so there is no stock run of the same thing to sit beside it, and its three reads are reported in its own terms. Stock Terraform is the oracle, so it has no ratio against itself.
+chant deploys CloudFormation stacks rather than a stock-Terraform estate, so there is no stock run of the same thing to take a difference against, and its three reads are reported in its own terms rather than collapsed into one.
 
 ## choudoufu
 
-| Size | Substrate | Stages | Account reads (API calls) | Stock oracle |
+| Size | Substrate | Stages | Account reads (API calls) | More than a stock plan |
 |---|---|---|---|---|
 | 79 | real AWS (us-east-2) | 4/4 | *not measured* | — |
-| 79 | emulator | 4/4 | 186 | 150 |
+| 79 | emulator | 4/4 | 186 | +36 (+24%) |
 | 301 | real AWS (us-east-2) | 4/4 | *not measured* | — |
 | 745 | real AWS (us-east-2) | 4/4 | *not measured* | — |
 | 3705 | real AWS (us-east-2) | 2/3 | *not measured* | — |
-| 9477 | emulator | 4/4 | 21423 | 17422 |
-| 10069 | emulator | 4/4 | 22760 | 18510 |
+| 9477 | emulator | 4/4 | 21423 | +4001 (+23%) |
+| 10069 | emulator | 4/4 | 22760 | +4250 (+23%) |
 
 **3705 resources:** `test_plan` failed.
 
@@ -50,14 +66,6 @@ chant has no oracle on its substrate — it deploys CloudFormation stacks rather
 | 10036 | 26 | 4/4 | 52 | 52 | 0 |
 
 \* measured before [chant#2407](https://github.com/INTENTIUS/chant/pull/2407) moved the held-properties pass behind an explicit `--deep` this harness does not pass — not comparable to an unstarred `Cold plan` figure in the same column. See the row's own `measurement.reads.cold_plan.note` and [chant measures three reads, not one](index.md#chant-measures-three-reads-not-one).
-
-## stock Terraform (oracle)
-
-| Size | Substrate | Stages | Account reads (API calls) |
-|---|---|---|---|
-| 79 | emulator | 1/1 | 150 |
-| 9477 | emulator | 1/1 | 17422 |
-| 10069 | emulator | 1/1 | 18510 |
 
 ## Where the time goes
 
@@ -93,14 +101,6 @@ real account, against an API that throttles.
 | 3088 | emulator | 79s | 3s | 4s | 3s |
 | 10036 | emulator | 258s | 4s | 6s | 4s |
 
-### stock Terraform (oracle)
-
-| Size | Substrate | Stand-up (its own apply) |
-|---|---|---|
-| 79 | emulator | 134s |
-| 9477 | emulator | 8126s |
-| 10069 | emulator | 8772s |
-
 ## Provenance
 
 Every row above, and what produced it.
@@ -119,9 +119,6 @@ Every row above, and what produced it.
 | chant | 1158 | emulator | `3d82057` | `sha256:0bbeb43075c9` | — | `test/scale-estate.sh` |
 | chant | 3088 | emulator | `3d82057` | `sha256:0bbeb43075c9` | — | `test/scale-estate.sh` |
 | chant | 10036 | emulator | `3d82057` | `sha256:0bbeb43075c9` | — | `test/scale-estate.sh` |
-| stock Terraform (oracle) | 79 | emulator | `fce6b53` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
-| stock Terraform (oracle) | 9477 | emulator | `9bd278a` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
-| stock Terraform (oracle) | 10069 | emulator | `fb13ead` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 
 ## Reading these numbers
 
@@ -161,30 +158,40 @@ Every row above, and what produced it.
     picking one, for the same reason: a cold plan and a warm diff are
     both true of the same estate and cost visibly different amounts.
 
-!!! warning "What the 1.23x is, and what choudoufu's own docs say"
+!!! note "Adoption is not day-to-day, and the stages are not extra work"
 
-    **This is a plan taken straight after adoption, and the excess over
-    stock grows with the number of marked resources rather than staying
-    the constant choudoufu's own cost model describes.** That model
-    ([what you pay](https://intentius.io/choudoufu/docs/what-you-pay/))
-    records the same 79-resource estate at 157 calls against stock's
-    150 — a seven-call residual itemised call by call, of which the only
-    growing term is one `GetResources` per hundred marked objects. At
-    10,069 resources that model predicts 18,561 and a ratio of 1.003x.
+    **Once an estate is adopted, choudoufu is plan and apply, the same
+    two commands as Terraform.** The stage column is the adoption
+    journey and the day-two checks that follow it — stand the estate up,
+    claim it, prove the next plan is empty, prove the next apply changes
+    nothing. It is not a list of phases a plan pays every time. Reading
+    it as one is a fair mistake to make from an earlier version of this
+    page, which also summed those stages into a single wall time.
 
-    Measured here: 22,760, and an excess of 0.95 calls per marked
-    resource at every size from 79 up. Two legs added under
-    [choudoufu#692](https://github.com/INTENTIUS/choudoufu/issues/692)
-    each cost one call per marked instance on the IAM path, which a
-    terralith is 84% made of. Both are correctness fixes that found real
-    gaps; neither was measured at size until this bench ran. Filed as
-    [choudoufu#1082](https://github.com/INTENTIUS/choudoufu/issues/1082),
-    with the two commits bisected.
+    **The day-to-day comparison against stock is a different measurement
+    and this bench has not made it at size.** choudoufu's own
+    `internal/live/statefulcost` makes it at 79 resources, three runs per
+    column, every plan empty:
 
-    One thing this row does not cover: the estate here was adopted with
-    `live-import`, which stamps markers and records nothing, so the plan
-    has no record store to read from. An estate choudoufu applied itself
-    has one. That comparison has not been measured.
+    | column | API calls |
+    |---|---|
+    | stock `terraform` with a state file | 150, 150, 150 |
+    | stock `tofu` with a state file | 150, 150, 150 |
+    | choudoufu with a state file | 150, 150, 150 |
+    | choudoufu in live mode, after adoption | 186, 186, 186 |
+
+    choudoufu holding a state file costs exactly what stock costs. The
+    186 is the price of holding none, and it recurs on every plan rather
+    than being a one-time adoption fee. What is not yet measured is that
+    same comparison on a settled estate at ten thousand resources, with
+    the record store and cache an operator would actually have. The rows
+    on this page are taken straight after `live-import`, which stamps
+    markers and records nothing.
+
+    Two legs added under [choudoufu#692](https://github.com/INTENTIUS/choudoufu/issues/692)
+    each cost one call per marked instance on the identity path, which is
+    why 186 is not the 157 choudoufu's own docs record. Bisected and
+    filed as [choudoufu#1082](https://github.com/INTENTIUS/choudoufu/issues/1082).
 
 !!! note "chant measures three reads, not one"
 
@@ -245,6 +252,20 @@ Every row above, and what produced it.
     the source of truth going forward. See [what this bench
     deliberately does not measure
     yet](index.md#the-axis-this-bench-exists-to-measure-one-row-at-a-time).
+
+!!! note "The adoption audit's calls are not the plan's"
+
+    **This row also carries `adoption_sweep_calls` (588) and
+    `adoption_read_pass_calls` (118) in its own JSON — a forced
+    account-inventory sweep of the provider's whole admission table,
+    not a plan.** That 706-call total was published as `Account
+    reads` for a few hours on 2026-09-11 and withdrawn once the
+    mistake was caught: an ordinary plan and a forced full-account
+    sweep are different operations on the same estate, not two
+    measurements of the same thing. The audit's numbers are real and
+    are kept, under their own `adoption_*` names, but never populate
+    `Account reads` again — that column and `Stock oracle (read
+    pass)` below it are both about the plan, never the audit.
 
 !!! note "The adoption audit's calls are not the plan's"
 
