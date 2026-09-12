@@ -18,6 +18,7 @@ reproduces it.
 | 301 | 4/4 | *not measured* | — | — (cold_deploy=174s, migrate=77s, test_plan=267s) | `420d460` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
 | 745 | 4/4 | *not measured* | — | — (cold_deploy=413s, migrate=222s, test_plan=129s) | `1d06e1d` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
 | 3705 | 2/3 (test_plan failed) | *not measured* | — | 11180.5s (cold_deploy=2023s, migrate=1214s) | `8bbef27` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
+| 9477 | 4/4 | 21423 | 17422 | 13919.9s (cold_deploy=8126s, migrate=1287s, test_plan=48s, test_apply=86s) | `9bd278a` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 | 10069 | 2/3 (test_plan failed) | *not measured* | — | 10136.2s (cold_deploy=8735s, migrate=1398s, test_plan=3s) | `9525811` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 
 ## chant

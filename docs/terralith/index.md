@@ -57,11 +57,21 @@ still exists, honestly named, as `measurement.verified_resources` on each row
 The real number needs choudoufu's own scale record
 (`live/gauntlet-scale.json`) to carry a `plan_calls` field.
 [INTENTIUS/choudoufu#1053](https://github.com/INTENTIUS/choudoufu/issues/1053)
-is the issue that produces it, and it has landed for exactly one record so
-far: the `floci`/`scale=1` (79-resource) emulator row, whose ordinary plan
-costs 186 calls — cold and warm alike, 186 both times, because choudoufu's
-record store is seeded by live-import itself rather than by a first plan, so
-there is no cold-plan penalty to pay here. The four real-AWS records (79,
+is the issue that produces it, and it has landed for two records so far,
+both on the emulator. At 79 resources an ordinary plan costs 186 calls — cold
+and warm alike, 186 both times, because choudoufu's record store is seeded by
+live-import itself rather than by a first plan, so there is no cold-plan
+penalty to pay here. At 9,477 resources it costs 21,423 against stock's
+17,422.
+
+Those two points are a hundred and twenty fold apart in estate size and
+agree to within one hundredth on the only thing this bench ranks: 1.24x at
+79, 1.23x at 9,477. Read the second row's `measurement.plan_calls_warm`
+alongside it — 21,620, which is 197 calls *more* than cold, the opposite of
+the scale-1 row where the two were identical. That is recorded and not
+explained.
+
+The four real-AWS records (79,
 301, 745 and 3,705 resources) have not been re-run with the instrumentation
 yet, so they still publish `null` with a reason rather than a wrong number.
 The next certification run on each of those is what fills them in — this
