@@ -1,0 +1,17 @@
+{
+  "schema": 2,
+  "estate": "chant-scale-estate",
+  "target": "floci",
+  "scale": 3,
+  "commit": "chfixture0002",
+  "resources": { "total": 30, "taggable": 30, "skipped": 0 },
+  "stages": {
+    "cold_deploy": { "verdict": "pass" }
+  },
+  "reads": {
+    "cold_plan": { "verdict": "pass", "calls": { "total": { "chant": 30 } } },
+    "snapshot": { "verdict": "pass", "calls": { "total": { "chant": 6 } } },
+    "warm_diff": { "verdict": "pass", "calls": { "total": { "chant": 0 } } }
+  },
+  "source": "fixture: chant schema 2, minimal record (no seconds/per_stack/by_action/emulator/stacks[]/median_seconds/anomaly_detected — exercises the absent-optional-field branch of chant_measurement_block()/chant_effort_block())"
+}

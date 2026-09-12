@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "bench": "terralith",
+  "scenario": "terralith-3088",
+  "arm": "chant",
+  "run": {
+    "id": "chant-terralith-3088-scale8",
+    "harness_commit": "3d82057f6f8b72e4b4b0a0ce23e1c1331b9228ba",
+    "substrate": "floci",
+    "emulator": "ghcr.io/lex00/floci@sha256:0bbeb43075c9df9c7e06311cd4eec99a354594d304faa4fe5899b494a009d23d"
+  },
+  "agent": {
+    "name": "none",
+    "model": null,
+    "k": 1
+  },
+  "score": {
+    "trials": 4,
+    "expected_trials": 4,
+    "completed": 4,
+    "errored": 0,
+    "passed": 4,
+    "pass_rate": 1.0,
+    "by_task": {
+      "cold_deploy": [
+        1
+      ],
+      "read_cold_plan": [
+        1
+      ],
+      "read_snapshot": [
+        1
+      ],
+      "read_warm_diff": [
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": null,
+    "account_reads_status": "not_a_single_read",
+    "account_reads_reason": "chant's own read cost is three independent numbers \u2014 cold_plan, snapshot and warm_diff \u2014 not one. Publishing any single one of them under this field would erase which read it describes; see measurement.reads for each, named.",
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "wall_seconds_by_stage": {
+      "cold_deploy": 79,
+      "read_cold_plan": 3,
+      "read_snapshot": 4,
+      "read_warm_diff": 3
+    }
+  },
+  "measurement": {
+    "resources": 3088,
+    "taggable_resources": 3088,
+    "untaggable_resources": 0,
+    "stacks": 8,
+    "median_stack_seconds": 6,
+    "anomaly_detected": false,
+    "reads": {
+      "cold_plan": {
+        "calls": 16,
+        "per_stack": 2,
+        "verdict": "pass"
+      },
+      "snapshot": {
+        "calls": 16,
+        "per_stack": 2,
+        "verdict": "pass"
+      },
+      "warm_diff": {
+        "calls": 0,
+        "per_stack": 0,
+        "verdict": "pass"
+      }
+    }
+  },
+  "reproduce": "test/scale-estate.sh"
+}

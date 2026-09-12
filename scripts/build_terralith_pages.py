@@ -15,15 +15,25 @@ piece of logic both benches need identically.
 **This page must not rank.** The maintainer's own framing: "this isn't
 supposed to be comparing them they are separate results proving they can both
 handle it", and "they can be presented together but one will be slower than
-the others". A future chant row and a choudoufu row at the same size are two
+the others". A chant row and a choudoufu row at the same size are two
 separate proofs that the estate can be handled, not two entries in a race — so
 this renderer groups rows by track (arm) into their own subsections and never
 sorts by a measured number. Size is the one exception: within a track, rows
 sort by estate size because that is the experiment's own independent
 variable, not a result being ranked. See PLAN.md's terralith section and
-docs/terralith/index.md for why a future chant row's wall time is not
-comparable to choudoufu's at all — different substrates, not just different
-tools.
+docs/terralith/index.md for why a chant row's wall time is not comparable to
+choudoufu's at all — different substrates, not just different tools.
+
+**chant's own track gets its own columns, not choudoufu's.** choudoufu's plan
+makes one kind of read; chant's harness measures three (`cold_plan`,
+`snapshot`, `warm_diff`), of visibly different cost — 260, 8 and 0 calls are
+all true of the same 264-resource estate. Collapsing those into the
+`Account reads` / `Stock oracle` pair choudoufu's rows use would either pick
+one of the three and silently drop the others, or add them together into a
+number that describes nothing real. `results_table()` renders chant's
+section with three named call columns instead, one per read, so a reader
+never has to guess which read a number is describing. See PLAN.md's "chant's
+shape" section.
 """
 
 from __future__ import annotations
@@ -48,7 +58,18 @@ ARMS = {
     "opentofu": "OpenTofu (oracle)",
 }
 
-STAGES = ["cold_deploy", "migrate", "test_plan", "test_apply"]
+#: Each arm's own expected task set, keyed by arm rather than shared, because
+#: chant's four tasks are not choudoufu's four — chant has no
+#: `migrate`/`test_plan`/`test_apply`, choudoufu has no `read_cold_plan`/
+#: `read_snapshot`/`read_warm_diff`. A shared list would mislabel every
+#: chant row's untouched choudoufu-only stages as "not reached" when they
+#: were never part of chant's own certification to begin with. See
+#: PLAN.md's "chant's shape" section.
+STAGES = {
+    "choudoufu": ["cold_deploy", "migrate", "test_plan", "test_apply"],
+    "opentofu": ["cold_deploy", "migrate", "test_plan", "test_apply"],
+    "chant": ["cold_deploy", "read_cold_plan", "read_snapshot", "read_warm_diff"],
+}
 
 
 def load() -> list[dict]:
@@ -76,7 +97,7 @@ def group_by_track(rows: list[dict]) -> list[tuple[str, list[dict]]]:
     """Rows grouped by arm ("track"), each group sorted by estate size only.
 
     This is the one place row order is decided, and it is deliberately not a
-    ranking. A choudoufu row and a future chant row at the same size are two
+    ranking. A choudoufu row and a chant row at the same size are two
     separate proofs that the estate can be handled, not two entries in a
     race — the maintainer's own words are "this isn't supposed to be
     comparing them they are separate results proving they can both handle
@@ -89,9 +110,9 @@ def group_by_track(rows: list[dict]) -> list[tuple[str, list[dict]]]:
 
     Groups themselves are ordered by `ARMS`'s own declaration order, not by
     any metric — `choudoufu` first because it is the arm this bench was
-    built to measure, `chant` next once it exists, `opentofu` last because it
-    is named an oracle rather than a competitor. An arm with no rows yet is
-    simply absent, not rendered as an empty section.
+    built to measure, `chant` next, `opentofu` last because it is named an
+    oracle rather than a competitor. An arm with no rows yet is simply
+    absent, not rendered as an empty section.
     """
     by_arm: dict[str, list[dict]] = defaultdict(list)
     for r in rows:
@@ -104,18 +125,20 @@ def group_by_track(rows: list[dict]) -> list[tuple[str, list[dict]]]:
 
 
 def stage_verdicts(r: dict) -> str:
-    """Which of the four scale stages ran and whether each passed.
+    """Which of an arm's own four scale stages ran and whether each passed.
 
     Not just a pass count: `2/3 (test_plan failed)` says which stage broke
     without a reader opening the JSON, and a run that never reached a stage
     (because an earlier one failed) is visibly different from one that ran it
-    and passed.
+    and passed. The expected stage list is the row's own arm's — see
+    `STAGES` above for why that can't be one shared list.
     """
+    stages = STAGES.get(r.get("arm"), [])
     by_task = r.get("score", {}).get("by_task", {})
     passed = sum(1 for v in by_task.values() if v and v[0])
     total = len(by_task)
-    failed = [s for s in STAGES if s in by_task and not by_task[s][0]]
-    skipped = [s for s in STAGES if s not in by_task]
+    failed = [s for s in stages if s in by_task and not by_task[s][0]]
+    skipped = [s for s in stages if s not in by_task]
     note = ""
     if failed:
         note = f" ({', '.join(failed)} failed)"
@@ -161,8 +184,9 @@ def wall_time(r: dict) -> str:
     total = e.get("wall_seconds")
     by_stage = e.get("wall_seconds_by_stage") or {}
     total_s = f"{num(total)}s" if isinstance(total, (int, float)) else "—"
+    stages = STAGES.get(r.get("arm"), [])
     if by_stage:
-        parts = ", ".join(f"{s}={by_stage[s]}s" for s in STAGES if s in by_stage)
+        parts = ", ".join(f"{s}={by_stage[s]}s" for s in stages if s in by_stage)
         return f"{total_s} ({parts})"
     return total_s
 
@@ -200,13 +224,66 @@ def reproduce_line(r: dict) -> str:
     return f"`{rep}`" if rep else "—"
 
 
-def results_table(rows: list[dict]) -> str:
+def chant_read_calls(r: dict, read_name: str) -> str:
+    """One of chant's three read call counts, named — never a bare number in
+    a column that could be any of the three. `measurement.reads` is absent
+    entirely on a non-chant row, so this reads `—` for those rather than
+    raising.
+
+    A read carrying its own `note` (today, only `cold_plan` on the two rows
+    measured before chant#2407) gets a trailing `*` — the table's own signal
+    that this cell is not on the same footing as the others in its column,
+    to be read alongside the note in that row's own JSON rather than
+    averaged in with the rest at a glance. See `results_page()`'s own
+    admonition for the finding this protects.
+    """
+    entry = r.get("measurement", {}).get("reads", {}).get(read_name, {})
+    v = entry.get("calls")
+    if not isinstance(v, (int, float)):
+        return "—"
+    return f"{num(v)}*" if entry.get("note") else num(v)
+
+
+def results_table(rows: list[dict], arm: str) -> str:
     """One track's own table — no `Arm` column, because the section heading
     above it already says which track this is, and repeating it per row would
     invite reading the column as something to compare across rows the way
     `Size` is meant to be. `rows` must already be one arm, sorted by size —
     `group_by_track()`'s job, not this function's.
+
+    chant's table is not choudoufu's table with different numbers in it: it
+    has no single `Account reads` cell to fill, so it gets three named call
+    columns instead — one per read — rather than picking one of the three to
+    show and silently dropping the others. See PLAN.md's "chant's shape"
+    section and this module's own docstring.
     """
+    if arm == "chant":
+        out = [
+            "| Size | Stacks | Stages | Cold plan (calls) | Snapshot (calls) | Warm diff (calls) | Wall time | Provenance | Reproduce |",
+            "|---|---|---|---|---|---|---|---|---|",
+        ]
+        starred = False
+        for r in rows:
+            size = r.get("measurement", {}).get("resources", "—")
+            stacks = r.get("measurement", {}).get("stacks", "—")
+            cold_plan = chant_read_calls(r, "cold_plan")
+            starred = starred or cold_plan.endswith("*")
+            out.append(
+                f"| {size} | {stacks} | {stage_verdicts(r)} | {cold_plan} "
+                f"| {chant_read_calls(r, 'snapshot')} | {chant_read_calls(r, 'warm_diff')} "
+                f"| {wall_time(r)} | {provenance(r)} | {reproduce_line(r)} |"
+            )
+        if starred:
+            out.append("")
+            out.append(
+                "\\* measured before [chant#2407](https://github.com/INTENTIUS/chant/pull/2407) "
+                "moved the held-properties pass behind an explicit `--deep` this harness does not "
+                "pass — not comparable to an unstarred `Cold plan` figure in the same column. See "
+                "the row's own `measurement.reads.cold_plan.note` and "
+                "[chant measures three reads, not one](index.md#chant-measures-three-reads-not-one)."
+            )
+        return "\n".join(out)
+
     out = [
         "| Size | Stages | Account reads | Stock oracle (read pass) | Wall time | Provenance | Reproduce |",
         "|---|---|---|---|---|---|---|",
@@ -240,14 +317,40 @@ def results_page(rows: list[dict]) -> str:
         "!!! note \"Grouped by track, not ranked\"",
         "",
         "    Each section below is one track — one arm, at every size it has",
-        "    been run at. They are not rows in a leaderboard: choudoufu and a",
-        "    future chant track are separate proofs that an estate this size",
-        "    can be handled, not two entries in a race, so nothing on this page",
+        "    been run at. They are not rows in a leaderboard: choudoufu and",
+        "    chant are separate proofs that an estate this size can be",
+        "    handled, not two entries in a race, so nothing on this page",
         "    sorts by a measured number. Wall time in particular describes what",
-        "    a run cost, not how it ranks — a future chant track's durations",
-        "    will not even be comparable to choudoufu's, because the",
-        "    substrates differ. See [what this bench does and does not",
-        "    measure](index.md) for why.",
+        "    a run cost, not how it ranks — chant's own durations are not even",
+        "    comparable to choudoufu's, because the substrates differ. See",
+        "    [what this bench does and does not measure](index.md) for why.",
+        "",
+        "!!! note \"chant measures three reads, not one\"",
+        "",
+        "    **choudoufu's plan makes one kind of read; chant's harness makes",
+        "    three, independently.** `cold_plan` is unconditionally live,",
+        "    `snapshot` is what writes the cache, and `warm_diff` reads only",
+        "    what `snapshot` just wrote — 260, 8 and 0 calls are all true of",
+        "    the same 264-resource estate below. `Snapshot` holds at two calls",
+        "    per stack and `Warm diff` at zero all the way from 264 to 10,036",
+        "    resources, a fortyfold growth — that is the finding. The chant",
+        "    section has its own three call columns instead of `Account reads`",
+        "    / `Stock oracle` so a number is never shown without saying which",
+        "    read it describes. See [the three-reads",
+        "    finding](index.md#chant-measures-three-reads-not-one).",
+        "",
+        "!!! warning \"Cold plan below is not one continuous series\"",
+        "",
+        "    **The starred `Cold plan` figures at 264 and 528 resources were",
+        "    measured before [chant#2407](https://github.com/INTENTIUS/chant/pull/2407)",
+        "    moved the held-properties pass behind an explicit `--deep` this",
+        "    harness does not pass; every unstarred figure from 1,158 resources",
+        "    on was measured after it.** Read together, the column drops from",
+        "    520 to 6 calls while the estate roughly doubles — that is a",
+        "    one-time change in what the same command measures, at a named",
+        "    commit, not chant getting eighty times cheaper by growing. See",
+        "    [the three-reads finding](index.md#chant-measures-three-reads-not-one)",
+        "    for the commit and the per-stack numbers either side of it.",
         "",
         "!!! note \"A failed stage is a published result, not a hidden one\"",
         "",
@@ -290,7 +393,7 @@ def results_page(rows: list[dict]) -> str:
     for arm, arm_rows in group_by_track(rows):
         body.append(f"## {ARMS.get(arm, arm)}")
         body.append("")
-        body.append(results_table(arm_rows))
+        body.append(results_table(arm_rows, arm))
         body.append("")
     return "\n".join(header + body)
 

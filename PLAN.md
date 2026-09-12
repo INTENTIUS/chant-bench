@@ -425,6 +425,65 @@ exactly as a missing field always was; the bar moved from "must be an int" to
 "must be an int, or a stated reason it is not one", not down to "may be
 absent".
 
+## chant's shape, and why the ingest learns it rather than the reverse
+
+INTENTIUS/chant#2403 shipped, and its own text asked for the record to match
+"the shape choudoufu writes in `live/gauntlet-scale.json`." That is not what
+landed, and `test/scale-estate.sh`'s own header says why it changed its mind
+partway through: schema 1 had one `plan_calls` field "keyed under an arm key
+of `choudoufu` even though it was always chant's own number." Schema 2
+replaced it with `reads`, plural, "keyed honestly as `chant`." Schema 3 then
+added `stages.cold_deploy.stacks[]` and an anomaly flag that choudoufu's
+record has no equivalent field for at all, because choudoufu's estate is one
+root module and chant's is never fewer than four. The producing side already
+decided this question once, for a real reason, before this document had to.
+
+So: **the ingest learns chant's shape. chant does not learn choudoufu's.**
+Forcing chant to emit a single `plan_calls` would not be a neutral choice of
+container — it would require averaging, summing, or silently picking one of
+`cold_plan`/`snapshot`/`warm_diff` and calling the result "account reads,"
+which is exactly the wrong number in the one field this whole site is built
+around, the same mistake `independence_block()` already refuses for
+choudoufu's own resource-count-as-read-count near-miss above. The two tools
+are not measuring the same thing with different labels. choudoufu's plan
+makes one kind of read; chant's harness makes three, of visibly different
+character — one unconditionally live, one that writes the cache, one that
+reads only what the second just wrote — and a result shape that cannot say
+which of the three a number describes has thrown away the finding along with
+the field.
+
+**The result contract does not grow a second shape.** Every field
+`build_result()` already fills for choudoufu — `schema`, `bench`, `scenario`,
+`arm`, `run`, `agent`, `score`, `gates`, `independence`, `effort`,
+`measurement`, `reproduce` — chant's rows fill too. What differs is only what
+feeds them, in a `build_chant_result()` that reads chant's schema-3 record
+directly, the same discipline `ingest_terralith.py`'s docstring already states
+for choudoufu: no field is parsed out of a `detail` sentence when a typed
+field carries the same number.
+
+| field | chant's value | why |
+|---|---|---|
+| `arm` | `"chant"` | already in `ARMS` |
+| `scenario` | `"terralith-264"`, `"terralith-528"`, … | same `terralith-<resources>` naming as choudoufu — `resources.total` on chant's record, not the stack count |
+| `run.id` | `"chant-terralith-264-scale4"` | reuses `run_id()`'s existing `{arm}-{scenario}-scale{N}` pattern for a `floci` target; `N` is chant's own `scale` field, which is the stack count, not choudoufu's terralith-gen multiplier — the two tools' `scale` never meant the same thing and this ingest does not pretend otherwise |
+| `score.by_task` | `cold_deploy`, `read_cold_plan`, `read_snapshot`, `read_warm_diff` | chant has no `migrate`/`test_plan`/`test_apply` — nothing in its harness adopts a stock state file or replans one. These four are not invented: they are the exact `stage=` names `test/scale-estate.sh` already prints on its own `VERDICT` lines, reused rather than renamed |
+| `independence.account_reads` | `null`, `account_reads_status: "not_a_single_read"` | chant's own read cost is three numbers, not one, and a reader who sees a lone integer here has no way to know which of the three it is. The three live in `measurement.reads`, named, instead |
+| `measurement.reads.{cold_plan,snapshot,warm_diff}` | `{calls, per_stack, verdict}` for each | copied straight from `reads.<name>.calls.total.chant` and `reads.<name>.per_stack` on the record — the one field this ingest exists to carry through without collapsing |
+| `measurement.stacks` | the stack count | chant's estate is many stacks by construction (CloudFormation's 500-resource cap), and that fact is a measurement, not an implementation detail to hide |
+| `reproduce` | `"test/scale-estate.sh"` | chant's own harness, in `INTENTIUS/chant`, the same way choudoufu's two `reproduce` values point at scripts in `INTENTIUS/choudoufu` |
+
+**The page renders this by column, not by omission.** `build_terralith_pages.py`
+gives the `chant` section its own table — `Cold plan (calls)`, `Snapshot
+(calls)`, `Warm diff (calls)` in place of choudoufu's `Account reads` /
+`Stock oracle` pair — so a reader never meets a single "reads" number for
+chant that could be mistaken for one of the other two. `260` and `0` are both
+true of the same 264-resource estate; the columns are what keep a reader from
+ever having to guess which one a number in isolation would have meant.
+`stage_verdicts()`'s stage list is keyed by arm for the same reason — chant's
+four task names are not choudoufu's four, and a shared hardcoded list would
+have mislabeled every chant row's untouched stages as "not reached" when they
+were never part of chant's own certification to begin with.
+
 ## Metric rendering
 
 Prototype: `layout-study.html` in this directory. Also published at

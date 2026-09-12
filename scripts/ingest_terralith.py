@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
-"""Turn choudoufu's own scale records into terralith (#33) result sets.
+"""Turn choudoufu's and chant's own scale records into terralith (#33) result sets.
+
+This ingest learns two source shapes, not one. See PLAN.md, "chant's shape,
+and why the ingest learns it rather than the reverse", for the argument in
+full; the short version is that chant's harness (`test/scale-estate.sh` in
+INTENTIUS/chant) deliberately diverged from choudoufu's own record shape
+partway through its own development — its schema-2 header names the
+reason: a single `plan_calls` field "keyed under an arm key of `choudoufu`
+even though it was always chant's own number" became `reads`, plural, "keyed
+honestly as `chant`" — because the two tools measure genuinely different
+things. choudoufu's certification makes one kind of plan read; chant's makes
+three (`cold_plan`, `snapshot`, `warm_diff`), of different character, and
+forcing that back into one number would erase the finding along with the
+field. `--chant-record` below reads chant's schema-3 shape directly; nothing
+in this file makes chant emit choudoufu's.
 
 terralith has no agent, no briefing, no transcript. The producing side is
 choudoufu's own certification runner — `live/e2e/terralith-scale/run.sh` on
@@ -23,6 +37,18 @@ never runs anything itself — no benchmark, no gauntlet, no AWS, no emulator.
         --scale-records <path/to/choudoufu>/live/gauntlet-scale.json \
         --gauntlet <path/to/choudoufu>/live/gauntlet.json \
         --out results/
+
+    python3 scripts/ingest_terralith.py \
+        --chant-record <path/to/one/run's/scale-record.json> \
+        [--chant-record <path/to/another/run's/scale-record.json> ...] \
+        --out results/
+
+The two forms are mutually exclusive per invocation — one ingest call reads
+one arm's own shape. `--chant-record` is repeatable because chant's harness
+writes one record per run (`--record <path>`, see `test/scale-estate.sh`),
+never an accumulating array the way choudoufu's `gauntlet-scale.json` does;
+a climb toward a larger size adds another `--chant-record`, not a rewrite of
+this script.
 
 That ingests every `terralith-scale` record in the scale artifact — one result
 set per record. `--target floci|aws` and/or `--scale N` narrow it to a single
@@ -126,6 +152,42 @@ ACCOUNT_READS_REASON = (
     "`plan_calls` (the sweep/read-pass split behind this number) is absent "
     "from this record. INTENTIUS/choudoufu#1053 is the issue scoped to "
     "produce it."
+)
+
+#: chant's own harness, kept separate from `REPRODUCE` above because it is
+#: keyed by tool (chant always deploys against `floci` — CloudFormation's
+#: 500-resource-per-stack cap is what makes the estate many stacks in the
+#: first place, see chant#2403 — there is no real-AWS leg to key on yet).
+CHANT_REPRODUCE = "test/scale-estate.sh"
+
+#: The three reads chant's harness measures independently, in the order it
+#: measures them (cold_plan first — nothing cached yet — snapshot second,
+#: because it IS the cache write, warm_diff third, reading only what
+#: snapshot just wrote). Also the keys `reads` carries on chant's own
+#: record, schema 2 onward — see `test/scale-estate.sh`'s own header.
+CHANT_READS = ("cold_plan", "snapshot", "warm_diff")
+
+#: chant's own `score.by_task` names. Not invented: these are the exact
+#: `stage=` identifiers `test/scale-estate.sh` already prints on its own
+#: `VERDICT` lines (`stage=cold_deploy`, `stage=read_cold_plan`,
+#: `stage=read_snapshot`, `stage=read_warm_diff`) — chant has no
+#: `migrate`/`test_plan`/`test_apply` because nothing in its harness adopts
+#: a stock state file or replans one.
+CHANT_TASK_FOR_READ = {
+    "cold_plan": "read_cold_plan",
+    "snapshot": "read_snapshot",
+    "warm_diff": "read_warm_diff",
+}
+
+#: Why `independence.account_reads` is null on every chant result, always —
+#: not a gap today's data happens to have, but a structural fact about what
+#: chant measures. See PLAN.md, "chant's shape, and why the ingest learns it
+#: rather than the reverse".
+CHANT_ACCOUNT_READS_REASON = (
+    "chant's own read cost is three independent numbers — cold_plan, "
+    "snapshot and warm_diff — not one. Publishing any single one of them "
+    "under this field would erase which read it describes; see "
+    "measurement.reads for each, named."
 )
 
 
@@ -400,16 +462,209 @@ def build_result(rec: dict, duration_lookup: dict[str, float], arm: str) -> dict
     }
 
 
+def chant_score_block(rec: dict) -> dict:
+    """`by_task` over chant's own four measured stages — one deploy, three
+    reads — read straight from the record's own verdict fields, the same
+    "absent means never attempted" rule `score_block()` above uses for
+    choudoufu. `k=1`, same reasoning as choudoufu: a certification attempt,
+    not a sampled trial.
+    """
+    by_task: dict[str, list[int]] = {}
+    stage = (rec.get("stages") or {}).get("cold_deploy")
+    if stage is not None:
+        by_task["cold_deploy"] = [1 if stage.get("verdict") == "pass" else 0]
+    reads = rec.get("reads") or {}
+    for read_name, task_name in CHANT_TASK_FOR_READ.items():
+        r = reads.get(read_name)
+        if r is not None:
+            by_task[task_name] = [1 if r.get("verdict") == "pass" else 0]
+    trials = sum(len(v) for v in by_task.values())
+    passed = sum(sum(v) for v in by_task.values())
+    return {
+        "trials": trials,
+        "expected_trials": trials,
+        "completed": trials,
+        "errored": 0,
+        "passed": passed,
+        "pass_rate": round(passed / trials, 4) if trials else 0.0,
+        "by_task": by_task,
+    }
+
+
+def chant_independence_block() -> dict:
+    """Always `null`, always with the same reason — see
+    `CHANT_ACCOUNT_READS_REASON` and PLAN.md's "chant's shape" section. Unlike
+    choudoufu's version of this function, there is no populated branch: this
+    is not a gap a future record fills in, it is what chant measures instead
+    of one axis.
+    """
+    return {
+        "account_reads": None,
+        "account_reads_status": "not_a_single_read",
+        "account_reads_reason": CHANT_ACCOUNT_READS_REASON,
+        "answered_from_own_state": False,
+    }
+
+
+def chant_measurement_block(rec: dict) -> dict:
+    """chant's own numbers — the stack count, each of the three reads by
+    name, and the deploy anomaly fields when the record carries them (schema
+    3 onward; a schema-2 record has no `stacks`/`median_seconds`/
+    `anomaly_detected` and this leaves them out rather than guessing).
+
+    A read's own `note`, when the record carries one, rides straight
+    through onto `measurement.reads.<name>.note` — the mechanism a record
+    predating chant#2407 uses to say its `cold_plan` count is not
+    comparable to one measured after it, without this ingest hardcoding
+    that specific commit boundary. See PLAN.md's "chant's shape" section.
+    """
+    measurement: dict = {}
+    resources = rec.get("resources") or {}
+    if "total" in resources:
+        measurement["resources"] = resources["total"]
+    if "taggable" in resources:
+        measurement["taggable_resources"] = resources["taggable"]
+    if "skipped" in resources:
+        measurement["untaggable_resources"] = resources["skipped"]
+    if rec.get("scale") is not None:
+        measurement["stacks"] = rec["scale"]
+
+    deploy = (rec.get("stages") or {}).get("cold_deploy") or {}
+    if deploy.get("median_seconds") is not None:
+        measurement["median_stack_seconds"] = deploy["median_seconds"]
+    if deploy.get("anomaly_detected") is not None:
+        measurement["anomaly_detected"] = deploy["anomaly_detected"]
+
+    reads_out: dict[str, dict] = {}
+    for read_name in CHANT_READS:
+        r = (rec.get("reads") or {}).get(read_name)
+        if r is None:
+            continue
+        entry: dict = {}
+        calls = ((r.get("calls") or {}).get("total") or {}).get("chant")
+        if calls is not None:
+            entry["calls"] = calls
+        if r.get("per_stack") is not None:
+            entry["per_stack"] = r["per_stack"]
+        if r.get("verdict") is not None:
+            entry["verdict"] = r["verdict"]
+        if r.get("note"):
+            entry["note"] = r["note"]
+        if entry:
+            reads_out[read_name] = entry
+    if reads_out:
+        measurement["reads"] = reads_out
+
+    return measurement
+
+
+def chant_effort_block(rec: dict) -> dict:
+    """Per-stage wall seconds only — chant's record carries no run-total the
+    way choudoufu's `live/gauntlet.json` does for its own estate, and this
+    does not approximate one by summing, for the same reason
+    `effort_block()` above refuses to for choudoufu.
+    """
+    effort: dict = {}
+    by_stage: dict[str, float] = {}
+    deploy = (rec.get("stages") or {}).get("cold_deploy")
+    if deploy and deploy.get("seconds") is not None:
+        by_stage["cold_deploy"] = deploy["seconds"]
+    reads = rec.get("reads") or {}
+    for read_name, task_name in CHANT_TASK_FOR_READ.items():
+        r = reads.get(read_name)
+        if r and r.get("seconds") is not None:
+            by_stage[task_name] = r["seconds"]
+    if by_stage:
+        effort["wall_seconds_by_stage"] = by_stage
+    return effort
+
+
+def chant_run_id(scenario: str, rec: dict) -> str:
+    """chant's target is always `floci` today (chant#2403 has no real-AWS
+    leg), so this reuses `run_id()`'s `floci` branch verbatim rather than
+    duplicating a dispatch this record can never take the other side of.
+    `scale` is chant's own stack count, not choudoufu's terralith-gen
+    multiplier — the two tools' `scale` fields never meant the same thing.
+    """
+    return f"chant-{scenario}-scale{rec.get('scale', 1)}"
+
+
+def build_chant_result(rec: dict) -> dict:
+    resources = rec.get("resources") or {}
+    if "total" not in resources:
+        sys.exit(
+            f"chant record target={rec.get('target')!r} scale={rec.get('scale')!r} "
+            "has no resources.total — nothing to name the scenario after"
+        )
+    scenario = f"terralith-{resources['total']}"
+
+    run = {
+        "id": chant_run_id(scenario, rec),
+        "harness_commit": rec.get("commit"),
+        "substrate": rec.get("target", "floci"),
+    }
+    if rec.get("date"):
+        run["finished_at"] = rec["date"]
+    if rec.get("emulator"):
+        run["emulator"] = rec["emulator"]
+
+    return {
+        "schema": 1,
+        "bench": "terralith",
+        "scenario": scenario,
+        "arm": "chant",
+        "run": run,
+        "agent": {"name": "none", "model": None, "k": 1},
+        "score": chant_score_block(rec),
+        "gates": gates_block(),
+        "independence": chant_independence_block(),
+        "effort": chant_effort_block(rec),
+        "measurement": chant_measurement_block(rec),
+        "reproduce": CHANT_REPRODUCE,
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--scale-records", required=True, type=Path, help="path to choudoufu's live/gauntlet-scale.json")
-    ap.add_argument("--gauntlet", required=True, type=Path, help="path to choudoufu's live/gauntlet.json")
+    ap.add_argument("--scale-records", type=Path, help="path to choudoufu's live/gauntlet-scale.json")
+    ap.add_argument("--gauntlet", type=Path, help="path to choudoufu's live/gauntlet.json")
     ap.add_argument("--estate", default=ESTATE, help=f"which estate's records to ingest (default: {ESTATE})")
     ap.add_argument("--target", choices=["floci", "aws"], help="ingest only this target (default: every target)")
     ap.add_argument("--scale", type=int, help="ingest only this scale (default: every scale)")
     ap.add_argument("--arm", default="choudoufu", help="which arm these records measure (default: choudoufu)")
+    ap.add_argument(
+        "--chant-record",
+        action="append",
+        default=[],
+        type=Path,
+        help="path to one of chant's own schema-3 scale-record.json files (test/scale-estate.sh --record); "
+        "repeatable. Mutually exclusive with --scale-records/--gauntlet — one ingest call reads one arm's shape.",
+    )
     ap.add_argument("--out", required=True, type=Path, help="results/ directory to write into")
     args = ap.parse_args()
+
+    if args.chant_record:
+        if args.scale_records or args.gauntlet:
+            sys.exit("--chant-record cannot be combined with --scale-records/--gauntlet")
+        args.out.mkdir(parents=True, exist_ok=True)
+        for path in args.chant_record:
+            rec = load_json(path)
+            result = build_chant_result(rec)
+            out_path = args.out / f"{result['run']['id']}.json"
+            out_path.write_text(json.dumps(result, indent=2) + "\n")
+            print(f"wrote {out_path}")
+            reads = result["measurement"].get("reads", {})
+            missing_reads = [r for r in CHANT_READS if r not in reads]
+            if missing_reads:
+                print(f"  measurement.reads is missing (not in the source record): {', '.join(missing_reads)}")
+            print(
+                f"  independence.account_reads: {result['independence']['account_reads_status']} "
+                f"— {result['independence']['account_reads_reason']}"
+            )
+        return 0
+
+    if not args.scale_records or not args.gauntlet:
+        sys.exit("--scale-records and --gauntlet are required unless --chant-record is given")
 
     artifact = load_json(args.scale_records)
     gauntlet = load_json(args.gauntlet)

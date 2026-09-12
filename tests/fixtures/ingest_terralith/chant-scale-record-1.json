@@ -1,0 +1,49 @@
+{
+  "schema": 3,
+  "estate": "chant-scale-estate",
+  "target": "floci",
+  "scale": 2,
+  "commit": "chfixture0001",
+  "emulator": "ghcr.io/lex00/floci@sha256:fixturechant000000000000000000000000000000000000000000000000",
+  "resources": { "total": 20, "taggable": 20, "skipped": 0 },
+  "stages": {
+    "cold_deploy": {
+      "verdict": "pass",
+      "seconds": 12,
+      "detail": "2/2 stacks, 20/20 resources (fixture)",
+      "stacks": [
+        { "name": "scale_stack_000", "seconds": 6, "anomaly": null },
+        { "name": "scale_stack_001", "seconds": 6, "anomaly": null }
+      ],
+      "median_seconds": 6,
+      "anomaly_detected": false
+    }
+  },
+  "reads": {
+    "cold_plan": {
+      "command": "chant lifecycle plan local",
+      "verdict": "pass",
+      "seconds": 3,
+      "detail": "create=0 noop=20 unobserved=0 calls_total=20 (fixture)",
+      "calls": { "total": { "chant": 20 }, "by_action": { "DescribeStackResources": 10, "DescribeStacks": 10 } },
+      "per_stack": 10.0
+    },
+    "snapshot": {
+      "command": "chant lifecycle snapshot local",
+      "verdict": "pass",
+      "seconds": 1,
+      "detail": "saved=2/2 calls_total=4 (fixture)",
+      "calls": { "total": { "chant": 4 }, "by_action": { "DescribeStackResources": 2, "DescribeStacks": 2 } },
+      "per_stack": 2.0
+    },
+    "warm_diff": {
+      "command": "chant lifecycle diff local",
+      "verdict": "pass",
+      "seconds": 0,
+      "detail": "unchanged=20 changed=0 added=0 removed=0 calls_total=0 (fixture)",
+      "calls": { "total": { "chant": 0 }, "by_action": {} },
+      "per_stack": 0.0
+    }
+  },
+  "source": "fixture: chant schema 3, full record (stacks[]/median_seconds/anomaly_detected present, exercises the populated branch of chant_measurement_block()/chant_effort_block())"
+}
