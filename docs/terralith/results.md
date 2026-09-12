@@ -16,55 +16,125 @@ number each track is measured on is how many account reads that plan
 costs — not wall time, which an emulator cannot answer, and not a
 score against the other tracks.
 
-| Track | Largest estate run | Stages there | What one plan reads | Measured against |
-|---|---|---|---|---|
-| choudoufu | 10069 resources | 4/4 | 22760 calls | stock Terraform's 18510 — 1.23x |
-| chant | 10036 resources | 4/4 | 52 cold, 52 snapshot, 0 warm diff | its own three reads — no oracle on this substrate |
-| stock Terraform (oracle) | 10069 resources | 1/1 | 18510 calls | it is the oracle |
+| Track | Largest estate run | Stages | What one plan reads | Stock oracle | Ratio |
+|---|---|---|---|---|---|
+| choudoufu | 10069 resources | 4/4 | 22760 | 18510 | 1.23x |
+| chant | 10036 resources | 4/4 | 52 cold, 52 snapshot, 0 warm diff | — | — |
+| stock Terraform (oracle) | 10069 resources | 1/1 | 18510 | — | — |
+
+chant has no oracle on its substrate — it deploys CloudFormation stacks rather than a stock-Terraform estate, so there is no stock run of the same thing to sit beside it, and its three reads are reported in its own terms. Stock Terraform is the oracle, so it has no ratio against itself.
 
 ## choudoufu
 
-| Size | Stages | Account reads | Stock oracle (read pass) | Wall time | Provenance | Reproduce |
-|---|---|---|---|---|---|---|
-| 79 | 4/4 | *not measured* | — | — (cold_deploy=68s, migrate=25s, test_plan=17s) | `da61fc0` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-| 79 | 4/4 | 186 | 150 | 327.7s (cold_deploy=121s, migrate=40s, test_plan=3s, test_apply=5s) | `3bca740` · floci `sha256:9ec3fa649177` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
-| 301 | 4/4 | *not measured* | — | — (cold_deploy=174s, migrate=77s, test_plan=267s) | `420d460` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-| 745 | 4/4 | *not measured* | — | — (cold_deploy=413s, migrate=222s, test_plan=129s) | `1d06e1d` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-| 3705 | 2/3 (test_plan failed) | *not measured* | — | 11180.5s (cold_deploy=2023s, migrate=1214s) | `8bbef27` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-| 9477 | 4/4 | 21423 | 17422 | 13919.9s (cold_deploy=8126s, migrate=1287s, test_plan=48s, test_apply=86s) | `9bd278a` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
-| 10069 | 4/4 | 22760 | 18510 | 15028.8s (cold_deploy=8772s, migrate=1393s, test_plan=57s, test_apply=119s) | `fb13ead` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| Size | Substrate | Stages | Account reads | Stock oracle |
+|---|---|---|---|---|
+| 79 | real AWS (us-east-2) | 4/4 | *not measured* | — |
+| 79 | emulator | 4/4 | 186 | 150 |
+| 301 | real AWS (us-east-2) | 4/4 | *not measured* | — |
+| 745 | real AWS (us-east-2) | 4/4 | *not measured* | — |
+| 3705 | real AWS (us-east-2) | 2/3 | *not measured* | — |
+| 9477 | emulator | 4/4 | 21423 | 17422 |
+| 10069 | emulator | 4/4 | 22760 | 18510 |
+
+**3705 resources:** `test_plan` failed.
 
 ## chant
 
-| Size | Stacks | Stages | Cold plan (calls) | Snapshot (calls) | Warm diff (calls) | Wall time | Provenance | Reproduce |
-|---|---|---|---|---|---|---|---|---|
-| 264 | 4 | 4/4 | 260* | 8 | 0 | — | `1c52fd5` · floci | `test/scale-estate.sh` |
-| 528 | 8 | 4/4 | 520* | 16 | 0 | — | `1c52fd5` · floci | `test/scale-estate.sh` |
-| 1158 | 3 | 4/4 | 6 | 6 | 0 | — (cold_deploy=30s, read_cold_plan=3s, read_snapshot=3s, read_warm_diff=3s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
-| 3088 | 8 | 4/4 | 16 | 16 | 0 | — (cold_deploy=79s, read_cold_plan=3s, read_snapshot=4s, read_warm_diff=3s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
-| 10036 | 26 | 4/4 | 52 | 52 | 0 | — (cold_deploy=258s, read_cold_plan=4s, read_snapshot=6s, read_warm_diff=4s) | `3d82057` · floci `sha256:0bbeb43075c9` | `test/scale-estate.sh` |
+| Size | Stacks | Stages | Cold plan | Snapshot | Warm diff |
+|---|---|---|---|---|---|
+| 264 | 4 | 4/4 | 260* | 8 | 0 |
+| 528 | 8 | 4/4 | 520* | 16 | 0 |
+| 1158 | 3 | 4/4 | 6 | 6 | 0 |
+| 3088 | 8 | 4/4 | 16 | 16 | 0 |
+| 10036 | 26 | 4/4 | 52 | 52 | 0 |
 
 \* measured before [chant#2407](https://github.com/INTENTIUS/chant/pull/2407) moved the held-properties pass behind an explicit `--deep` this harness does not pass — not comparable to an unstarred `Cold plan` figure in the same column. See the row's own `measurement.reads.cold_plan.note` and [chant measures three reads, not one](index.md#chant-measures-three-reads-not-one).
 
 ## stock Terraform (oracle)
 
-| Size | Stages | What one plan reads | Wall time (stand-up) | Provenance | Reproduce |
+| Size | Substrate | Stages | What one plan reads |
+|---|---|---|---|
+| 79 | emulator | 1/1 | 150 |
+| 9477 | emulator | 1/1 | 17422 |
+| 10069 | emulator | 1/1 | 18510 |
+
+## Where the time goes
+
+Per stage, and never added up. The first column on each table is the
+estate being stood up, which is not the same work as the columns
+beside it and on choudoufu's track is not choudoufu's work at all —
+it is stock Terraform's own apply, the identical stage the oracle's
+table reports. Summing them produces a figure that looks like a tool's
+cost and is mostly the fixture's.
+
+Read the substrate column before reading a number beside it. An
+emulator second is not a cost claim about either tool — see [an emulator
+cannot answer this](index.md) — while a real-AWS row is real time in a
+real account, against an API that throttles.
+
+### choudoufu
+
+| Size | Substrate | Stand-up (stock Terraform's apply) | `migrate` | `test_plan` | `test_apply` |
 |---|---|---|---|---|---|
-| 79 | 1/1 | 150 | 134s | `fce6b53` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
-| 9477 | 1/1 | 17422 | 8126s | `9bd278a` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
-| 10069 | 1/1 | 18510 | 8772s | `fb13ead` · floci `sha256:0bbeb43075c9` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| 79 | real AWS (us-east-2) | 68s | 25s | 17s | — |
+| 79 | emulator | 121s | 40s | 3s | 5s |
+| 301 | real AWS (us-east-2) | 174s | 77s | 267s | — |
+| 745 | real AWS (us-east-2) | 413s | 222s | 129s | — |
+| 3705 | real AWS (us-east-2) | 2023s | 1214s | — | — |
+| 9477 | emulator | 8126s | 1287s | 48s | 86s |
+| 10069 | emulator | 8772s | 1393s | 57s | 119s |
+
+### chant
+
+| Size | Substrate | Deploy (chant's own stacks) | `read_cold_plan` | `read_snapshot` | `read_warm_diff` |
+|---|---|---|---|---|---|
+| 1158 | emulator | 30s | 3s | 3s | 3s |
+| 3088 | emulator | 79s | 3s | 4s | 3s |
+| 10036 | emulator | 258s | 4s | 6s | 4s |
+
+### stock Terraform (oracle)
+
+| Size | Substrate | Stand-up (its own apply) |
+|---|---|---|
+| 79 | emulator | 134s |
+| 9477 | emulator | 8126s |
+| 10069 | emulator | 8772s |
+
+## Provenance
+
+Every row above, and what produced it.
+
+| Track | Size | Substrate | Commit | Emulator pin | Oracle versions | Reproduce |
+|---|---|---|---|---|---|---|
+| choudoufu | 79 | real AWS (us-east-2) | `da61fc0` | — | — | `live/live-cert/terralith-scale.sh` |
+| choudoufu | 79 | emulator | `3bca740` | `sha256:9ec3fa649177` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| choudoufu | 301 | real AWS (us-east-2) | `420d460` | — | — | `live/live-cert/terralith-scale.sh` |
+| choudoufu | 745 | real AWS (us-east-2) | `1d06e1d` | — | — | `live/live-cert/terralith-scale.sh` |
+| choudoufu | 3705 | real AWS (us-east-2) | `8bbef27` | — | — | `live/live-cert/terralith-scale.sh` |
+| choudoufu | 9477 | emulator | `9bd278a` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| choudoufu | 10069 | emulator | `fb13ead` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| chant | 264 | emulator | `1c52fd5` | — | — | `test/scale-estate.sh` |
+| chant | 528 | emulator | `1c52fd5` | — | — | `test/scale-estate.sh` |
+| chant | 1158 | emulator | `3d82057` | `sha256:0bbeb43075c9` | — | `test/scale-estate.sh` |
+| chant | 3088 | emulator | `3d82057` | `sha256:0bbeb43075c9` | — | `test/scale-estate.sh` |
+| chant | 10036 | emulator | `3d82057` | `sha256:0bbeb43075c9` | — | `test/scale-estate.sh` |
+| stock Terraform (oracle) | 79 | emulator | `fce6b53` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| stock Terraform (oracle) | 9477 | emulator | `9bd278a` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| stock Terraform (oracle) | 10069 | emulator | `fb13ead` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 
 ## Reading these numbers
 
 !!! note "Grouped by track, not ranked"
 
-    Each section below is one track — one arm, at every size it has
-    been run at. They are not rows in a leaderboard: choudoufu and
-    chant are separate proofs that an estate this size can be
+    Each results section above is one track — one arm, at every size
+    it has been run at. They are not rows in a leaderboard: choudoufu
+    and chant are separate proofs that an estate this size can be
     handled, not two entries in a race, so nothing on this page
-    sorts by a measured number. Wall time in particular describes what
-    a run cost, not how it ranks — chant's own durations are not even
-    comparable to choudoufu's, because the substrates differ. See
+    sorts by a measured number. That is why the seconds live in
+    [where the time goes](#where-the-time-goes), per stage and never
+    summed: a total reads as a tool's cost when most of it is the
+    fixture's, and chant's durations are not comparable to
+    choudoufu's at all, because the substrates differ. See
     [what this bench does and does not measure](index.md) for why.
 
 !!! note "chant measures three reads, not one"

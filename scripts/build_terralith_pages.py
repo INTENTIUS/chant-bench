@@ -150,18 +150,37 @@ def stage_verdicts(r: dict) -> str:
     and passed. The expected stage list is the row's own arm's — see
     `STAGES` above for why that can't be one shared list.
     """
-    stages = STAGES.get(r.get("arm"), [])
     by_task = r.get("score", {}).get("by_task", {})
     passed = sum(1 for v in by_task.values() if v and v[0])
-    total = len(by_task)
+    return f"{passed}/{len(by_task)}"
+
+
+def stage_note(r: dict) -> str:
+    """Which stage broke, or which was never reached — as a line under the
+    table rather than a parenthetical inside the cell.
+
+    It used to ride in the `Stages` cell, which meant that column held two
+    different things at once: a count, and sometimes a sentence. A reader
+    scanning the column had to parse each cell before they could compare any
+    two of them. The fact itself is worth keeping - `3/4` alone does not say
+    whether the fourth failed or was never attempted - so it moves out to
+    where it can be a sentence without crowding a number.
+    """
+    stages = STAGES.get(r.get("arm"), [])
+    by_task = r.get("score", {}).get("by_task", {})
     failed = [s for s in stages if s in by_task and not by_task[s][0]]
     skipped = [s for s in stages if s not in by_task]
-    note = ""
+    size = r.get("measurement", {}).get("resources", "—")
     if failed:
-        note = f" ({', '.join(failed)} failed)"
-    elif skipped:
-        note = f" ({', '.join(skipped)} not reached)"
-    return f"{passed}/{total}{note}"
+        return f"**{num(size)} resources:** `{'`, `'.join(failed)}` failed."
+    if skipped:
+        return f"**{num(size)} resources:** `{'`, `'.join(skipped)}` not reached, because an earlier stage stopped the run."
+    return ""
+
+
+def stage_notes(rows: list[dict]) -> list[str]:
+    lines = [stage_note(r) for r in rows]
+    return [ln for ln in lines if ln]
 
 
 def account_reads(r: dict) -> str:
@@ -270,35 +289,56 @@ def chant_read_calls(r: dict, read_name: str) -> str:
     return f"{num(v)}*" if entry.get("note") else num(v)
 
 
-def results_table(rows: list[dict], arm: str) -> str:
-    """One track's own table — no `Arm` column, because the section heading
-    above it already says which track this is, and repeating it per row would
-    invite reading the column as something to compare across rows the way
-    `Size` is meant to be. `rows` must already be one arm, sorted by size —
-    `group_by_track()`'s job, not this function's.
+def substrate(r: dict) -> str:
+    """Emulator or real AWS, as its own column.
 
-    chant's table is not choudoufu's table with different numbers in it: it
-    has no single `Account reads` cell to fill, so it gets three named call
-    columns instead — one per read — rather than picking one of the three to
-    show and silently dropping the others. See PLAN.md's "chant's shape"
-    section and this module's own docstring.
+    Not decoration: this track has two rows at 79 resources, one from the
+    floci emulator and one from a real account, and with the substrate only
+    in a provenance cell further down they were two identical-looking rows
+    labelled 79. A reader cannot tell which number they are looking at, which
+    is worse than a slightly wider table.
+    """
+    run = r.get("run", {})
+    sub = run.get("substrate")
+    if sub == "floci":
+        return "emulator"
+    if sub == "aws":
+        region = run.get("region")
+        return f"real AWS ({region})" if region else "real AWS"
+    return sub or "—"
+
+
+def results_table(rows: list[dict], arm: str) -> str:
+    """One track's own results — the numbers, and nothing else.
+
+    This table used to carry wall time, provenance and a reproduce command
+    as well, which put three or four separate facts in some of its cells: a
+    total with a per-stage breakdown in brackets, a commit with a substrate
+    and two tool versions joined by dots. A cell like that has to be read
+    before it can be compared, so a column of them cannot be scanned at all.
+    Those facts are all still on the page, in `timing_section()` and
+    `provenance_section()`, where each one gets a column of its own.
+
+    `rows` must already be one arm, sorted by size — `group_by_track()`'s
+    job, not this function's.
     """
     if arm == "chant":
         out = [
-            "| Size | Stacks | Stages | Cold plan (calls) | Snapshot (calls) | Warm diff (calls) | Wall time | Provenance | Reproduce |",
-            "|---|---|---|---|---|---|---|---|---|",
+            "| Size | Stacks | Stages | Cold plan | Snapshot | Warm diff |",
+            "|---|---|---|---|---|---|",
         ]
         starred = False
         for r in rows:
-            size = r.get("measurement", {}).get("resources", "—")
-            stacks = r.get("measurement", {}).get("stacks", "—")
+            m = r.get("measurement", {})
             cold_plan = chant_read_calls(r, "cold_plan")
             starred = starred or cold_plan.endswith("*")
             out.append(
-                f"| {size} | {stacks} | {stage_verdicts(r)} | {cold_plan} "
-                f"| {chant_read_calls(r, 'snapshot')} | {chant_read_calls(r, 'warm_diff')} "
-                f"| {wall_time(r)} | {provenance(r)} | {reproduce_line(r)} |"
+                f"| {num(m.get('resources', '—'))} | {m.get('stacks', '—')} | {stage_verdicts(r)} "
+                f"| {cold_plan} | {chant_read_calls(r, 'snapshot')} | {chant_read_calls(r, 'warm_diff')} |"
             )
+        for note in stage_notes(rows):
+            out.append("")
+            out.append(note)
         if starred:
             out.append("")
             out.append(
@@ -313,32 +353,146 @@ def results_table(rows: list[dict], arm: str) -> str:
     if arm == ORACLE_ARM:
         # No "Stock oracle" column on the oracle's own table: the cell would
         # hold this row's own number, and a figure compared against itself
-        # reads as a measurement when it is a tautology. The wall time is
-        # the one stage stock runs rather than the run's total, which is
-        # choudoufu's whole certification and not stock's to claim.
+        # reads as a measurement when it is a tautology.
         out = [
-            "| Size | Stages | What one plan reads | Wall time (stand-up) | Provenance | Reproduce |",
-            "|---|---|---|---|---|---|",
+            "| Size | Substrate | Stages | What one plan reads |",
+            "|---|---|---|---|",
         ]
         for r in rows:
             size = r.get("measurement", {}).get("resources", "—")
-            out.append(
-                f"| {size} | {stage_verdicts(r)} | {account_reads(r)} "
-                f"| {wall_time(r)} | {provenance(r)} | {reproduce_line(r)} |"
-            )
+            out.append(f"| {num(size)} | {substrate(r)} | {stage_verdicts(r)} | {account_reads(r)} |")
+        for note in stage_notes(rows):
+            out.append("")
+            out.append(note)
         return "\n".join(out)
 
     out = [
-        "| Size | Stages | Account reads | Stock oracle (read pass) | Wall time | Provenance | Reproduce |",
-        "|---|---|---|---|---|---|---|",
+        "| Size | Substrate | Stages | Account reads | Stock oracle |",
+        "|---|---|---|---|---|",
     ]
     for r in rows:
         size = r.get("measurement", {}).get("resources", "—")
         out.append(
-            f"| {size} | {stage_verdicts(r)} | {account_reads(r)} | {stock_oracle(r)} "
-            f"| {wall_time(r)} | {provenance(r)} | {reproduce_line(r)} |"
+            f"| {num(size)} | {substrate(r)} | {stage_verdicts(r)} | {account_reads(r)} "
+            f"| {stock_oracle(r)} |"
         )
+    for note in stage_notes(rows):
+        out.append("")
+        out.append(note)
     return "\n".join(out)
+
+
+#: What each arm's first stage actually is, and whose work it is. The label
+#: is per-arm because the stage is not the same event on every track:
+#: choudoufu's is stock Terraform applying the estate, which is the identical
+#: run the oracle's own row reports; chant's is chant deploying its own
+#: CloudFormation stacks on a different substrate entirely.
+STANDUP = {
+    "choudoufu": "Stand-up (stock Terraform's apply)",
+    "chant": "Deploy (chant's own stacks)",
+    ORACLE_ARM: "Stand-up (its own apply)",
+}
+
+
+def timing_section(groups: list[tuple[str, list[dict]]]) -> list[str]:
+    """Seconds per stage, never summed.
+
+    A total is what this section refuses to print, and the reason is the
+    first column. choudoufu's `cold_deploy` is stock Terraform standing the
+    estate up - the same stage, in the same run, that the oracle's own row
+    reports, 8,772s against 8,772s at ten thousand resources. Adding it to
+    the stages beside it produces a number that reads as choudoufu's cost and
+    is mostly stock's: 15,028s against stock's 8,772s invites "1.7x slower"
+    when 8,772 of those seconds ARE the 8,772.
+
+    The published totals were worse than merely misleading, which is how this
+    was found. `effort.wall_seconds` is the whole certification, including
+    stages no breakdown beside it names - `greenfield` is 4,667s of the
+    10,069-resource run and appears in no column - so the total did not
+    reconcile against its own parts either.
+
+    So: one column per stage, each one labelled with whose work it is, and
+    the arithmetic left to a reader who knows what they want to add.
+    """
+    out = [
+        "## Where the time goes",
+        "",
+        "Per stage, and never added up. The first column on each table is the",
+        "estate being stood up, which is not the same work as the columns",
+        "beside it and on choudoufu's track is not choudoufu's work at all —",
+        "it is stock Terraform's own apply, the identical stage the oracle's",
+        "table reports. Summing them produces a figure that looks like a tool's",
+        "cost and is mostly the fixture's.",
+        "",
+        "Read the substrate column before reading a number beside it. An",
+        "emulator second is not a cost claim about either tool — see [an emulator",
+        "cannot answer this](index.md) — while a real-AWS row is real time in a",
+        "real account, against an API that throttles.",
+        "",
+    ]
+    rendered = 0
+    for arm, rows in groups:
+        stages = STAGES.get(arm, [])
+        timed = [r for r in rows if (r.get("effort") or {}).get("wall_seconds_by_stage")]
+        if not timed or not stages:
+            continue
+        rendered += 1
+        header = [STANDUP.get(arm, stages[0])] + [f"`{st}`" for st in stages[1:]]
+        out.append(f"### {ARMS.get(arm, arm)}")
+        out.append("")
+        out.append("| Size | Substrate | " + " | ".join(header) + " |")
+        out.append("|---" * (len(header) + 2) + "|")
+        for r in timed:
+            by_stage = r["effort"]["wall_seconds_by_stage"]
+            cells = [f"{num(by_stage[st])}s" if st in by_stage else "—" for st in stages]
+            size = num(r.get("measurement", {}).get("resources", "—"))
+            out.append(f"| {size} | {substrate(r)} | " + " | ".join(cells) + " |")
+        out.append("")
+    if not rendered:
+        return []
+    return out
+
+
+def provenance_section(groups: list[tuple[str, list[dict]]]) -> list[str]:
+    """Where every number came from — one fact per column.
+
+    This was a single cell joining a commit, a substrate, an emulator digest
+    and two tool versions with dots. It is the "check our numbers" material
+    that PLAN.md argues outranks presentation, which is exactly why it should
+    not be compressed into something nobody can read: a reader chasing one
+    commit had to visually parse four facts to find it.
+    """
+    out = [
+        "## Provenance",
+        "",
+        "Every row above, and what produced it.",
+        "",
+        "| Track | Size | Substrate | Commit | Emulator pin | Oracle versions | Reproduce |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for arm, rows in groups:
+        for r in rows:
+            run = r.get("run", {})
+            commit = run.get("harness_commit")
+            # The region already rides in the substrate cell, so this column
+            # holds the emulator digest or nothing — never two different
+            # kinds of fact depending on the row.
+            emulator = run.get("emulator") or ""
+            where = f"`{emulator.rsplit('@', 1)[-1][:19]}`" if "@" in emulator else "—"
+            oracle = run.get("oracle") or {}
+            versions = " / ".join(
+                f"{k} {v}" for k, v in (("terraform", oracle.get("terraform")), ("tofu", oracle.get("tofu"))) if v
+            ) or "—"
+            rep = r.get("reproduce")
+            size = num(r.get("measurement", {}).get("resources", "—"))
+            commit_cell = f"`{commit[:7]}`" if commit else "—"
+            rep_cell = f"`{rep}`" if rep else "—"
+            out.append(
+                f"| {ARMS.get(arm, arm)} | {size} | {substrate(r)} | {commit_cell} "
+                f"| {where} | {versions} | {rep_cell} |"
+            )
+    out.append("")
+    return out
 
 
 def unknown_arms(rows: list[dict]) -> list[str]:
@@ -385,8 +539,8 @@ def summary_table(groups: list[tuple[str, list[dict]]]) -> list[str]:
         "costs — not wall time, which an emulator cannot answer, and not a",
         "score against the other tracks.",
         "",
-        "| Track | Largest estate run | Stages there | What one plan reads | Measured against |",
-        "|---|---|---|---|---|",
+        "| Track | Largest estate run | Stages | What one plan reads | Stock oracle | Ratio |",
+        "|---|---|---|---|---|---|",
     ]
 
     for arm in ARMS:
@@ -401,21 +555,29 @@ def summary_table(groups: list[tuple[str, list[dict]]]) -> list[str]:
                 f"{chant_read_calls(r, 'snapshot')} snapshot, "
                 f"{chant_read_calls(r, 'warm_diff')} warm diff"
             )
-            against = "its own three reads — no oracle on this substrate"
+            oracle, ratio = "—", "—"
         elif arm == ORACLE_ARM:
-            reads = f"{account_reads(r)} calls"
-            against = "it is the oracle"
+            reads, oracle, ratio = account_reads(r), "—", "—"
         else:
-            reads = f"{account_reads(r)} calls"
-            against = oracle_comparison(r)
-        out.append(f"| {ARMS[arm]} | {num(size)} resources | {stages} | {reads} | {against} |")
+            reads = account_reads(r)
+            oracle, ratio = oracle_comparison(r)
+        out.append(
+            f"| {ARMS[arm]} | {num(size)} resources | {stages} | {reads} | {oracle} | {ratio} |"
+        )
 
+    out.append("")
+    out.append(
+        "chant has no oracle on its substrate — it deploys CloudFormation stacks "
+        "rather than a stock-Terraform estate, so there is no stock run of the same "
+        "thing to sit beside it, and its three reads are reported in its own terms. "
+        "Stock Terraform is the oracle, so it has no ratio against itself."
+    )
     out.append("")
     return out
 
 
-def oracle_comparison(r: dict) -> str:
-    """One arm's read cost beside the oracle's, on the same row's own run.
+def oracle_comparison(r: dict) -> tuple[str, str]:
+    """The oracle's figure and the ratio to it, as two cells rather than one.
 
     The ratio is spelled out rather than left for the reader to divide,
     because it is the finding: it is the same to two significant figures at
@@ -425,8 +587,8 @@ def oracle_comparison(r: dict) -> str:
     mine = r.get("independence", {}).get("account_reads")
     stock = r.get("measurement", {}).get("stock_read_pass_calls")
     if not isinstance(mine, (int, float)) or not isinstance(stock, (int, float)) or not stock:
-        return "stock Terraform — not measured on this row"
-    return f"stock Terraform's {num(stock)} — {mine / stock:.2f}x"
+        return "*not measured*", "—"
+    return num(stock), f"{mine / stock:.2f}x"
 
 
 def results_page(rows: list[dict]) -> str:
@@ -456,13 +618,15 @@ def results_page(rows: list[dict]) -> str:
         "",
         "!!! note \"Grouped by track, not ranked\"",
         "",
-        "    Each section below is one track — one arm, at every size it has",
-        "    been run at. They are not rows in a leaderboard: choudoufu and",
-        "    chant are separate proofs that an estate this size can be",
+        "    Each results section above is one track — one arm, at every size",
+        "    it has been run at. They are not rows in a leaderboard: choudoufu",
+        "    and chant are separate proofs that an estate this size can be",
         "    handled, not two entries in a race, so nothing on this page",
-        "    sorts by a measured number. Wall time in particular describes what",
-        "    a run cost, not how it ranks — chant's own durations are not even",
-        "    comparable to choudoufu's, because the substrates differ. See",
+        "    sorts by a measured number. That is why the seconds live in",
+        "    [where the time goes](#where-the-time-goes), per stage and never",
+        "    summed: a total reads as a tool's cost when most of it is the",
+        "    fixture's, and chant's durations are not comparable to",
+        "    choudoufu's at all, because the substrates differ. See",
         "    [what this bench does and does not measure](index.md) for why.",
         "",
         "!!! note \"chant measures three reads, not one\"",
@@ -560,7 +724,14 @@ def results_page(rows: list[dict]) -> str:
         body.append("")
         body.append(results_table(arm_rows, arm))
         body.append("")
-    return "\n".join(intro + summary_table(groups) + body + notes)
+    return "\n".join(
+        intro
+        + summary_table(groups)
+        + body
+        + timing_section(groups)
+        + provenance_section(groups)
+        + notes
+    )
 
 
 def main() -> int:
