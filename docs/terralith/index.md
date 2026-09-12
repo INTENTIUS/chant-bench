@@ -2,7 +2,7 @@
 
 A scale-only benchmark: how much does a plan cost as a stock-Terraform estate
 grows, for [choudoufu](https://github.com/INTENTIUS/choudoufu) and for
-[chant](https://github.com/INTENTIUS/chant), against stock OpenTofu as the
+[chant](https://github.com/INTENTIUS/chant), against stock Terraform as the
 oracle. Both tracks are on the [results page](results.md) today, each on its
 own native path — this is not a comparison, see below. It answers one
 question — does the tool still work, and what does it cost, as the estate
@@ -102,7 +102,7 @@ audit's numbers are real — a genuine cost of adoption and of live-discover —
 and are kept, under their own `measurement.adoption_sweep_calls` /
 `adoption_read_pass_calls` names, but never populate `account_reads` again.
 
-**Stock OpenTofu's own call count rides beside the plan, as an oracle — not
+**Stock Terraform's own call count rides beside the plan, as an oracle — not
 as a second product's row.** The same run that measured choudoufu's 186-call
 plan also measured stock's plan of the identical, unmigrated estate: 150
 calls. That number is what keeps choudoufu's 186 from being self-reported —

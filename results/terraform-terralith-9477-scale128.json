@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "bench": "terralith",
+  "scenario": "terralith-9477",
+  "arm": "terraform",
+  "run": {
+    "id": "terraform-terralith-9477-scale128",
+    "finished_at": "2026-09-12T13:23:15Z",
+    "harness_commit": "9bd278a2926ba2783ae72d2ee1e9d74ddc4aa7e1",
+    "substrate": "floci",
+    "emulator": "ghcr.io/lex00/floci@sha256:0bbeb43075c9df9c7e06311cd4eec99a354594d304faa4fe5899b494a009d23d",
+    "oracle": {
+      "terraform": "1.15.8",
+      "tofu": "1.12.5"
+    }
+  },
+  "agent": {
+    "name": "none",
+    "model": null,
+    "k": 1
+  },
+  "score": {
+    "trials": 1,
+    "expected_trials": 1,
+    "completed": 1,
+    "errored": 0,
+    "passed": 1,
+    "pass_rate": 1.0,
+    "by_task": {
+      "cold_deploy": [
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": 17422,
+    "answered_from_own_state": true
+  },
+  "effort": {
+    "wall_seconds_by_stage": {
+      "cold_deploy": 8126
+    }
+  },
+  "measurement": {
+    "resources": 9477,
+    "taggable_resources": 4229,
+    "untaggable_resources": 5248
+  },
+  "reproduce": "live/e2e/terralith-scale/run.sh"
+}
