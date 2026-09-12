@@ -346,17 +346,28 @@ get deleted, it got its own honest name: `measurement.verified_resources`.
 ## The axis lands, one row at a time, and its own oracle beside it
 
 choudoufu#1053 gave exactly one record — `terralith-scale`'s `floci`/`scale=1`
-row — a `plan_calls` field: `sweep.choudoufu`, `read_pass.choudoufu`,
-`total.choudoufu`. The four real-AWS records (`scale=1,4,10,50`, resources
-79/301/745/3705) still carry none. `independence_block()` reads
-`total.choudoufu` directly when present (706 = 588 sweep + 118 read pass for
-the emulator row today) rather than summing the two legs itself — the record
-already totals them, and re-deriving a number the source already computed is
-exactly the kind of guess this ingest refuses to make elsewhere; summing is
-kept only as a fallback for a record whose `total` was never filled in. So the
-published state is a genuine mix: one row with a real `account_reads`, four
-still `null`-with-a-reason, and that mix is the honest state of the
-certification, not a bug in the ingest.
+row — a `plan_calls` field: `cold.choudoufu`, `cold.stock`, `warm.choudoufu`.
+The four real-AWS records (`scale=1,4,10,50`, resources 79/301/745/3705)
+still carry none. `independence_block()` reads `cold.choudoufu` directly
+(186 for the emulator row today), falling back to `warm.choudoufu` only for
+a record that somehow has the second leg and not the first — `warm` is never
+averaged or summed with `cold`. Cold and warm read byte-identical on the one
+record that has both, and that equality is itself the finding: choudoufu's
+record store is seeded by live-import, not by a first plan, so there is no
+cold-plan penalty to pay. So the published state is a genuine mix: one row
+with a real `account_reads`, four still `null`-with-a-reason, and that mix
+is the honest state of the certification, not a bug in the ingest.
+
+An earlier cut of this field conflated two different measurements: it read
+`sweep.choudoufu`/`read_pass.choudoufu`/`total.choudoufu` off what is now
+`audit_calls`, the account-inventory sweep's own cost (706 = 588 sweep + 118
+read pass), and published that as `account_reads` — nearly five times
+stock's plan, because a forced full-table sweep and an ordinary plan are not
+the same operation. It was withdrawn within hours and the two split apart:
+`plan_calls` (`cold`/`warm`, above, an ordinary plan) and `audit_calls`
+(`sweep`/`read_pass`/`total`, the audit, a real cost of adoption kept under
+its own `adoption_*` names in `measurement_block()` and never `account_reads`
+again).
 
 **The `stock` figure is an oracle for choudoufu's own number, not a second
 arm.** `ScaleCallPair.Stock` (choudoufu's own type) carries stock OpenTofu's

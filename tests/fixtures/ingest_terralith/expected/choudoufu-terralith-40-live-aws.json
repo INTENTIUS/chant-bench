@@ -47,7 +47,7 @@
   "independence": {
     "account_reads": null,
     "account_reads_status": "not_measured",
-    "account_reads_reason": "choudoufu's scale record carries resource counts, not API call counts — `plan_calls` (the sweep/read-pass split behind this number) is absent from this record. INTENTIUS/choudoufu#1053 is the issue scoped to produce it.",
+    "account_reads_reason": "choudoufu's scale record carries resource counts, not API call counts — `plan_calls` (the cold/warm plan-call counts choudoufu#1053 added) is absent from this record. It landed on the floci/scale=1 emulator row; a real-AWS certification has not carried that instrumentation yet.",
     "answered_from_own_state": false
   },
   "effort": {

@@ -70,7 +70,7 @@ necessary. `detail` itself still rides on each stage (for a human reading the
 original sentence) but nothing here reads it.
 
 Where a field the schema wants is not on the record — `plan_calls`, on every
-record today — this script leaves the key out entirely (or, for
+real-AWS record today — this script leaves the key out entirely (or, for
 `independence.account_reads`, publishes `null` with a reason). Nothing is
 computed from a number that is not there. `validate_results.py` is what
 refuses an incomplete result; guessing here would just move the lie one file
@@ -80,11 +80,10 @@ field-by-field reasoning.
 `independence.account_reads` — the axis this whole bench turns on — is `null`
 on every result whose record carries no `plan_calls`, with
 `account_reads_status` and `account_reads_reason` saying why. Once a record
-does carry `plan_calls` (choudoufu#1053 is the issue that will produce it),
-`account_reads` is populated from it directly and the status/reason fields are
-dropped — a `null` with an explanation and a real number with a leftover
-excuse both being things a reader would rightly distrust. See
-`independence_block()` below.
+does carry `plan_calls`, `account_reads` is populated from it directly and the
+status/reason fields are dropped — a `null` with an explanation and a real
+number with a leftover excuse both being things a reader would rightly
+distrust. See `independence_block()` below.
 
 choudoufu#1053 landed `plan_calls` on exactly one record so far — the
 `floci`/`scale=1` emulator row — and the four real-AWS records still carry
@@ -92,16 +91,48 @@ none, so this ingest publishes a mix: one row with a real
 `independence.account_reads`, four still `null`-with-a-reason. That mix is the
 honest state of the certification today, not a bug in this script.
 
-`plan_calls` also carries a `stock` count beside choudoufu's own, on whichever
+`plan_calls` is an ORDINARY PLAN's own call count, never anything else: a
+`cold` leg (the first plan after migrate/import) and a `warm` leg (a second,
+back-to-back plan against the same, unchanged estate), each a `{choudoufu,
+stock}` pair keyed by arm — `stock` rides on `cold` only, because
+choudoufu's own bench takes stock's plan exactly once, before migrate, and
+never repeats it (`warm.stock` is always absent, not zero). `account_reads`
+is the `cold` figure, falling back to `warm` only for a record that somehow
+has the second leg and not the first — see `independence_block()`. On the
+one record that carries both today the two are the identical 186, and that
+equality is *the finding*, not a coincidence to smooth over: choudoufu's
+record store is seeded by live-import itself, not by a first plan, so there
+is no cold-plan penalty to pay here. Both legs, and that equality, are
+published under `measurement.plan_calls_cold`/`plan_calls_warm`/
+`plan_calls_note` rather than only the single number `account_reads` carries
+— see `measurement_block()`.
+
+`plan_calls` is never `audit_calls`, and must never be confused with it
+again: an earlier cut of choudoufu#1053 shipped the account-inventory
+audit's own sweep/read-pass split under the `plan_calls` name — a forced
+full sweep of the provider's whole admission table, 992 types, bypassing
+choudoufu's own narrowing on purpose — and it was withdrawn within hours of
+publishing, because 706 calls read as choudoufu costing nearly five times
+what stock's plan does, when the two were never the same measurement at all.
+The corrected record carries both, apart: `plan_calls` (`cold`/`warm`,
+above) and `audit_calls` (`sweep`, `read_pass`, `total`, each a `{choudoufu,
+stock}` pair). The audit's numbers are real — a genuine cost of adoption and
+of live-discover — and are kept, under their own `adoption_sweep_calls`/
+`adoption_read_pass_calls` names in `measurement_block()`, but they never
+populate `independence.account_reads` again.
+
+`audit_calls` carries its own `stock` count beside choudoufu's, on whichever
 leg the same run measured both sides of — today that is only `read_pass`,
 because stock has no sweep phase to instrument (it never runs choudoufu's
 tagging sweep, so there is no "stock sweep count" to report — see
 choudoufu's `ScaleCallPair` doc comment). That number is not a second arm's
-score: it is the oracle that keeps choudoufu's own read-pass figure from being
-self-reported, so it rides as `measurement.stock_read_pass_calls`, beside
-`sweep_calls`/`read_pass_calls`, never as `independence.account_reads` for
-some competing row. See `measurement_block()` below and PLAN.md's terralith
-section for why it lives there and not as a second arm.
+score: it is the oracle for the audit's own read-pass figure, so it rides as
+`measurement.adoption_stock_read_pass_calls`. `plan_calls.cold` carries its
+own `stock` count the same way — the oracle for `account_reads` itself — and
+that one rides as `measurement.stock_read_pass_calls`, the name
+`build_terralith_pages.py`'s "Stock oracle (read pass)" column already
+reads. See `measurement_block()` below and PLAN.md's terralith section for
+why both live there and neither is a second arm.
 """
 
 from __future__ import annotations
@@ -143,15 +174,15 @@ REPRODUCE = {
 
 #: Why `independence.account_reads` is null on every terralith result whose
 #: record carries no `plan_calls` today, and what would fix it.
-#: INTENTIUS/choudoufu#1053 is the issue scoped to produce that number — see
+#: INTENTIUS/choudoufu#1053 is the issue that added `plan_calls` — see
 #: scalerecord.go's own package comment for why terralith-scale.sh's current
 #: analyze_api_calls report never reaches a gauntlet_stage call, and so never
 #: reaches this record, without it.
 ACCOUNT_READS_REASON = (
     "choudoufu's scale record carries resource counts, not API call counts — "
-    "`plan_calls` (the sweep/read-pass split behind this number) is absent "
-    "from this record. INTENTIUS/choudoufu#1053 is the issue scoped to "
-    "produce it."
+    "`plan_calls` (the cold/warm plan-call counts choudoufu#1053 added) is "
+    "absent from this record. It landed on the floci/scale=1 emulator row; "
+    "a real-AWS certification has not carried that instrumentation yet."
 )
 
 #: chant's own harness, kept separate from `REPRODUCE` above because it is
@@ -305,12 +336,22 @@ def independence_block(plan_calls: dict | None) -> dict:
     reader trusts without opening this script, so it is `null` with a reason
     instead.
 
-    Present, `plan_calls` IS the read count (choudoufu's own
-    `ScalePlanCalls.Total`, or `Sweep + ReadPass` when a run measured the two
-    legs but never totalled them), so it is used directly and the
-    `account_reads_status`/`account_reads_reason` explanation is dropped — a
-    real number sitting next to a leftover excuse for why it might not exist
-    would be its own kind of untrustworthy.
+    Present, `plan_calls` carries an ORDINARY PLAN's own call count — `cold`
+    (the first plan after migrate/import) and `warm` (a second, back-to-back
+    plan against the same, unchanged estate) — and `account_reads` is the
+    `cold` figure, `warm` standing in only for a record that somehow has the
+    second leg and not the first. `warm` is never averaged or summed with
+    `cold`: on the one record with both today they are the identical 186,
+    which is published in full — both legs, and the equality itself — under
+    `measurement.plan_calls_cold`/`plan_calls_warm`/`plan_calls_note`, not
+    folded into this one field. See `measurement_block()`.
+
+    `plan_calls` is never `audit_calls` — the account-inventory sweep/
+    read-pass split that used to ride under this same name is a different
+    measurement (a forced full sweep of the provider's whole admission
+    table, not a plan) and keeps its own `adoption_*` names in
+    `measurement_block()` rather than ever populating this field again. See
+    the module docstring and PLAN.md.
     """
     if not plan_calls:
         return {
@@ -320,20 +361,16 @@ def independence_block(plan_calls: dict | None) -> dict:
             "answered_from_own_state": False,
         }
 
-    total = (plan_calls.get("total") or {}).get("choudoufu")
-    if total is None:
-        sweep = (plan_calls.get("sweep") or {}).get("choudoufu")
-        read_pass = (plan_calls.get("read_pass") or {}).get("choudoufu")
-        if sweep is not None and read_pass is not None:
-            total = sweep + read_pass
-    if total is None:
+    cold = (plan_calls.get("cold") or {}).get("choudoufu")
+    warm = (plan_calls.get("warm") or {}).get("choudoufu")
+    account_reads = cold if cold is not None else warm
+    if account_reads is None:
         sys.exit(
-            "record carries `plan_calls` but neither `total.choudoufu` nor "
-            "both `sweep.choudoufu` and `read_pass.choudoufu` — nothing to "
-            "derive account_reads from"
+            "record carries `plan_calls` but neither `cold.choudoufu` nor "
+            "`warm.choudoufu` — nothing to derive account_reads from"
         )
     return {
-        "account_reads": total,
+        "account_reads": account_reads,
         "answered_from_own_state": False,
     }
 
@@ -377,26 +414,59 @@ def measurement_block(rec: dict) -> dict:
     if rec.get("index_lag_s") is not None:
         measurement["index_lag_seconds"] = rec["index_lag_s"]
 
+    # `plan_calls` — an ORDINARY PLAN's own cost, cold and warm — is the
+    # source for `independence.account_reads` (see `independence_block()`).
+    # Both legs are published here regardless, because the number this bench
+    # was built to carry is not just "what account_reads is" but "cold and
+    # warm cost the same", and that equality has no home in a single scalar
+    # field.
     plan_calls = rec.get("plan_calls")
     if plan_calls:
-        sweep = (plan_calls.get("sweep") or {}).get("choudoufu")
-        read_pass = (plan_calls.get("read_pass") or {}).get("choudoufu")
+        cold = (plan_calls.get("cold") or {}).get("choudoufu")
+        warm = (plan_calls.get("warm") or {}).get("choudoufu")
+        if cold is not None:
+            measurement["plan_calls_cold"] = cold
+        if warm is not None:
+            measurement["plan_calls_warm"] = warm
+        if cold is not None and warm is not None and cold == warm:
+            measurement["plan_calls_note"] = (
+                f"cold and warm plans both cost {cold} calls: choudoufu's "
+                "record store is seeded by live-import itself, not by a "
+                "first plan, so there is no cold-plan penalty to pay here."
+            )
+
+        # The oracle for `account_reads` itself, not a competing arm's score
+        # — see the module docstring and PLAN.md. `stock` rides on `cold`
+        # only; `plan_calls.warm.stock` is always absent (choudoufu's own
+        # bench takes stock's plan exactly once, before migrate), never a
+        # fallback source here.
+        stock_plan = (plan_calls.get("cold") or {}).get("stock")
+        if stock_plan is not None:
+            measurement["stock_read_pass_calls"] = stock_plan
+
+    # `audit_calls` — the account-inventory sweep/read-pass split — is a
+    # different, real measurement (see the module docstring for why it must
+    # never become `account_reads`), kept under its own `adoption_*` names.
+    audit_calls = rec.get("audit_calls")
+    if audit_calls:
+        sweep = (audit_calls.get("sweep") or {}).get("choudoufu")
+        read_pass = (audit_calls.get("read_pass") or {}).get("choudoufu")
         if sweep is not None:
             measurement["adoption_sweep_calls"] = sweep
         if read_pass is not None:
             measurement["adoption_read_pass_calls"] = read_pass
 
-        # The oracle for choudoufu's own read-pass figure, not a competing
-        # arm's score — see the module docstring and PLAN.md. Read off
-        # `read_pass.stock` first, since that is the leg stock actually runs;
-        # `total.stock` is only ever a fallback for a record instrumented with
-        # a total but no leg split, and today it is the same number anyway
-        # (`sweep.stock` never exists — stock has no sweep phase to run).
-        stock_read_pass = (plan_calls.get("read_pass") or {}).get("stock")
-        if stock_read_pass is None:
-            stock_read_pass = (plan_calls.get("total") or {}).get("stock")
-        if stock_read_pass is not None:
-            measurement["adoption_stock_read_pass_calls"] = stock_read_pass
+        # The oracle for the audit's own read-pass figure, not a competing
+        # arm's score. Read off `read_pass.stock` first, since that is the
+        # leg stock actually runs; `total.stock` is only ever a fallback for
+        # a record instrumented with a total but no leg split, and today it
+        # is the same number anyway (`sweep.stock` never exists — stock has
+        # no sweep phase to run).
+        adoption_stock_read_pass = (audit_calls.get("read_pass") or {}).get("stock")
+        if adoption_stock_read_pass is None:
+            adoption_stock_read_pass = (audit_calls.get("total") or {}).get("stock")
+        if adoption_stock_read_pass is not None:
+            measurement["adoption_stock_read_pass_calls"] = adoption_stock_read_pass
 
     return measurement
 
@@ -681,7 +751,14 @@ def main() -> int:
         print(f"wrote {out_path}")
         missing = [
             k
-            for k in ("adoption_sweep_calls", "adoption_read_pass_calls", "adoption_stock_read_pass_calls", "index_lag_seconds")
+            for k in (
+                "plan_calls_cold",
+                "stock_read_pass_calls",
+                "adoption_sweep_calls",
+                "adoption_read_pass_calls",
+                "adoption_stock_read_pass_calls",
+                "index_lag_seconds",
+            )
             if k not in result["measurement"]
         ]
         if missing:

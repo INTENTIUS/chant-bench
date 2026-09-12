@@ -58,25 +58,41 @@ The real number needs choudoufu's own scale record
 (`live/gauntlet-scale.json`) to carry a `plan_calls` field.
 [INTENTIUS/choudoufu#1053](https://github.com/INTENTIUS/choudoufu/issues/1053)
 is the issue that produces it, and it has landed for exactly one record so
-far: the `floci`/`scale=1` (79-resource) emulator row, whose plan made 706
-calls in total — 588 to sweep, 118 to do the ownership read pass. The four
-real-AWS records (79, 301, 745 and 3,705 resources) have not been re-run with
-the instrumentation yet, so they still publish `null` with a reason rather
-than a wrong number. The next certification run on each of those is what
-fills them in — this bench does not estimate the gap.
+far: the `floci`/`scale=1` (79-resource) emulator row, whose ordinary plan
+costs 186 calls — cold and warm alike, 186 both times, because choudoufu's
+record store is seeded by live-import itself rather than by a first plan, so
+there is no cold-plan penalty to pay here. The four real-AWS records (79,
+301, 745 and 3,705 resources) have not been re-run with the instrumentation
+yet, so they still publish `null` with a reason rather than a wrong number.
+The next certification run on each of those is what fills them in — this
+bench does not estimate the gap.
 
-**Stock OpenTofu's own call count rides beside the read-pass leg, as an
-oracle — not as a second product's row.** The same run that measured
-choudoufu's 118-call read pass also measured stock's: 150 calls, over the
-identical estate, doing the equivalent read. That number is what keeps
-choudoufu's 118 from being self-reported — a reader can see the two are the
-same order of magnitude without taking choudoufu's own count on faith. It
-publishes as `measurement.stock_read_pass_calls` and renders in its own
-column on the [results page](results.md), `Stock oracle (read pass)`,
-labelled so it is never mistaken for `chant`'s row or for a second
-`account_reads`. It only ever covers the read-pass leg: stock has no sweep
-phase to instrument (it never runs choudoufu's tagging sweep), so there is no
-"stock sweep count", structurally, not as a gap in this one run.
+**A separate, larger, and equally real number sits beside it and is not
+`account_reads`: the adoption audit's own sweep and read-pass calls.**
+`plan_calls` (above) is an ordinary plan; `audit_calls` is what a forced
+account-inventory sweep costs on the same estate — 588 calls to sweep the
+provider's whole admission table (992 types, bypassing choudoufu's own
+narrowing on purpose) plus 118 to do the ownership read pass, 706 in total.
+That 706 was published as `account_reads` for a few hours on 2026-09-11 and
+withdrawn once the mistake was caught: a plan and a forced full-account sweep
+are different operations, not two measurements of the same thing. The
+audit's numbers are real — a genuine cost of adoption and of live-discover —
+and are kept, under their own `measurement.adoption_sweep_calls` /
+`adoption_read_pass_calls` names, but never populate `account_reads` again.
+
+**Stock OpenTofu's own call count rides beside the plan, as an oracle — not
+as a second product's row.** The same run that measured choudoufu's 186-call
+plan also measured stock's plan of the identical, unmigrated estate: 150
+calls. That number is what keeps choudoufu's 186 from being self-reported —
+a reader can see the two are the same order of magnitude without taking
+choudoufu's own count on faith. It publishes as
+`measurement.stock_read_pass_calls` and renders in its own column on the
+[results page](results.md), `Stock oracle (read pass)`, labelled so it is
+never mistaken for `chant`'s row or for a second `account_reads`. Stock has
+no sweep phase to instrument (it never runs choudoufu's tagging sweep), so
+this plan is the whole of what stock measures here — there is no second,
+larger stock figure the way there is for choudoufu's own plan versus its
+audit.
 
 ## chant measures three reads, not one
 

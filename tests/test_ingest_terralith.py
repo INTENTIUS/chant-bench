@@ -18,17 +18,29 @@ name>/` was chosen so a second script gaining a test does not have to
 invent a new layout or collide with this one's file names. It holds:
 
   gauntlet-scale.json   a two-record ScaleArtifact, laid out the way
-                        choudoufu#1053 actually shipped it: one floci record
-                        WITH `plan_calls` — a sweep/read_pass split for
-                        choudoufu plus the stock oracle's own count on the
-                        read_pass leg — exercising the populated branch of
-                        `independence_block()` and `measurement_block()`'s
-                        `stock_read_pass_calls`, and one aws record with NO
-                        `plan_calls` and a failing `test_apply` stage,
+                        choudoufu#1053 actually shipped it (after its own
+                        correction): one floci record WITH both `plan_calls`
+                        — an ordinary plan's cold/warm call count for
+                        choudoufu, cold carrying the stock oracle's own count
+                        beside it — AND `audit_calls` — the account-inventory
+                        audit's separate sweep/read_pass split, its own
+                        stock oracle on the read_pass leg — exercising the
+                        populated branch of `independence_block()` (which
+                        reads only `plan_calls`) and `measurement_block()`'s
+                        `plan_calls_cold`/`plan_calls_warm`/`plan_calls_note`/
+                        `stock_read_pass_calls` (from `plan_calls`) alongside
+                        `adoption_sweep_calls`/`adoption_read_pass_calls`/
+                        `adoption_stock_read_pass_calls` (from `audit_calls`)
+                        — and one aws record with NEITHER `plan_calls` NOR
+                        `audit_calls` and a failing `test_apply` stage,
                         exercising the null/reason branch, the throttle/retry
                         summing, and a mixed pass/fail score. That pairing
                         (floci measured, aws not yet) matches every real
-                        record in `live/gauntlet-scale.json` today.
+                        record in `live/gauntlet-scale.json` today. The floci
+                        record's `cold` and `warm` plan legs are deliberately
+                        equal (5 calls each), the same equality the real
+                        79-resource row shows (186 each) — see
+                        `plan_calls_note` in `expected/`.
   gauntlet.json         a minimal companion carrying `duration_s` for only
                         the floci record's commit — so one expected result
                         gets `effort.wall_seconds` and the other proves the

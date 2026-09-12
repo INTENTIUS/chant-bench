@@ -14,7 +14,7 @@ reproduces it.
 | Size | Stages | Account reads | Stock oracle (read pass) | Wall time | Provenance | Reproduce |
 |---|---|---|---|---|---|---|
 | 79 | 4/4 | *not measured* | — | — (cold_deploy=68s, migrate=25s, test_plan=17s) | `da61fc0` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
-| 79 | 4/4 | *not measured* | — | 327.7s (cold_deploy=121s, migrate=40s, test_plan=3s, test_apply=5s) | `3bca740` · floci `sha256:9ec3fa649177` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| 79 | 4/4 | 186 | 150 | 327.7s (cold_deploy=121s, migrate=40s, test_plan=3s, test_apply=5s) | `3bca740` · floci `sha256:9ec3fa649177` · terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 | 301 | 4/4 | *not measured* | — | — (cold_deploy=174s, migrate=77s, test_plan=267s) | `420d460` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
 | 745 | 4/4 | *not measured* | — | — (cold_deploy=413s, migrate=222s, test_plan=129s) | `1d06e1d` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
 | 3705 | 2/3 (test_plan failed) | *not measured* | — | 11180.5s (cold_deploy=2023s, migrate=1214s) | `8bbef27` · aws (us-east-2) | `live/live-cert/terralith-scale.sh` |
@@ -85,21 +85,38 @@ reproduces it.
     **`independence.account_reads` — the axis this whole site turns
     on — is a real number for the emulator (floci) row and *not
     measured* for every real-AWS row below.** choudoufu#1053 gave the
-    emulator run a plan's sweep-call and read-pass count; the real-AWS
-    certification runs have not carried that instrumentation yet, so
-    those rows still read *not measured* rather than a number that
-    looks like one but isn't. Each cell says its own status — this
-    note describes today, the table is the source of truth going
-    forward. See [what this bench deliberately does not measure
+    emulator row an ordinary plan's own cold/warm call count — 186
+    both times, because choudoufu's record store is seeded by
+    live-import itself, so there is no cold-plan penalty to pay here;
+    the real-AWS certification runs have not carried that
+    instrumentation yet, so those rows still read *not measured*
+    rather than a number that looks like one but isn't. Each cell
+    says its own status — this note describes today, the table is
+    the source of truth going forward. See [what this bench
+    deliberately does not measure
     yet](index.md#the-axis-this-bench-exists-to-measure-one-row-at-a-time).
+
+!!! note "The adoption audit's calls are not the plan's"
+
+    **This row also carries `adoption_sweep_calls` (588) and
+    `adoption_read_pass_calls` (118) in its own JSON — a forced
+    account-inventory sweep of the provider's whole admission table,
+    not a plan.** That 706-call total was published as `Account
+    reads` for a few hours on 2026-09-11 and withdrawn once the
+    mistake was caught: an ordinary plan and a forced full-account
+    sweep are different operations on the same estate, not two
+    measurements of the same thing. The audit's numbers are real and
+    are kept, under their own `adoption_*` names, but never populate
+    `Account reads` again — that column and `Stock oracle (read
+    pass)` below it are both about the plan, never the audit.
 
 !!! note "Stock oracle (read pass): not a second product's score"
 
     **`Stock oracle (read pass)` is stock OpenTofu's own call count for
-    the read-pass leg of the same run, not a competing arm.** It is
-    what keeps the `Account reads` figure next to it from being
-    self-reported — the run measured both sides making the identical
-    read pass, and stock's count is the check. Stock has no sweep
-    phase to instrument (it never runs choudoufu's tagging sweep), so
-    this column only ever reports the read-pass leg, never a
-    whole-plan total.
+    its plan of the identical, unmigrated estate, not a competing
+    arm.** It is what keeps the `Account reads` figure next to it
+    from being self-reported — the run measured both sides planning
+    the same estate, and stock's count is the check. Stock has no
+    sweep phase to instrument (it never runs choudoufu's tagging
+    sweep), so this column only ever reports its one plan, never a
+    sweep or an audit total.
