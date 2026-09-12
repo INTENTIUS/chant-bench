@@ -382,9 +382,9 @@ def measurement_block(rec: dict) -> dict:
         sweep = (plan_calls.get("sweep") or {}).get("choudoufu")
         read_pass = (plan_calls.get("read_pass") or {}).get("choudoufu")
         if sweep is not None:
-            measurement["sweep_calls"] = sweep
+            measurement["adoption_sweep_calls"] = sweep
         if read_pass is not None:
-            measurement["read_pass_calls"] = read_pass
+            measurement["adoption_read_pass_calls"] = read_pass
 
         # The oracle for choudoufu's own read-pass figure, not a competing
         # arm's score — see the module docstring and PLAN.md. Read off
@@ -396,7 +396,7 @@ def measurement_block(rec: dict) -> dict:
         if stock_read_pass is None:
             stock_read_pass = (plan_calls.get("total") or {}).get("stock")
         if stock_read_pass is not None:
-            measurement["stock_read_pass_calls"] = stock_read_pass
+            measurement["adoption_stock_read_pass_calls"] = stock_read_pass
 
     return measurement
 
@@ -681,7 +681,7 @@ def main() -> int:
         print(f"wrote {out_path}")
         missing = [
             k
-            for k in ("sweep_calls", "read_pass_calls", "stock_read_pass_calls", "index_lag_seconds")
+            for k in ("adoption_sweep_calls", "adoption_read_pass_calls", "adoption_stock_read_pass_calls", "index_lag_seconds")
             if k not in result["measurement"]
         ]
         if missing:

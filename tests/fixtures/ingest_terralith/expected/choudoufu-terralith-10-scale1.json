@@ -67,9 +67,9 @@
     "untaggable_resources": 6,
     "throttles": 0,
     "retries": 0,
-    "sweep_calls": 3,
-    "read_pass_calls": 2,
-    "stock_read_pass_calls": 6
+    "adoption_sweep_calls": 3,
+    "adoption_read_pass_calls": 2,
+    "adoption_stock_read_pass_calls": 6
   },
   "reproduce": "live/e2e/terralith-scale/run.sh"
 }

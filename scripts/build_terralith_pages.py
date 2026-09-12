@@ -175,6 +175,12 @@ def stock_oracle(r: dict) -> str:
     See PLAN.md's terralith section and `ingest_terralith.py`'s
     `measurement_block()`.
     """
+    # 2026-09-11: the only row that had one carried it from the adoption
+    # audit, alongside a choudoufu figure that was withdrawn for the same
+    # reason (see that row's account_reads_reason). The audit's stock leg is
+    # kept under measurement.adoption_stock_read_pass_calls rather than shown
+    # here, because a column headed "oracle" beside a withdrawn number would
+    # be vouching for nothing. It comes back when the plan figure does.
     v = r.get("measurement", {}).get("stock_read_pass_calls")
     return num(v) if isinstance(v, (int, float)) else "—"
 
