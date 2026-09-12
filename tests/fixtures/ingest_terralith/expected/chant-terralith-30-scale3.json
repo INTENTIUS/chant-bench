@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "bench": "terralith",
+  "scenario": "terralith-30",
+  "arm": "chant",
+  "run": {
+    "id": "chant-terralith-30-scale3",
+    "harness_commit": "chfixture0002",
+    "substrate": "floci"
+  },
+  "agent": {
+    "name": "none",
+    "model": null,
+    "k": 1
+  },
+  "score": {
+    "trials": 4,
+    "expected_trials": 4,
+    "completed": 4,
+    "errored": 0,
+    "passed": 4,
+    "pass_rate": 1.0,
+    "by_task": {
+      "cold_deploy": [
+        1
+      ],
+      "read_cold_plan": [
+        1
+      ],
+      "read_snapshot": [
+        1
+      ],
+      "read_warm_diff": [
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": null,
+    "account_reads_status": "not_a_single_read",
+    "account_reads_reason": "chant's own read cost is three independent numbers \u2014 cold_plan, snapshot and warm_diff \u2014 not one. Publishing any single one of them under this field would erase which read it describes; see measurement.reads for each, named.",
+    "answered_from_own_state": false
+  },
+  "effort": {},
+  "measurement": {
+    "resources": 30,
+    "taggable_resources": 30,
+    "untaggable_resources": 0,
+    "stacks": 3,
+    "reads": {
+      "cold_plan": {
+        "calls": 30,
+        "verdict": "pass"
+      },
+      "snapshot": {
+        "calls": 6,
+        "verdict": "pass"
+      },
+      "warm_diff": {
+        "calls": 0,
+        "verdict": "pass"
+      }
+    }
+  },
+  "reproduce": "test/scale-estate.sh"
+}

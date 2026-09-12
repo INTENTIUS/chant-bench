@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "bench": "terralith",
+  "scenario": "terralith-20",
+  "arm": "chant",
+  "run": {
+    "id": "chant-terralith-20-scale2",
+    "harness_commit": "chfixture0001",
+    "substrate": "floci",
+    "emulator": "ghcr.io/lex00/floci@sha256:fixturechant000000000000000000000000000000000000000000000000"
+  },
+  "agent": {
+    "name": "none",
+    "model": null,
+    "k": 1
+  },
+  "score": {
+    "trials": 4,
+    "expected_trials": 4,
+    "completed": 4,
+    "errored": 0,
+    "passed": 4,
+    "pass_rate": 1.0,
+    "by_task": {
+      "cold_deploy": [
+        1
+      ],
+      "read_cold_plan": [
+        1
+      ],
+      "read_snapshot": [
+        1
+      ],
+      "read_warm_diff": [
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": null,
+    "account_reads_status": "not_a_single_read",
+    "account_reads_reason": "chant's own read cost is three independent numbers \u2014 cold_plan, snapshot and warm_diff \u2014 not one. Publishing any single one of them under this field would erase which read it describes; see measurement.reads for each, named.",
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "wall_seconds_by_stage": {
+      "cold_deploy": 12,
+      "read_cold_plan": 3,
+      "read_snapshot": 1,
+      "read_warm_diff": 0
+    }
+  },
+  "measurement": {
+    "resources": 20,
+    "taggable_resources": 20,
+    "untaggable_resources": 0,
+    "stacks": 2,
+    "median_stack_seconds": 6,
+    "anomaly_detected": false,
+    "reads": {
+      "cold_plan": {
+        "calls": 20,
+        "per_stack": 10.0,
+        "verdict": "pass"
+      },
+      "snapshot": {
+        "calls": 4,
+        "per_stack": 2.0,
+        "verdict": "pass"
+      },
+      "warm_diff": {
+        "calls": 0,
+        "per_stack": 0.0,
+        "verdict": "pass"
+      }
+    }
+  },
+  "reproduce": "test/scale-estate.sh"
+}

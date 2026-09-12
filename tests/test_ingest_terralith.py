@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""Prove `scripts/ingest_terralith.py` still reads a choudoufu scale record
-the way it says it does.
+"""Prove `scripts/ingest_terralith.py` still reads a choudoufu scale record —
+and a chant one — the way it says it does.
 
 Nothing else in this repository runs the ingest at all — `just check` and
 `.github/workflows/docs.yml` validate and render whatever is already sitting
 in `results/`, so a schema drift between this repo and choudoufu's own
-`ScaleRecord` (see `tools/gauntlet/scalerecord.go` there) would only be
-noticed the day a published number went wrong. This test ingests a small,
-committed scale record and diffs the result against a committed expectation,
-so that drift is a red test here instead.
+`ScaleRecord` (see `tools/gauntlet/scalerecord.go` there), or chant's own
+record (`test/scale-estate.sh` there), would only be noticed the day a
+published number went wrong. This test ingests small, committed scale
+records — one choudoufu-shaped invocation, one chant-shaped invocation — and
+diffs each result against a committed expectation, so that drift is a red
+test here instead.
 
 Fixtures live under `tests/fixtures/ingest_terralith/` — this repository has
 no other tests and so no established convention; `tests/fixtures/<script
@@ -31,8 +33,20 @@ invent a new layout or collide with this one's file names. It holds:
                         the floci record's commit — so one expected result
                         gets `effort.wall_seconds` and the other proves the
                         "commit not found" path leaves it out
+  chant-scale-record-1.json   a schema-3 chant record with every optional
+                        field present — `stages.cold_deploy.stacks[]`,
+                        `median_seconds`, `anomaly_detected`, and `seconds`/
+                        `detail`/`by_action` on all three reads — exercising
+                        the populated branch of `chant_measurement_block()`
+                        and `chant_effort_block()`.
+  chant-scale-record-2.json   a schema-2 chant record with none of those —
+                        no `emulator`, no `seconds` anywhere, no `per_stack`,
+                        no schema-3 deploy fields — exercising the
+                        absent-optional-field branch of the same two
+                        functions, the same way `gauntlet-scale.json`'s
+                        second record does for choudoufu's `plan_calls`.
   expected/*.json       the exact result set `ingest_terralith.py` must
-                        produce from the two fixtures above, one file per
+                        produce from the fixtures above, one file per
                         record's own `run.id`
 
     python3 tests/test_ingest_terralith.py
@@ -91,9 +105,31 @@ def main() -> int:
             text=True,
         )
         if result.returncode != 0:
-            print("ingest_terralith.py exited non-zero against the fixture:")
+            print("ingest_terralith.py exited non-zero against the choudoufu fixture:")
             print(result.stdout)
             print(result.stderr)
+            return 1
+
+        # Same output directory, a second invocation — the two ingest shapes
+        # are mutually exclusive per call (see ingest_terralith.py's own
+        # docstring) but their outputs are not, and the two fixture sets
+        # write disjoint run ids, so nothing here overwrites the choudoufu
+        # results just written above.
+        chant_result = subprocess.run(
+            [
+                sys.executable,
+                str(INGEST),
+                "--chant-record", str(FIXTURES / "chant-scale-record-1.json"),
+                "--chant-record", str(FIXTURES / "chant-scale-record-2.json"),
+                "--out", str(out),
+            ],
+            capture_output=True,
+            text=True,
+        )
+        if chant_result.returncode != 0:
+            print("ingest_terralith.py exited non-zero against the chant fixtures:")
+            print(chant_result.stdout)
+            print(chant_result.stderr)
             return 1
 
         actual_files = sorted(out.glob("*.json"))
