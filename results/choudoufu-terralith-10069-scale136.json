@@ -5,8 +5,8 @@
   "arm": "choudoufu",
   "run": {
     "id": "choudoufu-terralith-10069-scale136",
-    "finished_at": "2026-09-12T09:17:18Z",
-    "harness_commit": "9525811174df01a74d374da31231102bbf598f5d",
+    "finished_at": "2026-09-12T18:37:45Z",
+    "harness_commit": "fb13ead026ed2d27b356fd5bf318a0b10781dc90",
     "substrate": "floci",
     "emulator": "ghcr.io/lex00/floci@sha256:0bbeb43075c9df9c7e06311cd4eec99a354594d304faa4fe5899b494a009d23d",
     "oracle": {
@@ -20,12 +20,12 @@
     "k": 1
   },
   "score": {
-    "trials": 3,
-    "expected_trials": 3,
-    "completed": 3,
+    "trials": 4,
+    "expected_trials": 4,
+    "completed": 4,
     "errored": 0,
-    "passed": 2,
-    "pass_rate": 0.6667,
+    "passed": 4,
+    "pass_rate": 1.0,
     "by_task": {
       "cold_deploy": [
         1
@@ -34,7 +34,10 @@
         1
       ],
       "test_plan": [
-        0
+        1
+      ],
+      "test_apply": [
+        1
       ]
     }
   },
@@ -46,17 +49,16 @@
     "complete": true
   },
   "independence": {
-    "account_reads": null,
-    "account_reads_status": "not_measured",
-    "account_reads_reason": "This run's plan did not complete: the `test_plan` stage failed, so there is no plan cost to report. A refused plan's call count is how far it got before giving up, not what a plan costs, so nothing is published here. This is not missing instrumentation \u2014 the account-inventory numbers under `measurement` were measured on the same estate at the same size. The stage's own verdict line: the post-migration plan exited 1, Rule: count-index - first: Error: count.index is not available in resource arguments",
+    "account_reads": 22760,
     "answered_from_own_state": false
   },
   "effort": {
-    "wall_seconds": 10136.2,
+    "wall_seconds": 15028.8,
     "wall_seconds_by_stage": {
-      "cold_deploy": 8735,
-      "migrate": 1398,
-      "test_plan": 3
+      "cold_deploy": 8772,
+      "migrate": 1393,
+      "test_plan": 57,
+      "test_apply": 119
     }
   },
   "measurement": {
@@ -66,6 +68,9 @@
     "untaggable_resources": 5576,
     "throttles": 0,
     "retries": 0,
+    "plan_calls_cold": 22760,
+    "plan_calls_warm": 23428,
+    "stock_read_pass_calls": 18510,
     "adoption_sweep_calls": 13212,
     "adoption_read_pass_calls": 18508,
     "adoption_stock_read_pass_calls": 18510
