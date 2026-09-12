@@ -67,6 +67,18 @@ yet, so they still publish `null` with a reason rather than a wrong number.
 The next certification run on each of those is what fills them in — this
 bench does not estimate the gap.
 
+The 10,069-resource emulator row is blank for a different reason, and its
+cell says so rather than borrowing the sentence above. That run was
+instrumented; it simply has no plan to count. choudoufu refused the plan
+under its own `count-index` rule, which admits an expression built from
+`count.index` only while it can render every index and prove them pairwise
+distinct, and gives up at a count of 256. The terralith declares `count = 2 ×
+scale`, so the estate crosses that bound at scale 129 and every larger size
+is refused before a plan is produced. A refused plan's call count is how far
+it got before giving up, not what a plan costs, so nothing is published in
+that field. The same run's adoption numbers below are real and were measured
+on the same estate at the same size.
+
 **A separate, larger, and equally real number sits beside it and is not
 `account_reads`: the adoption audit's own sweep and read-pass calls.**
 `plan_calls` (above) is an ordinary plan; `audit_calls` is what a forced
