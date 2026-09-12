@@ -607,8 +607,27 @@ def build_stock_result(rec: dict, duration_lookup: dict[str, float]) -> dict | N
 
 
 def effort_block(rec: dict, duration_lookup: dict[str, float]) -> dict:
+    """`effort.wall_seconds` from the record itself, falling back to
+    `live/gauntlet.json` for records too old to carry it (#36).
+
+    `gauntlet_duration_lookup()` is keyed by commit against an artifact that
+    keeps ONE row per estate, so the moment a later run overwrites that row,
+    an earlier record's commit is no longer in it and the field silently
+    disappears from a result that published it the day before. That is not a
+    hypothetical: re-ingesting the 9,477-resource row hours after it was
+    published dropped its wall time, and `just check` went on passing,
+    because a row without a wall time is contract-valid.
+
+    choudoufu#1051's wall-time work put `total_seconds` on the record itself,
+    alongside `unaccounted_seconds` and `unaccounted_detail`, precisely so the
+    run's own total rides with the run. Reading it here makes each row
+    internally consistent by construction - one run, one commit, one wall
+    time - instead of joining two sources that drift apart.
+    """
     effort: dict = {}
-    wall_seconds = duration_lookup.get(rec.get("commit"))
+    wall_seconds = rec.get("total_seconds")
+    if wall_seconds is None:
+        wall_seconds = duration_lookup.get(rec.get("commit"))
     if wall_seconds is not None:
         effort["wall_seconds"] = wall_seconds
     by_stage = {}

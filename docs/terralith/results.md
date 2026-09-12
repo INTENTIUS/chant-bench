@@ -78,7 +78,7 @@ real account, against an API that throttles.
 | Size | Substrate | Stand-up (stock Terraform's apply) | `migrate` | `test_plan` | `test_apply` |
 |---|---|---|---|---|---|
 | 79 | real AWS (us-east-2) | 68s | 25s | 17s | — |
-| 79 | emulator | 121s | 40s | 3s | 5s |
+| 79 | emulator | 134s | 42s | 3s | 5s |
 | 301 | real AWS (us-east-2) | 174s | 77s | 267s | — |
 | 745 | real AWS (us-east-2) | 413s | 222s | 129s | — |
 | 3705 | real AWS (us-east-2) | 2023s | 1214s | — | — |
@@ -108,7 +108,7 @@ Every row above, and what produced it.
 | Track | Size | Substrate | Commit | Emulator pin | Oracle versions | Reproduce |
 |---|---|---|---|---|---|---|
 | choudoufu | 79 | real AWS (us-east-2) | `da61fc0` | — | — | `live/live-cert/terralith-scale.sh` |
-| choudoufu | 79 | emulator | `3bca740` | `sha256:9ec3fa649177` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
+| choudoufu | 79 | emulator | `fce6b53` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 | choudoufu | 301 | real AWS (us-east-2) | `420d460` | — | — | `live/live-cert/terralith-scale.sh` |
 | choudoufu | 745 | real AWS (us-east-2) | `1d06e1d` | — | — | `live/live-cert/terralith-scale.sh` |
 | choudoufu | 3705 | real AWS (us-east-2) | `8bbef27` | — | — | `live/live-cert/terralith-scale.sh` |
@@ -137,6 +137,29 @@ Every row above, and what produced it.
     fixture's, and chant's durations are not comparable to
     choudoufu's at all, because the substrates differ. See
     [what this bench does and does not measure](index.md) for why.
+
+!!! note "Which plan each number is: cold, warm, and why stock has neither"
+
+    **choudoufu's `Account reads` is its cold plan — the first plan
+    after adoption. Stock is planned once.** That is not an unequal
+    comparison, because stock has no warm case to compare against: a
+    stock plan refreshes every resource from the state file on every
+    run, and choudoufu's own cost model records three consecutive stock
+    plans of the 79-resource estate at 150, 150, 150. There is nothing
+    for a second stock plan to save, so the bench takes it once and
+    leaves `plan_calls.warm.stock` absent rather than copying the cold
+    figure into it.
+
+    choudoufu's warm plan IS measured, and it is not cheaper. At 79
+    resources it is identical at 186; at 9,477 it is 21,620 against a
+    cold 21,423, and at 10,069 it is 23,428 against a cold 22,760. So
+    the published figure is the lower of choudoufu's two, and a ratio
+    computed from its warm plan would be worse, not better. Each row's
+    own `measurement.plan_calls_warm` carries it.
+
+    chant is the exception that keeps its three reads apart rather than
+    picking one, for the same reason: a cold plan and a warm diff are
+    both true of the same estate and cost visibly different amounts.
 
 !!! warning "What the 1.23x is, and what choudoufu's own docs say"
 
