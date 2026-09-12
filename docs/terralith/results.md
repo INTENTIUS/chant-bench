@@ -11,12 +11,13 @@ reproduces it.
 
 ## What this page found
 
-One ordinary plan, over the same generated estate, as it grows. The
-number each track is measured on is how many account reads that plan
-costs — not wall time, which an emulator cannot answer, and not a
-score against the other tracks.
+One ordinary plan, over the same generated estate, as it grows. Every
+number below is a count of API calls the plan makes against the cloud
+account — not wall time, which an emulator cannot answer, and not a
+score against the other tracks. chant's three columns are counts of the
+same thing, one per read it makes.
 
-| Track | Largest estate run | Stages | What one plan reads | Stock oracle | Ratio |
+| Track | Largest estate run | Stages | Account reads (API calls) | Stock oracle | Ratio |
 |---|---|---|---|---|---|
 | choudoufu | 10069 resources | 4/4 | 22760 | 18510 | 1.23x |
 | chant | 10036 resources | 4/4 | 52 cold, 52 snapshot, 0 warm diff | — | — |
@@ -26,7 +27,7 @@ chant has no oracle on its substrate — it deploys CloudFormation stacks rather
 
 ## choudoufu
 
-| Size | Substrate | Stages | Account reads | Stock oracle |
+| Size | Substrate | Stages | Account reads (API calls) | Stock oracle |
 |---|---|---|---|---|
 | 79 | real AWS (us-east-2) | 4/4 | *not measured* | — |
 | 79 | emulator | 4/4 | 186 | 150 |
@@ -52,7 +53,7 @@ chant has no oracle on its substrate — it deploys CloudFormation stacks rather
 
 ## stock Terraform (oracle)
 
-| Size | Substrate | Stages | What one plan reads |
+| Size | Substrate | Stages | Account reads (API calls) |
 |---|---|---|---|
 | 79 | emulator | 1/1 | 150 |
 | 9477 | emulator | 1/1 | 17422 |
@@ -136,6 +137,31 @@ Every row above, and what produced it.
     fixture's, and chant's durations are not comparable to
     choudoufu's at all, because the substrates differ. See
     [what this bench does and does not measure](index.md) for why.
+
+!!! warning "What the 1.23x is, and what choudoufu's own docs say"
+
+    **This is a plan taken straight after adoption, and the excess over
+    stock grows with the number of marked resources rather than staying
+    the constant choudoufu's own cost model describes.** That model
+    ([what you pay](https://intentius.io/choudoufu/docs/what-you-pay/))
+    records the same 79-resource estate at 157 calls against stock's
+    150 — a seven-call residual itemised call by call, of which the only
+    growing term is one `GetResources` per hundred marked objects. At
+    10,069 resources that model predicts 18,561 and a ratio of 1.003x.
+
+    Measured here: 22,760, and an excess of 0.95 calls per marked
+    resource at every size from 79 up. Two legs added under
+    [choudoufu#692](https://github.com/INTENTIUS/choudoufu/issues/692)
+    each cost one call per marked instance on the IAM path, which a
+    terralith is 84% made of. Both are correctness fixes that found real
+    gaps; neither was measured at size until this bench ran. Filed as
+    [choudoufu#1082](https://github.com/INTENTIUS/choudoufu/issues/1082),
+    with the two commits bisected.
+
+    One thing this row does not cover: the estate here was adopted with
+    `live-import`, which stamps markers and records nothing, so the plan
+    has no record store to read from. An estate choudoufu applied itself
+    has one. That comparison has not been measured.
 
 !!! note "chant measures three reads, not one"
 
