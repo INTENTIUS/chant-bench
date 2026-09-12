@@ -49,8 +49,10 @@
     "complete": true
   },
   "independence": {
-    "account_reads": 706,
-    "answered_from_own_state": false
+    "account_reads": null,
+    "answered_from_own_state": false,
+    "account_reads_status": "withdrawn_pending_remeasure",
+    "account_reads_reason": "The 706 published here until 2026-09-11 was the adoption audit, not a plan. An ordinary plan on this estate measures 186 calls against stock's 150, and a second warm plan measures the same, because the record store is seeded by live-import itself. The figure is withdrawn rather than corrected in place because it must come from a record the runner wrote, not from a hand measurement. INTENTIUS/choudoufu#1053 is the issue that re-sources it."
   },
   "effort": {
     "wall_seconds": 327.7,
@@ -68,9 +70,10 @@
     "untaggable_resources": 41,
     "throttles": 0,
     "retries": 0,
-    "sweep_calls": 588,
-    "read_pass_calls": 118,
-    "stock_read_pass_calls": 150
+    "adoption_sweep_calls": 588,
+    "adoption_read_pass_calls": 118,
+    "adoption_stock_read_pass_calls": 150,
+    "adoption_sweep_note": "588 sweep and 118 read-pass calls, against stock's 150, measured with the account-inventory audit forced on (CollectUnclaimed). That path bypasses choudoufu's narrowing on purpose and enumerates the provider's whole admission table, 992 types, which is why the sweep exceeds the 79 resources sevenfold. It is a real cost of adoption and of live-discover. It is not what a plan costs, and it was published as account_reads until 2026-09-11."
   },
   "reproduce": "live/e2e/terralith-scale/run.sh"
 }
