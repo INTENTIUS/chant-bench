@@ -49,11 +49,9 @@ chant deploys CloudFormation stacks rather than a stock-Terraform estate, so the
 | 79 | emulator | 4/4 | 186 | +36 (+24%) |
 | 301 | real AWS (us-east-2) | 4/4 | *not measured* | — |
 | 745 | real AWS (us-east-2) | 4/4 | *not measured* | — |
-| 3705 | real AWS (us-east-2) | 2/3 | *not measured* | — |
+| 3705 | real AWS (us-east-2) | 4/4 | 8541 | +1568 (+22%) |
 | 9477 | emulator | 4/4 | 21423 | +4001 (+23%) |
 | 10069 | emulator | 4/4 | 22760 | +4250 (+23%) |
-
-**3705 resources:** `test_plan` failed.
 
 ## chant
 
@@ -89,7 +87,7 @@ real account, against an API that throttles.
 | 79 | emulator | 134s | 42s | 3s | 5s |
 | 301 | real AWS (us-east-2) | 174s | 77s | 267s | — |
 | 745 | real AWS (us-east-2) | 413s | 222s | 129s | — |
-| 3705 | real AWS (us-east-2) | 2023s | 1214s | — | — |
+| 3705 | real AWS (us-east-2) | 2203s | 2940s | 576s | 4499s |
 | 9477 | emulator | 8126s | 1287s | 48s | 86s |
 | 10069 | emulator | 8772s | 1393s | 57s | 119s |
 
@@ -111,7 +109,7 @@ Every row above, and what produced it.
 | choudoufu | 79 | emulator | `fce6b53` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 | choudoufu | 301 | real AWS (us-east-2) | `420d460` | — | — | `live/live-cert/terralith-scale.sh` |
 | choudoufu | 745 | real AWS (us-east-2) | `1d06e1d` | — | — | `live/live-cert/terralith-scale.sh` |
-| choudoufu | 3705 | real AWS (us-east-2) | `8bbef27` | — | — | `live/live-cert/terralith-scale.sh` |
+| choudoufu | 3705 | real AWS (us-east-2) | `3db8029` | — | — | `live/live-cert/terralith-scale.sh` |
 | choudoufu | 9477 | emulator | `9bd278a` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 | choudoufu | 10069 | emulator | `fb13ead` | `sha256:0bbeb43075c9` | terraform 1.15.8 / tofu 1.12.5 | `live/e2e/terralith-scale/run.sh` |
 | chant | 264 | emulator | `1c52fd5` | — | — | `test/scale-estate.sh` |
