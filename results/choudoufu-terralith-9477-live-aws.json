@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "bench": "terralith",
+  "scenario": "terralith-9477",
+  "arm": "choudoufu",
+  "run": {
+    "id": "choudoufu-terralith-9477-live-aws",
+    "finished_at": "2026-09-16T08:43:56Z",
+    "harness_commit": "686ac8a9583617eaec25277a61f7a97d7c22f53b",
+    "substrate": "aws",
+    "region": "us-east-2"
+  },
+  "agent": {
+    "name": "none",
+    "model": null,
+    "k": 1
+  },
+  "score": {
+    "trials": 4,
+    "expected_trials": 4,
+    "completed": 4,
+    "errored": 0,
+    "passed": 4,
+    "pass_rate": 1.0,
+    "by_task": {
+      "cold_deploy": [
+        1
+      ],
+      "migrate": [
+        1
+      ],
+      "test_plan": [
+        1
+      ],
+      "test_apply": [
+        1
+      ]
+    }
+  },
+  "gates": {
+    "audit": true,
+    "tool_missing": false,
+    "exceptions": {},
+    "errored_trials": 0,
+    "complete": true
+  },
+  "independence": {
+    "account_reads": 21868,
+    "answered_from_own_state": false
+  },
+  "effort": {
+    "wall_seconds": 39610.1,
+    "wall_seconds_by_stage": {
+      "cold_deploy": 5533,
+      "migrate": 7307,
+      "test_plan": 1349,
+      "test_apply": 11342
+    }
+  },
+  "measurement": {
+    "resources": 9477,
+    "taggable_resources": 4229,
+    "verified_resources": 4229,
+    "untaggable_resources": 5248,
+    "throttles": 1352,
+    "retries": 1353,
+    "index_lag_seconds": 63,
+    "plan_calls_cold": 21868,
+    "stock_read_pass_calls": 17862
+  },
+  "reproduce": "live/live-cert/terralith-scale.sh"
+}
