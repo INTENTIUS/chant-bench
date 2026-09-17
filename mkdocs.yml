@@ -83,6 +83,3 @@ nav:
   # of stage pass/fail and cost by estate size, not a leaderboard. Its own
   # top-level section for the same reason ec2-multiregion-negatives gets one:
   # a reader must not read this as part of aws-bench's board.
-  - terralith:
-      - What it is: terralith/index.md
-      - Results: terralith/results.md
